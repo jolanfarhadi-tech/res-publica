@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { NewsletterSignup } from "./NewsletterSignup";
 
 /**
  * Footer — full sitemap in two grouped columns (Organization /
@@ -20,6 +21,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     { href: `/${locale}/contact`, label: t.contact },
   ];
   const work = [
+    { href: `/${locale}/news`, label: t.news },
     { href: `/${locale}/projects`, label: t.projects },
     { href: `/${locale}/research`, label: t.research },
     { href: `/${locale}/publications`, label: t.publications },
@@ -36,7 +38,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       <Container className="py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
-          <div className="lg:col-span-2">
+          <div>
             <p className="font-serif text-lg tracking-[0.18em]">
               RES<span className="text-gold">·</span>PUBLICA
             </p>
@@ -72,6 +74,9 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               ))}
             </ul>
           </nav>
+
+          {/* Newsletter */}
+          <NewsletterSignup dict={dict} />
         </div>
 
         <div className="mt-12 border-t border-border pt-6">

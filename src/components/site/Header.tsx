@@ -13,6 +13,7 @@ import { ThemeToggle } from "./ThemeToggle";
 export function navItems(locale: Locale, dict: Dictionary) {
   const t = dict.nav;
   return [
+    { href: `/${locale}/news`, label: t.news },
     { href: `/${locale}/about`, label: t.about },
     { href: `/${locale}/mission-vision`, label: t.missionVision },
     { href: `/${locale}/projects`, label: t.projects },
@@ -86,6 +87,27 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          {/* Search */}
+          <Link
+            href={`/${locale}/search`}
+            aria-label={dict.search.label}
+            title={dict.search.label}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
+          >
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" />
+            </svg>
+          </Link>
           <div className="hidden xl:block">
             <LanguageSwitcher current={locale} dict={dict} />
           </div>

@@ -16,6 +16,7 @@ const STATIC_PATHS = [
   "/team",
   "/partners",
   "/contact",
+  "/search",
   ...collections.map((collection) => `/${collection}`),
 ];
 

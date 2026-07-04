@@ -1,132 +1,110 @@
 # Res Publica — Website
 
-Modern, multilingual website for the civic organization Res Publica.
-German (primary) · English · Persian (RTL).
+Production website of Res Publica, a civic organization for
+democracy, responsibility, dialogue, research, and public
+participation. Trilingual: German (primary), English, Persian (RTL).
 
-## Getting started
+Stack: Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 ·
+Framer Motion · MDX content in Git · Vercel.
+
+## Quick start
 
 ```bash
 npm install
-npm run dev
+npm run dev        # http://localhost:3000 → redirects to /de|/en|/fa
 ```
 
-Then open http://localhost:3000 — you will be redirected to your
-language (or /de). Try /de, /en and /fa, and the theme toggle.
+## Scripts
 
-## Milestone 5 — SEO & accessibility hardening
+| Command                | Purpose                                    |
+| ---------------------- | ------------------------------------------ |
+| `npm run dev`          | Dev server (runs the structure guard first)|
+| `npm run build`        | Production build (guard + build)           |
+| `npm run lint`         | ESLint                                     |
+| `npm run typecheck`    | TypeScript, no emit                        |
+| `npm run check-structure` | Verify single-router/content layout     |
 
-- **Canonical + hreflang**: every page declares its canonical URL
-  and de/en/fa + x-default alternates (`src/lib/seo.ts`), so
-  search engines connect the language versions.
-- **Structured data (JSON-LD)**: Organization (home), Article
-  (projects/research/publications), Event (events, with location
-  and dates), BreadcrumbList (detail pages), Person list (team).
-- **sitemap.xml** (all pages × locales, with alternates and
-  lastModified) and **robots.txt** (`src/app/sitemap.ts`,
-  `robots.ts`).
-- **RSS feeds** per language at `/de/rss.xml`, `/en/rss.xml`,
-  `/fa/rss.xml` (research + publications, newest first), with
-  autodiscovery links in every page's head.
-- **WCAG AA contrast verified programmatically** for every token
-  pair in both themes; light-mode gold darkened to #8A6D2F (was
-  3.0:1, now 4.7:1). Escape now returns focus to the menu button.
-- Reminder: set `NEXT_PUBLIC_SITE_URL` in Vercel — canonical
-  URLs, sitemap, JSON-LD, and RSS links all derive from it.
+## Environment variables
 
-## Milestone 4 — full home page & polish
+| Variable                | Required | Purpose                                  |
+| ----------------------- | -------- | ---------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`  | yes (prod) | Canonical URLs, sitemap, JSON-LD, RSS, OG |
+| `NEWSLETTER_PROVIDER`   | optional | `buttondown` or `mailchimp`              |
+| `BUTTONDOWN_API_KEY`    | if buttondown | Buttondown API token                |
+| `MAILCHIMP_API_KEY`     | if mailchimp | Key ends in `-usXX` (datacenter)     |
+| `MAILCHIMP_AUDIENCE_ID` | if mailchimp | Audience/list ID                     |
 
-- **Home** now pulls real content at build time: 3 featured
-  projects, latest research (3), latest publications (3), and up
-  to 3 upcoming events — each section with a "view all" link and
-  hidden automatically when empty.
-- **Content location**: `src/content/<locale>/...` is canonical;
-  a root `content/` folder still works as a fallback, but never
-  keep both (the structure guard will stop the build if you do).
-- **Full footer** with grouped sitemap (Organization / Our work).
-- **Full desktop navigation** including Events and Team; the URL
-  and label are now "Mission & Vision" (`/mission-vision`).
-- **Motion polish**: staggered fade-ups per section, gentle hover
-  lift on all cards. Everything respects `prefers-reduced-motion`.
-- **Localized 404**: middleware passes `x-locale` to
-  `not-found.tsx`; a catch-all route makes unknown paths like
-  `/de/xyz` render the localized 404 inside the normal layout.
-- **Brand assets**: `src/app/icon.svg` (favicon) and a generated
-  per-locale Open Graph image (`opengraph-image.tsx`) — shared
-  links show a branded card with the localized tagline.
-- Set `NEXT_PUBLIC_SITE_URL` in Vercel (Project → Settings →
-  Environment Variables) to the production URL so OG links
-  resolve to the right domain.
+Without a configured provider the newsletter endpoint returns 503
+and the form shows a localized "currently unavailable" message —
+no fake successes. Mailchimp subscriptions are created as
+`pending` (double opt-in); Buttondown handles confirmation itself.
 
-## Milestone 3 — dynamic content collections
+## Content model (`src/content/`)
 
-- **Four collections** under `content/<locale>/<collection>/`:
-  `projects`, `research`, `publications`, `events`. Slugs are
-  defined by the German folder; missing translations fall back
-  to German (`src/lib/collections.ts`).
-- **Frontmatter** (validated by Zod): `title`, `description`,
-  `date` (YYYY-MM-DD), `tags`, plus optional `location`/`endDate`
-  (events), `authors` (research/publications), `status`
-  (`ongoing`/`completed`, projects).
-- **Index pages** share `CollectionIndex`: tag filter (`?tag=`)
-  and pagination (`?page=`, 9 per page) live in the URL — no
-  client JS, filtered views are shareable. Events split into
-  upcoming (soonest first) and past.
-- **Detail pages** share `CollectionDetail`: metadata block,
-  MDX body, related entries (shared tags), back link.
-- **Dates** are locale-aware (`src/lib/dates.ts`): Persian pages
-  automatically show the Solar Hijri calendar with Persian digits.
-- All sample entries are PLACEHOLDER content — replace or delete.
+```
+src/content/<locale>/pages/<slug>.mdx          static pages
+src/content/<locale>/<collection>/<slug>.mdx   news | projects |
+                                               research | publications | events
+```
 
-### Adding an entry
+- German defines which entries exist; missing en/fa translations
+  fall back to German automatically.
+- Frontmatter is validated with Zod at build time: `title`,
+  `description`, `date` (YYYY-MM-DD), `tags`, plus optional
+  `location`/`endDate` (events), `authors`, `status`
+  (`ongoing`/`completed`).
+- Publishing = commit + push (Vercel redeploys). No CMS.
 
-Copy an existing `.mdx` file in `content/de/<collection>/`, adjust
-the frontmatter and text, and (ideally) add the `en`/`fa` versions
-with the same filename. Commit and push.
+Team and partners are data files: `src/data/team.ts`,
+`src/data/partners.ts`.
 
-## Milestone 2 — content architecture & static pages
+UI strings live in `src/i18n/dictionaries/{de,en,fa}.json` — all
+three must keep the same key structure (TypeScript enforces it).
 
-- **MDX content in Git**: `content/<locale>/pages/<slug>.mdx` with
-  frontmatter validated by Zod (`src/lib/content.ts`). Missing
-  translations fall back to German instead of breaking.
-- **Pages**: About and Mission (MDX-driven via `MdxPage`), Team and
-  Partners (data-driven from `src/data/*.ts` — replace the
-  placeholder entries), Contact (accessible form UI; backend
-  wiring comes in a later milestone).
-- New components: `PageHeader`, `PersonCard`, `MdxPage`,
-  `ContactForm`; `Prose` now styles MDX output.
-- New dependencies — run `npm install` once after pulling:
-  `next-mdx-remote`, `gray-matter`, `zod`.
+## Features
 
-### Editing content
+- **i18n**: `/de` `/en` `/fa` with locale middleware; Persian is
+  fully RTL (logical CSS properties only) and uses the Solar
+  Hijri calendar for dates.
+- **Search**: `/{locale}/search` — a per-locale JSON index is
+  generated at build time (`/{locale}/search-index.json`) and
+  searched client-side (debounced, ranked, Persian-aware
+  normalization). Search pages are `noindex`.
+- **News**: fifth content collection; included in RSS, sitemap,
+  and search automatically.
+- **Newsletter**: `POST /api/newsletter` with provider adapters
+  (Buttondown, Mailchimp), server-side keys, honeypot.
+- **SEO**: canonical + hreflang (de/en/fa/x-default) on every
+  page, JSON-LD (Organization, Article, Event, Person,
+  BreadcrumbList), `sitemap.xml`, `robots.txt`, per-locale RSS,
+  generated OG images.
+- **Accessibility**: WCAG AA — token contrast verified
+  programmatically in both themes, skip link, focus management,
+  `aria-current` navigation, live regions, reduced-motion support.
+- **Theming**: light/dark/system, CSS variables, no flash.
 
-Open `content/de/pages/about.mdx`, change the text, commit, push —
-Vercel redeploys automatically. Same for `en` and `fa`.
+## CI (GitHub Actions)
 
-## Milestone 1 — what exists
+`.github/workflows/ci.yml` runs on every push/PR to `main`:
+structure guard → `npm run lint` → `npm run typecheck` →
+`npm run build`.
 
-- **Design tokens** in `src/app/globals.css` (light + dark palettes,
-  fonts, focus styles). Components only use semantic Tailwind
-  classes like `bg-bg`, `text-ink`, `text-accent`, `border-border`.
-- **i18n**: locale routing under `/[locale]`, dictionaries in
-  `src/i18n/dictionaries/*.json`, RTL for Persian via `dir="rtl"`.
-- **Layout**: Header (sticky, mobile menu), Footer, skip link,
-  three-state theme toggle (system / light / dark, no flash).
-- **UI kit**: Container, Button, Card, SectionHeading, Prose,
-  FadeIn (Framer Motion, respects reduced motion).
-- **Home skeleton** proving the system in all three languages.
+## Deployment (Vercel)
 
-## Conventions
+1. Import the GitHub repo (framework auto-detected; `vercel.json`
+   pins it).
+2. Set the environment variables above for Production (at minimum
+   `NEXT_PUBLIC_SITE_URL=https://your-domain`).
+3. Deploy. Then verify: `/sitemap.xml`, `/robots.txt`,
+   `/de/rss.xml`, a detail page in Google's Rich Results Test,
+   and submit the sitemap in Google Search Console.
 
-- Use logical spacing utilities (`ms-`, `me-`, `ps-`, `pe-`,
-  `start-`, `end-`) instead of `ml-`/`mr-` so layouts mirror
-  correctly in Persian.
-- All user-facing strings live in the dictionaries — never
-  hard-code text in components.
+Security headers (nosniff, frame-deny, referrer policy,
+permissions policy) are set globally in `next.config.ts`.
 
-## Next milestones
+## Project structure rules
 
-2. Content architecture (MDX) & static pages
-3. Projects / Research / Publications / Events
-4. Full home page & motion polish
-5. SEO & accessibility hardening
-6. Search, newsletter, CI, Vercel deployment
+One App Router tree: `src/app/[locale]`. One content tree:
+`src/content`. The guard (`scripts/check-structure.mjs`) fails
+any dev/build where a duplicate root `app/` or `content/` folder
+appears — that state causes silent 404s/empty pages.

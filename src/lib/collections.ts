@@ -19,6 +19,7 @@ import type { Locale } from "@/i18n/config";
  */
 
 export const collections = [
+  "news",
   "projects",
   "research",
   "publications",

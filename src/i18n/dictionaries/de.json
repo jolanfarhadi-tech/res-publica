@@ -5,6 +5,7 @@
   },
   "nav": {
     "home": "Startseite",
+    "news": "Aktuelles",
     "about": "Über uns",
     "missionVision": "Mission & Vision",
     "projects": "Projekte",
@@ -14,6 +15,7 @@
     "team": "Team",
     "partners": "Partner",
     "contact": "Kontakt",
+    "search": "Suche",
     "menuOpen": "Menü öffnen",
     "menuClose": "Menü schließen"
   },
@@ -81,6 +83,10 @@
     "notFoundLink": "Zur Startseite"
   },
   "collections": {
+    "news": {
+      "title": "Aktuelles",
+      "lede": "Neuigkeiten aus der Organisation."
+    },
     "projects": {
       "title": "Projekte",
       "lede": "Konkrete Vorhaben, die Teilhabe möglich machen."
@@ -135,5 +141,27 @@
     "skipToContent": "Zum Inhalt springen",
     "languageSwitcher": "Sprache wählen",
     "mainNavigation": "Hauptnavigation"
+  },
+  "search": {
+    "title": "Suche",
+    "lede": "Durchsuchen Sie Aktuelles, Projekte, Forschung, Publikationen und Veranstaltungen.",
+    "placeholder": "Suchbegriff eingeben …",
+    "label": "Website durchsuchen",
+    "results": "{count} Ergebnisse",
+    "oneResult": "1 Ergebnis",
+    "noResults": "Keine Ergebnisse für „{query}“.",
+    "minChars": "Bitte mindestens 2 Zeichen eingeben.",
+    "loading": "Suchindex wird geladen …",
+    "errorLoading": "Suchindex konnte nicht geladen werden. Bitte laden Sie die Seite neu."
+  },
+  "newsletter": {
+    "title": "Newsletter",
+    "text": "Neuigkeiten von Res Publica — unregelmäßig, werbefrei, jederzeit abbestellbar.",
+    "placeholder": "E-Mail-Adresse",
+    "submit": "Anmelden",
+    "success": "Fast geschafft! Bitte bestätigen Sie die E-Mail, die wir Ihnen gesendet haben.",
+    "errorInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "errorExists": "Diese Adresse ist bereits angemeldet.",
+    "errorServer": "Anmeldung derzeit nicht möglich. Bitte versuchen Sie es später erneut."
   }
 }

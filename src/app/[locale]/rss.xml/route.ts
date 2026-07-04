@@ -5,7 +5,7 @@ import { absoluteUrl } from "@/lib/seo";
 
 /**
  * RSS 2.0 feed per language: /de/rss.xml, /en/rss.xml, /fa/rss.xml.
- * Contains research and publications (newest first). Generated at
+ * Contains news, research, and publications (newest first). Generated at
  * build time.
  */
 
@@ -32,6 +32,7 @@ export async function GET(
   const dict = getDictionary(locale);
 
   const items = [
+    ...getEntries(locale, "news"),
     ...getEntries(locale, "research"),
     ...getEntries(locale, "publications"),
   ]

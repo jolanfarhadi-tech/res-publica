@@ -5,6 +5,7 @@
   },
   "nav": {
     "home": "Home",
+    "news": "News",
     "about": "About",
     "missionVision": "Mission & Vision",
     "projects": "Projects",
@@ -14,6 +15,7 @@
     "team": "Team",
     "partners": "Partners",
     "contact": "Contact",
+    "search": "Search",
     "menuOpen": "Open menu",
     "menuClose": "Close menu"
   },
@@ -81,6 +83,10 @@
     "notFoundLink": "Go to the home page"
   },
   "collections": {
+    "news": {
+      "title": "News",
+      "lede": "News from the organization."
+    },
     "projects": {
       "title": "Projects",
       "lede": "Concrete initiatives that make participation possible."
@@ -135,5 +141,27 @@
     "skipToContent": "Skip to content",
     "languageSwitcher": "Choose language",
     "mainNavigation": "Main navigation"
+  },
+  "search": {
+    "title": "Search",
+    "lede": "Search news, projects, research, publications, and events.",
+    "placeholder": "Enter a search term …",
+    "label": "Search the website",
+    "results": "{count} results",
+    "oneResult": "1 result",
+    "noResults": "No results for \"{query}\".",
+    "minChars": "Please enter at least 2 characters.",
+    "loading": "Loading search index …",
+    "errorLoading": "The search index could not be loaded. Please reload the page."
+  },
+  "newsletter": {
+    "title": "Newsletter",
+    "text": "News from Res Publica — occasional, ad-free, unsubscribe anytime.",
+    "placeholder": "Email address",
+    "submit": "Subscribe",
+    "success": "Almost done! Please confirm the email we just sent you.",
+    "errorInvalid": "Please enter a valid email address.",
+    "errorExists": "This address is already subscribed.",
+    "errorServer": "Subscription is currently unavailable. Please try again later."
   }
 }
