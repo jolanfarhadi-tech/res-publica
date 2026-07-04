@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Date *)",
+      "PowerShell(npx next typegen; npx tsc --noEmit)"
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "title": "Res Publica",
+    "description": "Res Publica — ein gemeinsamer Raum für öffentlichen Diskurs und bürgerschaftliches Engagement."
+  },
+  "nav": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "missionVision": "Mission & Vision",
+    "projects": "Projekte",
+    "research": "Forschung",
+    "publications": "Publikationen",
+    "events": "Veranstaltungen",
+    "team": "Team",
+    "contact": "Kontakt"
+  },
+  "header": {
+    "toggleThemeToDark": "Zum dunklen Modus wechseln",
+    "toggleThemeToLight": "Zum hellen Modus wechseln",
+    "languageLabel": "Sprache"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "home": {
+    "heading": "Res Publica",
+    "subheading": "Ein gemeinsamer Raum für öffentlichen Diskurs und bürgerschaftliches Engagement.",
+    "cta": "Mitmachen"
+  },
+  "pages": {
+    "about": {
+      "title": "Über uns",
+      "heading": "Über Res Publica",
+      "intro": "Res Publica ist eine zivilgesellschaftliche Organisation, die sich für einen lebendigen öffentlichen Diskurs und demokratische Teilhabe einsetzt.",
+      "paragraphs": [
+        "Wir bringen Forschende, Praktiker*innen und Bürger*innen zusammen, um die Institutionen und Praktiken zu untersuchen, die eine gesunde Öffentlichkeit tragen.",
+        "Getragen von der Überzeugung, dass informierte, engagierte Gemeinschaften das Fundament widerstandsfähiger Demokratien sind, arbeiten wir disziplin- und grenzübergreifend an diesem Ziel."
+      ]
+    },
+    "missionVision": {
+      "title": "Mission & Vision",
+      "heading": "Mission & Vision",
+      "mission": {
+        "heading": "Unsere Mission",
+        "body": "Informierte öffentliche Debatten zu fördern und Bürger*innen sowie Institutionen mit dem Wissen auszustatten, das sie für eine sinnvolle Teilhabe am gesellschaftlichen Leben benötigen."
+      },
+      "vision": {
+        "heading": "Unsere Vision",
+        "body": "Eine Gesellschaft, in der der öffentliche Diskurs inklusiv, faktenbasiert und für alle Stimmen offen ist."
+      }
+    },
+    "projects": {
+      "title": "Projekte",
+      "heading": "Projekte",
+      "intro": "Ein Überblick über die Initiativen, die wir derzeit entwickeln.",
+      "empty": "Projektdetails werden hier in Kürze veröffentlicht."
+    },
+    "research": {
+      "title": "Forschung",
+      "heading": "Forschung",
+      "intro": "Unsere Forschung untersucht die Grundlagen des öffentlichen Diskurses, zivilgesellschaftlicher Institutionen und demokratischer Teilhabe.",
+      "empty": "Forschungsarbeiten werden hier in Kürze aufgeführt."
+    },
+    "publications": {
+      "title": "Publikationen",
+      "heading": "Publikationen",
+      "intro": "Berichte, Artikel und Papiere von Res Publica und seinen Partnern.",
+      "empty": "Publikationen werden hier in Kürze aufgeführt."
+    },
+    "events": {
+      "title": "Veranstaltungen",
+      "heading": "Veranstaltungen",
+      "intro": "Vorträge, Workshops und öffentliche Gespräche, veranstaltet von Res Publica.",
+      "empty": "Bevorstehende Veranstaltungen werden hier angekündigt."
+    },
+    "team": {
+      "title": "Team",
+      "heading": "Team",
+      "intro": "Die Menschen hinter Res Publica.",
+      "empty": "Teamprofile werden hier in Kürze ergänzt."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "heading": "Kontakt",
+      "intro": "Haben Sie eine Frage oder möchten Sie mit uns zusammenarbeiten? Melden Sie sich bei uns.",
+      "emailLabel": "E-Mail",
+      "email": "info@res-publica.org"
+    }
+  }
+}
