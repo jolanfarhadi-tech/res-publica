@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -32,6 +32,7 @@ export function navItems(locale: Locale, dict: Dictionary) {
  */
 export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [open, setOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
 
   // Close the mobile menu whenever the route changes.
@@ -40,7 +41,11 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   // Allow closing the menu with the Escape key.
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        // Return focus to the button that opened the menu (WCAG 2.4.3).
+        menuButtonRef.current?.focus();
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -87,6 +92,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <ThemeToggle dict={dict} />
           {/* Mobile menu button */}
           <button
+            ref={menuButtonRef}
             type="button"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-ink lg:hidden"
             aria-expanded={open}

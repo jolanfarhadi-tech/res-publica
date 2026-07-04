@@ -7,6 +7,8 @@ import { formatDate } from "@/lib/dates";
 import { Container } from "@/components/ui/Container";
 import { Prose } from "@/components/ui/Prose";
 import { EntryCard } from "@/components/ui/EntryCard";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { absoluteUrl } from "@/lib/seo";
 
 /** One quiet "label: value" line in the metadata block. */
 function MetaRow({ label, value }: { label: string; value: string }) {
@@ -41,8 +43,60 @@ export function CollectionDetail({
       ? `${formatDate(locale, entry.date)} – ${formatDate(locale, entry.endDate)}`
       : formatDate(locale, entry.date);
 
+  const pageUrl = absoluteUrl(`${basePath}/${entry.slug}`);
+  const structuredData =
+    entry.collection === "events"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Event",
+          name: entry.title,
+          description: entry.description,
+          startDate: entry.date,
+          ...(entry.endDate ? { endDate: entry.endDate } : {}),
+          ...(entry.location
+            ? { location: { "@type": "Place", name: entry.location } }
+            : {}),
+          organizer: { "@type": "Organization", name: "Res Publica" },
+          url: pageUrl,
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: entry.title,
+          description: entry.description,
+          datePublished: entry.date,
+          inLanguage: locale,
+          author: (entry.authors ?? ["Res Publica"]).map((name) => ({
+            "@type": name === "Res Publica" ? "Organization" : "Person",
+            name,
+          })),
+          publisher: { "@type": "Organization", name: "Res Publica" },
+          url: pageUrl,
+        };
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Res Publica",
+        item: absoluteUrl(`/${locale}`),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: dict.collections[entry.collection].title,
+        item: absoluteUrl(basePath),
+      },
+      { "@type": "ListItem", position: 3, name: entry.title, item: pageUrl },
+    ],
+  };
+
   return (
     <>
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbs} />
       <section className="border-b border-border">
         <Container className="py-16 sm:py-20">
           <p className="text-xs uppercase tracking-[0.2em] text-gold">

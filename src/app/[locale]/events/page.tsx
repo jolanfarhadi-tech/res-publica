@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pageAlternates } from "@/lib/seo";
 import { CollectionIndex } from "@/components/site/CollectionIndex";
 
 const COLLECTION = "events" as const;
@@ -15,7 +16,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const section = getDictionary(locale).collections[COLLECTION];
-  return { title: section.title, description: section.lede };
+  return {
+    title: section.title,
+    description: section.lede,
+    alternates: pageAlternates(locale, `/${COLLECTION}`),
+  };
 }
 
 export default async function Page({ params, searchParams }: Props) {

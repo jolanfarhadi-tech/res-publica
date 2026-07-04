@@ -13,6 +13,26 @@ npm run dev
 Then open http://localhost:3000 — you will be redirected to your
 language (or /de). Try /de, /en and /fa, and the theme toggle.
 
+## Milestone 5 — SEO & accessibility hardening
+
+- **Canonical + hreflang**: every page declares its canonical URL
+  and de/en/fa + x-default alternates (`src/lib/seo.ts`), so
+  search engines connect the language versions.
+- **Structured data (JSON-LD)**: Organization (home), Article
+  (projects/research/publications), Event (events, with location
+  and dates), BreadcrumbList (detail pages), Person list (team).
+- **sitemap.xml** (all pages × locales, with alternates and
+  lastModified) and **robots.txt** (`src/app/sitemap.ts`,
+  `robots.ts`).
+- **RSS feeds** per language at `/de/rss.xml`, `/en/rss.xml`,
+  `/fa/rss.xml` (research + publications, newest first), with
+  autodiscovery links in every page's head.
+- **WCAG AA contrast verified programmatically** for every token
+  pair in both themes; light-mode gold darkened to #8A6D2F (was
+  3.0:1, now 4.7:1). Escape now returns focus to the menu button.
+- Reminder: set `NEXT_PUBLIC_SITE_URL` in Vercel — canonical
+  URLs, sitemap, JSON-LD, and RSS links all derive from it.
+
 ## Milestone 4 — full home page & polish
 
 - **Home** now pulls real content at build time: 3 featured

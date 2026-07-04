@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pageAlternates } from "@/lib/seo";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ContactForm } from "@/components/site/ContactForm";
@@ -12,7 +13,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const dict = getDictionary(locale);
-  return { title: dict.contact.title, description: dict.contact.lede };
+  return {
+    title: dict.contact.title,
+    description: dict.contact.lede,
+    alternates: pageAlternates(locale, "/contact"),
+  };
 }
 
 export default async function ContactPage({ params }: Props) {

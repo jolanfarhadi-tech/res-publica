@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
@@ -10,6 +11,8 @@ import { Card } from "@/components/ui/Card";
 import { EntryCard } from "@/components/ui/EntryCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeIn } from "@/components/motion/FadeIn";
+import { pageAlternates, absoluteUrl } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 /**
  * Home — Milestone 4.
@@ -70,6 +73,21 @@ function EntryGrid({
   );
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const dict = getDictionary(locale);
+  return {
+    title: dict.meta.title,
+    description: dict.meta.description,
+    alternates: pageAlternates(locale, ""),
+  };
+}
+
 export default async function HomePage({
   params,
 }: {
@@ -91,6 +109,16 @@ export default async function HomePage({
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Res Publica",
+          url: absoluteUrl(`/${locale}`),
+          logo: absoluteUrl("/icon.svg"),
+          description: dict.meta.description,
+        }}
+      />
       {/* Hero */}
       <section className="border-b border-border">
         <Container className="py-24 sm:py-32">

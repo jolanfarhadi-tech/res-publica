@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getEntry, getSlugs } from "@/lib/collections";
+import { pageAlternates } from "@/lib/seo";
 import { CollectionDetail } from "@/components/site/CollectionDetail";
 
 const COLLECTION = "research" as const;
@@ -18,7 +19,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLocale(locale)) return {};
   const entry = getEntry(locale, COLLECTION, slug);
   if (!entry) return {};
-  return { title: entry.title, description: entry.description };
+  return {
+    title: entry.title,
+    description: entry.description,
+    alternates: pageAlternates(locale, `/${COLLECTION}/${slug}`),
+  };
 }
 
 export default async function Page({ params }: Props) {

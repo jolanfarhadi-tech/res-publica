@@ -15,7 +15,7 @@
   --surface: #ffffff;    /* cards, header */
   --accent: #1e4fa3;     /* civic blue — links, primary actions */
   --accent-contrast: #ffffff;
-  --gold: #b08d3e;       /* muted gold — sparing highlights */
+  --gold: #8a6d2f;       /* muted gold — darkened for AA text contrast (4.6:1+) */
   --muted: #5c6675;      /* secondary text */
   --border: #e3e4de;     /* hairline dividers */
 }
