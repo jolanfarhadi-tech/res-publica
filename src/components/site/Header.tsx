@@ -9,12 +9,12 @@ import { Container } from "@/components/ui/Container";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 
-/** One place to define the main navigation for all languages. */
-function navItems(locale: Locale, dict: Dictionary) {
+/** The one place the main navigation is defined (header + footer). */
+export function navItems(locale: Locale, dict: Dictionary) {
   const t = dict.nav;
   return [
     { href: `/${locale}/about`, label: t.about },
-    { href: `/${locale}/mission-vision`, label: t.mission },
+    { href: `/${locale}/mission-vision`, label: t.missionVision },
     { href: `/${locale}/projects`, label: t.projects },
     { href: `/${locale}/research`, label: t.research },
     { href: `/${locale}/publications`, label: t.publications },
@@ -26,9 +26,9 @@ function navItems(locale: Locale, dict: Dictionary) {
 }
 
 /**
- * Header — sticky, translucent, with the RES·PUBLICA wordmark.
- * Desktop shows a condensed nav; the full list lives in the
- * mobile menu (and will move into grouped menus in Milestone 2).
+ * Header — sticky, with the RES·PUBLICA wordmark and the FULL
+ * main navigation on desktop (≥ lg). Only logical flow properties
+ * are used, so the layout mirrors correctly on RTL (Persian) pages.
  */
 export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [open, setOpen] = useState(false);
@@ -47,8 +47,6 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   }, []);
 
   const items = navItems(locale, dict);
-  // Keep the desktop bar calm: first five sections + contact.
-  const desktopItems = [...items.slice(0, 5), items[items.length - 1]];
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/80 backdrop-blur">
@@ -56,22 +54,23 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         {/* Wordmark — serif, letterspaced, gold interpunct. */}
         <Link
           href={`/${locale}`}
-          className="font-serif text-lg tracking-[0.18em] text-ink"
+          className="shrink-0 font-serif text-lg tracking-[0.18em] text-ink"
         >
           RES<span className="text-gold">·</span>PUBLICA
         </Link>
 
-        <nav
-          aria-label={dict.a11y.mainNavigation}
-          className="hidden lg:block"
-        >
-          <ul className="flex items-center gap-6">
-            {desktopItems.map((item) => (
+        {/* Full navigation on desktop, including Events and Team. */}
+        <nav aria-label={dict.a11y.mainNavigation} className="hidden lg:block">
+          <ul className="flex items-center gap-4 xl:gap-5">
+            {items.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`text-sm transition-colors hover:text-accent ${
-                    pathname === item.href ? "text-accent" : "text-muted"
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  className={`whitespace-nowrap text-sm transition-colors hover:text-accent ${
+                    pathname === item.href
+                      ? "font-medium text-accent"
+                      : "text-muted"
                   }`}
                 >
                   {item.label}
@@ -81,8 +80,8 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:block">
+        <div className="flex shrink-0 items-center gap-2">
+          <div className="hidden xl:block">
             <LanguageSwitcher current={locale} dict={dict} />
           </div>
           <ThemeToggle dict={dict} />
@@ -113,14 +112,15 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="block rounded-lg px-2 py-3 text-ink hover:bg-bg"
+                    aria-current={pathname === item.href ? "page" : undefined}
+                    className="block rounded-lg px-2 py-3 text-start text-ink hover:bg-bg"
                   >
                     {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
-            <div className="mt-3 border-t border-border pt-4 sm:hidden">
+            <div className="mt-3 border-t border-border pt-4 xl:hidden">
               <LanguageSwitcher current={locale} dict={dict} />
             </div>
           </Container>

@@ -34,6 +34,22 @@ if (!fs.existsSync(path.join(root, "src", "app", "[locale]", "layout.tsx"))) {
   problems.push("`src/app/[locale]/layout.tsx` is missing.");
 }
 
+const hasSrcContent = fs.existsSync(path.join(root, "src", "content"));
+const hasRootContent = fs.existsSync(path.join(root, "content"));
+if (!hasSrcContent && !hasRootContent) {
+  problems.push(
+    "No content folder found. Collections and pages expect " +
+      "`src/content/<locale>/...` (canonical) or `content/<locale>/...`."
+  );
+}
+if (hasSrcContent && hasRootContent) {
+  problems.push(
+    "Both `src/content` and `content` exist. Merge everything into " +
+      "`src/content` and delete the root `content/` folder, otherwise " +
+      "edits in the ignored folder will silently not appear on the site."
+  );
+}
+
 for (const stray of ["src/middleware.ts", "src/app/middleware.ts"]) {
   if (fs.existsSync(path.join(root, stray))) {
     problems.push(

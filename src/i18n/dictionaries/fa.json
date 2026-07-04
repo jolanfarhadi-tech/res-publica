@@ -6,7 +6,7 @@
   "nav": {
     "home": "خانه",
     "about": "درباره ما",
-    "mission": "مأموریت",
+    "missionVision": "مأموریت و چشم‌انداز",
     "projects": "پروژه‌ها",
     "research": "پژوهش",
     "publications": "انتشارات",
@@ -70,6 +70,16 @@
       "errorEmail": "لطفاً یک نشانی ایمیل معتبر وارد کنید."
     }
   },
+  "home": {
+    "featuredProjects": "از پروژه‌های ما",
+    "latestResearch": "تازه‌های پژوهش",
+    "latestPublications": "تازه‌ترین انتشارات",
+    "upcomingEvents": "رویدادهای آینده",
+    "viewAll": "مشاهده همه",
+    "notFoundTitle": "صفحه پیدا نشد",
+    "notFoundText": "صفحه درخواستی وجود ندارد یا جابه‌جا شده است.",
+    "notFoundLink": "رفتن به صفحه اصلی"
+  },
   "collections": {
     "projects": {
       "title": "پروژه‌ها",
@@ -108,7 +118,12 @@
   },
   "footer": {
     "tagline": "برای دموکراسی، مسئولیت و مشارکت عمومی.",
-    "rights": "تمامی حقوق محفوظ است."
+    "rights": "تمامی حقوق محفوظ است.",
+    "groups": {
+      "organization": "سازمان",
+      "work": "کار ما",
+      "general": "عمومی"
+    }
   },
   "theme": {
     "label": "حالت رنگ",

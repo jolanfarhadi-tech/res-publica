@@ -27,7 +27,15 @@ export const collections = [
 
 export type Collection = (typeof collections)[number];
 
-const CONTENT_DIR = path.join(process.cwd(), "content");
+/**
+ * Content lives in `src/content` (canonical). A root-level
+ * `content/` folder is supported as a fallback for older setups.
+ */
+const CONTENT_DIR =
+  [
+    path.join(process.cwd(), "src", "content"),
+    path.join(process.cwd(), "content"),
+  ].find((dir) => fs.existsSync(dir)) ?? path.join(process.cwd(), "src", "content");
 
 /**
  * One frontmatter schema for all collections. The optional fields

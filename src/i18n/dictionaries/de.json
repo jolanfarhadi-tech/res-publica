@@ -6,7 +6,7 @@
   "nav": {
     "home": "Startseite",
     "about": "Über uns",
-    "mission": "Mission",
+    "missionVision": "Mission & Vision",
     "projects": "Projekte",
     "research": "Forschung",
     "publications": "Publikationen",
@@ -70,6 +70,16 @@
       "errorEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
     }
   },
+  "home": {
+    "featuredProjects": "Aus unseren Projekten",
+    "latestResearch": "Neues aus der Forschung",
+    "latestPublications": "Neueste Publikationen",
+    "upcomingEvents": "Kommende Veranstaltungen",
+    "viewAll": "Alle ansehen",
+    "notFoundTitle": "Seite nicht gefunden",
+    "notFoundText": "Die angeforderte Seite existiert nicht oder wurde verschoben.",
+    "notFoundLink": "Zur Startseite"
+  },
   "collections": {
     "projects": {
       "title": "Projekte",
@@ -108,7 +118,12 @@
   },
   "footer": {
     "tagline": "Für Demokratie, Verantwortung und öffentliche Teilhabe.",
-    "rights": "Alle Rechte vorbehalten."
+    "rights": "Alle Rechte vorbehalten.",
+    "groups": {
+      "organization": "Organisation",
+      "work": "Unsere Arbeit",
+      "general": "Allgemein"
+    }
   },
   "theme": {
     "label": "Farbschema",

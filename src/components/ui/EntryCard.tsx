@@ -24,7 +24,7 @@ export function EntryCard({
   return (
     <Link
       href={href}
-      className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-7 transition-colors hover:border-accent"
+      className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-7 transition-[border-color,transform,box-shadow] duration-200 hover:border-accent motion-safe:hover:-translate-y-1 hover:shadow-md"
     >
       <p className="text-xs uppercase tracking-[0.15em] text-gold">{date}</p>
       <h3 className="mt-3 text-xl transition-colors group-hover:text-accent">

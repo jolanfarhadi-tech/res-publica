@@ -10,7 +10,7 @@ export function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-surface p-7">
+    <div className="rounded-2xl border border-border bg-surface p-7 transition-[transform,box-shadow] duration-200 motion-safe:hover:-translate-y-1 hover:shadow-md">
       <h3 className="mb-3 text-xl">{title}</h3>
       <p className="leading-relaxed text-muted">{children}</p>
     </div>

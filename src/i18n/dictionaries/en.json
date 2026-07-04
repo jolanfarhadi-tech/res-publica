@@ -6,7 +6,7 @@
   "nav": {
     "home": "Home",
     "about": "About",
-    "mission": "Mission",
+    "missionVision": "Mission & Vision",
     "projects": "Projects",
     "research": "Research",
     "publications": "Publications",
@@ -70,6 +70,16 @@
       "errorEmail": "Please enter a valid email address."
     }
   },
+  "home": {
+    "featuredProjects": "From our projects",
+    "latestResearch": "Latest research",
+    "latestPublications": "Latest publications",
+    "upcomingEvents": "Upcoming events",
+    "viewAll": "View all",
+    "notFoundTitle": "Page not found",
+    "notFoundText": "The requested page does not exist or has been moved.",
+    "notFoundLink": "Go to the home page"
+  },
   "collections": {
     "projects": {
       "title": "Projects",
@@ -108,7 +118,12 @@
   },
   "footer": {
     "tagline": "For democracy, responsibility, and public participation.",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "groups": {
+      "organization": "Organization",
+      "work": "Our work",
+      "general": "General"
+    }
   },
   "theme": {
     "label": "Color scheme",

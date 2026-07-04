@@ -13,6 +13,30 @@ npm run dev
 Then open http://localhost:3000 — you will be redirected to your
 language (or /de). Try /de, /en and /fa, and the theme toggle.
 
+## Milestone 4 — full home page & polish
+
+- **Home** now pulls real content at build time: 3 featured
+  projects, latest research (3), latest publications (3), and up
+  to 3 upcoming events — each section with a "view all" link and
+  hidden automatically when empty.
+- **Content location**: `src/content/<locale>/...` is canonical;
+  a root `content/` folder still works as a fallback, but never
+  keep both (the structure guard will stop the build if you do).
+- **Full footer** with grouped sitemap (Organization / Our work).
+- **Full desktop navigation** including Events and Team; the URL
+  and label are now "Mission & Vision" (`/mission-vision`).
+- **Motion polish**: staggered fade-ups per section, gentle hover
+  lift on all cards. Everything respects `prefers-reduced-motion`.
+- **Localized 404**: middleware passes `x-locale` to
+  `not-found.tsx`; a catch-all route makes unknown paths like
+  `/de/xyz` render the localized 404 inside the normal layout.
+- **Brand assets**: `src/app/icon.svg` (favicon) and a generated
+  per-locale Open Graph image (`opengraph-image.tsx`) — shared
+  links show a branded card with the localized tagline.
+- Set `NEXT_PUBLIC_SITE_URL` in Vercel (Project → Settings →
+  Environment Variables) to the production URL so OG links
+  resolve to the right domain.
+
 ## Milestone 3 — dynamic content collections
 
 - **Four collections** under `content/<locale>/<collection>/`:

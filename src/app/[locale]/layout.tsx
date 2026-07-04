@@ -40,11 +40,22 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
   const dict = getDictionary(locale);
   return {
+    // Set NEXT_PUBLIC_SITE_URL in Vercel to the production domain.
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+    ),
     title: {
       default: dict.meta.title,
       template: `%s · ${dict.meta.title}`,
     },
     description: dict.meta.description,
+    openGraph: {
+      type: "website",
+      siteName: dict.meta.title,
+      title: dict.meta.title,
+      description: dict.meta.description,
+      locale,
+    },
   };
 }
 
@@ -101,7 +112,7 @@ export default async function LocaleLayout({
         <main id="main" className="flex-1">
           {children}
         </main>
-        <Footer dict={dict} />
+        <Footer locale={locale as Locale} dict={dict} />
       </body>
     </html>
   );
