@@ -70,6 +70,42 @@
       "errorEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
     }
   },
+  "collections": {
+    "projects": {
+      "title": "Projekte",
+      "lede": "Konkrete Vorhaben, die Teilhabe möglich machen."
+    },
+    "research": {
+      "title": "Forschung",
+      "lede": "Unabhängige Analysen als Grundlage unserer Arbeit."
+    },
+    "publications": {
+      "title": "Publikationen",
+      "lede": "Berichte, Papiere und Stellungnahmen — frei zugänglich."
+    },
+    "events": {
+      "title": "Veranstaltungen",
+      "lede": "Orte des Dialogs: kommende und vergangene Termine."
+    },
+    "labels": {
+      "all": "Alle",
+      "filterByTag": "Nach Thema filtern",
+      "readMore": "Weiterlesen",
+      "related": "Verwandte Beiträge",
+      "back": "Zurück zur Übersicht",
+      "upcoming": "Kommende Veranstaltungen",
+      "past": "Vergangene Veranstaltungen",
+      "location": "Ort",
+      "authors": "Autorinnen und Autoren",
+      "status": "Status",
+      "ongoing": "Laufend",
+      "completed": "Abgeschlossen",
+      "noEntries": "Noch keine Einträge.",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "pageOf": "Seite {page} von {total}"
+    }
+  },
   "footer": {
     "tagline": "Für Demokratie, Verantwortung und öffentliche Teilhabe.",
     "rights": "Alle Rechte vorbehalten."

@@ -70,6 +70,42 @@
       "errorEmail": "Please enter a valid email address."
     }
   },
+  "collections": {
+    "projects": {
+      "title": "Projects",
+      "lede": "Concrete initiatives that make participation possible."
+    },
+    "research": {
+      "title": "Research",
+      "lede": "Independent analysis as the foundation of our work."
+    },
+    "publications": {
+      "title": "Publications",
+      "lede": "Reports, papers, and statements — freely available."
+    },
+    "events": {
+      "title": "Events",
+      "lede": "Places of dialogue: upcoming and past dates."
+    },
+    "labels": {
+      "all": "All",
+      "filterByTag": "Filter by topic",
+      "readMore": "Read more",
+      "related": "Related entries",
+      "back": "Back to overview",
+      "upcoming": "Upcoming events",
+      "past": "Past events",
+      "location": "Location",
+      "authors": "Authors",
+      "status": "Status",
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "noEntries": "No entries yet.",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {total}"
+    }
+  },
   "footer": {
     "tagline": "For democracy, responsibility, and public participation.",
     "rights": "All rights reserved."

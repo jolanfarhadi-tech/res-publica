@@ -37,7 +37,7 @@ export default async function HomePage({
               {dict.hero.lede}
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Button href={`/${locale}/mission`}>{dict.hero.ctaPrimary}</Button>
+              <Button href={`/${locale}/mission-vision`}>{dict.hero.ctaPrimary}</Button>
               <Button href={`/${locale}/contact`} variant="secondary">
                 {dict.hero.ctaSecondary}
               </Button>

@@ -14,7 +14,7 @@ function navItems(locale: Locale, dict: Dictionary) {
   const t = dict.nav;
   return [
     { href: `/${locale}/about`, label: t.about },
-    { href: `/${locale}/mission`, label: t.mission },
+    { href: `/${locale}/mission-vision`, label: t.mission },
     { href: `/${locale}/projects`, label: t.projects },
     { href: `/${locale}/research`, label: t.research },
     { href: `/${locale}/publications`, label: t.publications },

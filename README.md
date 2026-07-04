@@ -13,6 +13,32 @@ npm run dev
 Then open http://localhost:3000 — you will be redirected to your
 language (or /de). Try /de, /en and /fa, and the theme toggle.
 
+## Milestone 3 — dynamic content collections
+
+- **Four collections** under `content/<locale>/<collection>/`:
+  `projects`, `research`, `publications`, `events`. Slugs are
+  defined by the German folder; missing translations fall back
+  to German (`src/lib/collections.ts`).
+- **Frontmatter** (validated by Zod): `title`, `description`,
+  `date` (YYYY-MM-DD), `tags`, plus optional `location`/`endDate`
+  (events), `authors` (research/publications), `status`
+  (`ongoing`/`completed`, projects).
+- **Index pages** share `CollectionIndex`: tag filter (`?tag=`)
+  and pagination (`?page=`, 9 per page) live in the URL — no
+  client JS, filtered views are shareable. Events split into
+  upcoming (soonest first) and past.
+- **Detail pages** share `CollectionDetail`: metadata block,
+  MDX body, related entries (shared tags), back link.
+- **Dates** are locale-aware (`src/lib/dates.ts`): Persian pages
+  automatically show the Solar Hijri calendar with Persian digits.
+- All sample entries are PLACEHOLDER content — replace or delete.
+
+### Adding an entry
+
+Copy an existing `.mdx` file in `content/de/<collection>/`, adjust
+the frontmatter and text, and (ideally) add the `en`/`fa` versions
+with the same filename. Commit and push.
+
 ## Milestone 2 — content architecture & static pages
 
 - **MDX content in Git**: `content/<locale>/pages/<slug>.mdx` with
