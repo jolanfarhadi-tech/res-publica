@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { defaultLocale, hasLocale, locales, type Locale } from "./app/[lang]/dictionaries";
+import { defaultLocale, isLocale, locales, type Locale } from "./src/i18n/config";
 
 function pickLocaleFromAcceptLanguage(header: string | null): Locale | undefined {
   if (!header) return undefined;
@@ -17,7 +17,7 @@ function pickLocaleFromAcceptLanguage(header: string | null): Locale | undefined
     .sort((a, b) => b.q - a.q);
 
   for (const { tag } of preferred) {
-    if (hasLocale(tag)) return tag;
+    if (isLocale(tag)) return tag as Locale;
   }
   return undefined;
 }
@@ -32,7 +32,7 @@ export function proxy(request: NextRequest) {
 
   const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
   const locale =
-    (cookieLocale && hasLocale(cookieLocale) ? cookieLocale : undefined) ??
+    (cookieLocale && isLocale(cookieLocale) ? (cookieLocale as Locale) : undefined)
     pickLocaleFromAcceptLanguage(request.headers.get("accept-language")) ??
     defaultLocale;
 
