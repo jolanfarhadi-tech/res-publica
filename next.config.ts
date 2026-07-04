@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+/**
+ * Res Publica — Next.js configuration.
+ * Milestone 1 keeps this intentionally minimal.
+ */
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

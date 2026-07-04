@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Res Publica — Website
 
-## Getting Started
+Modern, multilingual website for the civic organization Res Publica.
+German (primary) · English · Persian (RTL).
 
-First, run the development server:
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000 — you will be redirected to your
+language (or /de). Try /de, /en and /fa, and the theme toggle.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Milestone 2 — content architecture & static pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **MDX content in Git**: `content/<locale>/pages/<slug>.mdx` with
+  frontmatter validated by Zod (`src/lib/content.ts`). Missing
+  translations fall back to German instead of breaking.
+- **Pages**: About and Mission (MDX-driven via `MdxPage`), Team and
+  Partners (data-driven from `src/data/*.ts` — replace the
+  placeholder entries), Contact (accessible form UI; backend
+  wiring comes in a later milestone).
+- New components: `PageHeader`, `PersonCard`, `MdxPage`,
+  `ContactForm`; `Prose` now styles MDX output.
+- New dependencies — run `npm install` once after pulling:
+  `next-mdx-remote`, `gray-matter`, `zod`.
 
-## Learn More
+### Editing content
 
-To learn more about Next.js, take a look at the following resources:
+Open `content/de/pages/about.mdx`, change the text, commit, push —
+Vercel redeploys automatically. Same for `en` and `fa`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Milestone 1 — what exists
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Design tokens** in `src/app/globals.css` (light + dark palettes,
+  fonts, focus styles). Components only use semantic Tailwind
+  classes like `bg-bg`, `text-ink`, `text-accent`, `border-border`.
+- **i18n**: locale routing under `/[locale]`, dictionaries in
+  `src/i18n/dictionaries/*.json`, RTL for Persian via `dir="rtl"`.
+- **Layout**: Header (sticky, mobile menu), Footer, skip link,
+  three-state theme toggle (system / light / dark, no flash).
+- **UI kit**: Container, Button, Card, SectionHeading, Prose,
+  FadeIn (Framer Motion, respects reduced motion).
+- **Home skeleton** proving the system in all three languages.
 
-## Deploy on Vercel
+## Conventions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Use logical spacing utilities (`ms-`, `me-`, `ps-`, `pe-`,
+  `start-`, `end-`) instead of `ml-`/`mr-` so layouts mirror
+  correctly in Persian.
+- All user-facing strings live in the dictionaries — never
+  hard-code text in components.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Next milestones
+
+2. Content architecture (MDX) & static pages
+3. Projects / Research / Publications / Events
+4. Full home page & motion polish
+5. SEO & accessibility hardening
+6. Search, newsletter, CI, Vercel deployment

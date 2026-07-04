@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Res Publica",
+    "description": "Eine zivilgesellschaftliche Organisation für Demokratie, Verantwortung, Dialog, Forschung und öffentliche Teilhabe."
+  },
+  "nav": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "mission": "Mission",
+    "projects": "Projekte",
+    "research": "Forschung",
+    "publications": "Publikationen",
+    "events": "Veranstaltungen",
+    "team": "Team",
+    "partners": "Partner",
+    "contact": "Kontakt",
+    "menuOpen": "Menü öffnen",
+    "menuClose": "Menü schließen"
+  },
+  "hero": {
+    "eyebrow": "Zivilgesellschaftliche Organisation",
+    "title": "Die öffentliche Sache gehört allen.",
+    "lede": "Res Publica verbindet Demokratie, Verantwortung und Forschung — und schafft Räume, in denen Dialog zu Teilhabe wird.",
+    "ctaPrimary": "Unsere Mission",
+    "ctaSecondary": "Kontakt aufnehmen"
+  },
+  "pillars": {
+    "heading": "Wofür wir stehen",
+    "items": [
+      {
+        "title": "Demokratie",
+        "text": "Wir stärken demokratische Institutionen und Praktiken durch Bildung, Analyse und öffentliche Debatte."
+      },
+      {
+        "title": "Dialog",
+        "text": "Wir bringen Menschen mit unterschiedlichen Perspektiven zusammen — respektvoll, offen und auf Augenhöhe."
+      },
+      {
+        "title": "Forschung",
+        "text": "Wir arbeiten evidenzbasiert: unabhängige Forschung ist das Fundament unserer Positionen und Projekte."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Gestalten Sie mit.",
+    "text": "Öffentliche Teilhabe beginnt mit einem ersten Schritt. Schreiben Sie uns.",
+    "button": "Kontakt"
+  },
+  "pages": {
+    "team": {
+      "title": "Team",
+      "lede": "Die Menschen hinter Res Publica."
+    },
+    "partners": {
+      "title": "Partner",
+      "lede": "Wir arbeiten mit Organisationen zusammen, die unsere Werte teilen."
+    }
+  },
+  "contact": {
+    "title": "Kontakt",
+    "lede": "Schreiben Sie uns — wir antworten in der Regel innerhalb weniger Tage.",
+    "form": {
+      "name": "Name",
+      "email": "E-Mail-Adresse",
+      "message": "Nachricht",
+      "submit": "Nachricht senden",
+      "success": "Vielen Dank!",
+      "successText": "Ihre Nachricht wurde erfasst. Wir melden uns bei Ihnen.",
+      "errorRequired": "Bitte füllen Sie dieses Feld aus.",
+      "errorEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+    }
+  },
+  "footer": {
+    "tagline": "Für Demokratie, Verantwortung und öffentliche Teilhabe.",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "theme": {
+    "label": "Farbschema",
+    "system": "System",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
+  "a11y": {
+    "skipToContent": "Zum Inhalt springen",
+    "languageSwitcher": "Sprache wählen",
+    "mainNavigation": "Hauptnavigation"
+  }
+}

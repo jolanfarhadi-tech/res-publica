@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Res Publica",
+    "description": "A civic organization for democracy, responsibility, dialogue, research, and public participation."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "mission": "Mission",
+    "projects": "Projects",
+    "research": "Research",
+    "publications": "Publications",
+    "events": "Events",
+    "team": "Team",
+    "partners": "Partners",
+    "contact": "Contact",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu"
+  },
+  "hero": {
+    "eyebrow": "Civic organization",
+    "title": "The public matter belongs to everyone.",
+    "lede": "Res Publica connects democracy, responsibility, and research — creating spaces where dialogue becomes participation.",
+    "ctaPrimary": "Our mission",
+    "ctaSecondary": "Get in touch"
+  },
+  "pillars": {
+    "heading": "What we stand for",
+    "items": [
+      {
+        "title": "Democracy",
+        "text": "We strengthen democratic institutions and practices through education, analysis, and public debate."
+      },
+      {
+        "title": "Dialogue",
+        "text": "We bring people with different perspectives together — respectfully, openly, and as equals."
+      },
+      {
+        "title": "Research",
+        "text": "We work evidence-based: independent research is the foundation of our positions and projects."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Take part.",
+    "text": "Public participation begins with a first step. Write to us.",
+    "button": "Contact"
+  },
+  "pages": {
+    "team": {
+      "title": "Team",
+      "lede": "The people behind Res Publica."
+    },
+    "partners": {
+      "title": "Partners",
+      "lede": "We work with organizations that share our values."
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "lede": "Write to us — we usually reply within a few days.",
+    "form": {
+      "name": "Name",
+      "email": "Email address",
+      "message": "Message",
+      "submit": "Send message",
+      "success": "Thank you!",
+      "successText": "Your message has been recorded. We will get back to you.",
+      "errorRequired": "Please fill in this field.",
+      "errorEmail": "Please enter a valid email address."
+    }
+  },
+  "footer": {
+    "tagline": "For democracy, responsibility, and public participation.",
+    "rights": "All rights reserved."
+  },
+  "theme": {
+    "label": "Color scheme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "languageSwitcher": "Choose language",
+    "mainNavigation": "Main navigation"
+  }
+}
