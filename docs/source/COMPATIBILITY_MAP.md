@@ -17,7 +17,7 @@ Cross-references between the new canonical tree (`docs/source/`) and the prior P
 | `governance/REVIEW_PROCESS.md`, `DECISION_MODEL.md` | `brain/00_constitution/00_constitution.md` §§6/9 | Reuses |
 | `governance/ETHICS_CHARTER.md`, `DATA_POLICY.md` | *(none — new territory)* | New/Version 1.0, from confirmed fragments |
 | `projects/WEBSITE.md` | repo-root `WEBSITE.md` | Reuses directly, full fidelity |
-| `projects/IMPACT.md` | `brain/FOUNDATION/02_CONTRIBUTION_AND_IMPACT_FRAMEWORK.md` | Reuses, references directly |
+| `projects/IMPACT.md` | `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md` | Reuses, references directly |
 | `projects/PROJECT_PROPOSAL.md`, `COMMUNITY.md`, `BUSINESS.md`, `BUILD.md` | *(none, or partial fragments only)* | New/Version 1.0 |
 | `standards/*`, `glossary/*` | *(none — new territory)* | New, assembled from this build's own terminology |
 

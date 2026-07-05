@@ -21,7 +21,7 @@ All 4 files built from confirmed fragments (4 phases, 4 tracks, 5 levels, exact 
 ETHICS_CHARTER.md is a Version 1.0 proposal (referenced by path in `WEBSITE.md` but no content existed). AI_POLICY.md, REVIEW_PROCESS.md, DECISION_MODEL.md reuse existing Brain governance documents directly. DATA_POLICY.md reuses confirmed GDPR/DPIA fragments from `WEBSITE.md`.
 
 ## projects/
-PROJECT_PROPOSAL.md is a Version 1.0 skeleton (section list confirmed, content not). WEBSITE.md and COMMUNITY.md reuse confirmed, substantial fragments (repo-root `WEBSITE.md`; Lab Series Fellowship figures). BUSINESS.md, IMPACT.md, BUILD.md are largely Version 1.0, IMPACT.md drawing most heavily on existing `brain/FOUNDATION/02_CONTRIBUTION_AND_IMPACT_FRAMEWORK.md`.
+PROJECT_PROPOSAL.md is a Version 1.0 skeleton (section list confirmed, content not). WEBSITE.md and COMMUNITY.md reuse confirmed, substantial fragments (repo-root `WEBSITE.md`; Lab Series Fellowship figures). BUSINESS.md, IMPACT.md, BUILD.md are largely Version 1.0, IMPACT.md drawing most heavily on `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md` (the reconciled canonical version, per `architecture/adr/ADR-013-contribution-impact-framework-reconciliation.md`).
 
 ## standards/ and glossary/
 Assembled from this build's own confirmed usage; BRAND_GUIDE.md is a Version 1.0 summary of two confirmed fragments (typography, tone reference) only.
