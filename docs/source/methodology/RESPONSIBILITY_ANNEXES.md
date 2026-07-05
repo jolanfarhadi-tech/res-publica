@@ -29,7 +29,7 @@ A Responsibility Annex is a documented, evidence-backed account of one responsib
 
 **Direct path** (from a single Structured Hearing, per `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`):
 1. A Structured Hearing produces an Evidence Package.
-2. The Scientific Review Committee reviews it; approves or returns it for revision.
+2. The Scientific Review Committee reviews it through Scientific Review's four levels (Expert Review, Structured Hearing, Narrative Coding + Normative Alignment, Governance Review Gates — see that document §7 for full detail); approves or returns it for revision.
 3. Once approved, the Evidence Package becomes an Annex.
 4. A Blockchain Annex Block (integrity/timestamp/approval record only — never raw testimony) is produced.
 5. The Annex becomes eligible for Civic Contribution mapping.

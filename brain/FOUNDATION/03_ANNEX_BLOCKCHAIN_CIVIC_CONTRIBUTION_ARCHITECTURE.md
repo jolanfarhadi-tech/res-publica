@@ -84,11 +84,99 @@ The "direct path" described in `docs/source/methodology/RESPONSIBILITY_ANNEXES.m
 
 These rules operate under, and do not replace, the organization's existing Constitution, Ethics Charter, and Governance Charter — no new governance model is introduced.
 
-## 7. AI Integration
+## 7. Scientific Review: The Validation Engine
 
-AI may assist in assembling an Evidence Package (e.g., organizing a Facilitator's notes) and in surfacing related Annexes for the Scientific Review Committee's reference. AI does not approve an Annex, does not trigger Blockchain Annex Block production, and does not perform Civic Contribution mapping — all three require human action, consistent with `docs/source/foundation/05_AI.md` and `brain/AI/AI_GOVERNANCE_HIERARCHY.md`.
+**Definition:** Scientific Review is the validation engine that transforms subjective testimony into governance-grade validated evidence. It validates **mechanisms and evidence quality — never people.** This formalizes and details what §3 and §6 already named as the Scientific Review Committee's function, and resolves the "Validation Engine" item flagged as a Future Proposal requiring a new ADR in `brain/GOVERNANCE/EXECUTION_ALIGNMENT.md` (item 32) — see `architecture/adr/ADR-017-scientific-review-validation-engine.md`. It remains explicitly distinct from the Review & Validation Agent (`ADR-004`), an AI-assisted reviewer *role*, not this validation *process*.
 
-## 8. Entity Relationship Diagram
+### The complete review pipeline
+
+```mermaid
+flowchart LR
+    RT[Raw Testimony] --> ER[Expert Review]
+    ER --> SH[Structured Hearing]
+    SH --> NC[Narrative Coding]
+    NC --> NA[Normative Alignment]
+    NA --> CA[Comparative Analysis]
+    CA --> CV[Codex Validation]
+    CV --> GRG{Governance Review Gates}
+    GRG -- Pass --> AA[Approved Annex]
+    GRG -- Fail --> ER
+    AA --> BAB[Blockchain Annex Block]
+```
+
+This pipeline is the detailed internal structure of what §2 calls "Annex Deepening → Evidence Package → Scientific Review Committee → Approved Annex." Raw Testimony, Expert Review, and Structured Hearing correspond to Annex Deepening's evidence-gathering; Narrative Coding through Governance Review Gates correspond to the Scientific Review Committee's review process, now made explicit as four levels rather than one black-box step.
+
+### The four review levels
+
+**Level 1 — Expert Review**
+- **Purpose:** initial domain-expert assessment of Raw Testimony's substance and technical claims.
+- **Inputs:** Raw Testimony (from Listening/Structured Hearings intake).
+- **Outputs:** an Expert Review note, feeding the Structured Hearing.
+- **Decision criteria:** does the testimony contain a coherent, checkable claim.
+- **Roles:** Expert (existing role, `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` §Roles).
+- **Gate condition:** a testimony with no checkable claim does not proceed; it returns to Listening for further context — it is never discarded or dismissed as invalid experience (Governance Guardrail 5, below).
+
+**Level 2 — Structured Hearing**
+- **Purpose:** explore the testimony in depth under safety and quality conditions (existing process, `docs/source/methodology/STRUCTURED_HEARINGS.md`, unchanged).
+- **Inputs:** the Expert Review note plus the participant's account.
+- **Outputs:** a documented Evidence Package.
+- **Decision criteria:** the existing Structured Hearings safety/quality standard.
+- **Roles:** Facilitator, Participant, Moderator (existing roles, unchanged).
+- **Gate condition:** no Evidence Package is produced without Facilitator sign-off that the session met safety standards.
+
+**Level 3 — Narrative Coding + Normative Alignment**
+- **Purpose:** Narrative Coding structures the Evidence Package into analyzable categories against the Harm Codex taxonomy (`docs/source/methodology/HARM_CODEX.md`); Normative Alignment checks the coded narrative against the organization's Core Principles and Ethics Charter; Comparative Analysis checks it against existing Codex entries.
+- **Inputs:** the Evidence Package.
+- **Outputs:** a coded, normatively-checked, comparatively-analyzed narrative, ready for Codex Validation.
+- **Decision criteria:** internal consistency, normative fit, and whether the narrative matches or extends a known Codex mechanism.
+- **Roles:** Researcher (coding, comparative analysis), Reviewer (normative alignment check).
+- **Gate condition:** a narrative failing normative alignment is returned to Level 1, not silently advanced.
+
+**Level 4 — Governance Review Gates**
+- **Purpose:** the Scientific Review Committee's formal, committee-level approval decision — the final gate before Annex status, and the point where the Ethics Board's veto authority applies.
+- **Inputs:** the Codex-validated narrative and Comparative Analysis result.
+- **Outputs:** a Scientific Approval record (§3) — approve or return for revision.
+- **Decision criteria:** the full Review Criteria model, below.
+- **Roles:** Scientific Review Committee; Ethics Board (veto only — see Governance Guardrails).
+- **Gate condition:** no Approved Annex exists without a Scientific Approval record; an Ethics Board veto overrides a Committee approval and returns the item to Level 3.
+
+### Review Criteria model
+
+Every Level 4 decision is assessed against eight criteria: **Clarity, Structural Accuracy, Analytical Depth, Internal Consistency, Normative Fit, Epistemic Condition, Ethical Compliance, Governance Applicability.** These are qualitative judgment criteria applied by the Scientific Review Committee — never automated into a formula, and never used to produce a numeric score of the testimony's source.
+
+### Governance Guardrails (binding)
+
+1. **AI never validates.** AI may assist with Narrative Coding suggestions or Comparative Analysis candidate matches; it never makes an Expert Review, Hearing, Codex Validation, or Governance Review Gate decision.
+2. **Human-in-the-loop is mandatory** at every one of the four levels.
+3. **Confidence scores apply only to evidence quality and patterns** (e.g., "this mechanism is well-corroborated") — never to a person's credibility or worth.
+4. **Never score people.** Consistent with Zero Gamification (Core Principle 2), applied specifically to Scientific Review.
+5. **Reject only the data format — not human experience.** A "return" at Level 1 or Level 3 rejects the testimony's current documentation as insufficiently structured for validation; it never characterizes the underlying human experience as false or unworthy.
+6. **Ethics Board has veto authority.** The Ethics Board is a standing body, distinct from the Scientific Review Committee, empowered to veto a Committee approval on ethical grounds at Level 4. It does not originate approvals — only blocks them.
+7. **Full audit logging.** Every level transition is logged to `AuditLog`, consistent with the existing Responsibility Evidence Model.
+8. **Pseudonymization by default,** consistent with `docs/source/governance/DATA_POLICY.md`'s existing data-minimization standard.
+
+### Lifecycle State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> draft
+    draft --> expert_reviewed : Level 1 pass
+    expert_reviewed --> hearing_validated : Level 2 pass
+    hearing_validated --> codex_validated : Level 3 pass
+    codex_validated --> published : Level 4 pass (Scientific Approval)
+    published --> signal_released : Early Warning trigger (optional)
+    expert_reviewed --> draft : Level 1 return
+    hearing_validated --> expert_reviewed : Level 3 return
+    codex_validated --> hearing_validated : Level 4 / Ethics Board veto
+```
+
+This state machine describes an individual Evidence Package/Annex's own status field as it moves through the four Levels — it is more granular than, and sits alongside (not in place of), the Responsibility Evidence Model's general Created → Evidence Submitted → Human Verification → Accepted/Rejected workflow (`brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md` §5). `published` corresponds to that model's "Accepted." `signal_released` is an optional terminal state reached only if the validated Annex triggers an Early Warning signal — referenced here by name only (`EARLY_WARNING_PROPOSAL.md`, named in existing project material as "AI Early Warning: Narrative → Signal, Responsibility Briefs"); the full Early Warning specification is not present in this repository, and no additional content about it is invented here.
+
+## 8. AI Integration
+
+AI may assist in assembling an Evidence Package (e.g., organizing a Facilitator's notes) and in surfacing related Annexes for the Scientific Review Committee's reference. AI does not approve an Annex, does not trigger Blockchain Annex Block production, and does not perform Civic Contribution mapping — all three require human action, consistent with `docs/source/foundation/05_AI.md` and `brain/AI/AI_GOVERNANCE_HIERARCHY.md`. See §7 for AI's specifically bounded role within Scientific Review's four levels.
+
+## 9. Entity Relationship Diagram
 
 ```mermaid
 erDiagram
@@ -110,7 +198,7 @@ erDiagram
 
 A Civic Contribution citing zero Annexes cannot exist (Governance Rule 2); a Blockchain Annex Block cannot exist without a prior Scientific Approval (Governance Rules 3–4); an Annex correction always produces a new Annex row, never an update to an existing one (Governance Rule 6). The Dashboard-to-Impact-Record relationship is drawn as optional/secondary (dotted), reflecting its role as a later refresh, not the Dashboard's primary function.
 
-## 9. System Integration (Structured Hearings, HARM Operating System, Contribution & Impact Framework, Responsibility Evidence Model, RPCS, Responsibility Dashboard)
+## 10. System Integration (Structured Hearings, HARM Operating System, Contribution & Impact Framework, Responsibility Evidence Model, RPCS, Responsibility Dashboard, AHIP, Codex Research, Early Warning, Validation Engine)
 
 This architecture touches six existing systems. None of them is redefined here — each integration point is stated explicitly to avoid the silent, undocumented coupling this session's consistency discipline is designed to prevent.
 
@@ -120,16 +208,22 @@ This architecture touches six existing systems. None of them is redefined here �
 - **Responsibility Evidence Model** (`brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`) — a Civic Contribution's Responsibility Evidence record uses this model's existing verification workflow unchanged (Created → Evidence Submitted → Human Verification → Accepted/Rejected → `AuditLog`); this architecture adds only a constraint on that record's Evidence Source field (must cite ≥1 Approved Annex), not a new workflow.
 - **RPCS** (`docs/source/academy/RPCS_PROGRAM.md`) — RPCS tracks supply the trained people who staff this lifecycle: the **Trauma-Informed Facilitation** track trains the Facilitators who run Structured Hearings (stage 1); the **Codex Research** track trains researchers whose expertise supports Scientific Review Committee membership (stage 3); the **AHIP Specialist** track trains the intake moderators upstream of the Hearing itself. RPCS certification does not itself grant Scientific Review Committee membership — that remains a separate, explicit appointment, consistent with RPCS's existing "no abstract credentials" principle (`RPCS_PROGRAM.md` §Core Principles).
 - **Responsibility Dashboard** (`docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`) — **primary role:** the prioritization instrument that produces the Top Priority Selection feeding Annex Deepening (§2, stages 3–5). **Secondary role:** later refresh of its aggregate view using validated Impact Records (§2, stage 13). See §5 for the full correction record and `RESPONSIBILITY_DASHBOARD.md` for the complete specification (Observer Panel, HARM Lens, Priority Matrix, Zero-Gamification Guardrails).
+- **AHIP** (`docs/source/methodology/AHIP.md`) — supplies the intake that produces Raw Testimony ahead of Scientific Review Level 1 (§7).
+- **Codex Research** (RPCS track, `docs/source/academy/RPCS_PROGRAM.md`) — trains the researchers who perform Narrative Coding and Comparative Analysis at Scientific Review Level 3 (§7). RPCS certification does not itself grant Scientific Review Committee or Ethics Board membership, consistent with §9's earlier RPCS note.
+- **Early Warning** — the optional downstream consumer of a `published` Annex (§7's state machine), producing a `signal_released` state. Referenced by name only (`EARLY_WARNING_PROPOSAL.md`); its full specification is not present in this repository and no additional content about it is invented here.
+- **Validation Engine** — Scientific Review (§7) *is* this ecosystem's Validation Engine, resolving the Future Proposal flagged in `brain/GOVERNANCE/EXECUTION_ALIGNMENT.md` (item 32). See `architecture/adr/ADR-017-scientific-review-validation-engine.md`.
 
-## 10. Validation
+## 11. Validation
 
 - **Compatible with Core Domain Model (LOCKED)** — no new entity is added to that locked document; `AuditLog` is reused, not redefined. The Contribution Ledger and Blockchain Annex Block are described here as architecture concepts; any future domain-entity representation of them requires its own ADR against the locked model, not performed here.
 - **Compatible with Application Architecture (LOCKED)** — no service ownership is asserted or altered.
 - **Compatible with Responsibility Evidence Model** — Civic Contribution's Responsibility Evidence requirement is an additional constraint on Evidence Source (§4 of that model), not a redefinition of it.
 - **Compatible with Contribution & Impact Framework** — see §4 above; no redefinition.
 - **Compatible with Structured Hearings and Responsibility Annexes methodology documents** — both updated with a cross-reference and one small addition each (Evidence Package as an output; Scientific Review Committee and Blockchain Annex Block as an additional approval/output step), not rewritten.
-- **No architectural drift introduced.** This document specifies architecture only — no blockchain platform, consensus mechanism, smart contract, or storage schema is chosen or specified here.
+- **Compatible with `brain/GOVERNANCE/EXECUTION_ALIGNMENT.md`** — §7's Validation Engine formalization directly resolves that document's item 32 (Future Proposal, new ADR required), without redefining the distinct Review & Validation Agent role (`ADR-004`).
+- **Compatible with AHIP, RPCS, and Harm Codex** — Scientific Review's four levels (§7) reuse these documents' existing roles and taxonomy; no new role or taxonomy category is introduced without cross-reference.
+- **No architectural drift introduced.** This document specifies architecture only — no blockchain platform, consensus mechanism, smart contract, or storage schema is chosen or specified here. The Ethics Board is introduced as a governance role with veto authority, not as a new domain entity in the LOCKED Core Domain Model.
 
 ---
 
-*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_PROGRAM.md`, `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the original decision record, `architecture/adr/ADR-015-annex-architecture-extension.md` for the ERD/per-object/immutability extension, and `architecture/adr/ADR-016-responsibility-dashboard-specification.md` for the Dashboard-primacy correction and full Dashboard specification.*
+*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `docs/source/methodology/AHIP.md`, `docs/source/methodology/HARM_CODEX.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_PROGRAM.md`, `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`, `brain/GOVERNANCE/EXECUTION_ALIGNMENT.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the original decision record, `architecture/adr/ADR-015-annex-architecture-extension.md` for the ERD/per-object/immutability extension, `architecture/adr/ADR-016-responsibility-dashboard-specification.md` for the Dashboard-primacy correction, and `architecture/adr/ADR-017-scientific-review-validation-engine.md` for the Scientific Review validation-engine formalization.*

@@ -29,6 +29,9 @@ One definition per concept; every other document must match this one exactly.
 - **Civic Contribution** — a Contribution whose Responsibility Evidence cites at least one Approved Annex. Not a concept distinct from Contribution — a specific, more strictly evidenced case of it.
 - **Contribution Ledger** — the aggregate view over Annex-mapped Civic Contributions, extending `AuditLog`; not a separate storage system.
 - **Impact Record** — the specific Impact assessment for one Civic Contribution once entered in the Contribution Ledger; not a concept distinct from Impact.
+- **Scientific Review** — the validation engine that transforms subjective testimony into governance-grade validated evidence via four levels (Expert Review, Structured Hearing, Narrative Coding + Normative Alignment, Governance Review Gates). Validates mechanisms and evidence quality, never people. Res Publica's "Validation Engine."
+- **Ethics Board** — a standing body, distinct from the Scientific Review Committee, with veto authority over a Committee approval on ethical grounds. Never originates approvals, only blocks them.
+- **Review Criteria** — the eight qualitative criteria (Clarity, Structural Accuracy, Analytical Depth, Internal Consistency, Normative Fit, Epistemic Condition, Ethical Compliance, Governance Applicability) applied at Scientific Review's Governance Review Gates. Never automated into a formula or numeric score.
 
 ## Framework
 Not applicable.
