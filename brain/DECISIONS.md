@@ -15,6 +15,7 @@
 | [ADR-009](../architecture/adr/ADR-009-module-integration.md) | One integration map with a "downstream never blocks upstream" rule | Yes — amendment records the two map corrections (Events↔Community direction, missing Membership→Analytics row) |
 | [ADR-010](../architecture/adr/ADR-010-offline-first-development.md) | Offline-first as a platform-wide principle, not just a local-dev convenience | No |
 | [ADR-011](../architecture/adr/ADR-011-phase-0-start.md) | Phase 0 begins from the frozen Project Brain v1.1 baseline (`7d39c71`, tag `project-brain-v1.1`); no Brain/Foundation document changes during Phase 0 without a new ADR | No |
+| [ADR-012](../architecture/adr/ADR-012-phase-0-build-order-correction.md) | Adopts Implementation Plan's P0 tier (not `foundation-architecture.md` §9's list) as the authoritative Foundation Build Order Step 0 scope, without editing the frozen Foundation Architecture text | No — first ADR adopted under the Constitution's ADR Governance Workflow (§17) |
 
 ## Review gate history
 
