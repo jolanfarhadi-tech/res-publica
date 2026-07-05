@@ -2,7 +2,27 @@
   "permissions": {
     "allow": [
       "PowerShell(Get-Date *)",
-      "PowerShell(npx next typegen; npx tsc --noEmit)"
+      "PowerShell(npx next typegen; npx tsc --noEmit)",
+      "Bash(npx tsc *)",
+      "Bash(find node_modules/next/dist/docs -iname \"*proxy*\")",
+      "Bash(find node_modules/next/dist/docs -iname \"*middleware*\")",
+      "Bash(grep -rniE \"\\(api[_-]?key|secret|token|password|bearer\\)\\\\s*[:=]\\\\s*['\\\\\"][A-Za-z0-9_\\\\-]{10,}\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.json\" --include=\"*.mdx\" .)",
+      "Bash(grep -rn \"swcMinify\\\\|target:\\\\|experimental\\\\.\\\\|images:\\\\|i18n:\" next.config.ts)",
+      "Bash(node -e ' *)",
+      "Bash(npm audit *)",
+      "Bash(npx eslint *)",
+      "Bash(node -e ' *node -e \"...\")",
+      "Bash(npm run *)",
+      "Bash(npx --no-install tsc --noEmit proxy.ts)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(mkdir *)",
+      "Artifact",
+      "Skill(artifact-design)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git tag *)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }
