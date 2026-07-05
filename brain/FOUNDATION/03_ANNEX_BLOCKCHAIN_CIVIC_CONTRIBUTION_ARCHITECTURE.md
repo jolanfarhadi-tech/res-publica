@@ -12,28 +12,40 @@ This document exists to close a gap: prior documents defined Structured Hearings
 
 ## 2. Full Lifecycle
 
+**Corrected per ADR-016** (superseding this section's original ordering): the Responsibility Dashboard's primary position is upstream, Innovation 3, before Annex generation — it is the prioritization instrument that identifies which patterns should be deepened into Annexes, not primarily a downstream consumer. See §5 for the full reconciliation.
+
 ```mermaid
 flowchart TD
-    A[Structured Hearing] --> B[Evidence Package]
+    L[Listening / Structured Hearings] --> M[Responsibility Mapping]
+    M --> Dash[Responsibility Dashboard]
+    Dash --> T[Top Priority Selection]
+    T --> AD[Annex Deepening]
+    AD --> B[Evidence Package]
     B --> C{Scientific Review Committee}
     C -- Approved --> D[Approved Annex]
-    C -- Rejected / Revise --> A
+    C -- Rejected / Revise --> AD
     D --> E[Blockchain Annex Block]
     E --> F[Civic Contribution Mapping]
     F --> G[Contribution Ledger]
     G --> H[Contribution & Impact Framework]
-    H --> I[Responsibility Dashboard]
+    H -.secondary, later.-> Dash
 ```
 
-1. **Structured Hearing** — the facilitated session (`docs/source/methodology/STRUCTURED_HEARINGS.md`), unchanged.
-2. **Evidence Package** — the Hearing's documented output, assembled for review (§3).
-3. **Scientific Review Committee** — reviews the Evidence Package (§3); approves or returns it for revision. No shortcut exists from Evidence Package directly to Annex.
-4. **Approved Annex** — the verified evidence unit (§3), only once approved.
-5. **Blockchain Annex Block** — an integrity/timestamp/approval record produced only after approval (§3).
-6. **Civic Contribution Mapping** — a downstream civic action, responsibility, or intervention is mapped to one or more Approved Annexes (§3).
-7. **Contribution Ledger** — the durable record of mapped Civic Contributions (§3) — not a new storage system, an extension of `AuditLog` exactly as Responsibility Evidence already is.
-8. **Contribution & Impact Framework** — consumes the Contribution Ledger (§4).
-9. **Responsibility Dashboard** — aggregates Contribution & Impact Framework output for display (§5).
+1. **Listening / Structured Hearings** — the facilitated session (`docs/source/methodology/STRUCTURED_HEARINGS.md`), unchanged.
+2. **Responsibility Mapping** — accumulates Responsibility Maps (`docs/source/methodology/RESPONSIBILITY_MAPPING.md`), unchanged.
+3. **Responsibility Dashboard** — the prioritization instrument (`docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`); aggregates Maps, applies the Observer Panel and HARM Lens, and runs the Responsibility Priority Matrix.
+4. **Top Priority Selection** — the Matrix's output: which patterns warrant deeper documentation.
+5. **Annex Deepening** — the research and evidence-gathering activity applied to a Top Priority Selection (the same activity as `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`'s existing aggregate-path Workflow steps 1–2), producing an Evidence Package.
+6. **Evidence Package** — the documented output of Annex Deepening, assembled for review (§3).
+7. **Scientific Review Committee** — reviews the Evidence Package (§3); approves or returns it for revision. No shortcut exists from Evidence Package directly to Annex.
+8. **Approved Annex** — the verified evidence unit (§3), only once approved.
+9. **Blockchain Annex Block** — an integrity/timestamp/approval record produced only after approval (§3).
+10. **Civic Contribution Mapping** — a downstream civic action, responsibility, or intervention is mapped to one or more Approved Annexes (§3).
+11. **Contribution Ledger** — the durable record of mapped Civic Contributions (§3) — not a new storage system, an extension of `AuditLog` exactly as Responsibility Evidence already is.
+12. **Contribution & Impact Framework** — consumes the Contribution Ledger (§4).
+13. **Responsibility Dashboard (secondary, later)** — once Impact Records exist, the Dashboard's Visualizations & Metrics may incorporate them to refresh its aggregate view (§5). This is a secondary role, not the Dashboard's primary process position.
+
+**Note on the direct Hearing path:** a single Structured Hearing may still produce an Evidence Package directly (bypassing Dashboard-driven Top Priority Selection), per `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`'s "direct path." This remains valid as a secondary origination route; the Dashboard-driven route above is now stated as primary, per the user's architecture correction.
 
 ## 3. Definitions
 
@@ -53,13 +65,13 @@ The Contribution & Impact Framework (`brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FR
 
 ## 5. Relationship to the Responsibility Dashboard and the HARM Innovation Order
 
-`docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` sequences the five Innovations as Responsibility Biography Lab → Responsibility Mapping Lab → Responsibility Dashboard → Responsibility Annexes → Civic Intelligence Lab — in that ordering, the Dashboard's aggregate patterns are what *produce* Annexes. This architecture's lifecycle places the Responsibility Dashboard at the *end*, as a consumer of the Contribution & Impact Framework's output.
+**Corrected by ADR-016.** `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` sequences the five Innovations as Responsibility Biography Lab → Responsibility Mapping Lab → Responsibility Dashboard → Responsibility Annexes → Civic Intelligence Lab. This was always the correct, primary ordering — the Dashboard's role as prioritization instrument, positioned *before* Annex generation, was never actually in tension with it. An earlier version of this document overstated a conflict by framing the Dashboard primarily as a downstream consumer; that framing is superseded.
 
-**These are not contradictory — they describe two different Annex-origination paths, both valid:**
-- **Aggregate path** (existing, unchanged): Dashboard surfaces a recurring pattern across many accounts → a Researcher drafts an Annex about that pattern (`docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, unchanged Workflow).
-- **Direct path** (this architecture, new): a single Structured Hearing's Evidence Package is reviewed and approved as its own Annex, independent of any aggregate pattern.
+**The Dashboard has one primary role and one secondary role, not two parallel equal paths:**
+- **Primary (upstream, Innovation 3):** the Dashboard aggregates Responsibility Maps, applies the Observer Panel and HARM Lens, and runs the Responsibility Priority Matrix to produce a Top Priority Selection — this is what feeds Annex Deepening (§2, stages 3–5). This is the ecosystem's default, primary Annex-origination route.
+- **Secondary (downstream, later):** once Impact Records exist for prior Civic Contributions, the Dashboard's Visualizations & Metrics may incorporate them to refresh its aggregate view (§2, stage 13). This does not generate new Annexes — it only enriches the Dashboard's own display.
 
-Both paths converge on the same Annex concept and the same downstream treatment (Blockchain Annex Block eligibility, Civic Contribution mapping). The Dashboard therefore appears twice in the full system picture: upstream, as a pattern source for the aggregate path; downstream, as a display layer consuming verified Contribution & Impact data. This is stated explicitly here rather than silently merged, since it is a genuine structural nuance and not an oversight.
+The "direct path" described in `docs/source/methodology/RESPONSIBILITY_ANNEXES.md` (a single Structured Hearing producing an Evidence Package independent of the Dashboard) remains valid as a secondary origination route, not the primary one. See `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md` for the Dashboard's full specification (Observer Panel, HARM Lens, Priority Matrix, Visualizations & Metrics, Zero-Gamification Guardrails).
 
 ## 6. Governance Rules
 
@@ -80,7 +92,11 @@ AI may assist in assembling an Evidence Package (e.g., organizing a Facilitator'
 
 ```mermaid
 erDiagram
+    RESPONSIBILITY_MAP ||--o| RESPONSIBILITY_DASHBOARD : aggregates
+    RESPONSIBILITY_DASHBOARD ||--o| TOP_PRIORITY_SELECTION : produces
+    TOP_PRIORITY_SELECTION ||--o| ANNEX_DEEPENING : initiates
     HEARING ||--o| EVIDENCE_PACKAGE : produces
+    ANNEX_DEEPENING ||--o| EVIDENCE_PACKAGE : produces
     EVIDENCE_PACKAGE ||--o| SCIENTIFIC_APPROVAL : "reviewed via"
     SCIENTIFIC_APPROVAL ||--o| ANNEX : authorizes
     ANNEX ||--|| BLOCKCHAIN_ANNEX_BLOCK : "registers as"
@@ -89,10 +105,10 @@ erDiagram
     CIVIC_CONTRIBUTION ||--|| RESPONSIBILITY_EVIDENCE : "recorded as"
     CIVIC_CONTRIBUTION ||--o| CONTRIBUTION_LEDGER : "entered in"
     CONTRIBUTION_LEDGER ||--o| IMPACT_RECORD : "assessed as"
-    IMPACT_RECORD }o--|| RESPONSIBILITY_DASHBOARD : "aggregated by"
+    IMPACT_RECORD }o..o| RESPONSIBILITY_DASHBOARD : "secondarily refreshes"
 ```
 
-A Civic Contribution citing zero Annexes cannot exist (Governance Rule 2); a Blockchain Annex Block cannot exist without a prior Scientific Approval (Governance Rules 3–4); an Annex correction always produces a new Annex row, never an update to an existing one (Governance Rule 6).
+A Civic Contribution citing zero Annexes cannot exist (Governance Rule 2); a Blockchain Annex Block cannot exist without a prior Scientific Approval (Governance Rules 3–4); an Annex correction always produces a new Annex row, never an update to an existing one (Governance Rule 6). The Dashboard-to-Impact-Record relationship is drawn as optional/secondary (dotted), reflecting its role as a later refresh, not the Dashboard's primary function.
 
 ## 9. System Integration (Structured Hearings, HARM Operating System, Contribution & Impact Framework, Responsibility Evidence Model, RPCS, Responsibility Dashboard)
 
@@ -103,7 +119,7 @@ This architecture touches six existing systems. None of them is redefined here �
 - **Contribution & Impact Framework** (`brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`) — Civic Contribution and Impact Record are, respectively, the Annex-sourced instance of that framework's Contribution and Impact concepts (§4 above, and §3's Impact Record definition). Trust (§8 of that framework) is unaffected — Annex-sourced Contributions accrue Trust through the same mechanism as any other verified Contribution, no differently weighted.
 - **Responsibility Evidence Model** (`brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`) — a Civic Contribution's Responsibility Evidence record uses this model's existing verification workflow unchanged (Created → Evidence Submitted → Human Verification → Accepted/Rejected → `AuditLog`); this architecture adds only a constraint on that record's Evidence Source field (must cite ≥1 Approved Annex), not a new workflow.
 - **RPCS** (`docs/source/academy/RPCS_PROGRAM.md`) — RPCS tracks supply the trained people who staff this lifecycle: the **Trauma-Informed Facilitation** track trains the Facilitators who run Structured Hearings (stage 1); the **Codex Research** track trains researchers whose expertise supports Scientific Review Committee membership (stage 3); the **AHIP Specialist** track trains the intake moderators upstream of the Hearing itself. RPCS certification does not itself grant Scientific Review Committee membership — that remains a separate, explicit appointment, consistent with RPCS's existing "no abstract credentials" principle (`RPCS_PROGRAM.md` §Core Principles).
-- **Responsibility Dashboard** (`docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`) — consumes aggregated Impact Records as a downstream display layer (§2 stage 9); see §5 for its dual upstream/downstream role.
+- **Responsibility Dashboard** (`docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`) — **primary role:** the prioritization instrument that produces the Top Priority Selection feeding Annex Deepening (§2, stages 3–5). **Secondary role:** later refresh of its aggregate view using validated Impact Records (§2, stage 13). See §5 for the full correction record and `RESPONSIBILITY_DASHBOARD.md` for the complete specification (Observer Panel, HARM Lens, Priority Matrix, Zero-Gamification Guardrails).
 
 ## 10. Validation
 
@@ -116,4 +132,4 @@ This architecture touches six existing systems. None of them is redefined here �
 
 ---
 
-*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_PROGRAM.md`, `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the original decision record and `architecture/adr/ADR-015-annex-architecture-extension.md` for this extension (ERD, per-object definitions, immutability/versioning rule, six-system integration, glossary additions).*
+*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_PROGRAM.md`, `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the original decision record, `architecture/adr/ADR-015-annex-architecture-extension.md` for the ERD/per-object/immutability extension, and `architecture/adr/ADR-016-responsibility-dashboard-specification.md` for the Dashboard-primacy correction and full Dashboard specification.*
