@@ -14,6 +14,7 @@
 | [ADR-008](../architecture/adr/ADR-008-ai-layer.md) | One shared grounded RAG service, citation-or-refuse, hard cost ceiling | Yes — amendment clarifies AI Layer as sole owner of cost/usage data (Analytics only aggregates) and states the Moderator-Synthesis Assist endpoint is staff-only |
 | [ADR-009](../architecture/adr/ADR-009-module-integration.md) | One integration map with a "downstream never blocks upstream" rule | Yes — amendment records the two map corrections (Events↔Community direction, missing Membership→Analytics row) |
 | [ADR-010](../architecture/adr/ADR-010-offline-first-development.md) | Offline-first as a platform-wide principle, not just a local-dev convenience | No |
+| [ADR-011](../architecture/adr/ADR-011-phase-0-start.md) | Phase 0 begins from the frozen Project Brain v1.1 baseline (`7d39c71`, tag `project-brain-v1.1`); no Brain/Foundation document changes during Phase 0 without a new ADR | No |
 
 ## Review gate history
 
