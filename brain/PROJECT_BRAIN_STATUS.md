@@ -66,4 +66,16 @@ No other verbatim-duplicated substantive content was found in the editable index
 
 **Result: the Project Brain is internally 100% consistent** (cross-references, ADR references, document links, no unexplained duplication) **with two explicitly-flagged, unfabricated content gaps carried forward.**
 
+## 6. RPDF Phase 0 — Accountability Constitution (this session)
+
+Phase 0 opened from the frozen Project Brain v1.1 baseline per `../architecture/adr/ADR-011-phase-0-start.md` (indexed in `DECISIONS.md`). Its first deliverable, the Accountability Constitution (`00_constitution/00_constitution.md`), went through the same two-pass discipline used for Foundation Architecture v1.0:
+
+1. **Drafted** — 15 sections (Purpose through Constitutional Compliance Rules), every substantive claim grounded in already-approved Brain content, no new architecture.
+2. **Reviewed** (`00_constitution/CONSTITUTION_REVIEW.md`) — found 12 categories of issues: a hierarchy contradiction (Constitution vs. ADR authority), 3 duplicated rules, vague/uncheckable language in 4 places, and 6 missing-governance categories (ADR workflow, Plugin Governance, Human Approval Authority, Ecosystem Accountability, AI-governance gaps, environmental metrics).
+3. **Revised** (Revision Pass v1) — all 12 categories closed: the hierarchy contradiction resolved with a precise domain-classifying test (§6); duplicated rules consolidated to one canonical section each; vague language replaced with measurable rules (defined audit cadence, escalation timelines, a real environmental proxy metric); 4 new sections added (§16 Human Approval Authority, §17 ADR Governance Workflow, §18 Plugin Governance, §19 Ecosystem Accountability) — the document is now 19 sections, not the originally-specified 15, by this session's own explicit request.
+4. **Re-reviewed** (`00_constitution/CONSTITUTION_REVIEW_2.md`) — confirmed all 12 categories closed, checked the revision itself for new issues (found and fixed 2 broken relative links; noted 2 non-critical, forward-looking observations), zero critical findings, recommended APPROVE.
+5. **Approved** by the Human Approval Authority (the project owner, acting in that capacity per Constitution §16) and tagged `constitution-v1.0`.
+
+The Constitution is now the highest authority for conduct/accountability matters project-wide; approved ADRs and the Foundation Architecture remain highest authority for architecture/domain-model matters, per the Constitution's own Section 6. No Foundation or pre-existing Brain content was changed to produce it.
+
 Per instructions: stopping here, awaiting approval.

@@ -21,6 +21,10 @@
 - [`../FOUNDATION_REVIEW.md`](../FOUNDATION_REVIEW.md) — first pass, found 6 concrete issues across 20 validated dimensions, recommended NO pending fixes.
 - [`../FOUNDATION_REVIEW_FINAL.md`](../FOUNDATION_REVIEW_FINAL.md) — rerun after Foundation Stabilization, confirmed all 10 checklist items closed, recommended **APPROVED**.
 
+## Constitutional governance
+
+The Res Publica Accountability Constitution — [`00_constitution/00_constitution.md`](00_constitution/00_constitution.md), tagged `constitution-v1.0` — is the highest authority for conduct/accountability matters (who is answerable, what evidence compliance requires, how compliance is checked), per its own Section 6 Decision Hierarchy. Approved ADRs and the Foundation Architecture remain highest authority for architecture/domain-model matters; neither document outranks the other outside its own domain. Its review history: [`00_constitution/CONSTITUTION_REVIEW.md`](00_constitution/CONSTITUTION_REVIEW.md) (first pass, 12 finding categories) and [`00_constitution/CONSTITUTION_REVIEW_2.md`](00_constitution/CONSTITUTION_REVIEW_2.md) (re-validation, zero critical findings, recommended APPROVE). ADR-012 onward is governed by the Constitution's own ADR Governance Workflow (§17); ADR-001 through ADR-011 are grandfathered as validly adopted.
+
 ## Reading the amendments
 
 Every amended ADR keeps its original Context/Decision/Alternatives/Consequences/Future Impact sections completely intact — amendments are appended, never edited in, per the same "do not rewrite history" discipline used for git commits. If an ADR's original decision ever needs to be reversed rather than merely clarified, that requires a new ADR explicitly superseding it, not an edit to this one.
