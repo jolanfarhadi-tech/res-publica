@@ -59,6 +59,15 @@ for (const stray of ["src/middleware.ts", "src/app/middleware.ts"]) {
   }
 }
 
+if (fs.existsSync(path.join(root, "proxy.ts"))) {
+  problems.push(
+    "A root-level `proxy.ts` exists. This is a dead, unused file removed " +
+      "as a P0 fix (ADR-012) — its locale-detection logic was ported into " +
+      "`middleware.ts`. Do not re-add or re-enable it; port any new logic " +
+      "into `middleware.ts` directly and delete this file again."
+  );
+}
+
 if (problems.length > 0) {
   console.error("\n✖ Project structure problems:\n");
   problems.forEach((p, i) => console.error(`  ${i + 1}. ${p}\n`));

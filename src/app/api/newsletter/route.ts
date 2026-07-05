@@ -24,6 +24,43 @@ import { NextRequest, NextResponse } from "next/server";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Rate limiting — P0 fix (ADR-012). In-memory, per-process fixed window:
+ * 5 requests/hour per IP. No external service (Upstash/Vercel KV) is
+ * configured for this project yet, so this is the dependency-free
+ * fallback `implementation-plan.md` names for that case, not a
+ * permanent design choice.
+ *
+ * Known limitation: this Map is local to one running process. On a
+ * single long-running Node server this enforces the limit correctly;
+ * under multi-instance serverless scaling, each instance keeps its own
+ * count, so the effective global limit is higher than 5/hour. Still a
+ * large improvement over no rate limiting at all. Revisit with a
+ * shared store (Upstash Redis, Vercel KV) once one is actually
+ * provisioned for this deployment — not a P0-scope decision to make
+ * speculatively.
+ */
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = requestCounts.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    requestCounts.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  entry.count += 1;
+  return entry.count > RATE_LIMIT_MAX_REQUESTS;
+}
+
+function clientIp(request: NextRequest): string {
+  return request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+}
+
 type Result = { ok: true } | { ok: false; status: number };
 
 async function subscribeButtondown(email: string): Promise<Result> {
@@ -73,6 +110,13 @@ async function subscribeMailchimp(email: string): Promise<Result> {
 }
 
 export async function POST(request: NextRequest) {
+  if (isRateLimited(clientIp(request))) {
+    return NextResponse.json(
+      { error: "too_many_requests" },
+      { status: 429 }
+    );
+  }
+
   let email = "";
   let honeypot = "";
   try {

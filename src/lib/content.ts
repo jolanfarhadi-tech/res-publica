@@ -49,7 +49,14 @@ export type PageContent = {
  * translation does not exist yet, so a missing file never
  * produces a broken page.
  */
+/** Every real slug matches this shape; anything else can't be a genuine page. */
+const SLUG_PATTERN = /^[a-z0-9-]+$/;
+
 export function getPage(locale: Locale, slug: string): PageContent {
+  if (!SLUG_PATTERN.test(slug)) {
+    throw new Error(`Invalid page slug: ${JSON.stringify(slug)}`);
+  }
+
   const localized = path.join(CONTENT_DIR, locale, "pages", `${slug}.mdx`);
   const fallback = path.join(CONTENT_DIR, "de", "pages", `${slug}.mdx`);
   const file = fs.existsSync(localized) ? localized : fallback;

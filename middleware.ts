@@ -17,10 +17,16 @@ function detectLocale(request: NextRequest): string {
 
   const preferred = header
     .split(",")
-    .map((part) => part.split(";")[0].trim().toLowerCase())
-    .map((tag) => tag.split("-")[0]);
+    .map((part) => {
+      const [tag, qValue] = part.trim().split(";q=");
+      return {
+        tag: tag.split("-")[0].toLowerCase(),
+        q: qValue ? parseFloat(qValue) : 1,
+      };
+    })
+    .sort((a, b) => b.q - a.q);
 
-  for (const tag of preferred) {
+  for (const { tag } of preferred) {
     if (isLocale(tag)) return tag;
   }
   return defaultLocale;

@@ -14,6 +14,18 @@ export function generateStaticParams() {
   return getSlugs(COLLECTION).map((slug) => ({ slug }));
 }
 
+/**
+ * This is valid only while this route is fully generated from static
+ * Markdown via generateStaticParams.
+ *
+ * If CMS, database-backed content, ISR,
+ * user-generated content,
+ * or AI-generated dynamic routes
+ * are introduced,
+ * this must be re-evaluated before deployment.
+ */
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};

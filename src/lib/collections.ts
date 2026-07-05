@@ -66,11 +66,16 @@ export type Entry = EntryFrontmatter & {
   body: string;
 };
 
+/** Every real slug matches this shape; anything else can't be a genuine entry. */
+const SLUG_PATTERN = /^[a-z0-9-]+$/;
+
 function readEntry(
   locale: Locale,
   collection: Collection,
   slug: string
 ): Entry | null {
+  if (!SLUG_PATTERN.test(slug)) return null;
+
   const localized = path.join(CONTENT_DIR, locale, collection, `${slug}.mdx`);
   const fallback = path.join(CONTENT_DIR, "de", collection, `${slug}.mdx`);
   const file = fs.existsSync(localized) ? localized : fallback;
