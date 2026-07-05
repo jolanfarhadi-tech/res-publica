@@ -96,6 +96,7 @@ This framework reuses `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md` in ful
 - **Quality** — evidence must be specific and checkable, not a general assertion.
 - **Storage** — Responsibility Evidence records extend the organization's `AuditLog` entity (`brain/DOMAIN/CORE_DOMAIN_MODEL.md`), inheriting its append-only, auditable structure.
 - **Relationship with Knowledge Assets** — verified Responsibility Evidence may be surfaced through `Knowledge Asset`/`Publication` records once it supports a Knowledge Product, per the Contribution Lifecycle (§4).
+- **Relationship with Civic Contribution** — a "Civic Contribution" (per `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`) is not a new concept — it is a Contribution (§2 above) whose Responsibility Evidence cites at least one Scientific-Review-Committee-approved Annex as its Evidence Source, with an associated Blockchain Annex Block. That document defines the stricter evidentiary path; it does not redefine Contribution, Trust, or Impact as stated here.
 
 ## 7. Verification
 

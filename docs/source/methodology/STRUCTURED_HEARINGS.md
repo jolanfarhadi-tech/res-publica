@@ -32,7 +32,7 @@ Position in the HARM Lifecycle: `AHIP → **Structured Hearing** → Reflection`
 An AHIP-prepared account.
 
 ## Outputs
-A documented account, ready for Reflection.
+A documented account, ready for Reflection. The same session output may also be assembled as an **Evidence Package** — the input to Scientific Review Committee approval and, if approved, to Annex status — per `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`. Reflection and Evidence Package assembly are not mutually exclusive; the same Hearing output can feed both.
 
 ## Governance
 Subject to the organization's trauma-informed language standard; no session content is published without subsequent verification and human sign-off.
@@ -47,4 +47,4 @@ Reserved — pending approved case material.
 `.claude/skills/web-05-core-pages/SKILL.md`; `.claude/skills/web-01-sitemap/SKILL.md`
 
 ## Related Documents
-`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/AHIP.md` · `../methodology/HARM_LIFECYCLE.md`
+`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/AHIP.md` · `../methodology/HARM_LIFECYCLE.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`
