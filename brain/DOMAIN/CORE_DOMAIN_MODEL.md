@@ -1,6 +1,6 @@
 # Res Publica — Core Domain Model
 
-**Status: architecture only. Not backend design, not database design, not dashboard/API/UI design, not implementation.** This is the canonical conceptual domain model from which Backend, Dashboard, API, AI, and Frontend will later be derived — none of that derivation happens in this document. No approved document is modified. No new ADR is created.
+**Status: LOCKED — Architecture Baseline.** This document is architecture only — not backend design, not database design, not dashboard/API/UI design, not implementation. It is the canonical conceptual domain model from which Backend, Dashboard, API, AI, and Frontend will later be derived — none of that derivation happens in this document. As a locked Architecture Baseline, its content may not be modified going forward except through a new ADR or explicit human approval; this lock does not itself change any architecture or redesign anything.
 
 ---
 

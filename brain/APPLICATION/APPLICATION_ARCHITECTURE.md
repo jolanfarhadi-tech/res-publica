@@ -1,6 +1,6 @@
 # Res Publica — Application Architecture
 
-**Status: architecture only. Not backend implementation, database schema, API design, dashboard/frontend/UI design, or infrastructure design.** This layer sits between the Core Domain Model and future implementation — it defines *how the system behaves*, not how it is stored or displayed. No approved document is modified. No new domain entity is invented; every service and use case below reuses `CORE_DOMAIN_MODEL.md`'s entities and the already-approved 20 modules.
+**Status: LOCKED — Architecture Baseline.** This document is architecture only — not backend implementation, database schema, API design, dashboard/frontend/UI design, or infrastructure design. This layer sits between the Core Domain Model and future implementation — it defines *how the system behaves*, not how it is stored or displayed. No new domain entity is invented; every service and use case reuses `CORE_DOMAIN_MODEL.md`'s entities and the already-approved 20 modules. As a locked Architecture Baseline, its content may not be modified going forward except through a new ADR or explicit human approval; this lock does not itself change any architecture or redesign anything.
 
 ---
 
