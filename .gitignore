@@ -5,3 +5,7 @@ out/
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude Code local runtime files (not shared project config)
+.claude/settings.local.json
+.claude/worktrees/
