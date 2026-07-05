@@ -37,12 +37,15 @@ flowchart TD
 
 ## 3. Definitions
 
+- **Hearing** — shorthand used throughout this document for a Structured Hearing (`docs/source/methodology/STRUCTURED_HEARINGS.md`), not a distinct concept. Referenced here as an object in its own right only because it is the lifecycle's starting point.
 - **Evidence Package** — the structured, documented output of a Structured Hearing: the account itself, any supporting material gathered during the Hearing, and the Facilitator's notes. It is *not yet* an Annex — it has not been reviewed.
 - **Scientific Review Committee** — a named body of Experts and Reviewers (drawing on the existing Expert and Reviewer roles defined in `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` §Roles) responsible specifically for Annex approval. This is a specific, formal review body, distinct from the general single-Reviewer pattern used elsewhere in the Responsibility Evidence Model — Annex approval requires committee-level review because an Approved Annex triggers an irreversible Blockchain Annex Block.
+- **Scientific Approval** — the *record produced by* the Scientific Review Committee's decision (approve or return-for-revision), distinct from the Committee itself (the body) and distinct from the Blockchain Annex Block (the tamper-evidence record produced *from* an approval, not the approval decision itself). A Scientific Approval carries: the reviewing members, the decision, the date, and any conditions attached. It is the direct input to Blockchain Annex Block production.
 - **Annex (Approved Annex)** — **the verified evidence unit**, not merely a document or PDF attachment. An Annex is the Evidence Package once the Scientific Review Committee has confirmed its evidentiary basis, quality, and consistency with the organization's trauma-informed and ethical standards. Before approval, it is only an Evidence Package; the term "Annex" (unqualified) always means an *approved* Annex in this architecture.
 - **Blockchain Annex Block** — **an integrity, timestamp, and approval record — never the storage of raw sensitive testimony.** It contains: a cryptographic hash of the Approved Annex's content, the Scientific Review Committee's approval signature/attestation, and a timestamp. It proves that a specific, identified Annex was approved at a specific time and has not been altered since. It does not contain the testimony, the participant's identity, or any content capable of re-exposing sensitive material. The underlying Annex content remains governed by the organization's existing Data Policy and Ethics Charter, stored exactly as any other verified evidence record — the blockchain layer adds tamper-evidence, not new storage.
 - **Civic Contribution** — a downstream civic action, responsibility, or intervention undertaken in response to one or more Approved Annexes. A Civic Contribution is **not a new concept competing with "Contribution"** as already defined in `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md` §2/§5 — it is that same concept, specifically in the case where the underlying Responsibility Evidence cites at least one Approved Annex. Every Civic Contribution is a Contribution; not every Contribution is necessarily a Civic Contribution (a Contribution may instead cite a witness account, public record, or other Evidence Source per that framework's §7 Verification methods).
 - **Contribution Ledger** — **not a new storage system.** It is the aggregate, append-only view over Responsibility Evidence records that are Annex-mapped Civic Contributions, extending `AuditLog` exactly as the Responsibility Evidence Model already extends it (`brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md` §7). "Ledger" here names the aggregate view, not a distinct database or blockchain.
+- **Impact Record** — not a new concept competing with "Impact" as already defined in `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md` §9. An Impact Record is the specific, qualitative Impact assessment produced for one Civic Contribution once it is entered in the Contribution Ledger — the discrete instance, in the same relationship as "Civic Contribution" is to "Contribution." It carries the same six qualitative dimensions (Personal, Community, Institutional, Knowledge, Environmental, Policy) defined there; it introduces no new dimension and no numerical score.
 
 ## 4. Relationship to the Contribution & Impact Framework
 
@@ -65,6 +68,7 @@ Both paths converge on the same Annex concept and the same downstream treatment 
 3. **No Blockchain Annex Block is produced before approval.** The Block is the *record of* approval, not a step that can precede or substitute for it.
 4. **Each Civic Contribution must reference at least one Approved Annex.** No Civic Contribution mapping is valid without at least one specific, identified Annex citation.
 5. **Privacy-sensitive testimony must not be stored directly on-chain.** The Blockchain Annex Block contains only a content hash, approval attestation, and timestamp — never the testimony, participant identity, or any re-identifying material. This is a hard constraint, not a configuration choice, and is consistent with the organization's existing Data Policy (`docs/source/governance/DATA_POLICY.md`) and Zero Gamification / no-exploitation principles (`docs/source/governance/ETHICS_CHARTER.md`).
+6. **Annexes are immutable after blockchain registration.** Once a Blockchain Annex Block exists for an Annex, that Annex's content is not edited in place. A later correction produces a new, explicitly versioned Annex, fully traceable to the original (citing the prior version and the reason for revision), with its own independent Scientific Approval and its own Blockchain Annex Block. The original Block and Annex version are never deleted or overwritten — this mirrors the Constitution's own "never rewritten in place, only amended and appended" discipline (`brain/00_constitution/00_constitution.md` §17), applied here to Annexes specifically.
 
 These rules operate under, and do not replace, the organization's existing Constitution, Ethics Charter, and Governance Charter — no new governance model is introduced.
 
@@ -72,7 +76,36 @@ These rules operate under, and do not replace, the organization's existing Const
 
 AI may assist in assembling an Evidence Package (e.g., organizing a Facilitator's notes) and in surfacing related Annexes for the Scientific Review Committee's reference. AI does not approve an Annex, does not trigger Blockchain Annex Block production, and does not perform Civic Contribution mapping — all three require human action, consistent with `docs/source/foundation/05_AI.md` and `brain/AI/AI_GOVERNANCE_HIERARCHY.md`.
 
-## 8. Validation
+## 8. Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    HEARING ||--o| EVIDENCE_PACKAGE : produces
+    EVIDENCE_PACKAGE ||--o| SCIENTIFIC_APPROVAL : "reviewed via"
+    SCIENTIFIC_APPROVAL ||--o| ANNEX : authorizes
+    ANNEX ||--|| BLOCKCHAIN_ANNEX_BLOCK : "registers as"
+    ANNEX ||--o{ ANNEX : "revises (versioned)"
+    ANNEX ||--o{ CIVIC_CONTRIBUTION : "cited by (1..n)"
+    CIVIC_CONTRIBUTION ||--|| RESPONSIBILITY_EVIDENCE : "recorded as"
+    CIVIC_CONTRIBUTION ||--o| CONTRIBUTION_LEDGER : "entered in"
+    CONTRIBUTION_LEDGER ||--o| IMPACT_RECORD : "assessed as"
+    IMPACT_RECORD }o--|| RESPONSIBILITY_DASHBOARD : "aggregated by"
+```
+
+A Civic Contribution citing zero Annexes cannot exist (Governance Rule 2); a Blockchain Annex Block cannot exist without a prior Scientific Approval (Governance Rules 3–4); an Annex correction always produces a new Annex row, never an update to an existing one (Governance Rule 6).
+
+## 9. System Integration (Structured Hearings, HARM Operating System, Contribution & Impact Framework, Responsibility Evidence Model, RPCS, Responsibility Dashboard)
+
+This architecture touches six existing systems. None of them is redefined here — each integration point is stated explicitly to avoid the silent, undocumented coupling this session's consistency discipline is designed to prevent.
+
+- **Structured Hearings** (`docs/source/methodology/STRUCTURED_HEARINGS.md`) — unchanged as a process; gains one additional documented output (Evidence Package) alongside its existing Reflection-bound output. See §2 stage 1.
+- **HARM Operating System** (`docs/source/foundation/01_HARM_OPERATING_SYSTEM.md`) — this architecture is a second, parallel Annex-origination path alongside the existing aggregate-pattern path through the Responsibility Dashboard Innovation. See §5 for the full reconciliation; the 12-stage HARM Lifecycle itself is unchanged.
+- **Contribution & Impact Framework** (`brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`) — Civic Contribution and Impact Record are, respectively, the Annex-sourced instance of that framework's Contribution and Impact concepts (§4 above, and §3's Impact Record definition). Trust (§8 of that framework) is unaffected — Annex-sourced Contributions accrue Trust through the same mechanism as any other verified Contribution, no differently weighted.
+- **Responsibility Evidence Model** (`brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`) — a Civic Contribution's Responsibility Evidence record uses this model's existing verification workflow unchanged (Created → Evidence Submitted → Human Verification → Accepted/Rejected → `AuditLog`); this architecture adds only a constraint on that record's Evidence Source field (must cite ≥1 Approved Annex), not a new workflow.
+- **RPCS** (`docs/source/academy/RPCS_PROGRAM.md`) — RPCS tracks supply the trained people who staff this lifecycle: the **Trauma-Informed Facilitation** track trains the Facilitators who run Structured Hearings (stage 1); the **Codex Research** track trains researchers whose expertise supports Scientific Review Committee membership (stage 3); the **AHIP Specialist** track trains the intake moderators upstream of the Hearing itself. RPCS certification does not itself grant Scientific Review Committee membership — that remains a separate, explicit appointment, consistent with RPCS's existing "no abstract credentials" principle (`RPCS_PROGRAM.md` §Core Principles).
+- **Responsibility Dashboard** (`docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`) — consumes aggregated Impact Records as a downstream display layer (§2 stage 9); see §5 for its dual upstream/downstream role.
+
+## 10. Validation
 
 - **Compatible with Core Domain Model (LOCKED)** — no new entity is added to that locked document; `AuditLog` is reused, not redefined. The Contribution Ledger and Blockchain Annex Block are described here as architecture concepts; any future domain-entity representation of them requires its own ADR against the locked model, not performed here.
 - **Compatible with Application Architecture (LOCKED)** — no service ownership is asserted or altered.
@@ -83,4 +116,4 @@ AI may assist in assembling an Evidence Package (e.g., organizing a Facilitator'
 
 ---
 
-*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the formal decision record.*
+*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_PROGRAM.md`, `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the original decision record and `architecture/adr/ADR-015-annex-architecture-extension.md` for this extension (ERD, per-object definitions, immutability/versioning rule, six-system integration, glossary additions).*
