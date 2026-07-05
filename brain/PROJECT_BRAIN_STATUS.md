@@ -50,8 +50,20 @@ Instead, both files now exist as honest, clearly-labeled gap notices: what's mis
 
 Neither option is a migration-scope decision, so neither was taken unilaterally here.
 
-## 4. Overall status
+## 4. Overall status (as of the migration-completion session)
 
-**Project Brain migration: substantially complete.** Index layer complete and cross-reference-clean. 5 of 7 detail-layer folders complete (2 pre-existing + 3 completed this session as indices). 2 of 7 contain an explicitly-flagged, honestly-documented gap rather than fabricated content. No new architecture, features, or redesign was introduced at any point in this session.
+**Project Brain migration: substantially complete.** Index layer complete and cross-reference-clean. 5 of 7 detail-layer folders complete (2 pre-existing + 3 completed as indices). 2 of 7 contain an explicitly-flagged, honestly-documented gap rather than fabricated content. No new architecture, features, or redesign was introduced. Committed as `1ae9931` ("Project Brain v1.0"), tagged `project-brain-v1.0`, pushed to `origin/main`.
+
+## 5. Phase -1 finalization pass (this session)
+
+Re-ran full cross-reference and link validation across all 24 files in `brain/` — all markdown-syntax links resolve, no new breakage since the migration commit.
+
+**One duplication found and removed:** `GOVERNANCE/foundation-review-index.md` restated the same two Review Gate summary lines already canonical in `DECISIONS.md`'s "Review gate history" section. Trimmed to a pure pointer — `DECISIONS.md` remains the single canonical location for both the ADR index and the Review Gate summary, per this Brain's own rule 2 (`GOVERNANCE/brain-governance-rules.md`).
+
+No other verbatim-duplicated substantive content was found in the editable index/navigation layer. Repeated facts that appear in multiple files (e.g., "1–3 engineer team growing to 6–8 FTE by 2030," entity names, agent names) are short, attributed, cross-referenced restatements consistent with this Brain's own established index convention (a one-line summary plus a link to the canonical detail) — not the kind of duplication rule 2 targets. The frozen detail-layer artifacts (`BLUEPRINTS/`, `KNOWLEDGE/`, `PRODUCTS/product-vision.md`, the ADRs) were not edited or de-duplicated against each other, since they are approved, migrated-verbatim Foundation artifacts — cross-document conceptual overlap between them was already reviewed and accepted at the Foundation Review stage (see `DECISIONS.md`), and altering their content now would be redesigning an approved artifact, which is out of scope.
+
+**Definition of "100% consistency" used for this pass:** zero broken cross-references, zero contradicting facts, zero unexplained duplicated content in the editable layer. This is distinct from "100% content completeness" — the two items in §3 above (`RESEARCH/engineering-security-audit.md`, `PRODUCTS/experience-blueprint.md`) remain open content gaps, unchanged since the prior session, because their source text still does not exist anywhere in this repository. Closing them requires locating the original text or an explicit stakeholder decision to formally accept the compressed summary as the permanent record (see §3) — neither of which a finalization pass can do unilaterally.
+
+**Result: the Project Brain is internally 100% consistent** (cross-references, ADR references, document links, no unexplained duplication) **with two explicitly-flagged, unfabricated content gaps carried forward.**
 
 Per instructions: stopping here, awaiting approval.
