@@ -63,7 +63,7 @@ These twelve reconcile with, and do not replace, the Constitution's own Core Pri
 
 **Ethical Decision Criteria:** human dignity, rights protection, evidence quality, fairness, accountability, long-term societal impact, proportionality, transparency.
 
-**Relationship with Other Frameworks:** this Charter provides ethical guidance for — not governance over — HARM taxonomy (`docs/source/methodology/HARM_CODEX.md`, National Harm Taxonomy per `ADR-021`), AHIP, Structured Hearings, Scientific Review, the Validation Framework (i.e. Scientific Review's own validation engine, `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7), Harm Codex, AI Governance (`AI_POLICY.md`), DPIA (`DPIA.md`), Early Warning (`EARLY_WARNING.md`), Platform Services, and Monitoring & Evaluation. None of these is redefined by this Charter.
+**Relationship with Other Frameworks:** this Charter provides ethical guidance for — not governance over — HARM taxonomy (`docs/source/methodology/HARM_CODEX.md`, National Harm Taxonomy per `ADR-021`), AHIP, Structured Hearings, the Scientific Review Governance Gate (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7), Harm Codex, AI Governance (`AI_POLICY.md`), DPIA (`DPIA.md`), Early Warning (`EARLY_WARNING.md`), Platform Services, and Monitoring & Evaluation. None of these is redefined by this Charter.
 
 ## Workflow
 
@@ -99,7 +99,7 @@ Reserved — pending approved case material.
 
 **Current Role:** Placeholder / Governance Extension. **Blocking Status:** NON-BLOCKING. **Implementation Priority:** Phase 2. **Current Requirement:** architecture placeholder only — consistent with `ADR-023`.
 
-**Interfaces:** AI Governance, DPIA, Early Warning, Scientific Review, the Validation Framework, Platform Services, Harm Codex, AHIP, Structured Hearings — each reserves a Charter-compliance extension point; no automated enforcement exists yet.
+**Interfaces:** AI Governance, DPIA, Early Warning, the Scientific Review Governance Gate, Platform Services, Harm Codex, AHIP, Structured Hearings — each reserves a Charter-compliance extension point; no automated enforcement exists yet.
 
 ## Future Responsibilities (Phase 2)
 

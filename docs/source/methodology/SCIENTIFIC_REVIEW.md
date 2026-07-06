@@ -12,7 +12,9 @@ Extends/Reconciles with: brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION
 
 ## Purpose
 
-The Scientific Review Framework establishes the formal scientific evaluation process for all validated cases, evidence packages, research outputs, and analytical findings within the HARM ecosystem. Its purpose is to ensure that every conclusion entering the HARM knowledge base is evidence-based, methodologically sound, transparent, reproducible, and scientifically defensible. **Scientific Review is not a political review, legal review, or ethical approval process** — it is an independent quality assurance mechanism for scientific rigor.
+The Scientific Review Framework establishes the formal scientific evaluation process for cases, evidence packages, research outputs, and analytical findings within the HARM ecosystem. Its purpose is to ensure that every conclusion entering the HARM knowledge base is evidence-based, methodologically sound, transparent, reproducible, and scientifically defensible. **Scientific Review is not a political review, legal review, or ethical approval process** — it is an independent quality assurance mechanism for scientific rigor.
+
+**Scientific Review is the first formal validation process in the HARM lifecycle.** Everything upstream — AHIP intake, Structured Hearings' multi-perspective reflections (`STRUCTURED_HEARINGS.md`), and Basic Validation Framework's data-completeness gate — is preparation and context-building, not validation. In particular, Expert, Community, Institutional, and Policy contributors in a Structured Hearing provide contextual reflection, not evidence validation; no conclusion is scientifically validated until it passes through this framework.
 
 **Relationship to `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7 — read this first:** that document remains the canonical source for Scientific Review's four-level pipeline (Expert Review, Structured Hearing, Narrative Coding + Normative Alignment, Governance Review Gates), its 8 formal Review Criteria, its 8 Governance Guardrails, and its lifecycle state machine — **none of that is redefined here.** This document specifies the *internal working process* a reviewer follows once material reaches Level 4 (Governance Review Gates) — operational detail that sits inside, not alongside, that existing pipeline.
 
@@ -28,6 +30,8 @@ Ensure scientific quality; evaluate methodological rigor; verify evidence consis
 
 Applies to AHIP Cases, Structured Hearings, Evidence Packages, Harm Assessments, Harm Codex Entries, Research Reports, Governance Analyses, Policy Assessments, indicators, and future research modules.
 
+**Structured Hearings are not the exclusive input to Scientific Review.** Structured Hearing is only one evidence-producing process within the HARM lifecycle. Scientific Review evaluates integrated evidence originating from multiple sources, including but not limited to: AHIP, Structured Hearings, Documentation, Evidence Packages, External Records, Supporting Annexes, and future evidence modules. Structured Hearings enrich the evidence base; they are not the sole input.
+
 ## Core Principles
 
 1. **Scientific Integrity** — conclusions are based on transparent methods and verifiable evidence.
@@ -41,7 +45,7 @@ Applies to AHIP Cases, Structured Hearings, Evidence Packages, Harm Assessments,
 
 **Reconciling the two criteria sets, explicitly, not silently:** `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7 already defines 8 formal Review Criteria (Clarity, Structural Accuracy, Analytical Depth, Internal Consistency, Normative Fit, Epistemic Condition, Ethical Compliance, Governance Applicability) — these are the Scientific Review Committee's **formal decision criteria** at Level 4. This document's more granular **working rubric** (16 items across 4 categories, below) is what an individual reviewer applies *before* that formal decision — the working rubric informs the 8 formal criteria; it does not replace or compete with them.
 
-**Scientific Confidence Levels** (1–5: Preliminary, Limited Evidence, Moderate Confidence, Strong Evidence, High Scientific Confidence) — this is an additional field carried on the existing **Scientific Approval** record (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §3: "the reviewing members, the decision, the date, and any conditions attached"). It is not a new lifecycle state and does not replace the existing `draft → expert_reviewed → hearing_validated → codex_validated → published → signal_released` state machine.
+**Scientific Confidence Levels** (1–5: Preliminary, Limited Evidence, Moderate Confidence, Strong Evidence, High Scientific Confidence) — this is an additional field carried on the existing **Scientific Approval** record (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §3: "the reviewing members, the decision, the date, and any conditions attached"). It is not a new lifecycle state and does not replace the existing `draft → expert_reviewed → hearing_documented → codex_validated → published → signal_released` state machine (the Level 2 state is `hearing_documented`, not `hearing_validated` — Structured Hearings document, they do not validate; validation begins no earlier than `codex_validated`). This formal rating is distinct from, and later than, the **Evidence Model**'s (`EVIDENCE_MODEL.md`) preliminary Confidence Assessment (Very Low–Very High) — two sequential stages, not one.
 
 **Scientific Outputs** (Accepted, Accepted with Minor Revisions, Major Revision Required, Insufficient Evidence, Rejected for Scientific Reasons) — this is the granular vocabulary for the existing binary "approve / return for revision" decision at Level 4 Governance Review Gates, not a new decision authority.
 
@@ -55,11 +59,13 @@ Applies to AHIP Cases, Structured Hearings, Evidence Packages, Harm Assessments,
 - **Data:** completeness, quality, metadata, traceability.
 - **Analysis:** logical coherence, internal consistency, appropriate interpretation, recognition of uncertainty.
 
-**Relationship with Other Frameworks:** receives validated inputs from AHIP, Basic Validation (`BASIC_VALIDATION_FRAMEWORK.md`), Structured Hearings, and Evidence Standards (unresolved gap, already flagged elsewhere). Provides outputs to the Validation Framework (itself), Harm Codex, Responsibility Mapping, the Prioritization Framework (= Responsibility Dashboard's Priority Matrix), the Repair Framework, Civic Intelligence, and Early Warning. Operates alongside the Ethics Charter, AI Governance Framework, and DPIA. None of these is redefined here.
+**Relationship with Other Frameworks:** receives inputs from AHIP and Structured Hearings — documented, multi-perspective, but not yet validated — after they pass Basic Validation Framework's data-completeness gate (`BASIC_VALIDATION_FRAMEWORK.md`, itself a completeness check, not a truth judgment) and, where applicable, Evidence Standards (unresolved gap, already flagged elsewhere). Provides outputs to Harm Codex, Responsibility Mapping, the Prioritization Framework (= Responsibility Dashboard's Priority Matrix), the Repair Framework, Civic Intelligence, and Early Warning. Operates alongside the Ethics Charter, AI Governance Framework, and DPIA. None of these is redefined here.
+
+**Terminology note:** this framework is referred to elsewhere in the repository as the **Scientific Review Governance Gate** — "Validation Framework" is retired as an alias for Scientific Review, since the repository now has a canonical, unrelated **Basic Validation Framework** (`BASIC_VALIDATION_FRAMEWORK.md`) and the shared word risked conflating the two.
 
 ## Workflow
 
-Validated Case (= output of Basic Validation Framework) → Scientific Assignment → Methodology Review → Evidence Review → Data Quality Assessment → Consistency Assessment → Scientific Findings → Reviewer Recommendations → Scientific Approval → Transfer to Harm Codex.
+Validated Case (= output of Basic Validation Framework's data-completeness gate — a completeness check, not scientific validation) → Scientific Assignment → Methodology Review → Evidence Review → Data Quality Assessment → Consistency Assessment → Scientific Findings → Reviewer Recommendations → Scientific Approval → Transfer to Harm Codex.
 
 This workflow is the internal detail of `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7's Level 4 (Governance Review Gates) specifically — it does not add a fifth level, reorder the existing four, or bypass Levels 1–3.
 
@@ -71,7 +77,9 @@ This workflow is the internal detail of `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_
 
 ## Inputs
 
-A Validated Case (Basic Validation Framework output).
+A Validated Case (Basic Validation Framework's data-completeness output — not yet scientifically validated).
+
+**Evidence Integration.** Scientific Review evaluates an integrated evidence package assembled from multiple sources (see Scope), not a single hearing output. Where a Structured Hearing occurred, its Hearing Report is one component of that package, alongside AHIP documentation, evidence packages, external records, and supporting annexes where applicable.
 
 ## Outputs
 
@@ -114,4 +122,4 @@ Double-blind peer review, AI-assisted literature support, automated consistency 
 
 ## Related Documents
 
-`brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` · `../methodology/BASIC_VALIDATION_FRAMEWORK.md` · `../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `../methodology/REPAIR_FRAMEWORK.md`
+`brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` · `../methodology/BASIC_VALIDATION_FRAMEWORK.md` · `../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `../methodology/REPAIR_FRAMEWORK.md` · `../methodology/EVIDENCE_MODEL.md`

@@ -55,7 +55,7 @@ Applies to: all personal data processed by the platform, sensitive personal data
 
 **Privacy by Design** integration points: Platform Architecture, Database Design, AI Components, APIs, User Interfaces, Reporting Systems, Analytics.
 
-**Relationship with Other Frameworks:** the DPIA supports — not governs — Ethics Charter, AI Governance Framework (`AI_POLICY.md`), Data Usage Policy (`DATA_POLICY.md`), HARM Taxonomy (National Harm Taxonomy, `ADR-021`), AHIP, Structured Hearings, the Evidence Model (Responsibility Evidence Model), Platform Services, and Scientific Review (the "Validation Framework"). None of these is redefined here.
+**Relationship with Other Frameworks:** the DPIA supports — not governs — Ethics Charter, AI Governance Framework (`AI_POLICY.md`), Data Usage Policy (`DATA_POLICY.md`), HARM Taxonomy (National Harm Taxonomy, `ADR-021`), AHIP, Structured Hearings, the Evidence Model (Responsibility Evidence Model), Platform Services, and the Scientific Review Governance Gate. None of these is redefined here.
 
 ## Workflow
 
@@ -89,7 +89,7 @@ Reserved — pending approved case material.
 
 **Current Role:** Placeholder / Governance Extension. **Blocking Status:** NON-BLOCKING. **Implementation Priority:** Phase 2. **Current Requirement:** architecture placeholder only, consistent with `ADR-023`.
 
-**Interfaces:** Ethics Charter, AI Governance Framework, Platform Services, Data Usage Policy, HARM Codex, AHIP, Structured Hearings, Scientific Review, the Validation Framework, Early Warning Framework — each reserves a DPIA assessment extension point; none is enforced yet.
+**Interfaces:** Ethics Charter, AI Governance Framework, Platform Services, Data Usage Policy, HARM Codex, AHIP, Structured Hearings, the Scientific Review Governance Gate, Early Warning Framework — each reserves a DPIA assessment extension point; none is enforced yet.
 
 ## Future Responsibilities (Phase 2)
 

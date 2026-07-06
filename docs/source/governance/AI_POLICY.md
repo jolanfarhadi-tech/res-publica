@@ -61,7 +61,7 @@ These reconcile with, and do not replace, `../foundation/05_AI.md`'s existing "A
 
 **AI Documentation** (per component): purpose, model description, training data sources, limitations, intended use, prohibited use, known risks, performance metrics, version history.
 
-**Relationship with Other Frameworks:** the AI Governance Framework supports — not governs — HARM Taxonomy, AHIP, Structured Hearings, Scientific Review (the "Validation Framework"), Harm Codex, Ethics Charter, DPIA, Early Warning Framework, and Platform Services. None of these is redefined here.
+**Relationship with Other Frameworks:** the AI Governance Framework supports — not governs — HARM Taxonomy, AHIP, Structured Hearings, the Scientific Review Governance Gate, Harm Codex, Ethics Charter, DPIA, Early Warning Framework, and Platform Services. None of these is redefined here.
 
 ## Workflow
 
@@ -99,7 +99,7 @@ See `brain/AI/AGENT_ACTIVATION_ROADMAP.md` for a worked example of this review p
 
 **Current Role:** Placeholder / Governance Extension. **Blocking Status:** NON-BLOCKING. **Implementation Priority:** Phase 2. **Current Requirement:** architecture placeholder only, consistent with `ADR-023`.
 
-**Interfaces:** Ethics Charter, DPIA, Platform Services, Scientific Review, the Validation Framework, Early Warning Framework, HARM Codex, AHIP, Structured Hearings, Monitoring & Evaluation — each reserves an AI Governance check extension point; none is enforced yet.
+**Interfaces:** Ethics Charter, DPIA, Platform Services, the Scientific Review Governance Gate, Early Warning Framework, HARM Codex, AHIP, Structured Hearings, the AI Hearing Facilitator (`docs/source/methodology/AI_HEARING_FACILITATOR.md`), Monitoring & Evaluation — each reserves an AI Governance check extension point; none is enforced yet.
 
 ## Future Responsibilities (Phase 2)
 
@@ -125,4 +125,4 @@ The complete framework may include: AI Model Registry; AI Approval Workflow; AI 
 
 ## Related Documents
 
-`../foundation/05_AI.md` · `DECISION_MODEL.md` · `REVIEW_PROCESS.md` · `ETHICS_CHARTER.md` · `DPIA.md` · `EARLY_WARNING.md`
+`../foundation/05_AI.md` · `DECISION_MODEL.md` · `REVIEW_PROCESS.md` · `ETHICS_CHARTER.md` · `DPIA.md` · `EARLY_WARNING.md` · `../methodology/AI_HEARING_FACILITATOR.md`

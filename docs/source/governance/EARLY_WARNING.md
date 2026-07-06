@@ -57,7 +57,7 @@ Applies to: HARM Taxonomy (National Harm Taxonomy, `ADR-021`), AHIP Intake, Stru
 
 **Risk Assessment dimensions:** severity, scale, geographic distribution, population affected, likelihood, urgency, confidence level, evidence strength, potential impact — consistent with the existing rule that confidence evaluates evidence quality and patterns, never people (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7 Governance Guardrail 3).
 
-**Relationship with Other Frameworks:** the Early Warning Framework supports — not governs — HARM Taxonomy, AHIP, Structured Hearings, Harm Codex, Scientific Review (the "Validation Framework"), Civic Intelligence, AI Governance Framework, Ethics Charter, and Platform Services. None of these is redefined here.
+**Relationship with Other Frameworks:** the Early Warning Framework supports — not governs — HARM Taxonomy, AHIP, Structured Hearings, Harm Codex, the Scientific Review Governance Gate, Civic Intelligence, AI Governance Framework, Ethics Charter, and Platform Services. None of these is redefined here.
 
 ## Workflow
 
@@ -91,7 +91,7 @@ Reserved — pending approved case material.
 
 **Current Role:** Placeholder / Governance Extension. **Blocking Status:** NON-BLOCKING. **Implementation Priority:** Phase 2. **Current Requirement:** architecture placeholder only, consistent with `ADR-023`.
 
-**Interfaces:** HARM Codex, AHIP, Structured Hearings, Scientific Review, the Validation Framework, Platform Services, Civic Intelligence, AI Governance, Ethics Charter, Monitoring & Evaluation — each reserves an Early Warning extension point; none is enforced yet.
+**Interfaces:** HARM Codex, AHIP, Structured Hearings, the Scientific Review Governance Gate, Platform Services, Civic Intelligence, AI Governance, Ethics Charter, Monitoring & Evaluation — each reserves an Early Warning extension point; none is enforced yet.
 
 ## Future Responsibilities (Phase 2)
 

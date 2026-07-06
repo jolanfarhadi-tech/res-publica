@@ -38,7 +38,7 @@ Applies to AHIP submissions, Structured Hearings, evidence packages, documents, 
 
 ## Definitions
 
-**Validation Status** (this gate's own status field — distinct from, and prior to, Scientific Review's `draft → expert_reviewed → hearing_validated → codex_validated → published → signal_released` state machine, `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7). A submission reaches Scientific Review's `draft` state only after passing this gate:
+**Validation Status** (this gate's own status field — distinct from, and prior to, Scientific Review's `draft → expert_reviewed → hearing_documented → codex_validated → published → signal_released` state machine, `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7 — the Level 2 state is named `hearing_documented`, not `hearing_validated`, since Structured Hearings document, not validate). A submission reaches Scientific Review's `draft` state only after passing this gate:
 - **Valid** — ready for Scientific Review.
 - **Valid with Minor Issues** — accepted with recommendations for correction.
 - **Incomplete** — additional information required.
@@ -46,6 +46,8 @@ Applies to AHIP submissions, Structured Hearings, evidence packages, documents, 
 - **Invalid Submission** — rejected due to missing minimum requirements.
 
 **What Basic Validation does NOT do:** determine legal responsibility; verify historical truth; judge political claims; conduct scientific peer review; make governance decisions; assess ethical acceptability. Those functions belong to Scientific Review and later stages — explicitly not redefined or preempted here.
+
+**Boundary with Documentation Quality Review (DQR), `docs/source/methodology/DOCUMENTATION_QUALITY_REVIEW.md`:** Basic Validation checks whether a *submission* has the required data to proceed (existence of fields, evidence, and metadata) — a one-time intake gate. DQR checks whether a *document artifact itself* is well-formed (template compliance, structure, technical/editorial quality) — an ecosystem-wide, recurring check, not limited to intake. Where both examine metadata or evidence, Basic Validation asks whether it exists; DQR asks whether it is well-authored. Neither redefines the other.
 
 ## Framework
 
@@ -56,7 +58,7 @@ Applies to AHIP submissions, Structured Hearings, evidence packages, documents, 
 - **Documentation:** legible, complete, structured, consistent.
 - **Classification:** correct Harm Category, correct taxonomy mapping (National Harm Taxonomy, `ADR-021` — not a separate taxonomy), appropriate severity level, geographic assignment, stakeholder assignment.
 
-**Relationship with Other Frameworks:** receives data from AHIP, Structured Hearings, and Platform Services. Provides validated inputs to Scientific Review (the "Validation Framework"), Harm Codex, Responsibility Mapping, and the Repair Framework. None of these is redefined here.
+**Relationship with Other Frameworks:** receives data from AHIP, Structured Hearings, and Platform Services. Provides validated inputs to the Scientific Review Governance Gate, Harm Codex, Responsibility Mapping, and the Repair Framework. None of these is redefined here.
 
 ## Workflow
 
@@ -84,7 +86,7 @@ Validation Status, Validation Report, Metadata Report, Missing Information List,
 
 ## AI Integration
 
-Not specified beyond the general AI Governance boundary (`docs/source/governance/AI_POLICY.md`). "AI-assisted metadata validation," "automated duplicate detection," and "smart taxonomy suggestions" are named only as Future Enhancements (below), not current scope — no validation decision is AI-originated.
+Not specified beyond the general AI Governance boundary (`docs/source/governance/AI_POLICY.md`). Where a hearing used the **AI Hearing Facilitator** (`AI_HEARING_FACILITATOR.md`), its Documentation Gap List and Evidence Collection Checklist outputs may help a submission arrive more complete — advisory input only; the completeness determination itself remains this framework's own. "AI-assisted metadata validation," "automated duplicate detection," and "smart taxonomy suggestions" are named only as Future Enhancements (below), not current scope — no validation decision is AI-originated.
 
 ## Examples
 
@@ -114,4 +116,4 @@ AI-assisted metadata validation, automated duplicate detection, file integrity a
 
 ## Related Documents
 
-`../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`
+`../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `../methodology/DOCUMENTATION_QUALITY_REVIEW.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`

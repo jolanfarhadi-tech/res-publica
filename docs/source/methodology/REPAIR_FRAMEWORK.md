@@ -14,6 +14,8 @@ Extends/Reconciles with: docs/source/foundation/01_HARM_OPERATING_SYSTEM.md (H-A
 
 The Repair Framework establishes the standardized methodology for transforming validated harm into coordinated repair actions. It provides the governance processes, decision models, and operational mechanisms required to restore trust, strengthen institutions, improve public policies, and reduce future harm. It does not seek punishment as its primary objective — it prioritizes sustainable repair, institutional learning, and long-term governance improvement.
 
+**Alias note:** referenced as "Grammar of Repair" in `EVIDENCE_MODEL.md`'s source specification — the same framework, not a second one.
+
 **This is the full operational specification of two already-established but previously undetailed concepts:** the HARM Operating System's H-A-R-M analytical engine's **"R" (Repair)** letter (`01_HARM_OPERATING_SYSTEM.md` §Framework: "identifies what would remedy the harm, and whether repair has been attempted") and Transferable Civic Value's **repair value** (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §13: "supports remedy where harm is acknowledged"). This document does not introduce a new concept — it operationalizes two that already existed at a single-line level.
 
 ## Mission
@@ -109,7 +111,7 @@ Repair Plans, Policy Recommendations, Institutional Improvement Plans, Community
 
 ## Governance
 
-**Relationship with Other Frameworks:** receives validated inputs from AHIP, Structured Hearings, Scientific Review (the "Validation Framework"), Harm Codex, and Responsibility Mapping. Its outputs support the RPCS Program, Civic Intelligence, Monitoring & Evaluation, Early Warning Framework, Governance Dashboards, and Policy Development. None of these is redefined here.
+**Relationship with Other Frameworks:** triggered only by a validated Annex — i.e., material that has passed the Scientific Review Governance Gate, the sole source of validation in this chain. AHIP and Structured Hearings contributed the underlying account and contextual reflections earlier in the lifecycle, but do not themselves validate; Harm Codex and Responsibility Mapping provide supporting context, not additional validation. Its outputs support the RPCS Program, Civic Intelligence, Monitoring & Evaluation, Early Warning Framework, Governance Dashboards, and Policy Development. None of these is redefined here.
 
 **Quality Assurance:** repair plans should be evidence-based, feasible, transparent, inclusive, measurable, accountable, and periodically reviewed.
 
@@ -145,4 +147,4 @@ AI-assisted repair planning, repair simulation models, cost-benefit analysis too
 
 ## Related Documents
 
-`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/AHIP.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`
+`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/AHIP.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `../methodology/EVIDENCE_MODEL.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`

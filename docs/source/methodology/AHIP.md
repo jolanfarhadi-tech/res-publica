@@ -55,7 +55,7 @@ Position in the HARM Lifecycle: `Citizen Experience → **AHIP** → Structured 
 
 **Evidence Collection sources:** interviews, Structured Hearings, documents, official records, photographs, audio, video, scientific publications, administrative data, observational notes, expert opinions.
 
-**Evidence Standards** (authenticity, reliability, validity, completeness, relevance, consistency, traceability) — the specification refers to a detailed "Evidence Standards Annex," which does not exist anywhere in this repository. Flagged as a genuine gap, not invented here.
+**Evidence Standards** (authenticity, reliability, validity, completeness, relevance, consistency, traceability) — the previously-flagged "Evidence Standards Annex" gap is now resolved by `docs/source/methodology/EVIDENCE_MODEL.md`'s Evidence Quality Assessment criteria (authenticity, reliability, relevance, completeness, consistency, traceability, plus timeliness, contextual integrity, corroboration).
 
 **Accountability Mapping** (responsible institutions, organizations, processes, contributing factors, systemic drivers) — this is the same function already specified as **Responsibility Mapping Lab** (`docs/source/methodology/RESPONSIBILITY_MAPPING.md`), not a second, competing mapping process. AHIP documents accountability relationships without assigning legal liability, consistent with that document's existing evidence-grounded-linkage-only principle.
 
@@ -95,7 +95,7 @@ Subject to Res Publica's trauma-informed language standard and data-protection r
 
 ## AI Integration
 
-AI does not perform intake moderation. Any AI assistance (e.g., language accessibility support, future "AI-assisted Intake" per Future Enhancements below) is advisory only to the human moderator, consistent with `docs/source/governance/AI_POLICY.md`.
+AI does not perform intake moderation. Any AI assistance (e.g., language accessibility support, future "AI-assisted Intake" per Future Enhancements below) is advisory only to the human moderator, consistent with `docs/source/governance/AI_POLICY.md`. Where AHIP intake involves an extended conversational component, the **AI Hearing Facilitator** (`AI_HEARING_FACILITATOR.md`) may offer the same advisory support it provides at Structured Hearings — never conducting intake, validating anything, or replacing the Moderator.
 
 ## Examples
 
@@ -119,7 +119,7 @@ AI-assisted intake, automated classification, duplicate case detection, multilin
 - [ ] Develop dashboard reporting.
 - [ ] Enable multilingual submissions.
 - [ ] Prepare APIs for external integrations.
-- [ ] Author the referenced "Evidence Standards Annex" (does not exist yet).
+- [ ] Integrate Evidence Model's Evidence Quality Assessment criteria into the intake evidence-collection UI (gap resolved, `EVIDENCE_MODEL.md`).
 
 ## References
 
@@ -127,4 +127,4 @@ AI-assisted intake, automated classification, duplicate case detection, multilin
 
 ## Related Documents
 
-`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `../methodology/HARM_CODEX.md` · `../methodology/BASIC_VALIDATION_FRAMEWORK.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` · `../academy/RPCS_PROGRAM.md`
+`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `../methodology/HARM_CODEX.md` · `../methodology/BASIC_VALIDATION_FRAMEWORK.md` · `../methodology/AI_HEARING_FACILITATOR.md` · `../methodology/EVIDENCE_MODEL.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` · `../academy/RPCS_PROGRAM.md`
