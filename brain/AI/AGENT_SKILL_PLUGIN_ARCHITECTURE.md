@@ -98,7 +98,7 @@ Full specification: `brain/AI/EAO_AGENT_REGISTRY.md`, `EAO_ARCHITECTURE.md`, and
 
 | Name | Purpose | Real backing | Status |
 |---|---|---|---|
-| Chief Systems Officer (CSO) | Repository-wide coordination, routing, reporting; absorbs the former `ecc:program-orchestrator` concept | `ecc:program-orchestrator` (`.claude/agents/ecc-program-orchestrator.md`) | **Registered and Activated** |
+| Chief Systems Officer (CSO) | Repository-wide coordination, routing, reporting; absorbs the former `ecc:program-orchestrator` concept | `program-orchestrator` (`.claude/agents/program-orchestrator.md`) — local project agent; `ecc:` is reserved for the installed ecc marketplace plugin, not available to local agents | **Registered and Activated** |
 | Chief Architecture Officer, Chief Governance Officer, Chief Documentation Officer, Chief Research Officer, Chief Delivery Officer | See `EAO_AGENT_REGISTRY.md` §1 | None yet — conceptual | Registered, not yet Activated |
 | 9 Domain Advisors, 7 Technical Advisors | See `EAO_AGENT_REGISTRY.md` §2–3 | Mostly none yet — conceptual (Documentation Advisor partially overlaps `ecc:doc-updater`) | Registered, not yet Activated |
 

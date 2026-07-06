@@ -70,7 +70,7 @@ The 6 "Not approved" roles below are given no activation phase, trigger, skills,
 - **Dependencies:** none beyond ADR-024 itself.
 - **Deactivation Conditions:** none defined; standing function for the life of the EAO.
 - **Why not earlier:** The EAO did not exist as an approved architecture before `ADR-024`; this is its first day.
-- **Real backing:** `.claude/agents/ecc-program-orchestrator.md`. **Known limitation, disclosed:** this session's actual invokable-agent list (harness-enumerated) does not yet include this role — the file is written for future session pickup; this session runs its defined procedure directly rather than falsely claiming a successful subagent invocation.
+- **Real backing:** `.claude/agents/program-orchestrator.md` (renamed from `ecc-program-orchestrator.md` — `ecc:` is the reserved namespace of the installed ecc marketplace plugin, not available to local project agents; corrected name has no namespace prefix). **Known limitation, disclosed:** the current session's actual invokable-agent list (harness-enumerated at session start) does not yet include this role regardless of the naming fix — a new session is required for pickup; this session runs its defined procedure directly rather than falsely claiming a successful subagent invocation.
 - **Remaining 21 EAO roles:** Registered (`AGENT_SKILL_PLUGIN_ARCHITECTURE.md` §3d) but **not yet Activated** — no activation trigger has been set for them; each awaits a separate instruction, consistent with `EAO_ACTIVATION_ROADMAP_PROPOSAL.md`'s phased order.
 
 ---
