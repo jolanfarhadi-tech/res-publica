@@ -60,6 +60,19 @@ The 6 "Not approved" roles below are given no activation phase, trigger, skills,
 - **Deactivation Conditions:** none defined; standing functions for the life of Phase 1 module-building.
 - **Why not earlier:** These three agents review manifests, CLI commands, and local-dev tooling that don't exist before Phase 1's Core Domain Model and Plugin Architecture steps — there was nothing for them to operate on during Phase -1/0.
 
+**Chief Systems Officer (CSO)** *(Executive AI Office, `ADR-024`, Accepted)*
+- **Activation Trigger:** ADR-024 acceptance (now).
+- **Required Skills:** Repository Health, Project Health (`EAO_SKILL_LIBRARY.md`).
+- **Required Plugins:** none — cross-cutting, per `EAO_PLUGIN_MCP_ARCHITECTURE.md` Phase 1 native capabilities only (Git, filesystem, ripgrep, Markdown).
+- **Required MCP Tools:** none beyond existing repository access already in use this session.
+- **Human Approval:** Required for any file modification, ADR-status change, or roadmap-becomes-binding decision (`EAO_PERMISSION_MODEL.md`).
+- **Permission Level:** Read Only + Suggest Only — no elevation.
+- **Dependencies:** none beyond ADR-024 itself.
+- **Deactivation Conditions:** none defined; standing function for the life of the EAO.
+- **Why not earlier:** The EAO did not exist as an approved architecture before `ADR-024`; this is its first day.
+- **Real backing:** `.claude/agents/ecc-program-orchestrator.md`. **Known limitation, disclosed:** this session's actual invokable-agent list (harness-enumerated) does not yet include this role — the file is written for future session pickup; this session runs its defined procedure directly rather than falsely claiming a successful subagent invocation.
+- **Remaining 21 EAO roles:** Registered (`AGENT_SKILL_PLUGIN_ARCHITECTURE.md` §3d) but **not yet Activated** — no activation trigger has been set for them; each awaits a separate instruction, consistent with `EAO_ACTIVATION_ROADMAP_PROPOSAL.md`'s phased order.
+
 ---
 
 ## Phase 2 and beyond

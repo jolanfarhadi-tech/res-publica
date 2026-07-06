@@ -92,6 +92,18 @@ These map onto `foundation-architecture.md` §3's own note that these roles "don
 | **Responsibility Evidence Agent** *(historical term — superseded by Responsibility Evidence; previously "Contribution Credit Agent")* | Responsibility Evidence tracking, per `../GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md` | *(none — no approved module)* | Future | **High** | **Flagged: adjacent to the Reputation/Leadership Engine gamification risk already raised in `EXECUTION_ALIGNMENT.md`. Must not be designed without an explicit Core Principle 2 (zero gamification) review first.** |
 | Analytics/Civic-Effect Agent | Civic-effect metric assist | Analytics | MVP (9th) | Medium | Must never introduce attention metrics (Core Principle 4) |
 
+## 3d. Executive AI Office (EAO) — Approved via `ADR-024` (Accepted)
+
+Full specification: `brain/AI/EAO_AGENT_REGISTRY.md`, `EAO_ARCHITECTURE.md`, and companion documents. Registered here; **activated only where separately noted** — registration and activation are distinct steps (`EAO_ARCHITECTURE.md` §9, Platform Lifecycle Model).
+
+| Name | Purpose | Real backing | Status |
+|---|---|---|---|
+| Chief Systems Officer (CSO) | Repository-wide coordination, routing, reporting; absorbs the former `ecc:program-orchestrator` concept | `ecc:program-orchestrator` (`.claude/agents/ecc-program-orchestrator.md`) | **Registered and Activated** |
+| Chief Architecture Officer, Chief Governance Officer, Chief Documentation Officer, Chief Research Officer, Chief Delivery Officer | See `EAO_AGENT_REGISTRY.md` §1 | None yet — conceptual | Registered, not yet Activated |
+| 9 Domain Advisors, 7 Technical Advisors | See `EAO_AGENT_REGISTRY.md` §2–3 | Mostly none yet — conceptual (Documentation Advisor partially overlaps `ecc:doc-updater`) | Registered, not yet Activated |
+
+All 22 roles are Read Only + Suggest Only by default (`EAO_PERMISSION_MODEL.md`); none may modify a file, commit, push, or approve architecture. `ecc:architect` remains the sole architecture-validation authority for all 22.
+
 ---
 
 # 4. Required Skills
