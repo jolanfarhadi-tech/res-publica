@@ -82,6 +82,7 @@ export function computeDependencyGraph(root = process.cwd()) {
   const edges = [];
   const brokenRefs = [];
   const plainFormattingDrift = [];
+  const danglingAdrReferences = []; // { file, context, adrNumber } - ADR-### mentioned in text with no matching file under architecture/adr/
 
   for (const file of mdFiles) {
     const base = path.basename(file);
@@ -123,7 +124,11 @@ export function computeDependencyGraph(root = process.cwd()) {
 
       for (const adrNum of findAdrMentions(sectionText)) {
         const target = [...byBasename.keys()].find((n) => n.startsWith(adrNum));
-        if (target) edges.push({ from: base, to: target, kind: "architectural", classification: "reference" });
+        if (target) {
+          edges.push({ from: base, to: target, kind: "architectural", classification: "reference" });
+        } else {
+          danglingAdrReferences.push({ file: path.relative(root, file), context: sectionName, adrNumber: adrNum });
+        }
       }
     }
 
@@ -132,6 +137,11 @@ export function computeDependencyGraph(root = process.cwd()) {
       if (target && target !== base) {
         const already = edges.some((e) => e.from === base && e.to === target && e.kind === "architectural");
         if (!already) edges.push({ from: base, to: target, kind: "architectural", classification: "optional" });
+      } else if (!target) {
+        const alreadyDangling = danglingAdrReferences.some((d) => d.file === path.relative(root, file) && d.adrNumber === adrNum);
+        if (!alreadyDangling) {
+          danglingAdrReferences.push({ file: path.relative(root, file), context: "body text", adrNumber: adrNum });
+        }
       }
     }
   }
@@ -207,6 +217,7 @@ export function computeDependencyGraph(root = process.cwd()) {
     generatedCount,
     mdFilesScanned: mdFiles.length,
     optedInCount: optedIn.length,
+    danglingAdrReferences,
   };
 }
 
@@ -223,6 +234,7 @@ export function renderDependencyGraphJson(result) {
       orphans: result.orphans,
       brokenReferences: result.brokenReferences,
       unreferencedCoreDocuments: result.unreferencedCoreDocuments,
+      danglingAdrReferences: result.danglingAdrReferences,
     },
     null,
     2
@@ -247,7 +259,7 @@ export function renderDependencyGraphDot(result) {
 }
 
 export function renderDependencyGraphMarkdown(result) {
-  const { nodes, edges, reverseAdjacency, cyclesByKind, orphans, brokenReferences, unreferencedCoreDocuments, plainFormattingDrift, headingDrift, generatedCount } = result;
+  const { nodes, edges, reverseAdjacency, cyclesByKind, orphans, brokenReferences, unreferencedCoreDocuments, plainFormattingDrift, headingDrift, generatedCount, danglingAdrReferences } = result;
   const lines = [];
   lines.push("## Dependency Map");
   lines.push("");
@@ -320,6 +332,21 @@ export function renderDependencyGraphMarkdown(result) {
   lines.push(
     unreferencedCoreDocuments.length
       ? unreferencedCoreDocuments.map((p) => `- \`${p}\` (0 inbound references of any kind)`).join("\n")
+      : "- none"
+  );
+  lines.push("");
+
+  lines.push(`### Dangling ADR References — ${danglingAdrReferences.length}`);
+  lines.push("");
+  lines.push(
+    "_ADR numbers mentioned in text with no matching file under architecture/adr/ - previously " +
+      "silently dropped; now surfaced, since a mention of a non-existent ADR is itself a real " +
+      "architectural signal (typo, or a decision that was referenced as if made but never recorded)._"
+  );
+  lines.push("");
+  lines.push(
+    danglingAdrReferences.length
+      ? danglingAdrReferences.map((d) => `- \`${d.file}\` (${d.context}) -> \`${d.adrNumber}\` (no matching file)`).join("\n")
       : "- none"
   );
   lines.push("");
