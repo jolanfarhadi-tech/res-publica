@@ -12,6 +12,7 @@
 //
 // Read-only.
 
+import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { findMarkdownFiles, forEachLine } from "./lib/markdown.mjs";
 import { computeRepositoryHealth } from "./repository-health.mjs";
@@ -19,16 +20,20 @@ import { computeBrokenLinks } from "./broken-links.mjs";
 import { computeTerminologyDrift } from "./terminology-drift.mjs";
 import { computeDependencyGraph } from "./dependency-map.mjs";
 
-function countTodos(root = process.cwd()) {
+function findTodos(root = process.cwd()) {
   // Reuses the existing shared file-walk/line-scan utilities (lib/markdown.mjs)
   // rather than implementing a new scan - a minimal composition, not a new pipeline.
-  let count = 0;
+  // Returns actual occurrences (not just a count) so this finding can carry
+  // real evidence in the canonical action model, same as every other finding.
+  const todos = [];
   for (const file of findMarkdownFiles(root)) {
-    forEachLine(file, (lineText) => {
-      if (/\bTODO\b/.test(lineText)) count++;
+    forEachLine(file, (lineText, lineNum) => {
+      if (/\bTODO\b/.test(lineText)) {
+        todos.push({ file: path.relative(root, file), line: lineNum, text: lineText.trim().slice(0, 140) });
+      }
     });
   }
-  return count;
+  return todos;
 }
 
 export function computeProjectHealth(root = process.cwd()) {
@@ -36,7 +41,7 @@ export function computeProjectHealth(root = process.cwd()) {
   const links = computeBrokenLinks(root);
   const terminology = computeTerminologyDrift(root);
   const deps = computeDependencyGraph(root);
-  const todoCount = countTodos(root);
+  const todos = findTodos(root);
 
   const genuineBrokenRefs = deps.brokenReferences.filter((b) => !b.note);
   const scopeArtifactRefs = deps.brokenReferences.filter((b) => b.note);
@@ -125,7 +130,7 @@ export function computeProjectHealth(root = process.cwd()) {
     criticalIssues,
     warnings,
     technicalDebtIndicators: {
-      todoCount,
+      todoCount: todos.length,
       note: "Count of lines containing the word TODO across all scanned Markdown files.",
     },
     documentationCoverage: {
@@ -136,29 +141,138 @@ export function computeProjectHealth(root = process.cwd()) {
     circularDependencySummary: deps.cyclesByKind,
     orphanDocumentsSummary: deps.orphans,
     unreferencedCoreDocuments: deps.unreferencedCoreDocuments,
-    priorityActions: buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs }),
+    priorityActions: buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos }),
   };
 }
 
-function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs }) {
+function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos }) {
+  // severity/governanceSensitive are stated explicitly here (matching exactly
+  // which criticalIssues/warnings entry each action corresponds to above)
+  // rather than left for a downstream consumer (e.g. the Roadmap pipeline)
+  // to re-infer from the priority number or from string-matching - avoids a
+  // fragile implicit coupling between this ordering and severity meaning.
+  // Canonical action model: every field below is generated once, here, and
+  // propagated downstream (Roadmap, and future Risk Analysis/ADR Review/
+  // Dashboard pipelines) - none of them re-derive or re-infer this metadata,
+  // keeping Project Health the single source of truth for it.
+  //   - category / sourcePipeline: which pipeline and finding-type this is.
+  //   - affectsArchitecture: true only for findings that touch the
+  //     dependency graph's structural/architectural layer (unreferenced core
+  //     docs, governance connectivity), not pure documentation formatting.
+  //   - autoFixable: true only where a deterministic fix is actually knowable
+  //     from the finding itself (terminology drift already carries its exact
+  //     replacement text; formatting/heading drift is mechanical reformatting).
+  //     False for anything requiring human judgment about the correct target
+  //     (broken references, governance connectivity, technical debt triage).
+  //   - humanApprovalRequired: always true - no EAO role modifies a file
+  //     without explicit human approval (EAO_PERMISSION_MODEL.md), no exceptions.
+  //   - evidence: the actual originating finding records (not just a count),
+  //     so downstream consumers have full traceability without re-deriving it.
   const actions = [];
   if (terminology.liveDrift.length) {
-    actions.push({ priority: 1, action: "Resolve live terminology drift", count: terminology.liveDrift.length });
+    actions.push({
+      priority: 1,
+      action: "Resolve live terminology drift",
+      count: terminology.liveDrift.length,
+      severity: "critical",
+      category: "terminology-drift",
+      sourcePipeline: "terminology-drift",
+      affectsArchitecture: false,
+      governanceSensitive: false,
+      autoFixable: true,
+      humanApprovalRequired: true,
+      evidence: terminology.liveDrift,
+    });
   }
   if (governanceOrphans.length || governanceBrokenRefs.length) {
-    actions.push({ priority: 2, action: "Investigate governance document connectivity issues", count: governanceOrphans.length + governanceBrokenRefs.length });
+    actions.push({
+      priority: 2,
+      action: "Investigate governance document connectivity issues",
+      count: governanceOrphans.length + governanceBrokenRefs.length,
+      severity: "critical",
+      category: "governance-connectivity",
+      sourcePipeline: "dependency-analysis",
+      affectsArchitecture: true,
+      governanceSensitive: true,
+      autoFixable: false,
+      humanApprovalRequired: true,
+      evidence: { orphans: governanceOrphans, brokenReferences: governanceBrokenRefs },
+    });
   }
   if (genuineBrokenRefs.length) {
-    actions.push({ priority: 3, action: "Fix genuine broken References/Related Documents entries", count: genuineBrokenRefs.length });
+    actions.push({
+      priority: 3,
+      action: "Fix genuine broken References/Related Documents entries",
+      count: genuineBrokenRefs.length,
+      severity: "critical",
+      category: "broken-reference",
+      sourcePipeline: "dependency-analysis",
+      affectsArchitecture: false,
+      governanceSensitive: false,
+      autoFixable: false,
+      humanApprovalRequired: true,
+      evidence: genuineBrokenRefs,
+    });
   }
   if (links.broken.length) {
-    actions.push({ priority: 4, action: "Fix broken Markdown links", count: links.broken.length });
+    actions.push({
+      priority: 4,
+      action: "Fix broken Markdown links",
+      count: links.broken.length,
+      severity: "critical",
+      category: "broken-link",
+      sourcePipeline: "broken-link-detection",
+      affectsArchitecture: false,
+      governanceSensitive: false,
+      autoFixable: false,
+      humanApprovalRequired: true,
+      evidence: links.broken,
+    });
   }
   if (deps.unreferencedCoreDocuments.length) {
-    actions.push({ priority: 5, action: "Add inbound references to unreferenced core documents", count: deps.unreferencedCoreDocuments.length });
+    actions.push({
+      priority: 5,
+      action: "Add inbound references to unreferenced core documents",
+      count: deps.unreferencedCoreDocuments.length,
+      severity: "critical",
+      category: "unreferenced-core-document",
+      sourcePipeline: "dependency-analysis",
+      affectsArchitecture: true,
+      governanceSensitive: false,
+      autoFixable: false,
+      humanApprovalRequired: true,
+      evidence: deps.unreferencedCoreDocuments,
+    });
   }
   if (deps.headingDrift.length || deps.plainFormattingDrift.length) {
-    actions.push({ priority: 6, action: "Standardize heading depth and backtick filename formatting", count: deps.headingDrift.length + deps.plainFormattingDrift.length });
+    actions.push({
+      priority: 6,
+      action: "Standardize heading depth and backtick filename formatting",
+      count: deps.headingDrift.length + deps.plainFormattingDrift.length,
+      severity: "warning",
+      category: "documentation-formatting-drift",
+      sourcePipeline: "dependency-analysis",
+      affectsArchitecture: false,
+      governanceSensitive: false,
+      autoFixable: true,
+      humanApprovalRequired: true,
+      evidence: { headingDrift: deps.headingDrift, plainFormattingDrift: deps.plainFormattingDrift },
+    });
+  }
+  if (todos.length) {
+    actions.push({
+      priority: 7,
+      action: "Review and triage outstanding TODO markers",
+      count: todos.length,
+      severity: "warning",
+      category: "technical-debt",
+      sourcePipeline: "project-health",
+      affectsArchitecture: false,
+      governanceSensitive: false,
+      autoFixable: false,
+      humanApprovalRequired: true,
+      evidence: todos,
+    });
   }
   return actions.sort((a, b) => a.priority - b.priority);
 }
