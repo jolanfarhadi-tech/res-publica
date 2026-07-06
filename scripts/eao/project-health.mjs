@@ -218,12 +218,17 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     ...deps.plainFormattingDrift.map((p) => ({ kind: "plainFormattingDrift", ...p })),
   ];
 
+  // Known Issue #1 (Canonical Action Model Spec) - count must be derived from
+  // evidence, never hand-authored in parallel, so the two can never silently
+  // desynchronize. pushAction is the single place count is computed.
   const actions = [];
+  function pushAction(action) {
+    actions.push({ ...action, count: action.evidence.length });
+  }
   if (terminology.liveDrift.length) {
-    actions.push({
+    pushAction({
       priority: 1,
       action: "Resolve live terminology drift",
-      count: terminology.liveDrift.length,
       severity: "critical",
       category: CATEGORIES.TERMINOLOGY_DRIFT,
       riskDomain: riskDomainForCategory(CATEGORIES.TERMINOLOGY_DRIFT),
@@ -236,10 +241,9 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     });
   }
   if (governanceEvidence.length) {
-    actions.push({
+    pushAction({
       priority: 2,
       action: "Investigate governance document connectivity issues",
-      count: governanceEvidence.length,
       severity: "critical",
       category: CATEGORIES.GOVERNANCE_CONNECTIVITY,
       riskDomain: riskDomainForCategory(CATEGORIES.GOVERNANCE_CONNECTIVITY),
@@ -252,10 +256,9 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     });
   }
   if (genuineBrokenRefs.length) {
-    actions.push({
+    pushAction({
       priority: 3,
       action: "Fix genuine broken References/Related Documents entries",
-      count: genuineBrokenRefs.length,
       severity: "critical",
       category: CATEGORIES.BROKEN_REFERENCE,
       riskDomain: riskDomainForCategory(CATEGORIES.BROKEN_REFERENCE),
@@ -268,10 +271,9 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     });
   }
   if (links.broken.length) {
-    actions.push({
+    pushAction({
       priority: 4,
       action: "Fix broken Markdown links",
-      count: links.broken.length,
       severity: "critical",
       category: CATEGORIES.BROKEN_LINK,
       riskDomain: riskDomainForCategory(CATEGORIES.BROKEN_LINK),
@@ -284,10 +286,9 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     });
   }
   if (deps.unreferencedCoreDocuments.length) {
-    actions.push({
+    pushAction({
       priority: 5,
       action: "Add inbound references to unreferenced core documents",
-      count: deps.unreferencedCoreDocuments.length,
       severity: "critical",
       category: CATEGORIES.UNREFERENCED_CORE_DOCUMENT,
       riskDomain: riskDomainForCategory(CATEGORIES.UNREFERENCED_CORE_DOCUMENT),
@@ -300,10 +301,9 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     });
   }
   if (formattingDriftEvidence.length) {
-    actions.push({
+    pushAction({
       priority: 6,
       action: "Standardize heading depth and backtick filename formatting",
-      count: formattingDriftEvidence.length,
       severity: "warning",
       category: CATEGORIES.DOCUMENTATION_FORMATTING_DRIFT,
       riskDomain: riskDomainForCategory(CATEGORIES.DOCUMENTATION_FORMATTING_DRIFT),
@@ -316,10 +316,9 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     });
   }
   if (todos.length) {
-    actions.push({
+    pushAction({
       priority: 7,
       action: "Review and triage outstanding TODO markers",
-      count: todos.length,
       severity: "warning",
       category: CATEGORIES.TECHNICAL_DEBT,
       riskDomain: riskDomainForCategory(CATEGORIES.TECHNICAL_DEBT),
@@ -332,10 +331,9 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
     });
   }
   if (mvpBlocking.length) {
-    actions.push({
+    pushAction({
       priority: 8,
       action: "Confirm implementation status of MVP-critical specifications before release",
-      count: mvpBlocking.length,
       severity: "critical",
       category: CATEGORIES.MVP_IMPLEMENTATION_PENDING,
       riskDomain: riskDomainForCategory(CATEGORIES.MVP_IMPLEMENTATION_PENDING),
