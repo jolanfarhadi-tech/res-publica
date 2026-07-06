@@ -36,6 +36,8 @@ Since this introduces new architectural content (a named concept with six sub-va
 
 **Addendum (same turn):** §13 now also states explicitly that Transferable Civic Value may later inform value accounting, contribution recognition, or tokenized civic value mechanisms, but that no token, coin, financial instrument, exchange mechanism, or tokenomics model is introduced by this ADR or by §13. Any future tokenization would require its own feasibility study, legal review, ethics review, platform architecture decision, and dedicated ADR. This addendum does not modify the Blockchain Annex Block's existing integrity/timestamp/approval role (§3, §6 Rule 5 of the architecture document) and introduces no implementation commitment.
 
+**Addendum 2 (subsequent turn):** §13 gains a "Philosophical Foundation" subsection stating the ecosystem's purpose is to transform validated human experience into transferable civic value, not to collect harm for its own sake. This is architectural philosophy explaining *why* the Annex Architecture exists, not a constitutional amendment — it explicitly operates under, and does not add to, amend, or restate, the Constitution's Core Principles (both Constitution documents remain LOCKED and untouched). No new framework, parallel lifecycle, or architectural change was introduced.
+
 ## Alternatives Considered
 
 - **Create a new standalone "Transferable Civic Value" document.** Rejected — this content is specifically about what an Annex produces; it belongs with the Annex's own canonical architecture, not a separate document, consistent with the "extend, don't fragment" discipline already applied to Scientific Review (§7) and the National Harm Taxonomy (§12).

@@ -255,6 +255,12 @@ No entity is added to `brain/DOMAIN/CORE_DOMAIN_MODEL.md` (LOCKED) by this secti
 
 **Harm Categories are not generative.** Restated once more, consistent with §6 Rule 7 and §12: they are a post-validation classification layer applied only after an Annex has been approved, existing to organize validated Annexes so they can be connected across the ecosystem — not to produce, gate, or precede them.
 
+### Philosophical Foundation
+
+**The purpose of the Res Publica ecosystem is not to collect harm.** Its purpose is to transform validated human experience into transferable civic value. Human suffering is never the objective. The objective is to convert validated experience into evidence, learning, accountability, repair, democratic capacity, and shared public value. The value does not lie in suffering itself. The value lies in what society learns from validated human experience.
+
+This is architectural philosophy explaining *why* the Annex Architecture exists — not a constitutional amendment. It operates under, and does not add to, amend, or restate, the Constitution's own Core Principles (`brain/00_constitution/00_constitution.md`, `brain/CONSTITUTION.md` — both LOCKED, neither touched here), in the same way §6's Governance Rules already state they "operate under, and do not replace" the Constitution. It is the reason the six value types below exist, not a seventh value or a new framework.
+
 ### Transferable Civic Value
 
 The value of an Annex is not the document itself, but its ability to transform reported harm into transferable civic value:
