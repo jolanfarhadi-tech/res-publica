@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "check-structure": "node scripts/check-structure.mjs",
+    "eao:repo-health": "node scripts/eao/repository-health.mjs",
+    "eao:broken-links": "node scripts/eao/broken-links.mjs",
+    "eao:terminology-drift": "node scripts/eao/terminology-drift.mjs",
     "predev": "node scripts/check-structure.mjs",
     "prebuild": "node scripts/check-structure.mjs",
     "dev": "next dev",
