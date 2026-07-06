@@ -25,6 +25,8 @@ Fed by Mechanism Identification (HARM Lifecycle stage) and by recurring patterns
 
 **Version 1.0 proposal — taxonomy structure, pending approval:** entries are classified into three proposed categories: **institutional mechanisms** (a specific institution's recurring practice), **systemic patterns** (a pattern recurring across multiple institutions), and **procedural failures** (a process design flaw, not tied to one institution). A proposed entry template: mechanism name, category, first-identified date, number of linked Annexes, aggregated evidence summary (never raw case data) — reviewed and verified before entry, per `../governance/REVIEW_PROCESS.md`.
 
+**Formal name:** this three-category taxonomy is formally named the **National Harm Taxonomy** and serves as the classification layer for the Annex lifecycle — see `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §12. This is a naming/integration formalization only; the three categories themselves are unchanged.
+
 ## Roles
 **Researcher** — documents entries. **Expert** — validates taxonomy classification. **Reviewer** — verifies entries before they're relied upon.
 

@@ -40,7 +40,7 @@ The graph stores *what* is known and *how* it connects. The Civic Intelligence L
 | `Pattern` | Layer 5 — Intelligence | A recognized cluster across multiple Codex entries |
 | `Scenario` | Layer 5 — Intelligence | An explorative future, 1/3/10-year horizon |
 | `OrientationStatement` | Layer 5 — Intelligence | A human-reviewed orientation output |
-| `HarmCategory` | Taxonomy (reference) | One of the Harm Codex's category types |
+| `HarmCategory` | Taxonomy (reference) | One of the National Harm Taxonomy's category types (formally named in `docs/source/methodology/HARM_CODEX.md`; currently: institutional mechanisms, systemic patterns, procedural failures) |
 | `NormativeFramework` | External (reference) | A referenced external standard or indicator |
 | `ActorCategory` | Layer 2 — Mapping | An institution-type category — **never an individual person** |
 | `Region` | Dashboard/heat map | A geographic area with a heat level |

@@ -44,7 +44,7 @@ A Responsibility Dashboard pattern.
 A published Responsibility Annex.
 
 ## Governance
-Subject to the same human sign-off discipline as any Publication; no Annex publishes without named review.
+Subject to the same human sign-off discipline as any Publication; no Annex publishes without named review. Per `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §6/§12 (Governance Rule 7), every *validated* Annex is additionally classified under at least one Harm Category from the National Harm Taxonomy (`../methodology/HARM_CODEX.md`), applied after Scientific Review approval — Harm Categories classify Annexes; they do not generate them.
 
 ## AI Integration
 AI may assist in drafting or citation-checking; it does not verify or publish an Annex itself.

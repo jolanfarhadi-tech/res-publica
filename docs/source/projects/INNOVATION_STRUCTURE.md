@@ -3,7 +3,7 @@
 ```
 Type: Project (Canonical Overview / Root Document)
 Status: Canonical
-Version: 1.2.0 — last restructured: added Known Architecture Decision Needed note (Structured Hearing/Expert Review ordering), added Application Architecture/AI Governance/Early Warning/direct-path/Dashboard-secondary-role references, fixed "Responsibility Mapping Lab" naming
+Version: 1.3.0 — last restructured: Critical ordering conflict resolved via ADR-020 (Dual Intake and Review Paths); prior "Known Architecture Decision Needed" callout updated to RESOLVED
 Authorized by: N/A — pure synthesis of already-canonical content, no new decision introduced
 Extends/Reconciles with: docs/source/foundation/01_HARM_OPERATING_SYSTEM.md,
   docs/source/methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md,
@@ -65,7 +65,7 @@ flowchart TD
 
 Every node above is owned by exactly one existing canonical document (§7, References). The **Knowledge Graph** (`ADR-007`, specialized by `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md`) is not a stage in this flow — it is the persistent memory layer underlying every stage, per its own core sentence: *"The Knowledge Graph is the memory; the Civic Intelligence Layer is the thinking about it."*
 
-> **⚠ Known Architecture Decision Needed — not resolved here.** "Structured Hearing" and "Expert Review" currently appear in different orders across two canonical documents: `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` §Framework sequences `Structured Hearing → ... → Expert Review`, while `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7 (Scientific Review, Levels 1–2) sequences `Expert Review → Structured Hearing`. This document's diagram above collapses Scientific Review into a single node specifically because exposing its internal order would surface this unresolved conflict. **No order is chosen here.** Resolving this requires an ADR amendment (to `ADR-014` or a new ADR) or an explicit human architecture decision — not a documentation-level fix.
+> **✅ RESOLVED — see `architecture/adr/ADR-020-dual-intake-and-review-paths.md`.** "Structured Hearing" and "Expert Review" appear in different orders across `01_HARM_OPERATING_SYSTEM.md` and `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7 because they describe two distinct, intentional entry paths — the Primary Lifecycle (Innovation/Fellowship Path, Structured Hearing before Expert Review) and the Direct Annex Path (Evidence-Origin Path, Expert Review before Structured Hearing) — not a contradiction. Both paths converge after Codex Validation. Neither existing document was changed; this diagram's single collapsed "Scientific Review — 4 Levels" node remains a simplification of the Primary Lifecycle path specifically — see the ADR for the full Direct Annex Path detail.
 
 ## 4. Supporting Systems (each canonically owned elsewhere)
 
