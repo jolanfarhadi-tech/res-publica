@@ -45,4 +45,4 @@ Reserved — pending approved case material.
 `../foundation/01_HARM_OPERATING_SYSTEM.md`
 
 ## Related Documents
-`../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `../methodology/RESPONSIBILITY_ANNEXES.md` · `../methodology/CIVIC_INTELLIGENCE.md`
+`../methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md` · `../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `../methodology/RESPONSIBILITY_ANNEXES.md` · `../methodology/CIVIC_INTELLIGENCE.md`

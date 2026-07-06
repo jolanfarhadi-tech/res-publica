@@ -83,7 +83,7 @@ The cycle's Knowledge Products stage is produced by five Innovations. **Canonica
 
 | Canonical name | UI label (website only) | Detailed in |
 |---|---|---|
-| Responsibility Biography Lab | Biography Lab | `../methodology/HARM_LIFECYCLE.md` |
+| Responsibility Biography Lab | Biography Lab | `../methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md` |
 | Responsibility Mapping Lab | Mapping Lab | `../methodology/RESPONSIBILITY_MAPPING.md` |
 | Responsibility Dashboard | Dashboard | `../methodology/RESPONSIBILITY_DASHBOARD.md` |
 | Responsibility Annexes | Annexes | `../methodology/RESPONSIBILITY_ANNEXES.md` |
@@ -157,4 +157,4 @@ AI assists at defined points (e.g., surfacing related Harm Codex entries during 
 
 ## Related Documents
 
-`../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `../methodology/HARM_LIFECYCLE.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `../methodology/RESPONSIBILITY_ANNEXES.md` · `../methodology/CIVIC_INTELLIGENCE.md` · `../foundation/04_GOVERNANCE.md` · `../foundation/05_AI.md`
+`../methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md` · `../methodology/AHIP.md` · `../methodology/STRUCTURED_HEARINGS.md` · `../methodology/HARM_CODEX.md` · `../methodology/HARM_LIFECYCLE.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/RESPONSIBILITY_DASHBOARD.md` · `../methodology/RESPONSIBILITY_ANNEXES.md` · `../methodology/CIVIC_INTELLIGENCE.md` · `../foundation/04_GOVERNANCE.md` · `../foundation/05_AI.md`

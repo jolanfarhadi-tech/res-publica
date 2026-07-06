@@ -3,9 +3,10 @@
 ```
 Type: Project (Canonical Overview / Root Document)
 Status: Canonical
-Version: 1.0.0
+Version: 1.1.0 — last restructured: Gap 1 resolution (RESPONSIBILITY_BIOGRAPHY_LAB.md added)
 Authorized by: N/A — pure synthesis of already-canonical content, no new decision introduced
 Extends/Reconciles with: docs/source/foundation/01_HARM_OPERATING_SYSTEM.md,
+  docs/source/methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md,
   docs/source/methodology/RESPONSIBILITY_MAPPING.md,
   docs/source/methodology/RESPONSIBILITY_DASHBOARD.md,
   docs/source/methodology/RESPONSIBILITY_ANNEXES.md,
@@ -29,7 +30,7 @@ Each Responsibility Lab Innovation, and each supporting system around it, has be
 
 | # | Canonical Name | UI Label | Canonical Document | Purpose |
 |---|---|---|---|---|
-| 1 | Responsibility Biography Lab | Biography Lab | `docs/source/methodology/HARM_LIFECYCLE.md` / `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` (no dedicated methodology file — see §5, Gap 1) | Listening: captures Citizen Experience |
+| 1 | Responsibility Biography Lab | Biography Lab | `docs/source/methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md` | Listening: captures Citizen Experience |
 | 2 | Responsibility Mapping Lab | Mapping Lab | `docs/source/methodology/RESPONSIBILITY_MAPPING.md` | Identifies who/what holds responsibility |
 | 3 | Responsibility Dashboard | Dashboard | `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md` | Prioritization instrument (Observer Panel, HARM Lens, Priority Matrix) |
 | 4 | Responsibility Annexes | Annexes | `docs/source/methodology/RESPONSIBILITY_ANNEXES.md` | Produces the verified evidence unit (the Annex) |
@@ -73,7 +74,7 @@ Every node above is owned by exactly one existing canonical document (§7, Refer
 
 ## 5. Genuine Gaps Identified (explicit, not smoothed over)
 
-1. **Innovation 1 has no dedicated methodology document.** Innovations 2–5 each have their own `docs/source/methodology/*.md` file; Innovation 1 (Responsibility Biography Lab) is described only within `HARM_LIFECYCLE.md` and `01_HARM_OPERATING_SYSTEM.md`. This asymmetry was noted once before, during this session's original build, and was never resolved.
+1. ~~**Innovation 1 has no dedicated methodology document.**~~ **RESOLVED.** `docs/source/methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md` now exists, derived strictly from `01_HARM_OPERATING_SYSTEM.md` and `HARM_LIFECYCLE.md`'s existing "Citizen Experience" description — no new concept was invented. Both documents' Innovation table/Related Documents were updated to point to it.
 2. **Innovations 6 and 7 remain unresolved.** Named in `CIVIC_INTELLIGENCE_LAYER.md`, not yet adopted into the canonical 5-Innovation list, per `ADR-019`'s (draft) open questions.
 3. **No prior document showed the full end-to-end lifecycle in one place.** Each piece (HARM Lifecycle, Annex/Blockchain lifecycle, Scientific Review pipeline, Civic Intelligence Cycle) existed only in its own document. This document's §3 is the first synthesis — worth stating plainly as the actual gap this document exists to close.
 4. **The Knowledge Graph specialization is still Draft.** `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md` and its authorizing `ADR-019` are not yet approved. This overview cites Draft-status material for the Knowledge Graph section specifically — flagged so that status isn't silently implied to be Canonical.
@@ -88,7 +89,7 @@ This document does not alter the governance of any Innovation or supporting syst
 
 ## 7. References
 
-`docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` · `docs/source/methodology/RESPONSIBILITY_MAPPING.md` · `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md` · `docs/source/methodology/RESPONSIBILITY_ANNEXES.md` · `docs/source/methodology/CIVIC_INTELLIGENCE.md` · `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` · `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_LAYER.md` · `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md` · `architecture/adr/ADR-007-knowledge-graph.md`
+`docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` · `docs/source/methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md` · `docs/source/methodology/RESPONSIBILITY_MAPPING.md` · `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md` · `docs/source/methodology/RESPONSIBILITY_ANNEXES.md` · `docs/source/methodology/CIVIC_INTELLIGENCE.md` · `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` · `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_LAYER.md` · `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md` · `architecture/adr/ADR-007-knowledge-graph.md`
 
 ## Related Documents
 
