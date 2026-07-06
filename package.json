@@ -12,6 +12,7 @@
     "eao:roadmap": "node scripts/eao/roadmap.mjs",
     "eao:risk-analysis": "node scripts/eao/risk-analysis.mjs",
     "eao:adr-review": "node scripts/eao/adr-review.mjs",
+    "eao:release-readiness": "node scripts/eao/release-readiness.mjs",
     "predev": "node scripts/check-structure.mjs",
     "prebuild": "node scripts/check-structure.mjs",
     "dev": "next dev",

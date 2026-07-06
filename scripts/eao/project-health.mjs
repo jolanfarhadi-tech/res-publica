@@ -45,6 +45,15 @@ export function computeProjectHealth(root = process.cwd()) {
 
   const genuineBrokenRefs = deps.brokenReferences.filter((b) => !b.note);
   const scopeArtifactRefs = deps.brokenReferences.filter((b) => b.note);
+
+  // Release Readiness signal: derived entirely from deps.mvpStatusFindings
+  // (extracted at the source in dependency-map.mjs, not re-scanned here).
+  // "Blocking" classified by keyword, matching the actual convention already
+  // used across MVP Status sections ("MVP CRITICAL" vs "NON-BLOCKING" /
+  // "Non-blocking ...") - disclosed heuristic, not free-form guessing.
+  const mvpBlocking = deps.mvpStatusFindings.filter((f) => /critical/i.test(f.blockingStatus));
+  const mvpNonBlocking = deps.mvpStatusFindings.filter((f) => !/critical/i.test(f.blockingStatus));
+
   const totalCycles =
     deps.cyclesByKind.documentation.length +
     deps.cyclesByKind.execution.length +
@@ -127,6 +136,22 @@ export function computeProjectHealth(root = process.cwd()) {
       governanceOrphans,
       governanceBrokenRefs,
     },
+    // Deliberately NOT folded into criticalIssues/warnings above: a document
+    // being marked "MVP CRITICAL, not yet implemented" is expected, disclosed
+    // pre-implementation state at this project stage, not a defect - the same
+    // distinction this project has applied elsewhere (temporary ownership vs
+    // genuine inconsistency). It IS a genuine input for Release Readiness
+    // specifically, which has its own Go/No-Go criteria, so it's exposed here
+    // as its own health dimension and (below) as a canonical action for
+    // Roadmap/Risk Analysis to compose - without inflating Project Health's
+    // own general-purpose status framing.
+    releaseReadinessHealth: {
+      totalMvpStatusEntries: deps.mvpStatusFindings.length,
+      blockingCount: mvpBlocking.length,
+      nonBlockingCount: mvpNonBlocking.length,
+      blocking: mvpBlocking,
+      nonBlocking: mvpNonBlocking,
+    },
     criticalIssues,
     warnings,
     technicalDebtIndicators: {
@@ -141,11 +166,11 @@ export function computeProjectHealth(root = process.cwd()) {
     circularDependencySummary: deps.cyclesByKind,
     orphanDocumentsSummary: deps.orphans,
     unreferencedCoreDocuments: deps.unreferencedCoreDocuments,
-    priorityActions: buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos }),
+    priorityActions: buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos, mvpBlocking }),
   };
 }
 
-function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos }) {
+function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos, mvpBlocking }) {
   // severity/governanceSensitive are stated explicitly here (matching exactly
   // which criticalIssues/warnings entry each action corresponds to above)
   // rather than left for a downstream consumer (e.g. the Roadmap pipeline)
@@ -284,6 +309,22 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       autoFixable: false,
       humanApprovalRequired: true,
       evidence: todos,
+    });
+  }
+  if (mvpBlocking.length) {
+    actions.push({
+      priority: 8,
+      action: "Confirm implementation status of MVP-critical specifications before release",
+      count: mvpBlocking.length,
+      severity: "critical",
+      category: "mvp-implementation-pending",
+      riskDomain: "Release",
+      sourcePipeline: "project-health",
+      affectsArchitecture: true,
+      governanceSensitive: false,
+      autoFixable: false,
+      humanApprovalRequired: true,
+      evidence: mvpBlocking,
     });
   }
   return actions.sort((a, b) => a.priority - b.priority);

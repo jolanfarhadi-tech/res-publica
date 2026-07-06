@@ -36,13 +36,22 @@ export function forEachLine(file, callback) {
 // heading isn't present. Generic - reusable by any pipeline that needs to
 // read a specific documented section (References, Related Documents,
 // MVP Status, TODO, etc.) rather than the whole file.
-export function extractSection(content, heading) {
+export function extractSection(content, heading, { exact = true } = {}) {
   const lines = content.split("\n");
   // Matches "##" or "###" - this repository's own EAO documents are not
   // consistent on heading depth for the same logical section (a real,
   // disclosed Documentation Health finding - see checkHeadingConsistency
   // below - not silently normalized away without being reported).
-  const headingRe = new RegExp(`^#{2,3}\\s+${heading}\\s*$`);
+  //
+  // exact (default true, unchanged behavior for existing callers - References,
+  // Related Documents): heading text must match exactly.
+  // exact: false (opt-in, e.g. "MVP Status"): matches a heading that STARTS
+  // WITH the given text, since some documents use a longer variant (e.g.
+  // "MVP Status & Extension Points") for the same underlying convention -
+  // discovered as a real, disclosed heading-naming variant, not guessed at.
+  const headingRe = exact
+    ? new RegExp(`^#{2,3}\\s+${heading}\\s*$`)
+    : new RegExp(`^#{2,3}\\s+${heading}\\b`);
   const startIdx = lines.findIndex((l) => headingRe.test(l.trim()));
   if (startIdx === -1) return "";
   const rest = lines.slice(startIdx + 1);

@@ -82,11 +82,24 @@ export function computeDependencyGraph(root = process.cwd()) {
   const edges = [];
   const brokenRefs = [];
   const plainFormattingDrift = [];
+  const mvpStatusFindings = []; // { file, blockingStatus, implementationPriority, rawText } - extracted from "## MVP Status" during the same file walk, not a second scan
   const danglingAdrReferences = []; // { file, context, adrNumber } - ADR-### mentioned in text with no matching file under architecture/adr/
 
   for (const file of mdFiles) {
     const base = path.basename(file);
     const content = fs.readFileSync(file, "utf8");
+
+    const mvpStatusText = extractSection(content, "MVP Status", { exact: false });
+    if (mvpStatusText) {
+      const blockingMatch = mvpStatusText.match(/\*\*Blocking Status:\*\*\s*([^*.]+)/);
+      const priorityMatch = mvpStatusText.match(/\*\*Implementation Priority:\*\*\s*([^*.]+)/);
+      mvpStatusFindings.push({
+        file: path.relative(root, file),
+        blockingStatus: blockingMatch ? blockingMatch[1].trim() : "Unclear",
+        implementationPriority: priorityMatch ? priorityMatch[1].trim() : "Unclear",
+        rawText: mvpStatusText.slice(0, 300),
+      });
+    }
 
     for (const sectionName of ["Related Documents", "References"]) {
       const sectionText = extractSection(content, sectionName);
@@ -218,6 +231,7 @@ export function computeDependencyGraph(root = process.cwd()) {
     mdFilesScanned: mdFiles.length,
     optedInCount: optedIn.length,
     danglingAdrReferences,
+    mvpStatusFindings,
   };
 }
 
