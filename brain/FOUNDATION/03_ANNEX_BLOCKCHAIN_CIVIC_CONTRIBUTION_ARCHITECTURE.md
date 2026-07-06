@@ -145,6 +145,8 @@ This pipeline is the detailed internal structure of what §2 calls "Annex Deepen
 
 Every Level 4 decision is assessed against eight criteria: **Clarity, Structural Accuracy, Analytical Depth, Internal Consistency, Normative Fit, Epistemic Condition, Ethical Compliance, Governance Applicability.** These are qualitative judgment criteria applied by the Scientific Review Committee — never automated into a formula, and never used to produce a numeric score of the testimony's source.
 
+**Operational detail:** `docs/source/methodology/SCIENTIFIC_REVIEW.md` specifies the reviewer's internal working process (a more granular rubric, Scientific Confidence Levels, and specific decision vocabulary) that operates *within* this Level 4 gate — it does not add a fifth level or redefine these eight formal criteria; it is the process a reviewer follows before reaching one of them.
+
 ### Governance Guardrails (binding)
 
 1. **AI never validates.** AI may assist with Narrative Coding suggestions or Comparative Analysis candidate matches; it never makes an Expert Review, Hearing, Codex Validation, or Governance Review Gate decision.
