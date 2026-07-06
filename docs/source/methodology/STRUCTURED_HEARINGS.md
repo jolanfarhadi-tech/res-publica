@@ -11,7 +11,13 @@ Extends/Reconciles with: docs/source/foundation/01_HARM_OPERATING_SYSTEM.md,
 
 ## Purpose
 
-The Structured Hearings Framework establishes the standardized methodology for collecting, documenting, analyzing, and validating experiences, testimonies, expert knowledge, and stakeholder perspectives in a systematic, transparent, evidence-based manner. Unlike traditional public hearings, Structured Hearings generate comparable, high-quality evidence that can directly support governance, research, accountability, and societal repair. **Structured Hearings are not judicial proceedings and do not determine legal responsibility** — their purpose is knowledge generation, evidence collection, and informed governance. A Structured Hearing is the facilitated, prepared session where a citizen's account is explored in depth under explicit safety and quality conditions, following AHIP intake (retained, unchanged).
+The Structured Hearings Framework establishes the standardized methodology for collecting, documenting, analyzing, and contextualizing experiences, testimonies, expert knowledge, and stakeholder perspectives in a systematic, transparent, evidence-based manner. Unlike traditional public hearings, Structured Hearings generate comparable, high-quality evidence that can directly support governance, research, accountability, and societal repair. **Structured Hearings are not judicial proceedings and do not determine legal responsibility** — their purpose is knowledge generation, evidence collection, and informed governance. A Structured Hearing is the facilitated, prepared session where a citizen's account is explored in depth under explicit safety and quality conditions, following AHIP intake (retained, unchanged).
+
+**Reflection ≠ Validation — architecture clarification.** Where a hearing involves Expert, Community, Institutional, Multi-Stakeholder, or Policy participants (per Hearing Type, below), their role is to contribute **contextual reflections** — a professional or civic perspective that enriches understanding of the reported harm — **not** to validate, verify, fact-check, or approve/reject the account or its evidence. Experts explain what they observe from their professional knowledge; community representatives explain community impact; institutional representatives explain institutional implications; policy participants explain policy relevance. None of this constitutes Scientific Review, fact-checking, or evidence validation — Observation ≠ Verification, Professional Perspective ≠ Scientific Review, Community Input ≠ Evidence Validation, Institutional Perspective ≠ Approval. The hearing is a democratic knowledge-building process; its output is a richer, multi-perspective understanding of the reported harm, not a validated conclusion. Formal validation begins downstream, at Scientific Review (`SCIENTIFIC_REVIEW.md`) — the first formal validation process in the HARM lifecycle.
+
+**Expert Contributions — architecture clarification.** Expert contributors do not produce scientific findings. Expert contributions must always distinguish between professional observation, professional interpretation, documented evidence, assumptions, and uncertainty. Professional opinion must never be presented as validated evidence — that distinction is preserved through Documentation Standards and Evidence Coding (below), and resolved only by Scientific Review.
+
+**What a Structured Hearing is — architecture clarification.** A Structured Hearing is not a therapy session, not a political debate, and not an open storytelling space. It is an evidence-oriented hearing whose purpose is to identify and document signals that help reconstruct harm mechanisms, responsibility pathways, institutional interactions, systemic vulnerabilities, governance effects, and repair opportunities. Full detail on how this is supported: `AI_HEARING_FACILITATOR.md`.
 
 ## Background
 
@@ -47,6 +53,8 @@ Safety before disclosure depth; preparation before the session; no re-traumatiza
 
 Distinct from AHIP (intake) and Reflection (the pause immediately after). A Structured Hearing is the working session itself (retained, unchanged).
 
+**Supplementary definition (architecture patch — supplements, does not replace, the definition above):** "A Structured Hearing is a facilitated deliberative process designed to document and contextualize reported harms through multiple informed perspectives under explicit procedural safeguards. Its purpose is knowledge generation, contextual understanding, and evidence enrichment. It does not establish factual truth, determine legal responsibility, or perform scientific validation."
+
 ## Framework
 
 Position in the HARM Lifecycle: `AHIP → **Structured Hearing** → Reflection` (unchanged). Also Level 2 of Scientific Review's own internal pipeline (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7) — this document does not alter that reconciliation (`ADR-020`, Dual Intake and Review Paths).
@@ -55,9 +63,9 @@ Position in the HARM Lifecycle: `AHIP → **Structured Hearing** → Reflection`
 
 **Evidence Coding dimensions:** Harm Category, harm type, stakeholder group, root cause, responsibility area, geographic area, severity, evidence confidence. Coding follows the **National Harm Taxonomy** (`ADR-021`, `HARM_CODEX.md`) — the same taxonomy AHIP's Harm Classification uses, not a second one.
 
-**Evidence Standards** (authenticity, reliability, etc.) — refers to the same "Evidence Standards Annex" already flagged as missing in `AHIP.md`; not duplicated here, not invented.
+**Evidence Standards** (authenticity, reliability, etc.) — the previously-flagged gap (also noted in `AHIP.md`) is now resolved by `docs/source/methodology/EVIDENCE_MODEL.md`'s Evidence Quality Assessment criteria.
 
-**Relationship with Other Frameworks:** provides evidence to AHIP, Scientific Review (the "Validation Framework"), Harm Codex, Responsibility Mapping, the Repair Framework (`REPAIR_FRAMEWORK.md`), Civic Intelligence, and Early Warning. Receives guidance from the Ethics Charter, Evidence Standards (unresolved gap), AI Governance Framework, and Platform Services. None of these is redefined here.
+**Relationship with Other Frameworks:** provides evidence to AHIP, the Scientific Review Governance Gate, Harm Codex, Responsibility Mapping, the Repair Framework (`REPAIR_FRAMEWORK.md`), Civic Intelligence, and Early Warning. Receives guidance from the Ethics Charter, Evidence Standards (unresolved gap), AI Governance Framework, and Platform Services. None of these is redefined here.
 
 ## Workflow
 
@@ -66,42 +74,14 @@ Position in the HARM Lifecycle: `AHIP → **Structured Hearing** → Reflection`
 2. **Moderation** — the session runs under trauma-informed facilitation practice, following the Hearing Structure below (retained).
 3. **Evidence capture / Evidence Coding** — Documentation and Evidence Coding per the dimensions above (retained and expanded).
 4. **Internal Validation** — the same shared gate as AHIP's "Basic Validation" step; full specification: `docs/source/methodology/BASIC_VALIDATION_FRAMEWORK.md` (not duplicated here). Distinct from, and feeding into, the full Scientific Review pipeline below — it does not replace Scientific Review's own Level 3/4 validation.
-5. **Session Quality Review** — every completed hearing undergoes this internal review before Reflection handoff and before entering Scientific Review. Full detail below.
+5. **HQC (Hearing Quality Check)** — every completed hearing undergoes this review before Reflection handoff and before entering Scientific Review. **HQC is a standalone, reusable canonical methodology** (`docs/source/methodology/HEARING_QUALITY_CHECK.md`), not owned by or internal to Structured Hearings — it is the shared quality-check framework for every hearing-based methodology in the ecosystem. Not duplicated here.
 6. **Reflection handoff** — the account moves to the Reflection stage (retained, unchanged).
 
 **Handoffs to already-canonical systems** (not Structured-Hearings-owned stages):
-- **Scientific Review** (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7) — the actual next stage after this document's own internal Validation, exactly as already established.
+- **HQC** (`docs/source/methodology/HEARING_QUALITY_CHECK.md`) — the reusable hearing quality assurance framework, applicable to Structured Hearings and any other hearing-based methodology.
+- **Scientific Review** (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7) — the actual next stage after HQC and this document's own internal Validation, exactly as already established.
 - **Integration into AHIP** — the existing AHIP case record is enriched/updated with hearing findings; this is not a second intake (`AHIP.md`'s own scope, Case Submission through Evidence Collection, is unaffected).
 - **Integration into Harm Codex** (`HARM_CODEX.md`) — occurs once a pattern is validated, per that document's existing Workflow; not a direct, unvalidated feed from Structured Hearings alone.
-
-### Session Quality Review
-
-**Internal to Structured Hearings — not a separate canonical methodology.** This subsection evaluates whether the hearing *process itself* was conducted properly (facilitation, preparation, participation, ethical compliance) — distinct from Basic Validation Framework (submission data-completeness, kept separate because it is genuinely cross-cutting across AHIP and Structured Hearings) and Scientific Review (evidentiary/methodological validity, kept separate because it is a distinct downstream validation engine with its own multi-level pipeline). Session Quality Review has no scope outside Structured Hearings, so it lives here rather than as its own document.
-
-**Purpose:** evaluate whether each hearing session was conducted according to the required methodological, procedural, ethical, and documentation standards before its outputs become part of the official evidence base. It evaluates the quality of the hearing *process* — not the truthfulness of participants or the validity of the evidence itself.
-
-**Scope:** every Hearing Type defined above (Individual, Community, Expert, Multi-Stakeholder, Institutional, Academic, Thematic, Policy, Digital, Hybrid). Every completed hearing undergoes this review before entering Scientific Review.
-
-**Quality Criteria:**
-- *Preparation:* clear objectives, appropriate participants, agenda prepared, supporting materials available.
-- *Facilitation:* neutral moderation, equal participation opportunities, respectful communication, structured discussion, appropriate time management.
-- *Documentation:* complete records, accurate summaries, metadata captured, evidence linked, decisions documented.
-- *Evidence Collection* (process-level — distinct from Basic Validation Framework's data-level Evidence Inventory Check): relevant evidence gathered, sources documented, evidence organized, missing evidence identified.
-- *Participation:* stakeholders represented, opportunity to contribute, respectful interaction, balanced discussion.
-- *Technical Quality:* audio/video quality (if applicable), digital platform functionality, file integrity, accessibility.
-- *Ethical Compliance:* informed participation, confidentiality respected, no coercion, appropriate conduct, compliance with the Ethics Charter.
-
-**Scoring System:** Excellent (90–100), Good (75–89), Acceptable (60–74), Needs Improvement (40–59), Unsatisfactory (<40) — a session-process score, never a score of the participant or their account, consistent with Zero Gamification (Core Principle 2). **Review Outcomes:** Approved; Approved with Recommendations; Minor Improvements Required; Major Improvements Required; Re-Hearing Recommended.
-
-**Sub-workflow:** Completed Hearing → Documentation Review → Facilitation Assessment → Evidence Completeness Check → Participation Assessment → Quality Scoring → Recommendations → Approval → feeds into Reflection handoff and the Scientific Review handoff, both above.
-
-**Outputs:** Session Quality Report, Quality Score, Improvement Recommendations, Facilitation Feedback, Documentation Assessment, Readiness for Scientific Review.
-
-**Downstream consumers:** Scientific Review (readiness gate), Harm Codex (pattern quality context), Monitoring & Evaluation (KPIs, below). Operates alongside the Ethics Charter, AI Governance Framework, and Evidence Standards (unresolved gap, already flagged above). None of these is redefined here.
-
-**Key Performance Indicators:** average Session Quality Score, documentation completeness rate, facilitation compliance rate, re-hearing rate, participant satisfaction, review completion time, recommendation implementation rate — all process/session-level metrics, never per-person scores.
-
-**Roles (Phase 2, not yet formally appointed):** Quality Reviewer, Hearing Coordinator, Scientific Coordinator, Platform Administrator, Governance Committee.
 
 **Standard Hearing Structure:** 1. Opening, 2. Introduction of objectives, 3. Ethical briefing, 4. Participant introductions, 5. Evidence presentation, 6. Structured discussion, 7. Clarification questions, 8. Summary, 9. Closing remarks, 10. Documentation review.
 
@@ -109,7 +89,7 @@ Position in the HARM Lifecycle: `AHIP → **Structured Hearing** → Reflection`
 
 ## Roles
 
-**Facilitator** (= "Hearing Facilitator") — runs the session. **Participant** — shares the account in depth. **Moderator** — supports safety. **Research Coordinator, Scientific Reviewer, Documentation Officer, Platform Administrator** — named in the new specification as supporting/downstream roles. **Ethics Observer (future)** — a new, not-yet-formally-appointed role, distinct from the existing Ethics Board (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7) — not conflated with it here.
+**Facilitator** (= "Hearing Facilitator") — runs the session. **Participant** — shares the account in depth. **Moderator** — improves the clarity and completeness of the hearing. Examples: asking neutral follow-up questions, identifying timeline gaps, requesting clarification, encouraging specificity, identifying missing context, ensuring participant understanding, preventing leading questions, preventing intimidation, maintaining procedural neutrality; also supports safety (retained). The Moderator never: validates evidence, judges credibility, determines responsibility, performs scientific review, or performs legal assessment. **Expert, Community, Institutional, Multi-Stakeholder, and Policy contributors** (per Hearing Type) — provide contextual reflections from their professional or civic perspective; per the architecture clarification above, they do not validate, verify, fact-check, or approve/reject the account or evidence. **Research Coordinator, Documentation Officer, Platform Administrator** — supporting roles. **Scientific Reviewer** — a downstream role belonging to Scientific Review, not a participant in the hearing itself; named in the source specification as a later-stage role. **Ethics Observer (future)** — a new, not-yet-formally-appointed role, distinct from the existing Ethics Board (`03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7) — not conflated with it here.
 
 ## Inputs
 
@@ -117,7 +97,7 @@ An AHIP-prepared account (retained).
 
 ## Outputs
 
-A documented account, ready for Reflection (retained). Hearing Reports, Evidence Packages, Testimony Records, Harm Classifications, Stakeholder Maps, Scientific Inputs, Policy Insights, AHIP Case Inputs (enrichment, not new intake), Harm Codex Entries (once validated downstream).
+A documented, multi-perspective account — not a validated conclusion — ready for Reflection (retained). Hearing Reports, Evidence Packages, Testimony Records, Harm Classifications (descriptive tagging per the National Harm Taxonomy, not a truth judgment), Stakeholder Maps, contextual reflections from Expert/Community/Institutional/Policy contributors where applicable (raw material for Scientific Review, not already-validated findings), AHIP Case Inputs (enrichment, not new intake), Harm Codex Entries (once validated downstream, by Scientific Review — not by this document's own process).
 
 ## Governance
 
@@ -125,7 +105,7 @@ Subject to the organization's trauma-informed language standard; no session cont
 
 ## AI Integration
 
-AI does not facilitate or moderate hearings. AI is not present as a decision-maker in the session itself (retained). "AI-assisted transcription" is named only as a Future Enhancement (below), not current scope.
+AI does not facilitate or moderate hearings. AI is not present as a decision-maker in the session itself (retained). Where AI assistance is used, it takes the form of the **AI Hearing Facilitator** (`AI_HEARING_FACILITATOR.md`) — a reusable, advisory-only capability that supports the human Facilitator and Moderator (signal clarification prompts, chronology-gap identification, documentation checklists) without conducting the hearing, validating anything, or replacing human moderation. "AI-assisted transcription" is named only as a Future Enhancement (below), not current scope.
 
 ## Examples
 
@@ -149,13 +129,7 @@ AI-assisted transcription, multilingual hearings, real-time evidence coding, dig
 - [ ] Implement evidence coding interfaces.
 - [ ] Create reporting dashboards.
 - [ ] Enable multilingual support.
-- [ ] Author the referenced "Evidence Standards Annex" (same gap already flagged in `AHIP.md` — does not exist yet).
-- [ ] Develop standardized Session Quality Review templates.
-- [ ] Create facilitator evaluation criteria.
-- [ ] Implement session scoring tools.
-- [ ] Build Session Quality dashboards.
-- [ ] Integrate participant feedback surveys.
-- [ ] Connect Session Quality metrics with Monitoring & Evaluation.
+- [ ] Integrate Evidence Model's Evidence Quality Assessment criteria into hearing evidence coding (gap resolved, `EVIDENCE_MODEL.md`).
 
 ## References
 
@@ -163,6 +137,6 @@ AI-assisted transcription, multilingual hearings, real-time evidence coding, dig
 
 ## Related Documents
 
-`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/AHIP.md` · `../methodology/HARM_LIFECYCLE.md` · `../methodology/HARM_CODEX.md` · `../methodology/REPAIR_FRAMEWORK.md` · `../methodology/BASIC_VALIDATION_FRAMEWORK.md` · `../methodology/SCIENTIFIC_REVIEW.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`
+`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/AHIP.md` · `../methodology/HARM_LIFECYCLE.md` · `../methodology/HARM_CODEX.md` · `../methodology/REPAIR_FRAMEWORK.md` · `../methodology/BASIC_VALIDATION_FRAMEWORK.md` · `../methodology/HEARING_QUALITY_CHECK.md` · `../methodology/SCIENTIFIC_REVIEW.md` · `../methodology/AI_HEARING_FACILITATOR.md` · `../methodology/EVIDENCE_MODEL.md` · `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md`
 
-**Note:** Session Quality Review is documented as an internal subsection of this document (above), not a separate file — see the "Session Quality Review" subsection under Workflow.
+**Note:** HQC (Hearing Quality Check) is a standalone, reusable canonical methodology (`HEARING_QUALITY_CHECK.md`) — not internal to this document. Per explicit architecture decision, it was briefly folded in as a subsection and has since been re-established standalone, since its scope extends to every hearing-based methodology in the ecosystem, not solely Structured Hearings.

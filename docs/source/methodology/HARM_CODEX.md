@@ -28,7 +28,7 @@ Fed by Mechanism Identification (HARM Lifecycle stage) and by recurring patterns
 **Formal name:** this three-category taxonomy is formally named the **National Harm Taxonomy** and serves as the classification layer for the Annex lifecycle — see `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §12. This is a naming/integration formalization only; the three categories themselves are unchanged.
 
 ## Roles
-**Researcher** — documents entries. **Expert** — validates taxonomy classification. **Reviewer** — verifies entries before they're relied upon.
+**Researcher** — documents entries. **Expert** — supports taxonomy classification by providing domain-specific interpretation and contextual review; does not independently validate evidence or establish scientific approval. Formal validation remains with Scientific Review (`docs/source/methodology/SCIENTIFIC_REVIEW.md`), consistent with the principle that Expert contribution ≠ validation and Structured Hearing Expert ≠ Scientific Reviewer. **Reviewer** — verifies entries before they're relied upon.
 
 ## Inputs
 Recurring patterns across Responsibility Annexes and Mechanism Identification findings.
@@ -49,4 +49,4 @@ Reserved — pending approved case material. The Codex's own design principle is
 `.claude/skills/web-01-sitemap/SKILL.md` ("/codex" page); `.claude/skills/web-07-forms/SKILL.md` ("Codex Research" RPCS track)
 
 ## Related Documents
-`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/RESPONSIBILITY_ANNEXES.md` · `../methodology/CIVIC_INTELLIGENCE.md`
+`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/RESPONSIBILITY_ANNEXES.md` · `../methodology/CIVIC_INTELLIGENCE.md` · `../methodology/EVIDENCE_MODEL.md`
