@@ -247,6 +247,60 @@ This architecture touches six existing systems. None of them is redefined here �
 
 No entity is added to `brain/DOMAIN/CORE_DOMAIN_MODEL.md` (LOCKED) by this section — `HarmCategory` remains the conceptual Knowledge Graph node type it already was.
 
+## 13. Philosophical Basis of Annex Generation and Transferable Civic Value
+
+**Canonical principle:** every person may carry testimony, lived experience, knowledge, observation, documents, or other forms of evidence that may become an Annex if it successfully passes the approved review pathway (§7, §2). **An Annex is the canonical representation of validated civic knowledge** — this is a framing of the existing Annex definition (§3), not a redefinition of it.
+
+**Annexes originate from:** reported harms, testimonies, lived experiences, documentary evidence, community knowledge, structured observations, and other evidence accepted through the approved review process — i.e., Raw Testimony (§7 Level 1) and External Evidence/Direct Submission (`ADR-020`'s Direct Annex Path), enumerated here at the level of concrete source types rather than process-stage names. **Scientific Review determines whether submitted material is sufficiently validated to become an Annex** (§7, unchanged) — no new decision authority is introduced.
+
+**Harm Categories are not generative.** Restated once more, consistent with §6 Rule 7 and §12: they are a post-validation classification layer applied only after an Annex has been approved, existing to organize validated Annexes so they can be connected across the ecosystem — not to produce, gate, or precede them.
+
+### Transferable Civic Value
+
+The value of an Annex is not the document itself, but its ability to transform reported harm into transferable civic value:
+
+- **Evidence value** — a checkable, citable record.
+- **Governance value** — a basis for institutional accountability.
+- **Learning value** — durable institutional and community memory.
+- **Policy value** — informs future policy consideration.
+- **Repair value** — supports remedy where harm is acknowledged.
+- **Contribution value** — the basis a Civic Contribution cites (§3, §4).
+
+This transferable civic value is what enables future civic action, institutional learning, democratic accountability, and social repair. It is produced once, at Annex approval, and is what Harm Category classification organizes for downstream use — the classification itself creates no new value; it makes already-created value findable and connectable.
+
+### Reconciling the Value Lifecycle with the Existing Process Lifecycle
+
+The following is a **value-narrative view** of the same underlying process already described in §2 — it does not introduce a parallel or competing technical lifecycle, and does not alter §2's diagram or stage ordering:
+
+```
+Reported Harm / Testimony / Lived Experience / Documentary Evidence
+  ↓
+Structured Hearing / Approved Review Path        (§2 stages 1, 5-6; ADR-020's two paths)
+  ↓
+Scientific Review                                 (§7)
+  ↓
+Validated Evidence
+  ↓
+Approved Annex                                     (§2 stage 8)
+  ↓
+Harm Category Classification                       (§6 Rule 7, §12 — post-validation only)
+  ↓
+Transferable Civic Value                           (this section)
+  ↓
+Civic Contribution                                  (§2 stages 10-12)
+  ↓
+Knowledge Graph                                     (ADR-007, CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md)
+  ↓
+Civic Intelligence                                  (CIVIC_INTELLIGENCE_LAYER.md)
+  ↓
+Early Warning                                       (referenced by name only, §7, §10)
+  ↓
+Future Democratic Learning & Institutional Repair   (= Institutional Learning / Governance Improvement,
+                                                       01_HARM_OPERATING_SYSTEM.md §Framework, unchanged)
+```
+
+**Blockchain Annex Block is not omitted from the architecture** — it is implicit within "Approved Annex" at this level of abstraction (it is the integrity record *of* the Approved Annex, per §3), simply not named at the value-narrative level shown here. §2 remains the authoritative process-stage diagram; this section is its value-meaning counterpart, not a substitute.
+
 ---
 
-*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `docs/source/methodology/AHIP.md`, `docs/source/methodology/HARM_CODEX.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_PROGRAM.md`, `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`, `brain/GOVERNANCE/EXECUTION_ALIGNMENT.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the original decision record, `architecture/adr/ADR-015-annex-architecture-extension.md` for the ERD/per-object/immutability extension, `architecture/adr/ADR-016-responsibility-dashboard-specification.md` for the Dashboard-primacy correction, `architecture/adr/ADR-017-scientific-review-validation-engine.md` for the Scientific Review validation-engine formalization, and `architecture/adr/ADR-021-national-harm-taxonomy-classification-layer.md` for the National Harm Taxonomy classification-layer integration (§12).*
+*Self-review complete. Reconciled with, not duplicating: `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`, `docs/source/methodology/STRUCTURED_HEARINGS.md`, `docs/source/methodology/AHIP.md`, `docs/source/methodology/HARM_CODEX.md`, `brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`, `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_PROGRAM.md`, `docs/source/methodology/RESPONSIBILITY_DASHBOARD.md`, `brain/GOVERNANCE/EXECUTION_ALIGNMENT.md`. See `architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md` for the original decision record, `architecture/adr/ADR-015-annex-architecture-extension.md` for the ERD/per-object/immutability extension, `architecture/adr/ADR-016-responsibility-dashboard-specification.md` for the Dashboard-primacy correction, `architecture/adr/ADR-017-scientific-review-validation-engine.md` for the Scientific Review validation-engine formalization, `architecture/adr/ADR-021-national-harm-taxonomy-classification-layer.md` for the National Harm Taxonomy classification-layer integration (§12), and `architecture/adr/ADR-022-transferable-civic-value.md` for the Transferable Civic Value concept and value-lifecycle reconciliation (§13).*

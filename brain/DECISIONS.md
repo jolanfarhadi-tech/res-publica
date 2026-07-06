@@ -35,6 +35,7 @@ This index otherwise lists only approved ADRs (ADR-001 through ADR-012, above). 
 | [ADR-019](../architecture/adr/ADR-019-civic-intelligence-layer-and-knowledge-graph-relationship.md) | Civic Intelligence Layer (deepens Innovation 5) and its relationship to the Knowledge Graph (specializes ADR-007) | **Draft — not final, pending review** |
 | [ADR-020](../architecture/adr/ADR-020-dual-intake-and-review-paths.md) | Resolves the Structured Hearing/Expert Review ordering conflict between `01_HARM_OPERATING_SYSTEM.md` and `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` as two distinct, intentional paths (Primary Lifecycle vs. Direct Annex Path), not a contradiction | **Accepted** |
 | [ADR-021](../architecture/adr/ADR-021-national-harm-taxonomy-classification-layer.md) | Names `HARM_CODEX.md`'s existing 3-category taxonomy the "National Harm Taxonomy" and integrates it as the Annex lifecycle's classification layer; adds Governance Rule 7 (every validated Annex is classified under ≥1 Harm Category, applied after validation — classification does not generate the Annex) | **Accepted** |
+| [ADR-022](../architecture/adr/ADR-022-transferable-civic-value.md) | Adds Transferable Civic Value (evidence/governance/learning/policy/repair/contribution value) as what an Approved Annex produces; reconciles the philosophical Annex-generation narrative as a value-view of the existing SS2 process lifecycle, not a parallel one | **Accepted** |
 
 ## Reading the amendments
 
