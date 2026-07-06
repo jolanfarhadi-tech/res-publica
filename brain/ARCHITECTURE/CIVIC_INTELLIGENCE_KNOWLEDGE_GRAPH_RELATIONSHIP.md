@@ -102,7 +102,7 @@ type EdgeType =
 interface GraphNode {
   id: string;
   type: NodeType;
-  status: "draft" | "expert_reviewed" | "hearing_validated"
+  status: "draft" | "expert_reviewed" | "hearing_documented"
         | "codex_validated" | "published" | "reference";
   payloadRef: string;        // reference to the actual object — never raw text in the graph
   createdBySession?: string; // provenance anchor

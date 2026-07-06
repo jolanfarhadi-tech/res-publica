@@ -164,14 +164,16 @@ Every Level 4 decision is assessed against eight criteria: **Clarity, Structural
 stateDiagram-v2
     [*] --> draft
     draft --> expert_reviewed : Level 1 pass
-    expert_reviewed --> hearing_validated : Level 2 pass
-    hearing_validated --> codex_validated : Level 3 pass
+    expert_reviewed --> hearing_documented : Level 2 pass
+    hearing_documented --> codex_validated : Level 3 pass
     codex_validated --> published : Level 4 pass (Scientific Approval)
     published --> signal_released : Early Warning trigger (optional)
     expert_reviewed --> draft : Level 1 return
-    hearing_validated --> expert_reviewed : Level 3 return
-    codex_validated --> hearing_validated : Level 4 / Ethics Board veto
+    hearing_documented --> expert_reviewed : Level 3 return
+    codex_validated --> hearing_documented : Level 4 / Ethics Board veto
 ```
+
+**Critical architecture patch:** the Level 2 state is named `hearing_documented`, not `hearing_validated` — Structured Hearings do not validate (see `docs/source/methodology/STRUCTURED_HEARINGS.md`'s "Reflection ≠ Validation" clarification); this state means the hearing has been completed and documented, not that it has been validated. Scientific Review (specifically Level 3/4, `codex_validated`/`published`) remains the first point at which formal validation occurs. Renamed from the original `hearing_validated` (see `ADR-017` addendum).
 
 This state machine describes an individual Evidence Package/Annex's own status field as it moves through the four Levels — it is more granular than, and sits alongside (not in place of), the Responsibility Evidence Model's general Created → Evidence Submitted → Human Verification → Accepted/Rejected workflow (`brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md` §5). `published` corresponds to that model's "Accepted." `signal_released` is an optional terminal state reached only if the validated Annex triggers an Early Warning signal — referenced here by name only (`EARLY_WARNING_PROPOSAL.md`, named in existing project material as "AI Early Warning: Narrative → Signal, Responsibility Briefs"); the full Early Warning specification is not present in this repository, and no additional content about it is invented here.
 
