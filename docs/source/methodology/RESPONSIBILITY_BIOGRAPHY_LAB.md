@@ -39,7 +39,7 @@ A Citizen Experience account, feeding AHIP.
 Subject to the same constitutional principles as the rest of HARM — zero gamification, no scoring or ranking of accounts, human dignity preserved throughout (`01_HARM_OPERATING_SYSTEM.md` §Governance).
 
 ## AI Integration
-None specified at this stage in canonical source material. AI involvement, where it exists elsewhere in HARM, begins no earlier than AHIP (`AHIP.md`) — this document does not extend AI involvement earlier than what is already established.
+**Architecture correction:** AI involvement at this stage was previously stated to begin no earlier than AHIP. This is now narrowly extended: the AI Hearing Facilitator (`AI_HEARING_FACILITATOR.md`) may assist with safety/comfort-oriented functions only (e.g., recommending breaks, accessibility accommodations, trauma-informed reminders), consistent with this stage's Core Principle that nothing is filtered, categorized, or judged here. Structuring-oriented AI functions (signal clarification, harm-mechanism identification, evidence-reference prompts) do **not** apply at this stage — they begin at Structured Hearings (`AHIP.md`, `STRUCTURED_HEARINGS.md`), unchanged.
 
 ## Examples
 Reserved — pending approved case material.
@@ -48,4 +48,4 @@ Reserved — pending approved case material.
 `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` · `docs/source/methodology/HARM_LIFECYCLE.md` · `.claude/skills/web-01-sitemap/SKILL.md` (public sitemap naming, "Biography Lab")
 
 ## Related Documents
-`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/HARM_LIFECYCLE.md` · `../methodology/AHIP.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../projects/INNOVATION_STRUCTURE.md`
+`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../methodology/HARM_LIFECYCLE.md` · `../methodology/AHIP.md` · `../methodology/RESPONSIBILITY_MAPPING.md` · `../methodology/AI_HEARING_FACILITATOR.md` · `../projects/INNOVATION_STRUCTURE.md`
