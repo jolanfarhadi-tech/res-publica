@@ -14,16 +14,17 @@
 
 import { pathToFileURL } from "node:url";
 import { computeProjectHealth } from "./project-health.mjs";
+import { CATEGORIES } from "./lib/registry.mjs";
 
 // Each gate maps to a specific canonical action category already computed by
 // Project Health - no new detection logic, just a named pass/fail lens on
 // data that already exists.
 const GATE_DEFINITIONS = [
-  { name: "No unresolved terminology drift", categories: ["terminology-drift"] },
-  { name: "No governance document connectivity issues", categories: ["governance-connectivity"] },
-  { name: "No broken documentation references or links", categories: ["broken-reference", "broken-link"] },
-  { name: "All core documents referenced", categories: ["unreferenced-core-document"] },
-  { name: "MVP-critical specifications confirmed implemented", categories: ["mvp-implementation-pending"] },
+  { name: "No unresolved terminology drift", categories: [CATEGORIES.TERMINOLOGY_DRIFT] },
+  { name: "No governance document connectivity issues", categories: [CATEGORIES.GOVERNANCE_CONNECTIVITY] },
+  { name: "No broken documentation references or links", categories: [CATEGORIES.BROKEN_REFERENCE, CATEGORIES.BROKEN_LINK] },
+  { name: "All core documents referenced", categories: [CATEGORIES.UNREFERENCED_CORE_DOCUMENT] },
+  { name: "MVP-critical specifications confirmed implemented", categories: [CATEGORIES.MVP_IMPLEMENTATION_PENDING] },
 ];
 
 export function computeReleaseReadiness(root = process.cwd()) {
@@ -56,11 +57,12 @@ export function computeReleaseReadiness(root = process.cwd()) {
   };
 
   return {
+    schemaVersion: health.schemaVersion,
     executiveSummary,
     gates,
     blockingIssues,
     nonBlockingIssues,
-    remainingTechnicalDebt: health.priorityActions.filter((a) => a.category === "technical-debt"),
+    remainingTechnicalDebt: health.priorityActions.filter((a) => a.category === CATEGORIES.TECHNICAL_DEBT),
     recommendedDecision,
   };
 }

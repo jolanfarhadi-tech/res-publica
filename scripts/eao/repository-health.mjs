@@ -20,7 +20,7 @@ export function computeRepositoryHealth() {
   const aheadBehind = getAheadBehind();
   const { staged, unstaged, untracked } = parseStatus(getStatusPorcelain());
   const log = getRecentLog(10);
-  return { branch, aheadBehind, staged, unstaged, untracked, log };
+  return { schemaVersion: 1, branch, aheadBehind, staged, unstaged, untracked, log };
 }
 
 export function renderRepositoryHealthMarkdown(result) {

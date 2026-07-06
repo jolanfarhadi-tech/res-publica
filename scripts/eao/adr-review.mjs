@@ -15,6 +15,7 @@
 import { pathToFileURL } from "node:url";
 import { computeDependencyGraph } from "./dependency-map.mjs";
 import { computeProjectHealth } from "./project-health.mjs";
+import { CATEGORIES } from "./lib/registry.mjs";
 
 function isAdrFile(name) {
   return /^ADR-\d{3}/.test(name);
@@ -100,7 +101,7 @@ export function computeAdrReview(root = process.cwd()) {
       source: "dependency-analysis (dangling ADR reference)",
       evidence: d,
     })),
-    ...(health.priorityActions.find((a) => a.category === "unreferenced-core-document")?.evidence || []).map((doc) => ({
+    ...(health.priorityActions.find((a) => a.category === CATEGORIES.UNREFERENCED_CORE_DOCUMENT)?.evidence || []).map((doc) => ({
       candidateFor: doc,
       reason: "Unreferenced core document (Project Health) - foundational document with zero inbound references; may need its own ADR to formally record why it stands alone",
       source: "project-health (canonical action model)",
@@ -119,7 +120,7 @@ export function computeAdrReview(root = process.cwd()) {
     missingAdrCandidatesCount: missingAdrCandidates.length,
   };
 
-  return { executiveSummary, coverageReport, coveredChanges, adrsRequiringRevision, missingAdrCandidates };
+  return { schemaVersion: health.schemaVersion, executiveSummary, coverageReport, coveredChanges, adrsRequiringRevision, missingAdrCandidates };
 }
 
 export function renderAdrReviewMarkdown(result) {

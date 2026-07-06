@@ -57,7 +57,7 @@ export function computeTerminologyDrift(root = process.cwd()) {
     }
   }
 
-  return { filesScanned: files.length, liveDrift, disclosedHistorical };
+  return { schemaVersion: 1, filesScanned: files.length, liveDrift, disclosedHistorical };
 }
 
 export function renderTerminologyDriftMarkdown(result) {

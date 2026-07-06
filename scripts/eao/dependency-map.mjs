@@ -217,6 +217,7 @@ export function computeDependencyGraph(root = process.cwd()) {
   ).map((d) => ({ file: path.relative(root, d.file), actualHeading: d.actualHeading }));
 
   return {
+    schemaVersion: 1,
     nodes: [...byBasename.keys()],
     edges: dedupedEdges,
     adjacency,
@@ -242,6 +243,7 @@ function sanitizeId(name) {
 export function renderDependencyGraphJson(result) {
   return JSON.stringify(
     {
+      schemaVersion: result.schemaVersion,
       nodes: result.nodes,
       edges: result.edges,
       cyclesByKind: result.cyclesByKind,

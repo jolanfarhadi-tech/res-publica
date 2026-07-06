@@ -13,6 +13,7 @@
 
 import { pathToFileURL } from "node:url";
 import { computeProjectHealth } from "./project-health.mjs";
+import { CATEGORIES } from "./lib/registry.mjs";
 
 const GOVERNANCE_DOCS = ["ETHICS_CHARTER.md", "DPIA.md", "AI_POLICY.md", "DATA_POLICY.md"];
 
@@ -28,7 +29,7 @@ export function computeRoadmap(root = process.cwd()) {
     requirement: action.action,
     count: action.count,
     source:
-      action.category === "technical-debt"
+      action.category === CATEGORIES.TECHNICAL_DEBT
         ? "Technical Debt Indicator (Project Health)"
         : action.governanceSensitive
         ? "Governance Health finding (Project Health)"
@@ -90,7 +91,7 @@ export function computeRoadmap(root = process.cwd()) {
     phase2WarningsAndTechnicalDebt: phase2,
   };
 
-  return { generatedAt: health.generatedAt, health, backlog, taskBreakdown, roadmap };
+  return { schemaVersion: health.schemaVersion, generatedAt: health.generatedAt, health, backlog, taskBreakdown, roadmap };
 }
 
 export function renderRequirementsBacklogMarkdown(backlog) {

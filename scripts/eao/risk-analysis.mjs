@@ -83,7 +83,7 @@ export function computeRiskAnalysis(root = process.cwd()) {
     byDomain: Object.fromEntries([...byDomain.entries()].map(([d, rs]) => [d, rs.length])),
   };
 
-  return { generatedAt: health.generatedAt, executiveSummary, riskRegister, byDomain, matrix };
+  return { schemaVersion: health.schemaVersion, generatedAt: health.generatedAt, executiveSummary, riskRegister, byDomain, matrix };
 }
 
 export function renderRiskAnalysisMarkdown(result) {
@@ -161,7 +161,9 @@ export function renderRiskAnalysisMarkdown(result) {
   lines.push("### Evidence References");
   lines.push("");
   for (const r of riskRegister) {
-    const evCount = Array.isArray(r.evidence) ? r.evidence.length : Object.keys(r.evidence || {}).length;
+    // Task 4 (Phase A): evidence is now always an array (project-health.mjs
+    // normalizes it at the source) - no shape-detection workaround needed.
+    const evCount = r.evidence.length;
     lines.push(`- ${r.riskId}: ${evCount} evidence record(s) (see Project Health / originating pipeline output for full detail)`);
   }
   if (!riskRegister.length) lines.push("- none");

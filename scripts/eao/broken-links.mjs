@@ -48,7 +48,7 @@ export function computeBrokenLinks(root = process.cwd()) {
     });
   }
 
-  return { filesScanned: files.length, broken };
+  return { schemaVersion: 1, filesScanned: files.length, broken };
 }
 
 export function renderBrokenLinksMarkdown(result) {

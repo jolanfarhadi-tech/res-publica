@@ -15,10 +15,16 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { findMarkdownFiles, forEachLine } from "./lib/markdown.mjs";
+import { CATEGORIES, riskDomainForCategory } from "./lib/registry.mjs";
 import { computeRepositoryHealth } from "./repository-health.mjs";
 import { computeBrokenLinks } from "./broken-links.mjs";
 import { computeTerminologyDrift } from "./terminology-drift.mjs";
 import { computeDependencyGraph } from "./dependency-map.mjs";
+
+// Per brain/AI/EAO_SCHEMA_VERSIONING_SPEC.md: schemaVersion 1 is the shape
+// already shipped in Generation 1 (the 12-field Canonical Action Model).
+// No schema change is made here - this constant only labels the existing shape.
+const SCHEMA_VERSION = 1;
 
 function findTodos(root = process.cwd()) {
   // Reuses the existing shared file-walk/line-scan utilities (lib/markdown.mjs)
@@ -98,6 +104,7 @@ export function computeProjectHealth(root = process.cwd()) {
   const overallStatus = criticalIssues.length > 0 ? "Needs Attention" : warnings.length > 0 ? "Healthy, minor items" : "Healthy";
 
   return {
+    schemaVersion: SCHEMA_VERSION,
     generatedAt: new Date().toISOString(),
     overallStatus,
     repositoryHealth: {
@@ -198,6 +205,19 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
   //     Terminology). Disclosed: no current finding maps to a "Dependency"
   //     bucket distinct from Documentation/Architecture - not fabricated to
   //     fill out an example list.
+  // Task 4 (Phase A) - evidence is now always an array. The two categories
+  // that previously used an object ({key: array, key: array}) are flattened
+  // here, with each record tagged by its originating subcategory so no
+  // information is lost - only the shape is normalized.
+  const governanceEvidence = [
+    ...governanceOrphans.map((o) => ({ kind: "orphan", document: o })),
+    ...governanceBrokenRefs.map((b) => ({ kind: "brokenReference", ...b })),
+  ];
+  const formattingDriftEvidence = [
+    ...deps.headingDrift.map((h) => ({ kind: "headingDrift", ...h })),
+    ...deps.plainFormattingDrift.map((p) => ({ kind: "plainFormattingDrift", ...p })),
+  ];
+
   const actions = [];
   if (terminology.liveDrift.length) {
     actions.push({
@@ -205,8 +225,8 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       action: "Resolve live terminology drift",
       count: terminology.liveDrift.length,
       severity: "critical",
-      category: "terminology-drift",
-      riskDomain: "Terminology",
+      category: CATEGORIES.TERMINOLOGY_DRIFT,
+      riskDomain: riskDomainForCategory(CATEGORIES.TERMINOLOGY_DRIFT),
       sourcePipeline: "terminology-drift",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -215,20 +235,20 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       evidence: terminology.liveDrift,
     });
   }
-  if (governanceOrphans.length || governanceBrokenRefs.length) {
+  if (governanceEvidence.length) {
     actions.push({
       priority: 2,
       action: "Investigate governance document connectivity issues",
-      count: governanceOrphans.length + governanceBrokenRefs.length,
+      count: governanceEvidence.length,
       severity: "critical",
-      category: "governance-connectivity",
-      riskDomain: "Governance",
+      category: CATEGORIES.GOVERNANCE_CONNECTIVITY,
+      riskDomain: riskDomainForCategory(CATEGORIES.GOVERNANCE_CONNECTIVITY),
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: true,
       governanceSensitive: true,
       autoFixable: false,
       humanApprovalRequired: true,
-      evidence: { orphans: governanceOrphans, brokenReferences: governanceBrokenRefs },
+      evidence: governanceEvidence,
     });
   }
   if (genuineBrokenRefs.length) {
@@ -237,8 +257,8 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       action: "Fix genuine broken References/Related Documents entries",
       count: genuineBrokenRefs.length,
       severity: "critical",
-      category: "broken-reference",
-      riskDomain: "Documentation",
+      category: CATEGORIES.BROKEN_REFERENCE,
+      riskDomain: riskDomainForCategory(CATEGORIES.BROKEN_REFERENCE),
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -253,8 +273,8 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       action: "Fix broken Markdown links",
       count: links.broken.length,
       severity: "critical",
-      category: "broken-link",
-      riskDomain: "Documentation",
+      category: CATEGORIES.BROKEN_LINK,
+      riskDomain: riskDomainForCategory(CATEGORIES.BROKEN_LINK),
       sourcePipeline: "broken-link-detection",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -269,8 +289,8 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       action: "Add inbound references to unreferenced core documents",
       count: deps.unreferencedCoreDocuments.length,
       severity: "critical",
-      category: "unreferenced-core-document",
-      riskDomain: "Architecture",
+      category: CATEGORIES.UNREFERENCED_CORE_DOCUMENT,
+      riskDomain: riskDomainForCategory(CATEGORIES.UNREFERENCED_CORE_DOCUMENT),
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: true,
       governanceSensitive: false,
@@ -279,20 +299,20 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       evidence: deps.unreferencedCoreDocuments,
     });
   }
-  if (deps.headingDrift.length || deps.plainFormattingDrift.length) {
+  if (formattingDriftEvidence.length) {
     actions.push({
       priority: 6,
       action: "Standardize heading depth and backtick filename formatting",
-      count: deps.headingDrift.length + deps.plainFormattingDrift.length,
+      count: formattingDriftEvidence.length,
       severity: "warning",
-      category: "documentation-formatting-drift",
-      riskDomain: "Documentation",
+      category: CATEGORIES.DOCUMENTATION_FORMATTING_DRIFT,
+      riskDomain: riskDomainForCategory(CATEGORIES.DOCUMENTATION_FORMATTING_DRIFT),
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: false,
       governanceSensitive: false,
       autoFixable: true,
       humanApprovalRequired: true,
-      evidence: { headingDrift: deps.headingDrift, plainFormattingDrift: deps.plainFormattingDrift },
+      evidence: formattingDriftEvidence,
     });
   }
   if (todos.length) {
@@ -301,8 +321,8 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       action: "Review and triage outstanding TODO markers",
       count: todos.length,
       severity: "warning",
-      category: "technical-debt",
-      riskDomain: "Technical Debt",
+      category: CATEGORIES.TECHNICAL_DEBT,
+      riskDomain: riskDomainForCategory(CATEGORIES.TECHNICAL_DEBT),
       sourcePipeline: "project-health",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -317,8 +337,8 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       action: "Confirm implementation status of MVP-critical specifications before release",
       count: mvpBlocking.length,
       severity: "critical",
-      category: "mvp-implementation-pending",
-      riskDomain: "Release",
+      category: CATEGORIES.MVP_IMPLEMENTATION_PENDING,
+      riskDomain: riskDomainForCategory(CATEGORIES.MVP_IMPLEMENTATION_PENDING),
       sourcePipeline: "project-health",
       affectsArchitecture: true,
       governanceSensitive: false,
