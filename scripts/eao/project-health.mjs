@@ -168,6 +168,11 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
   //     without explicit human approval (EAO_PERMISSION_MODEL.md), no exceptions.
   //   - evidence: the actual originating finding records (not just a count),
   //     so downstream consumers have full traceability without re-deriving it.
+  //   - riskDomain: a coarse grouping bucket for Risk Analysis and future
+  //     dashboards (Governance/Documentation/Architecture/Technical Debt/
+  //     Terminology). Disclosed: no current finding maps to a "Dependency"
+  //     bucket distinct from Documentation/Architecture - not fabricated to
+  //     fill out an example list.
   const actions = [];
   if (terminology.liveDrift.length) {
     actions.push({
@@ -176,6 +181,7 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       count: terminology.liveDrift.length,
       severity: "critical",
       category: "terminology-drift",
+      riskDomain: "Terminology",
       sourcePipeline: "terminology-drift",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -191,6 +197,7 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       count: governanceOrphans.length + governanceBrokenRefs.length,
       severity: "critical",
       category: "governance-connectivity",
+      riskDomain: "Governance",
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: true,
       governanceSensitive: true,
@@ -206,6 +213,7 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       count: genuineBrokenRefs.length,
       severity: "critical",
       category: "broken-reference",
+      riskDomain: "Documentation",
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -221,6 +229,7 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       count: links.broken.length,
       severity: "critical",
       category: "broken-link",
+      riskDomain: "Documentation",
       sourcePipeline: "broken-link-detection",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -236,6 +245,7 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       count: deps.unreferencedCoreDocuments.length,
       severity: "critical",
       category: "unreferenced-core-document",
+      riskDomain: "Architecture",
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: true,
       governanceSensitive: false,
@@ -251,6 +261,7 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       count: deps.headingDrift.length + deps.plainFormattingDrift.length,
       severity: "warning",
       category: "documentation-formatting-drift",
+      riskDomain: "Documentation",
       sourcePipeline: "dependency-analysis",
       affectsArchitecture: false,
       governanceSensitive: false,
@@ -266,6 +277,7 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       count: todos.length,
       severity: "warning",
       category: "technical-debt",
+      riskDomain: "Technical Debt",
       sourcePipeline: "project-health",
       affectsArchitecture: false,
       governanceSensitive: false,

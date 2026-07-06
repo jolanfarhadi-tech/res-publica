@@ -44,6 +44,7 @@ export function computeRoadmap(root = process.cwd()) {
     // not re-derived or re-interpreted here (or by any future downstream
     // pipeline). Project Health remains the single source of truth for them.
     category: action.category,
+    riskDomain: action.riskDomain,
     sourcePipeline: action.sourcePipeline,
     affectsArchitecture: action.affectsArchitecture,
     autoFixable: action.autoFixable,

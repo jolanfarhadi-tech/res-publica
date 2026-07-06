@@ -10,6 +10,7 @@
     "eao:dependency-map": "node scripts/eao/dependency-map.mjs",
     "eao:project-health": "node scripts/eao/project-health.mjs",
     "eao:roadmap": "node scripts/eao/roadmap.mjs",
+    "eao:risk-analysis": "node scripts/eao/risk-analysis.mjs",
     "predev": "node scripts/check-structure.mjs",
     "prebuild": "node scripts/check-structure.mjs",
     "dev": "next dev",
