@@ -268,6 +268,8 @@ The value of an Annex is not the document itself, but its ability to transform r
 
 This transferable civic value is what enables future civic action, institutional learning, democratic accountability, and social repair. It is produced once, at Annex approval, and is what Harm Category classification organizes for downstream use — the classification itself creates no new value; it makes already-created value findable and connectable.
 
+**Future-facing clarification, not a commitment:** Transferable Civic Value may later become the conceptual basis for value accounting, contribution recognition, or tokenized civic value mechanisms. **No token, coin, financial instrument, exchange mechanism, or tokenomics model is introduced at this stage.** Any future tokenization requires its own feasibility study, legal review, ethics review, platform architecture decision, and dedicated ADR — none of which is performed or implied here. This clarification does not modify the Blockchain Annex Block's existing integrity/timestamp/approval role (§3, §6 Rule 5) in any way.
+
 ### Reconciling the Value Lifecycle with the Existing Process Lifecycle
 
 The following is a **value-narrative view** of the same underlying process already described in §2 — it does not introduce a parallel or competing technical lifecycle, and does not alter §2's diagram or stage ordering:

@@ -34,6 +34,8 @@ Since this introduces new architectural content (a named concept with six sub-va
 - Future documents describing why an Annex matters, or what downstream systems gain from one, should cite §13's six value types rather than inventing new value language.
 - No implementation consequence — Transferable Civic Value remains conceptual, consistent with every other Annex-ecosystem concept's LOCKED-model-deferred status.
 
+**Addendum (same turn):** §13 now also states explicitly that Transferable Civic Value may later inform value accounting, contribution recognition, or tokenized civic value mechanisms, but that no token, coin, financial instrument, exchange mechanism, or tokenomics model is introduced by this ADR or by §13. Any future tokenization would require its own feasibility study, legal review, ethics review, platform architecture decision, and dedicated ADR. This addendum does not modify the Blockchain Annex Block's existing integrity/timestamp/approval role (§3, §6 Rule 5 of the architecture document) and introduces no implementation commitment.
+
 ## Alternatives Considered
 
 - **Create a new standalone "Transferable Civic Value" document.** Rejected — this content is specifically about what an Annex produces; it belongs with the Annex's own canonical architecture, not a separate document, consistent with the "extend, don't fragment" discipline already applied to Scientific Review (§7) and the National Harm Taxonomy (§12).
