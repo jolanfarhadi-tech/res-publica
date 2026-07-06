@@ -3,7 +3,7 @@
 ```
 Type: Project (Canonical Overview / Root Document)
 Status: Canonical
-Version: 1.1.0 — last restructured: Gap 1 resolution (RESPONSIBILITY_BIOGRAPHY_LAB.md added)
+Version: 1.2.0 — last restructured: added Known Architecture Decision Needed note (Structured Hearing/Expert Review ordering), added Application Architecture/AI Governance/Early Warning/direct-path/Dashboard-secondary-role references, fixed "Responsibility Mapping Lab" naming
 Authorized by: N/A — pure synthesis of already-canonical content, no new decision introduced
 Extends/Reconciles with: docs/source/foundation/01_HARM_OPERATING_SYSTEM.md,
   docs/source/methodology/RESPONSIBILITY_BIOGRAPHY_LAB.md,
@@ -46,7 +46,7 @@ This is the first document to show the complete path in one continuous diagram �
 flowchart TD
     CE[Citizen Experience / Listening — Innovation 1] --> AHIP[AHIP Intake]
     AHIP --> SH[Structured Hearing]
-    SH --> RM[Responsibility Mapping — Innovation 2]
+    SH --> RM[Responsibility Mapping Lab — Innovation 2]
     RM --> Dash[Responsibility Dashboard — Innovation 3]
     Dash -->|Observer Panel + HARM Lens + Priority Matrix| TPS[Top Priority Selection]
     TPS --> AD[Annex Deepening]
@@ -65,12 +65,19 @@ flowchart TD
 
 Every node above is owned by exactly one existing canonical document (§7, References). The **Knowledge Graph** (`ADR-007`, specialized by `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md`) is not a stage in this flow — it is the persistent memory layer underlying every stage, per its own core sentence: *"The Knowledge Graph is the memory; the Civic Intelligence Layer is the thinking about it."*
 
+> **⚠ Known Architecture Decision Needed — not resolved here.** "Structured Hearing" and "Expert Review" currently appear in different orders across two canonical documents: `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` §Framework sequences `Structured Hearing → ... → Expert Review`, while `brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7 (Scientific Review, Levels 1–2) sequences `Expert Review → Structured Hearing`. This document's diagram above collapses Scientific Review into a single node specifically because exposing its internal order would surface this unresolved conflict. **No order is chosen here.** Resolving this requires an ADR amendment (to `ADR-014` or a new ADR) or an explicit human architecture decision — not a documentation-level fix.
+
 ## 4. Supporting Systems (each canonically owned elsewhere)
 
 - **Scientific Review** — the four-level validation engine (`brain/FOUNDATION/03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7). Not redefined here.
 - **Blockchain Annex Architecture** — the integrity/immutability layer for Approved Annexes (same document, §2–§6).
 - **Contribution & Impact Framework** — Trust and Impact Record semantics (`brain/FOUNDATION/02_CONTRIBUTION_IMPACT_FRAMEWORK.md`). Not redefined here.
 - **Knowledge Graph** — the persistent memory substrate (`ADR-007`, `brain/ARCHITECTURE/CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md`). Not redefined here.
+- **Application Architecture** (`brain/APPLICATION/APPLICATION_ARCHITECTURE.md`, LOCKED) — no stage in this lifecycle yet has an assigned owning service in that document; this overview does not assign one. Not touched or redefined here.
+- **AI Governance** (`docs/source/foundation/05_AI.md`, `brain/AI/AI_GOVERNANCE_HIERARCHY.md`, `docs/source/governance/AI_POLICY.md`) — constrains every stage's AI Integration boundary already stated in each stage's own canonical document (e.g., Scientific Review's "AI never validates," Civic Intelligence's "AI grounds, never originates"). Not redefined here; cited as the umbrella governing all of them.
+- **Early Warning** — the optional downstream consumer tied to `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §7's `published → signal_released` state and to `CIVIC_INTELLIGENCE_KNOWLEDGE_GRAPH_RELATIONSHIP.md`'s `compounds_into` edge. Referenced by name only — no full specification exists in this repository (`EARLY_WARNING_PROPOSAL.md` is not present); not invented here.
+- **Direct Annex origination path** — a single Structured Hearing may produce an Evidence Package independent of Dashboard-driven Top Priority Selection, per `docs/source/methodology/RESPONSIBILITY_ANNEXES.md`'s "direct path" Workflow and `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §2's explicit note. This path exists alongside the primary, Dashboard-driven route shown in §3's diagram; it is not shown as a separate branch there, per the lifecycle-ordering freeze in effect for this document.
+- **Dashboard's secondary/aggregate role** — once Impact Records exist for prior Civic Contributions, the Responsibility Dashboard's Visualizations & Metrics may incorporate them to refresh its aggregate view, per `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` §5 and `ADR-016`. This is secondary to, not a replacement for, the Dashboard's primary upstream role shown in §3's diagram.
 
 ## 5. Genuine Gaps Identified (explicit, not smoothed over)
 
