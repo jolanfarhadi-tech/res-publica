@@ -8,6 +8,7 @@
     "eao:broken-links": "node scripts/eao/broken-links.mjs",
     "eao:terminology-drift": "node scripts/eao/terminology-drift.mjs",
     "eao:dependency-map": "node scripts/eao/dependency-map.mjs",
+    "eao:project-health": "node scripts/eao/project-health.mjs",
     "predev": "node scripts/check-structure.mjs",
     "prebuild": "node scripts/check-structure.mjs",
     "dev": "next dev",
