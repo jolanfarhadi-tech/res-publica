@@ -15,7 +15,7 @@ describe("Membership lifecycle", () => {
   });
 
   it("follows the documented lifecycle and audits every transition", () => {
-    let member = createMember("person-1", "basic");
+    const member = createMember("person-1", "basic");
     let result = transitionStatus(member, "verified", "email-confirmed");
     expect(result.member.status).toBe("verified");
     expect(result.auditEntry.action).toBe("membership.status-transition");

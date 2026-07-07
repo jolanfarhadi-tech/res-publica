@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createInstitutionalPartner, transitionPartnershipStage } from "./relationship";
+import { createInstitutionalPartner } from "./relationship";
 import { logDisclosure, reviewDisclosure, activatePartnership } from "./disclosure";
 import { publishFundingDisclosure } from "./funding-disclosure";
 import { createDonorRecord } from "./donor";
