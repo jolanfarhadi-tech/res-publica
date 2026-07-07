@@ -43,6 +43,23 @@
       }
     ]
   },
+  "platformFoundation": {
+    "eyebrow": "Im Aufbau",
+    "heading": "Plattform-Fundament",
+    "intro": "Res Publica entwickelt sich zu einer vollständigen zivilgesellschaftlichen Plattform. Die folgenden Bereiche sind auf der Architektur- und Modul-Ebene bereits als Fundament umgesetzt — die meisten sind noch nicht mit einer öffentlichen Oberfläche verbunden. Das ist Fundament-Arbeit im Aufbau, keine Liste fertiger Funktionen.",
+    "badge": "Fundament im Aufbau",
+    "items": [
+      { "title": "Mitgliedschaft", "text": "Modul-Ebene umgesetzt — Lebenszyklus, Stufen und Anbindungen; Oberfläche noch nicht verbunden." },
+      { "title": "Community", "text": "Modul-Ebene umgesetzt — Teilhabe-Stufen und einwilligungsbasierte Interaktion; für künftige Anbindung vorbereitet." },
+      { "title": "CRM / Partner", "text": "Modul-Ebene umgesetzt — Förder- und Partnerbeziehungen samt Interessenkonflikt-Prüfung als Fundament." },
+      { "title": "Projekte", "text": "Heute bereits öffentlich sichtbar; tiefere Plattform-Anbindung im Aufbau." },
+      { "title": "Veranstaltungen", "text": "Heute bereits öffentlich sichtbar; Anmeldung und veranstaltungsbezogene Fragen als Modul-Fundament umgesetzt." },
+      { "title": "Lernen", "text": "Fundament im Aufbau — noch nicht als eigenständiges Modul umgesetzt." },
+      { "title": "Publikationen", "text": "Heute bereits öffentlich sichtbar; redaktioneller Workflow als separates Modul-Fundament umgesetzt." },
+      { "title": "Forschung", "text": "Heute bereits öffentlich sichtbar als Teil unserer Arbeit." },
+      { "title": "Governance / EAO", "text": "Internes Steuerungs-Fundament im Aufbau, getrennt von öffentlichen Funktionen." }
+    ]
+  },
   "cta": {
     "title": "Gestalten Sie mit.",
     "text": "Öffentliche Teilhabe beginnt mit einem ersten Schritt. Schreiben Sie uns.",

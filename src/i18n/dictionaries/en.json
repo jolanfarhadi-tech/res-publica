@@ -43,6 +43,23 @@
       }
     ]
   },
+  "platformFoundation": {
+    "eyebrow": "In progress",
+    "heading": "Platform Foundation",
+    "intro": "Res Publica is becoming a full civic platform. The areas below already have a foundation implemented at the architecture and module level — most are not yet connected to a public interface. This is foundation work in progress, not a list of finished features.",
+    "badge": "Foundation in progress",
+    "items": [
+      { "title": "Membership", "text": "Module layer implemented — lifecycle, tiers, and integrations; frontend not yet connected." },
+      { "title": "Community", "text": "Module layer implemented — participation stages and consent-based interaction; prepared for future frontend integration." },
+      { "title": "CRM / Partners", "text": "Module layer implemented — donor and partner relationships, including conflict-of-interest review, as a governance foundation." },
+      { "title": "Projects", "text": "Already visible publicly today; deeper platform integration in progress." },
+      { "title": "Events", "text": "Already visible publicly today; registration and event-scoped Q&A implemented as a module-level foundation." },
+      { "title": "Learning", "text": "Foundation in progress — not yet implemented as its own module." },
+      { "title": "Publications", "text": "Already visible publicly today; editorial workflow implemented as a separate module-level foundation." },
+      { "title": "Research", "text": "Already visible publicly today as part of our work." },
+      { "title": "Governance / EAO", "text": "Internal governance foundation in progress, separate from public-facing features." }
+    ]
+  },
   "cta": {
     "title": "Take part.",
     "text": "Public participation begins with a first step. Write to us.",

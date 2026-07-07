@@ -162,6 +162,30 @@ export default async function HomePage({
         </Container>
       </section>
 
+      {/* Platform Foundation */}
+      <section className="border-t border-border bg-surface">
+        <Container className="py-16 sm:py-24">
+          <FadeIn>
+            <SectionHeading eyebrow={dict.platformFoundation.eyebrow}>
+              {dict.platformFoundation.heading}
+            </SectionHeading>
+            <p className="-mt-6 mb-10 max-w-2xl text-muted">
+              {dict.platformFoundation.intro}
+            </p>
+            <span className="mb-8 inline-block rounded-full border border-border px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted">
+              {dict.platformFoundation.badge}
+            </span>
+          </FadeIn>
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {dict.platformFoundation.items.map((item, index) => (
+              <FadeIn key={item.title} delay={index * 0.06}>
+                <Card title={item.title}>{item.text}</Card>
+              </FadeIn>
+            ))}
+          </div>
+        </Container>
+      </section>
+
       {/* Featured projects */}
       {projects.length > 0 && (
         <section className="border-t border-border bg-surface">
