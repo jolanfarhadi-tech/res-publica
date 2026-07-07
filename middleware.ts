@@ -52,5 +52,12 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|.*\\..*).*)"],
+  // NOTE: dot-exclusion uses a character class `[.]` rather than `\.`.
+  // A backslash-escaped dot is silently unescaped by this project's
+  // path-to-regexp-based matcher compiler, turning `\.` into a bare `.`
+  // wildcard and making the exclusion match nearly every path. `[.]`
+  // reaches the compiled regex as a literal dot without going through
+  // that backslash-consuming step. Verified directly against this
+  // build's own `tryToParsePath` compiler, not assumed.
+  matcher: ["/((?!api|_next/static|_next/image|.*[.].*).*)"],
 };
