@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { germanMemberProfileCopy } from "@/i18n/member-profile";
+import { isMemberProfileLocale, memberProfileCopy } from "@/i18n/member-profile";
 
 type SessionState = "loading" | "anonymous" | "authenticated" | "unavailable";
 
@@ -45,7 +46,7 @@ export function AccountControl({ locale, dict }: { locale: Locale; dict: Diction
   if (state === "authenticated") {
     return (
       <div className="flex items-center gap-2">
-        {locale === "de" && <a className={classes} href="/de/profile">{germanMemberProfileCopy.profileLink}</a>}
+        {isMemberProfileLocale(locale) && <Link className={classes} href={`/${locale}/profile`}>{memberProfileCopy[locale].profileLink}</Link>}
         <button type="button" className={classes} onClick={logout} disabled={busy}>{busy ? t.loggingOut : t.logout}</button>
       </div>
     );

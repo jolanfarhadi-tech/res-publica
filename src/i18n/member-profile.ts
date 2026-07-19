@@ -50,3 +50,131 @@ export const germanMembershipTierLabels: Record<MembershipTier, string> = {
   research: "Forschungsmitgliedschaft",
   institutional: "Institutionelle Mitgliedschaft",
 };
+
+export type MemberProfileCopy = { [Key in keyof typeof germanMemberProfileCopy]: string };
+
+export const englishMemberProfileCopy: MemberProfileCopy = {
+  title: "My membership profile",
+  lede: "See your current membership status and the next status steps available to you.",
+  loading: "Loading membership profile …",
+  loginTitle: "Please sign in",
+  loginText: "Your membership profile is available only through your verified account.",
+  loginAction: "Sign in and open profile",
+  unavailableTitle: "Profile currently unavailable",
+  unavailableText: "Your data has not been changed. Please try again later.",
+  errorTitle: "Profile could not be loaded",
+  errorText: "Please reload the page or try again later.",
+  notEnrolledTitle: "No membership yet",
+  notEnrolledText: "No membership has been created for your account yet.",
+  membershipAction: "Choose a membership",
+  overviewTitle: "Membership overview",
+  typeLabel: "Membership type",
+  currentStatusLabel: "Current status",
+  registeredAtLabel: "Registration date",
+  journeyTitle: "Membership journey",
+  previousStatusLabel: "Previous status",
+  statusChangeDateLabel: "Most recent status change",
+  triggeringActivityLabel: "Basis for the status change",
+  triggeringActivityValue: "Confirmed through the responsible membership process",
+  noPreviousStatus: "No previous status step yet",
+  nextStatusesTitle: "Possible next status steps",
+  noNextStatuses: "No further status steps are defined for the current status.",
+  privacyNotice: "This view shows information about your own membership only. Internal review and governance information is not displayed here.",
+  profileLink: "My profile",
+};
+
+export const englishMembershipStatusLabels: Record<MembershipStatus, string> = {
+  registered: "Registered",
+  verified: "Verified",
+  active: "Active",
+  inactive: "Inactive",
+  paused: "Paused",
+  "self-isolated": "Self-isolated",
+  withdrawn: "Withdrawn",
+  retired: "Retired",
+  suspended: "Suspended",
+  terminated: "Terminated",
+};
+
+export const englishMembershipTierLabels: Record<MembershipTier, string> = {
+  basic: "Basic membership",
+  supporter: "Supporting membership",
+  volunteer: "Volunteer membership",
+  research: "Research membership",
+  institutional: "Institutional membership",
+};
+
+export const persianMemberProfileCopy: MemberProfileCopy = {
+  title: "پروفایل عضویت من",
+  lede: "در این صفحه، وضعیت کنونی عضویت و گام‌های احتمالی بعدی را مشاهده می‌کنید.",
+  loading: "پروفایل عضویت در حال بارگذاری است …",
+  loginTitle: "لطفاً وارد حساب خود شوید",
+  loginText: "پروفایل عضویت شما فقط از طریق حساب تأییدشده‌تان در دسترس است.",
+  loginAction: "ورود و مشاهدهٔ پروفایل",
+  unavailableTitle: "پروفایل در حال حاضر در دسترس نیست",
+  unavailableText: "داده‌های شما تغییری نکرده است. لطفاً بعداً دوباره تلاش کنید.",
+  errorTitle: "بارگذاری پروفایل ممکن نشد",
+  errorText: "لطفاً صفحه را دوباره بارگذاری کنید یا کمی بعد دوباره تلاش کنید.",
+  notEnrolledTitle: "هنوز عضویتی ثبت نشده است",
+  notEnrolledText: "هنوز برای حساب شما عضویتی ایجاد نشده است.",
+  membershipAction: "انتخاب نوع عضویت",
+  overviewTitle: "نمای کلی عضویت",
+  typeLabel: "نوع عضویت",
+  currentStatusLabel: "وضعیت کنونی",
+  registeredAtLabel: "تاریخ ثبت‌نام",
+  journeyTitle: "مسیر عضویت",
+  previousStatusLabel: "وضعیت پیشین",
+  statusChangeDateLabel: "آخرین تغییر وضعیت",
+  triggeringActivityLabel: "مبنای تغییر وضعیت",
+  triggeringActivityValue: "از طریق فرایند مسئول عضویت تأیید شده است",
+  noPreviousStatus: "هنوز وضعیت پیشینی وجود ندارد",
+  nextStatusesTitle: "گام‌های احتمالی بعدی",
+  noNextStatuses: "برای وضعیت کنونی، گام دیگری تعریف نشده است.",
+  privacyNotice: "این بخش فقط اطلاعات مربوط به عضویت خود شما را نمایش می‌دهد. اطلاعات داخلی بررسی و حکمرانی در اینجا نمایش داده نمی‌شود.",
+  profileLink: "پروفایل من",
+};
+
+export const persianMembershipStatusLabels: Record<MembershipStatus, string> = {
+  registered: "ثبت‌شده",
+  verified: "تأییدشده",
+  active: "فعال",
+  inactive: "غیرفعال",
+  paused: "در حالت وقفه",
+  "self-isolated": "خودکناره‌گرفته",
+  withdrawn: "انصراف‌داده",
+  retired: "بازنشسته",
+  suspended: "تعلیق‌شده",
+  terminated: "خاتمه‌یافته",
+};
+
+export const persianMembershipTierLabels: Record<MembershipTier, string> = {
+  basic: "عضویت پایه",
+  supporter: "عضویت حامی",
+  volunteer: "مشارکت داوطلبانه",
+  research: "عضویت پژوهشی",
+  institutional: "عضویت نهادی",
+};
+
+export const memberProfileCopy = {
+  de: germanMemberProfileCopy,
+  en: englishMemberProfileCopy,
+  fa: persianMemberProfileCopy,
+} as const;
+
+export const membershipStatusLabels = {
+  de: germanMembershipStatusLabels,
+  en: englishMembershipStatusLabels,
+  fa: persianMembershipStatusLabels,
+} as const;
+
+export const membershipTierLabels = {
+  de: germanMembershipTierLabels,
+  en: englishMembershipTierLabels,
+  fa: persianMembershipTierLabels,
+} as const;
+
+export type MemberProfileLocale = keyof typeof memberProfileCopy;
+
+export function isMemberProfileLocale(locale: string): locale is MemberProfileLocale {
+  return locale === "de" || locale === "en" || locale === "fa";
+}
