@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1784444141114,
+      "tag": "0000_m1-canonical-domain",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784444451249,
+      "tag": "0001_m1-membership-events",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784444535085,
+      "tag": "0002_m1-publishing-community",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784444617321,
+      "tag": "0003_m1-remaining-mvp-modules",
+      "breakpoints": true
+    }
+  ]
+}
