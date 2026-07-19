@@ -24,6 +24,19 @@ export function requireInstitutionAdmin(
   });
 }
 
+export function requireGovernanceRole(
+  actor: AuthenticatedActor | null,
+  role: OperationalGovernanceRole,
+  institutionId: string,
+): asserts actor is AuthenticatedActor {
+  requireAuthorization(actor, {
+    domain: "governance",
+    capability: governanceCapability(role),
+    target: institutionId,
+    minimumAssurance: "mfa",
+  });
+}
+
 export function assertOperationalDelegation(input: {
   actorPersonId: string;
   granteePersonId: string;

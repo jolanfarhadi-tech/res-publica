@@ -13,6 +13,7 @@ export type ConfidentialityLevel = "public" | "restricted" | "confidential";
 
 export type HarmCase = {
   id: string;
+  institutionId: string;
   reportedAt: Date;
   location: string;
   harmCategory: string;

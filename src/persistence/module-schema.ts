@@ -240,6 +240,7 @@ export const harmCases = pgTable(
   "harm_cases",
   {
     id: text("id").primaryKey(),
+    institutionId: text("institution_id").notNull().references(() => organizations.id, { onDelete: "restrict" }),
     reportedAt: timestamp("reported_at", { withTimezone: true, mode: "date" }).notNull(),
     location: text("location").notNull(),
     harmCategory: text("harm_category").notNull(),

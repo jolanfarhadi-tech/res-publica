@@ -16,6 +16,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
+    "db:check:fresh": "node scripts/check-fresh-migrations.mjs",
     "predev": "node scripts/check-structure.mjs",
     "prebuild": "node scripts/check-structure.mjs",
     "dev": "next dev",

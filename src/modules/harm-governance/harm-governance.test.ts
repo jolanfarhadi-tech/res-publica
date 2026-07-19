@@ -4,6 +4,7 @@ import type { BasicValidationDecision, HarmCase } from "./types";
 
 const baseCase: HarmCase = {
   id: "case-1",
+  institutionId: "institution-1",
   reportedAt: new Date("2026-07-19T09:00:00Z"),
   location: "Berlin",
   harmCategory: "governance-failure",

@@ -36,5 +36,8 @@ jobs:
       - name: Check database migrations
         run: npm run db:check
 
+      - name: Run all migrations against a fresh database
+        run: npm run db:check:fresh
+
       - name: Build
         run: npm run build
