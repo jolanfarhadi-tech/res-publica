@@ -15,4 +15,12 @@ describe("Module bootstrap", () => {
     expect(getModule("crm")).toBeDefined();
     expect(getModule("analytics")).toBeDefined();
   });
+
+  it("is idempotent across repeated server invocations", () => {
+    const first = bootstrapModules();
+    const second = bootstrapModules();
+
+    expect(second).toEqual(first);
+    expect(second).toHaveLength(9);
+  });
 });

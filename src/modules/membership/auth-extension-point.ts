@@ -17,9 +17,7 @@
  * resulting `personId`, exactly as it already does throughout this module.
  */
 
-export type AuthenticatedActor = {
-  personId: string;
-};
+export type { AuthenticatedActor, ActorResolver } from "../../auth/types";
 
 /**
  * A future Auth system would implement this to resolve a request's
@@ -27,6 +25,3 @@ export type AuthenticatedActor = {
  * here — activating one is a configuration/wiring decision for a future
  * Backend/API layer, never something this module performs itself.
  */
-export type ActorResolver = {
-  resolve(request: unknown): AuthenticatedActor | null;
-};

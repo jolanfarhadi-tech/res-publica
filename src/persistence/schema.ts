@@ -5,6 +5,7 @@ import {
   numeric,
   pgTable,
   primaryKey,
+  uniqueIndex,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
@@ -95,6 +96,56 @@ export const auditLog = pgTable(
   ]
 );
 
+export const authIdentities = pgTable(
+  "auth_identities",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    issuer: text("issuer").notNull(),
+    subject: text("subject").notNull(),
+    linkedAt: timestamp("linked_at", { withTimezone: true, mode: "date" }).notNull(),
+    disabledAt: timestamp("disabled_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("auth_identities_issuer_subject_uq").on(table.issuer, table.subject),
+    index("auth_identities_person_idx").on(table.personId),
+  ]
+);
+
+export const authSessions = pgTable(
+  "auth_sessions",
+  {
+    id: text("id").primaryKey(),
+    authIdentityId: text("auth_identity_id").notNull().references(() => authIdentities.id, { onDelete: "restrict" }),
+    tokenHash: text("token_hash").notNull(),
+    assurance: text("assurance", { enum: ["verified", "mfa", "recent-mfa"] }).notNull(),
+    authenticatedAt: timestamp("authenticated_at", { withTimezone: true, mode: "date" }).notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("auth_sessions_token_hash_uq").on(table.tokenHash),
+    index("auth_sessions_identity_idx").on(table.authIdentityId),
+  ]
+);
+
+export const authorizationGrants = pgTable(
+  "authorization_grants",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    domain: text("domain", { enum: ["civic", "governance"] }).notNull(),
+    capability: text("capability").notNull(),
+    target: text("target"),
+    assuranceRequired: text("assurance_required", { enum: ["verified", "mfa", "recent-mfa"] }).notNull(),
+    validFrom: timestamp("valid_from", { withTimezone: true, mode: "date" }).notNull(),
+    validUntil: timestamp("valid_until", { withTimezone: true, mode: "date" }),
+    grantedByPersonId: text("granted_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [index("authorization_grants_person_domain_idx").on(table.personId, table.domain)]
+);
+
 export type PersistenceSchema = {
   people: typeof people;
   consentRecords: typeof consentRecords;
@@ -102,4 +153,7 @@ export type PersistenceSchema = {
   organizations: typeof organizations;
   notifications: typeof notifications;
   auditLog: typeof auditLog;
+  authIdentities: typeof authIdentities;
+  authSessions: typeof authSessions;
+  authorizationGrants: typeof authorizationGrants;
 };

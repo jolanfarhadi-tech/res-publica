@@ -1,4 +1,6 @@
 import { registerModule } from "./registry";
+import { getModule } from "./registry";
+import type { ModuleManifest } from "./manifest";
 import { knowledgeGraphManifest } from "./knowledge-graph/manifest";
 import { aiLayerManifest } from "./ai-layer/manifest";
 import { publishingManifest } from "./publishing/manifest";
@@ -16,14 +18,23 @@ import { analyticsManifest } from "./analytics/manifest";
  * each new module's manifest is added here as it's built, rather than
  * left isolated and undiscoverable.
  */
-export function bootstrapModules() {
-  registerModule(knowledgeGraphManifest);
-  registerModule(aiLayerManifest);
-  registerModule(publishingManifest);
-  registerModule(communityManifest);
-  registerModule(membershipManifest);
-  registerModule(eventsManifest);
-  registerModule(dashboardManifest);
-  registerModule(crmManifest);
-  registerModule(analyticsManifest);
+const implementedManifests: readonly ModuleManifest[] = [
+  knowledgeGraphManifest,
+  aiLayerManifest,
+  publishingManifest,
+  communityManifest,
+  membershipManifest,
+  eventsManifest,
+  dashboardManifest,
+  crmManifest,
+  analyticsManifest,
+];
+
+export function bootstrapModules(): readonly ModuleManifest[] {
+  for (const manifest of implementedManifests) {
+    if (!getModule(manifest.moduleName)) {
+      registerModule(manifest);
+    }
+  }
+  return implementedManifests.map((manifest) => getModule(manifest.moduleName)!);
 }
