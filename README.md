@@ -108,3 +108,14 @@ One App Router tree: `src/app/[locale]`. One content tree:
 `src/content`. The guard (`scripts/check-structure.mjs`) fails
 any dev/build where a duplicate root `app/` or `content/` folder
 appears — that state causes silent 404s/empty pages.
+
+## License
+
+The Res Publica core software is licensed under the GNU Affero General
+Public License, version 3 only (`AGPL-3.0-only`). See [LICENSE](LICENSE).
+
+Res Publica reserves the option, to the extent it holds the necessary
+rights, to offer the software under separate terms (dual licensing).
+Contributions require a Contributor License Agreement (CLA). Until the
+CLA text is published, contributions are accepted only by prior
+arrangement; see [CONTRIBUTING.md](CONTRIBUTING.md).
