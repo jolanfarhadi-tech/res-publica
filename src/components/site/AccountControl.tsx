@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { germanMemberProfileCopy } from "@/i18n/member-profile";
 
 type SessionState = "loading" | "anonymous" | "authenticated" | "unavailable";
 
@@ -42,7 +43,12 @@ export function AccountControl({ locale, dict }: { locale: Locale; dict: Diction
   if (state === "loading") return <span className="h-9 w-16 animate-pulse rounded-full bg-border" aria-label={t.loading} />;
   if (state === "unavailable") return null;
   if (state === "authenticated") {
-    return <button type="button" className={classes} onClick={logout} disabled={busy}>{busy ? t.loggingOut : t.logout}</button>;
+    return (
+      <div className="flex items-center gap-2">
+        {locale === "de" && <a className={classes} href="/de/profile">{germanMemberProfileCopy.profileLink}</a>}
+        <button type="button" className={classes} onClick={logout} disabled={busy}>{busy ? t.loggingOut : t.logout}</button>
+      </div>
+    );
   }
   return <a className={classes} href={`/api/auth/login?returnTo=/${locale}`}>{t.login}</a>;
 }

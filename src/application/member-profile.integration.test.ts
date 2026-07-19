@@ -95,7 +95,7 @@ describe("Member Profile self-service boundary", () => {
           registeredAt: new Date("2026-07-03T00:00:00.000Z"),
           previousStatus: "verified",
           statusChangeDate: new Date("2026-07-05T00:00:00.000Z"),
-          triggeringActivity: "membership-activation-confirmed",
+          triggeringActivity: "membership-status-change-confirmed",
           nextAvailableStatuses: [
             "inactive",
             "paused",

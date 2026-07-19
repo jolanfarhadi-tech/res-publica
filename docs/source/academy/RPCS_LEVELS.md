@@ -49,4 +49,4 @@ Reserved — pending approved level content.
 `.claude/skills/web-01-sitemap/SKILL.md`
 
 ## Related Documents
-`RPCS_PROGRAM.md` · `RPCS_CERTIFICATION.md`
+`RPCS_PROGRAM.md` · `RPCS_CERTIFICATION.md` · `../projects/MEMBER_PROFILE.md`

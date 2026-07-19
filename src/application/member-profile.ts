@@ -73,7 +73,9 @@ export async function getSelfMemberProfile(
       registeredAt: member.createdAt,
       previousStatus: journey.previousStatus,
       statusChangeDate: journey.statusChangeDate,
-      triggeringActivity: journey.triggeringActivity,
+      triggeringActivity: journey.triggeringActivity
+        ? "membership-status-change-confirmed"
+        : null,
       nextAvailableStatuses: journey.nextAvailableStatuses,
     },
   };

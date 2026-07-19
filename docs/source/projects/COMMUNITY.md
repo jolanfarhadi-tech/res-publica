@@ -42,4 +42,4 @@ None — pending approved program material.
 Approved project material for the Lab Series Fellowship is maintained externally; the in-repository program reference is `../academy/RPCS_PROGRAM.md`.
 
 ## Related Documents
-`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../academy/RPCS_PROGRAM.md`
+`../foundation/01_HARM_OPERATING_SYSTEM.md` · `../academy/RPCS_PROGRAM.md` · `MEMBER_PROFILE.md`
