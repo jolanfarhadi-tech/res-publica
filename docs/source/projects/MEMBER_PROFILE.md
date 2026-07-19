@@ -2,7 +2,7 @@
 
 ```
 Type: Project/Product (Member-facing transparency and participation interface)
-Status: Substantially specified — Membership lifecycle and journey view implemented; Member Profile interface not started
+Status: First self-service slice implemented — protected member-facing Membership profile API and trilingual interface delivered
 Version: 1.0
 Extends/Reconciles with: brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md (Verification status,
   Privacy Rules), docs/source/academy/RPCS_LEVELS.md, docs/source/academy/RPCS_PROGRAM.md,
@@ -350,16 +350,17 @@ Notification preferences; profile export; multilingual profile rendering; access
 
 ## MVP Status
 
-**Current Role:** Member-facing product feature. **Blocking Status:** Non-blocking for the core HARM pipeline — this is a presentation layer, not a governance module. **Implementation Priority:** Not yet assigned a phase. **Current Requirement:** architecture specified (this document); implementation has not started — no profile UI, data-access layer, or tier-separation enforcement exists yet in this repository.
+**Current Role:** Member-facing product feature. **Blocking Status:** Non-blocking for the core HARM pipeline — this is a presentation layer, not a governance module. **Implementation Priority:** First self-service slice delivered. **Current Requirement:** the protected, read-only Membership profile slice is implemented according to ADR-034: session-derived self-authorization, query-level ownership enforcement, an allowlisted member-facing projection, and a trilingual DE/EN/FA interface with Persian RTL support. Identity details beyond the session actor, Community participation, applications, payments, notifications, contributions, recommendations, and Governance-approved disclosures remain outside the implemented slice.
 
-## TODO (implementation — not started)
+## TODO (implementation status)
 
-- [ ] Design the data-access layer enforcing tier separation at the query level, not just the UI level.
+- [x] Enforce self-service ownership and member-facing tier separation at the query/projection boundary for the ADR-034 first slice, not just in the UI.
+- [x] Provide the protected read-only Membership profile API and DE/EN/FA member interface, including Persian RTL, session states, Membership type/status, journey details, and valid next Membership statuses.
 - [ ] Define the exact approval workflow for surfacing a Codex Potential / Hearing Candidate flag.
 - [ ] Define consent-capture UX for Codex Potential / Hearing Candidate disclosure.
 - [ ] Integrate with `RESPONSIBILITY_EVIDENCE_MODEL.md`'s existing Contributor-facing private-field visibility (§6).
 - [ ] Define "Next Recommended Steps" generation logic (human-authored templates vs. AI-assisted, per AI Integration above).
-- [ ] Build the Identity, Membership Journey, and Membership Types views over the existing Membership System and Core Domain Model `Person` entity.
+- [ ] Build the remaining Identity view over the Core Domain Model `Person` entity; Membership Journey and Membership Types are delivered within the ADR-034 first slice.
 - [ ] Build the Community Participation and Community Systems status/progress/actions views over the existing Community, Fellowship, Academy, Speech Academy, Writing Academy, News Analysis Lab, and Research Lab modules.
 - [ ] Build the Application History view over the existing Community/Events application and registration flows.
 - [ ] Build the Payments and Notifications views over the existing `Payment` and `Notification` entities.
