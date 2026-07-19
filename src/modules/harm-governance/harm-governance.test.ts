@@ -90,4 +90,13 @@ describe("HARM governance workflow", () => {
       risks: [], dependencies: [], createdByPersonId: "planner-1", createdAt: new Date(),
     }).caseId).toBe(pending.id);
   });
+
+  it("keeps revision and insufficient-evidence reviews in scientific review", () => {
+    const pending = { ...baseCase, status: "scientific-review-pending" as const };
+    const common = { id: "review-2", caseId: pending.id, reviewerPersonIds: ["scientist-1"],
+      conflictDeclarationsComplete: true, methodologyAssessment: "documented", evidenceAssessment: "documented",
+      findings: "documented", scientificConfidence: 2 as const, recommendations: ["revise"], decidedAt: new Date() };
+    expect(applyScientificReview(pending, { ...common, output: "major-revision-required" }).status).toBe("scientific-review-pending");
+    expect(applyScientificReview(pending, { ...common, output: "insufficient-evidence" }).status).toBe("scientific-review-pending");
+  });
 });

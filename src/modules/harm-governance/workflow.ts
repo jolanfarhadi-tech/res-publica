@@ -47,7 +47,10 @@ export function applyScientificReview(harmCase: HarmCase, review: ScientificRevi
   if (review.output === "accepted" || review.output === "accepted-with-minor-revisions") {
     return transitionHarmCase(harmCase, "repair-planning");
   }
-  return transitionHarmCase(harmCase, "closed");
+  if (review.output === "rejected-for-scientific-reasons") {
+    return transitionHarmCase(harmCase, "closed");
+  }
+  return harmCase;
 }
 
 export function createRepairPlan(harmCase: HarmCase, plan: RepairPlan): RepairPlan {

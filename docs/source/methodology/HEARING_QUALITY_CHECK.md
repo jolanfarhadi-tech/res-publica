@@ -97,9 +97,9 @@ AI-assisted transcript quality analysis, automated documentation checks, facilit
 
 ## MVP Status
 
-**Current Role:** Core Operational Module, reusable governance capability. **Blocking Status:** MVP CRITICAL. **Implementation Priority:** Phase 1. **Current Requirement:** architecture now specified (this document); **implementation has not started** — no scoring tool, quality dashboard, or feedback survey exists yet in this repository.
+**Current Role:** Core Operational Module, reusable governance capability. **Blocking Status:** MVP IMPLEMENTED (backend). **Implementation Priority:** Phase 1 delivered. **Current Requirement:** protected human HQC outcomes, recommendations, moderator/reviewer separation, Scientific Review readiness transition, persistence, and atomic audit events are implemented. Scoring dashboards and feedback surveys remain non-blocking follow-up work.
 
-## TODO (implementation — not started)
+## Remaining implementation work (non-blocking)
 
 - [ ] Develop standardized quality review templates, generic across hearing-based methodologies.
 - [ ] Create facilitator evaluation criteria.

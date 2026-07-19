@@ -98,9 +98,9 @@ AI-assisted metadata validation, automated duplicate detection, file integrity a
 
 ## MVP Status
 
-**Current Role:** Core Operational Module. **Blocking Status:** MVP CRITICAL. **Implementation Priority:** Phase 1. **Current Requirement:** architecture now specified (this document); **implementation has not started** — no validation rule engine, dashboard, or duplicate-detection service exists yet in this repository.
+**Current Role:** Core Operational Module. **Blocking Status:** MVP IMPLEMENTED (backend). **Implementation Priority:** Phase 1 delivered. **Current Requirement:** protected human decisions, canonical outcomes, missing-information and duplicate constraints, lifecycle transitions, persistence, and atomic audit events are implemented. Automated detection and dashboards remain non-blocking follow-up work.
 
-## TODO (implementation — not started)
+## Remaining implementation work (non-blocking)
 
 - [ ] Implement automated validation rules.
 - [ ] Create validation dashboards.

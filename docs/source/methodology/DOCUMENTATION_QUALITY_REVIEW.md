@@ -92,9 +92,9 @@ Enable AI-assisted document quality checks; automated template compliance valida
 
 ## MVP Status
 
-**Current Role:** Core Operational Module, reusable governance capability. **Blocking Status:** MVP CRITICAL. **Implementation Priority:** Phase 1. **Current Requirement:** architecture now specified (this document); **implementation has not started** — no template engine, metadata validator, or quality-scoring tool exists yet in this repository.
+**Current Role:** Core Operational Module, reusable governance capability. **Blocking Status:** MVP IMPLEMENTED (backend). **Implementation Priority:** Phase 1 delivered. **Current Requirement:** protected, institution-scoped human DQR outcomes, findings, persistence, role enforcement, and atomic audit events are implemented separately from Basic Validation. Templates and dashboards remain non-blocking follow-up work.
 
-## TODO (implementation — not started)
+## Remaining implementation work (non-blocking)
 
 - [ ] Develop documentation templates.
 - [ ] Create metadata validation rules.

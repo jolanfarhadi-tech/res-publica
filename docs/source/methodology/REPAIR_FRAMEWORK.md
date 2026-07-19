@@ -129,9 +129,9 @@ AI-assisted repair planning, repair simulation models, cost-benefit analysis too
 
 ## MVP Status
 
-**Current Role:** Core Operational Module. **Blocking Status:** MVP CRITICAL. **Implementation Priority:** Phase 1. **Current Requirement:** architecture now specified (this document); **implementation has not started** — no Repair Plan template, tracking system, or dashboard exists yet in this repository.
+**Current Role:** Core Operational Module. **Blocking Status:** MVP IMPLEMENTED (backend). **Implementation Priority:** Phase 1 delivered. **Current Requirement:** protected human-authored Repair Plans, canonical planning fields, accepted-Scientific-Review prerequisite, persistence, role enforcement, and atomic audit events are implemented. Monitoring dashboards and external outcome integrations remain non-blocking follow-up work.
 
-## TODO (implementation — not started)
+## Remaining implementation work (non-blocking)
 
 - [ ] Develop standardized Repair Plan templates.
 - [ ] Integrate with AHIP and Harm Codex (via the existing handoff points already documented in `AHIP.md`).

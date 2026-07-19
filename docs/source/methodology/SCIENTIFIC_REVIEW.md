@@ -103,9 +103,9 @@ Double-blind peer review, AI-assisted literature support, automated consistency 
 
 ## MVP Status
 
-**Current Role:** Core Operational Module. **Blocking Status:** MVP CRITICAL. **Implementation Priority:** Phase 1. **Current Requirement:** architecture now specified at the operational level (this document, reconciled with the existing pipeline-level specification); **implementation has not started** — no reviewer assignment system, review template, or confidence-scoring tool exists yet in this repository.
+**Current Role:** Core Operational Module. **Blocking Status:** MVP IMPLEMENTED (backend). **Implementation Priority:** Phase 1 delivered. **Current Requirement:** protected human Scientific Review, mandatory COI declaration, session-derived reviewer identity, five canonical outcomes, Scientific Confidence, lifecycle transitions, persistence, and atomic audit events are implemented. Committee administration and dashboards remain non-blocking; AI validation remains prohibited.
 
-## TODO (implementation — not started)
+## Remaining implementation work (non-blocking)
 
 - [ ] Establish the Scientific Review Board (= Scientific Review Committee) formally.
 - [ ] Develop reviewer guidelines.

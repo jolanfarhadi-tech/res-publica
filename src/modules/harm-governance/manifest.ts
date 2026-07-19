@@ -17,6 +17,9 @@ export const harmGovernanceManifest: ModuleManifest = {
   apiRoutes: [
     "/api/governance/grants", "/api/governance/cases",
     "/api/governance/evidence", "/api/governance/validation",
+    "/api/governance/evidence-quality", "/api/governance/documentation-quality",
+    "/api/governance/hearings", "/api/governance/hearing-quality",
+    "/api/governance/scientific-reviews", "/api/governance/repair-plans",
   ],
   dashboardContribution: "harm-case-work-queue",
   aiLayerCapabilities: [],

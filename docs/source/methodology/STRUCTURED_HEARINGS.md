@@ -117,9 +117,9 @@ AI-assisted transcription, multilingual hearings, real-time evidence coding, dig
 
 ## MVP Status
 
-**Current Role:** Core Operational Module. **Blocking Status:** MVP CRITICAL. **Implementation Priority:** Phase 1. **Current Requirement:** architecture now substantially specified (this document); **implementation has not started** — no hearing template, participant registration workflow, or documentation tool exists yet in this repository.
+**Current Role:** Core Operational Module. **Blocking Status:** MVP IMPLEMENTED (backend). **Implementation Priority:** Phase 1 delivered. **Current Requirement:** protected hearing documentation, current-consent timestamp, session-derived moderator, report reference, lifecycle transition, persistence, HQC handoff, and atomic audit events are implemented. Scheduling, participant registration, and operator UI remain non-blocking follow-up work.
 
-## TODO (implementation — not started)
+## Remaining implementation work (non-blocking)
 
 - [ ] Develop standardized hearing templates.
 - [ ] Create facilitator guidelines.

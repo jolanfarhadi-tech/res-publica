@@ -202,9 +202,9 @@ Not specified in the source material beyond what is already listed under AI Inte
 
 ## MVP Status
 
-**Current Role:** Core Operational Module, cross-cutting epistemic framework. **Blocking Status:** MVP CRITICAL. **Implementation Priority:** Phase 1. **Current Requirement:** architecture now specified (this document); **implementation has not started** — no evidence-profile store, confidence-scoring tool, or corroboration engine exists yet in this repository.
+**Current Role:** Core Operational Module, cross-cutting epistemic framework. **Blocking Status:** MVP IMPLEMENTED (backend). **Implementation Priority:** Phase 1 delivered. **Current Requirement:** evidence metadata, nine quality criteria, contradictions, corroboration references, preliminary human-confirmed Evidence Confidence, protected persistence, and atomic audit events are implemented. Automated detection and dashboards remain non-blocking; Scientific Confidence remains separate.
 
-## TODO (implementation — not started)
+## Remaining implementation work (non-blocking)
 
 - [ ] Design the Evidence Profile and Chain of Evidence data structures.
 - [ ] Implement preliminary Confidence Assessment scoring, distinct from Scientific Review's own Confidence Levels.
