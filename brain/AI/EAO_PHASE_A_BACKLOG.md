@@ -24,7 +24,7 @@ A dedicated, discoverable registration point for architectural backlog items ide
 
 **Expected architectural outcome:** the Technical Debt detector should exclude TODO occurrences that appear within EAO's own architectural/governance documentation when that documentation is describing the detector, the category, or the concept itself (e.g., via a scoped exclusion of `brain/AI/EAO_*.md` self-referential mentions, or a more precise pattern requiring TODO to appear in a recognized task-marker context rather than as a bare substring match) — without excluding genuine outstanding TODOs that happen to exist within EAO documentation files themselves.
 
-**Status:** Registered, not implemented. No change made to `scripts/eao/project-health.mjs`'s `findTodos()` function during this Transition.
+**Status:** Implemented. `findTodos()` now recognizes Markdown TODO section headings as actionable markers and excludes historical, architectural, and detector self-references; regression coverage preserves both behaviors.
 
 ## References
 
