@@ -12,6 +12,7 @@ function graphWithEntity(): KnowledgeGraph {
         "e1",
         {
           id: "e1",
+          domain: "civic",
           type: "topic",
           canonicalName: "Participation Impact",
           aliases: [],
@@ -46,13 +47,13 @@ describe("queryAILayer — citation-or-refuse enforcement", () => {
       estimatedCostPerQuery: 0,
       query: () => ({ answer: "I know this for sure!", citations: [], refused: false }),
     };
-    const { result } = queryAILayer(dishonestProvider, "anything", createLedger(100));
+    const { result } = queryAILayer(dishonestProvider, "anything", createLedger(100), { domain: "civic", useCaseId: "grounded-search" });
     expect(result.refused).toBe(true);
   });
 
   it("passes through a properly-cited answer unmodified", () => {
     const provider = createLocalProvider(graphWithEntity());
-    const { result } = queryAILayer(provider, "participation", createLedger(100));
+    const { result } = queryAILayer(provider, "participation", createLedger(100), { domain: "civic", useCaseId: "grounded-search" });
     expect(result.refused).toBe(false);
     expect(result.citations.length).toBeGreaterThan(0);
   });
@@ -66,8 +67,8 @@ describe("Cost Governance Ledger", () => {
       query: () => ({ answer: "x", citations: ["c"], refused: false }),
     };
     let ledger = createLedger(100);
-    ({ ledger } = queryAILayer(paidProvider, "q1", ledger));
-    ({ ledger } = queryAILayer(paidProvider, "q2", ledger));
+    ({ ledger } = queryAILayer(paidProvider, "q1", ledger, { domain: "civic", useCaseId: "grounded-search" }));
+    ({ ledger } = queryAILayer(paidProvider, "q2", ledger, { domain: "civic", useCaseId: "grounded-search" }));
     expect(totalSpend(ledger)).toBe(10);
   });
 
@@ -78,9 +79,18 @@ describe("Cost Governance Ledger", () => {
       query: () => ({ answer: "x", citations: ["c"], refused: false }),
     };
     let ledger = createLedger(100);
-    ({ ledger } = queryAILayer(paidProvider, "q1", ledger)); // spend: 60
-    const second = queryAILayer(paidProvider, "q2", ledger); // would be 120 — over ceiling
+    ({ ledger } = queryAILayer(paidProvider, "q1", ledger, { domain: "civic", useCaseId: "grounded-search" })); // spend: 60
+    const second = queryAILayer(paidProvider, "q2", ledger, { domain: "civic", useCaseId: "grounded-search" }); // would be 120 — over ceiling
     expect(second.result.refused).toBe(true);
     expect(totalSpend(second.ledger)).toBe(60); // unchanged — no unbounded bill
+  });
+
+  it("records the owning domain and use case in the single ledger", () => {
+    const provider = createLocalProvider(graphWithEntity());
+    const { ledger } = queryAILayer(provider, "participation", createLedger(100), {
+      domain: "civic",
+      useCaseId: "grounded-search",
+    });
+    expect(ledger.entries[0]).toMatchObject({ domain: "civic", useCaseId: "grounded-search" });
   });
 });

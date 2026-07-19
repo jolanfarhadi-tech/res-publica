@@ -198,6 +198,7 @@ export const evangelismInvitations = pgTable("evangelism_invitations", {
 
 export const kgEntities = pgTable("kg_entities", {
   id: text("id").primaryKey(),
+  domain: text("domain", { enum: ["civic", "governance"] }).notNull(),
   type: text("type", { enum: ["person", "organization", "topic", "legislation", "dialogue", "finding"] }).notNull(),
   canonicalName: text("canonical_name").notNull(),
   aliases: jsonb("aliases").$type<Array<{ locale: string; name: string }>>().notNull(),
@@ -207,6 +208,7 @@ export const kgEntities = pgTable("kg_entities", {
 export const kgRelationships = pgTable(
   "kg_relationships",
   {
+    domain: text("domain", { enum: ["civic", "governance"] }).notNull(),
     fromEntityId: text("from_entity_id").notNull().references(() => kgEntities.id, { onDelete: "restrict" }),
     toEntityId: text("to_entity_id").notNull().references(() => kgEntities.id, { onDelete: "restrict" }),
     type: text("type", { enum: ["co-occurs"] }).notNull(),
@@ -221,6 +223,8 @@ export const aiQueryLog = pgTable(
     timestamp: timestamp("timestamp", { withTimezone: true, mode: "date" }).notNull(),
     prompt: text("prompt").notNull(),
     providerName: text("provider_name").notNull(),
+    domain: text("domain", { enum: ["civic", "governance"] }).notNull(),
+    useCaseId: text("use_case_id").notNull(),
     cost: numeric("cost", { precision: 14, scale: 6, mode: "number" }).notNull(),
     refused: boolean("refused").notNull(),
   },

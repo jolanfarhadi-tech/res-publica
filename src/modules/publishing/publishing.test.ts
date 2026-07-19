@@ -19,6 +19,7 @@ function graphWithEntity(): KnowledgeGraph {
         "e1",
         {
           id: "e1",
+          domain: "civic",
           type: "topic",
           canonicalName: "Participation Impact",
           aliases: [],

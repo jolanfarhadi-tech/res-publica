@@ -38,7 +38,7 @@ describe("Personalized Digest", () => {
   function graph(): KnowledgeGraph {
     return {
       entities: new Map([
-        ["e1", { id: "e1", type: "topic", canonicalName: "Participation", aliases: [], sources: [] }],
+        ["e1", { id: "e1", domain: "civic", type: "topic", canonicalName: "Participation", aliases: [], sources: [] }],
       ]),
       relationships: [],
     };

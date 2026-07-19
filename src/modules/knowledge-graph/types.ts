@@ -1,3 +1,5 @@
+import type { BusinessDomain } from "../../platform/domain";
+
 /**
  * Knowledge Graph — Foundation Build Order Step 5, MVP module #1 (`ADR-007`).
  *
@@ -23,6 +25,7 @@ export type EntityAlias = {
 
 export type Entity = {
   id: string;
+  domain: BusinessDomain;
   type: EntityType;
   canonicalName: string;
   aliases: EntityAlias[];
@@ -32,6 +35,7 @@ export type Entity = {
 export type RelationshipType = "co-occurs";
 
 export type Relationship = {
+  domain: BusinessDomain;
   fromEntityId: string;
   toEntityId: string;
   type: RelationshipType;

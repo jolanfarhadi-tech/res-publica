@@ -19,7 +19,10 @@ export function authorDraft(
   provider: AIProvider,
   ledger: CostGovernanceLedger
 ): { draft: DraftDocument; ledger: CostGovernanceLedger } {
-  const { result, ledger: updatedLedger } = queryAILayer(provider, submission.rawContent, ledger);
+  const { result, ledger: updatedLedger } = queryAILayer(provider, submission.rawContent, ledger, {
+    domain: "civic",
+    useCaseId: "publishing.draft-authoring",
+  });
 
   const draft: DraftDocument = {
     id: createId(),

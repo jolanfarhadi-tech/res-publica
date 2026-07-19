@@ -51,6 +51,7 @@ describe("Event Q&A — cross-event isolation guardrail", () => {
           "loc-a",
           {
             id: "loc-a",
+            domain: "civic",
             type: "topic",
             canonicalName: "Berlin Conference Hall",
             aliases: [],
@@ -61,6 +62,7 @@ describe("Event Q&A — cross-event isolation guardrail", () => {
           "loc-b",
           {
             id: "loc-b",
+            domain: "civic",
             type: "topic",
             canonicalName: "Munich Town Hall",
             aliases: [],

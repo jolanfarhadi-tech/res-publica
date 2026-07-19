@@ -34,7 +34,10 @@ export function askEventQuestion(
 ): { logEntry: EventQALogEntry; ledger: CostGovernanceLedger } {
   const scopedGraph = scopeGraphToEvent(graph, event);
   const scopedProvider = createLocalProvider(scopedGraph);
-  const { result, ledger: updatedLedger } = queryAILayer(scopedProvider, question, ledger);
+  const { result, ledger: updatedLedger } = queryAILayer(scopedProvider, question, ledger, {
+    domain: "civic",
+    useCaseId: "events.scoped-qa",
+  });
 
   const logEntry: EventQALogEntry = {
     id: createId(),

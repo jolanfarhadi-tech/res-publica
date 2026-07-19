@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import type { Entity, EntityAlias, EntityExtractor, KnowledgeGraph } from "./types";
 import { frontmatterEntityExtractor } from "./extractors/frontmatter-extractor";
+import type { BusinessDomain } from "../../platform/domain";
 
 function findMdxFiles(dir: string): string[] {
   const results: string[] = [];
@@ -28,7 +29,8 @@ function findMdxFiles(dir: string): string[] {
 export function buildKnowledgeGraph(
   contentDir: string,
   root: string,
-  extractor: EntityExtractor = frontmatterEntityExtractor
+  extractor: EntityExtractor = frontmatterEntityExtractor,
+  domain: BusinessDomain = "civic"
 ): KnowledgeGraph {
   const entities = new Map<string, Entity>();
   const relationships: KnowledgeGraph["relationships"] = [];
@@ -53,6 +55,7 @@ export function buildKnowledgeGraph(
       } else {
         entities.set(d.id, {
           id: d.id,
+          domain,
           type: d.type,
           canonicalName: d.name,
           aliases: [alias],
@@ -65,6 +68,7 @@ export function buildKnowledgeGraph(
     for (let i = 0; i < ids.length; i++) {
       for (let j = i + 1; j < ids.length; j++) {
         relationships.push({
+          domain,
           fromEntityId: ids[i],
           toEntityId: ids[j],
           type: "co-occurs",

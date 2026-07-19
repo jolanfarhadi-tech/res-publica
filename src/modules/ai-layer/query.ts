@@ -1,5 +1,9 @@
 import { totalSpend, recordQuery, type CostGovernanceLedger } from "./cost-governance";
 import type { AIProvider, AIQueryResult } from "./types";
+export type AIQueryContext = {
+  domain: "civic";
+  useCaseId: "grounded-search" | "publishing.draft-authoring" | "events.scoped-qa";
+};
 
 /**
  * The single entry point every module should use for AI Layer queries —
@@ -9,7 +13,8 @@ import type { AIProvider, AIQueryResult } from "./types";
 export function queryAILayer(
   provider: AIProvider,
   prompt: string,
-  ledger: CostGovernanceLedger
+  ledger: CostGovernanceLedger,
+  context: AIQueryContext
 ): { result: AIQueryResult; ledger: CostGovernanceLedger } {
   // Prospective check: would *this* query push spend over the ceiling? —
   // not merely "are we already over," which would let exactly one query
@@ -38,6 +43,8 @@ export function queryAILayer(
     timestamp: new Date(),
     prompt,
     providerName: provider.name,
+    domain: context.domain,
+    useCaseId: context.useCaseId,
     cost: provider.estimatedCostPerQuery,
     refused: result.refused,
   });

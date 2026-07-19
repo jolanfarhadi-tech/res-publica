@@ -1,3 +1,5 @@
+import type { BusinessDomain } from "../../platform/domain";
+
 /**
  * Cost Governance Ledger — `ADR-008`: "AI Layer is the sole owner of raw
  * cost/usage data; Analytics reads and aggregates it." Deterministic,
@@ -10,6 +12,8 @@ export type QueryLogEntry = {
   timestamp: Date;
   prompt: string;
   providerName: string;
+  domain: BusinessDomain;
+  useCaseId: string;
   cost: number;
   refused: boolean;
 };

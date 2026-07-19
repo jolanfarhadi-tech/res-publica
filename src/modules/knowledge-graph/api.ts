@@ -1,4 +1,5 @@
 import type { Entity, KnowledgeGraph } from "./types";
+import type { BusinessDomain } from "../../platform/domain";
 
 /** Entity Lookup — retrieve an entity and its known relationships. */
 export function lookupEntity(graph: KnowledgeGraph, entityId: string): Entity | undefined {
@@ -18,10 +19,11 @@ export function relatedEntities(graph: KnowledgeGraph, entityId: string): Entity
 }
 
 /** Graph Search — query entities by name, alias, or type (deterministic substring match). */
-export function searchEntities(graph: KnowledgeGraph, query: string): Entity[] {
+export function searchEntities(graph: KnowledgeGraph, query: string, domain?: BusinessDomain): Entity[] {
   const lower = query.toLowerCase();
   return [...graph.entities.values()].filter(
     (e) =>
+      (domain === undefined || e.domain === domain) &&
       e.canonicalName.toLowerCase().includes(lower) ||
       e.aliases.some((a) => a.name.toLowerCase().includes(lower)) ||
       e.type.toLowerCase().includes(lower)

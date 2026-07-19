@@ -65,6 +65,7 @@ describe("buildKnowledgeGraph", () => {
     const graph = buildKnowledgeGraph(tmpDir, tmpDir);
     expect(graph.entities.size).toBe(2);
     expect(graph.entities.get("e1")?.canonicalName).toBe("Jane Doe");
+    expect(graph.entities.get("e1")?.domain).toBe("civic");
     expect(graph.relationships).toHaveLength(1);
     expect(graph.relationships[0]).toMatchObject({ fromEntityId: "e1", toEntityId: "e2", type: "co-occurs" });
   });
@@ -88,10 +89,10 @@ describe("Knowledge Graph API", () => {
   function sampleGraph(): KnowledgeGraph {
     return {
       entities: new Map([
-        ["e1", { id: "e1", type: "person", canonicalName: "Jane Doe", aliases: [], sources: [] }],
-        ["e2", { id: "e2", type: "topic", canonicalName: "Participation", aliases: [], sources: [] }],
+        ["e1", { id: "e1", domain: "civic", type: "person", canonicalName: "Jane Doe", aliases: [], sources: [] }],
+        ["e2", { id: "e2", domain: "civic", type: "topic", canonicalName: "Participation", aliases: [], sources: [] }],
       ]),
-      relationships: [{ fromEntityId: "e1", toEntityId: "e2", type: "co-occurs", source: { file: "x", locale: "de" } }],
+      relationships: [{ domain: "civic", fromEntityId: "e1", toEntityId: "e2", type: "co-occurs", source: { file: "x", locale: "de" } }],
     };
   }
 
@@ -109,5 +110,10 @@ describe("Knowledge Graph API", () => {
     const results = searchEntities(sampleGraph(), "jane");
     expect(results).toHaveLength(1);
     expect(results[0].id).toBe("e1");
+  });
+
+  it("can constrain queries to the owning domain", () => {
+    expect(searchEntities(sampleGraph(), "participation", "governance")).toEqual([]);
+    expect(searchEntities(sampleGraph(), "participation", "civic")).toHaveLength(1);
   });
 });

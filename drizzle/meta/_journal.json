@@ -50,6 +50,13 @@
       "when": 1784447211978,
       "tag": "0006_m2-membership-uniqueness",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1784451469871,
+      "tag": "0007_m4-domain-boundaries",
+      "breakpoints": true
     }
   ]
 }

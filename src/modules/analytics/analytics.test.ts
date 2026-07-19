@@ -56,6 +56,8 @@ describe("Analytics x AI Layer integration (no independent usage ledger)", () =>
       timestamp: new Date(),
       prompt: "x",
       providerName: "local-keyword-search",
+      domain: "civic",
+      useCaseId: "analytics-test",
       cost: 10,
       refused: false,
     });
