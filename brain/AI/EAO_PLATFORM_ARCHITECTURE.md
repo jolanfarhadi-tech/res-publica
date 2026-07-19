@@ -56,10 +56,10 @@ Also not a new file or tool - the composed function of the Chief Systems Officer
 
 Sits above, and cross-references, all other EAO documents without modifying any of them. EAO_ARCHITECTURE.md remains the canonical source for the 9 original operational models (communication, routing, aggregation, memory, skill usage, prioritization, escalation, approval gates, lifecycle) - this document is the map of how those models, plus the newer Runtime/Memory/Pipeline extensions, compose into one platform.
 
-### References
+## References
 
-All 16 other EAO documents; architecture/adr/ADR-024-executive-ai-office.md
+All 16 other EAO documents; `architecture/adr/ADR-024-executive-ai-office.md`
 
 ### Related Documents
 
-EAO_ARCHITECTURE.md, EAO_RUNTIME_ARCHITECTURE.md, EAO_SYSTEM_SEQUENCE.md, EAO_EXECUTION_PIPELINES.md
+`EAO_ARCHITECTURE.md`, `EAO_RUNTIME_ARCHITECTURE.md`, `EAO_SYSTEM_SEQUENCE.md`, `EAO_EXECUTION_PIPELINES.md`

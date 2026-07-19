@@ -65,10 +65,10 @@ sequenceDiagram
 
 Composes EAO_COMMUNICATION_PROTOCOL.md's request/response and escalation diagrams, EAO_RUNTIME_ROUTING.md's routing rules, and EAO_EXECUTION_PIPELINES.md's named pipelines into two full system-level views. Introduces no new role, gate, or rule.
 
-### References
+## References
 
-brain/AI/EAO_COMMUNICATION_PROTOCOL.md; brain/AI/EAO_RUNTIME_ROUTING.md; brain/AI/EAO_EXECUTION_PIPELINES.md; brain/AI/EAO_PLATFORM_ARCHITECTURE.md
+`brain/AI/EAO_COMMUNICATION_PROTOCOL.md`; `brain/AI/EAO_RUNTIME_ROUTING.md`; `brain/AI/EAO_EXECUTION_PIPELINES.md`; `brain/AI/EAO_PLATFORM_ARCHITECTURE.md`
 
 ### Related Documents
 
-EAO_PLATFORM_ARCHITECTURE.md, EAO_RUNTIME_ARCHITECTURE.md
+`EAO_PLATFORM_ARCHITECTURE.md`, `EAO_RUNTIME_ARCHITECTURE.md`

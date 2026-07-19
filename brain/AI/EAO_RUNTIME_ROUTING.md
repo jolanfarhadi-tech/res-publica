@@ -34,10 +34,10 @@ Confidence is qualitative, not a fabricated statistic - each Advisor's response 
 
 Does not modify EAO_ARCHITECTURE.md sections 2-3. Operationalizes them with concrete routing/merge rules.
 
-### References
+## References
 
-brain/AI/EAO_ARCHITECTURE.md sections 2-3; brain/AI/EAO_AGENT_REGISTRY.md; brain/AI/EAO_COMMUNICATION_PROTOCOL.md
+`brain/AI/EAO_ARCHITECTURE.md` sections 2-3; `brain/AI/EAO_AGENT_REGISTRY.md`; `brain/AI/EAO_COMMUNICATION_PROTOCOL.md`
 
 ### Related Documents
 
-EAO_COMMUNICATION_PROTOCOL.md, EAO_RUNTIME_ARCHITECTURE.md, EAO_EXECUTION_PIPELINES.md
+`EAO_COMMUNICATION_PROTOCOL.md`, `EAO_RUNTIME_ARCHITECTURE.md`, `EAO_EXECUTION_PIPELINES.md`

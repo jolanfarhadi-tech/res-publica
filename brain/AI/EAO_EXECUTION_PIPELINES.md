@@ -91,10 +91,10 @@ Defines 9 complete, end-to-end pipelines, each a concrete composition of existin
 
 Composes EAO_AGENT_REGISTRY.md, EAO_SKILL_LIBRARY.md, EAO_PLUGIN_MCP_ARCHITECTURE.md, and EAO_REPORTING_TEMPLATES.md - introduces no new role, skill, plugin, or template.
 
-### References
+## References
 
-brain/AI/EAO_AGENT_REGISTRY.md; brain/AI/EAO_SKILL_LIBRARY.md; brain/AI/EAO_PLUGIN_MCP_ARCHITECTURE.md; brain/AI/EAO_REPORTING_TEMPLATES.md
+`brain/AI/EAO_AGENT_REGISTRY.md`; `brain/AI/EAO_SKILL_LIBRARY.md`; `brain/AI/EAO_PLUGIN_MCP_ARCHITECTURE.md`; `brain/AI/EAO_REPORTING_TEMPLATES.md`
 
 ### Related Documents
 
-EAO_PLATFORM_ARCHITECTURE.md, EAO_SYSTEM_SEQUENCE.md, EAO_RUNTIME_ROUTING.md
+`EAO_PLATFORM_ARCHITECTURE.md`, `EAO_SYSTEM_SEQUENCE.md`, `EAO_RUNTIME_ROUTING.md`

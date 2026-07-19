@@ -48,10 +48,10 @@ A human may cancel any Queued or In Progress task at any time - cancellation is 
 
 Does not modify EAO_ARCHITECTURE.md section 6 - operationalizes it. Does not modify EAO_PERMISSION_MODEL.md - reuses its existing gates.
 
-### References
+## References
 
-brain/AI/EAO_ARCHITECTURE.md section 6; brain/AI/EAO_RUNTIME_ARCHITECTURE.md; brain/AI/EAO_PERMISSION_MODEL.md
+`brain/AI/EAO_ARCHITECTURE.md` section 6; `brain/AI/EAO_RUNTIME_ARCHITECTURE.md`; `brain/AI/EAO_PERMISSION_MODEL.md`
 
 ### Related Documents
 
-EAO_RUNTIME_ARCHITECTURE.md, EAO_EXECUTION_PIPELINES.md, EAO_SHARED_MEMORY_MODEL.md
+`EAO_RUNTIME_ARCHITECTURE.md`, `EAO_EXECUTION_PIPELINES.md`, `EAO_SHARED_MEMORY_MODEL.md`
