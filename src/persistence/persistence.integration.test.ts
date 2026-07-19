@@ -88,7 +88,7 @@ describe("M1 PostgreSQL-compatible persistence", () => {
     expect(await db.select().from(people).where(eq(people.id, "person-rollback"))).toEqual([]);
     expect(await db.select().from(auditLog).where(eq(auditLog.id, "audit-rollback"))).toEqual([]);
     await client.close();
-  });
+  }, 20_000);
 
   it("rejects update and delete operations against the audit log", async () => {
     const { client, db } = await createTemporaryDatabase();

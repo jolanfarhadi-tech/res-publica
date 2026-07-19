@@ -1,5 +1,6 @@
 import { createId } from "../../domain/shared";
 import { appendEntry } from "../../domain/audit-log";
+import type { AuditLogEntry } from "../../domain/audit-log";
 import { createNotification, type Notification } from "../../domain/notification";
 import type { Event, Registration, WaitlistEntry } from "./types";
 
@@ -8,7 +9,7 @@ export function registerForEvent(
   event: Event,
   personId: string,
   currentRegistrations: readonly Registration[]
-): { registration: Registration; waitlistEntry: WaitlistEntry | null } {
+): { registration: Registration; waitlistEntry: WaitlistEntry | null; auditEntry: AuditLogEntry } {
   const confirmedCount = currentRegistrations.filter((r) => r.eventId === event.id && r.status === "confirmed").length;
   const isFull = confirmedCount >= event.capacity;
 
@@ -19,10 +20,10 @@ export function registerForEvent(
     status: isFull ? "waitlisted" : "confirmed",
     registeredAt: new Date(),
   };
-  appendEntry({ actorPersonId: personId, action: "events.registration", target: event.id });
+  const auditEntry = appendEntry({ actorPersonId: personId, action: "events.registration", target: event.id });
 
   if (!isFull) {
-    return { registration, waitlistEntry: null };
+    return { registration, waitlistEntry: null, auditEntry };
   }
 
   const waitlistCount = currentRegistrations.filter((r) => r.eventId === event.id && r.status === "waitlisted").length;
@@ -32,7 +33,7 @@ export function registerForEvent(
     registrationId: registration.id,
     position: waitlistCount + 1,
   };
-  return { registration, waitlistEntry };
+  return { registration, waitlistEntry, auditEntry };
 }
 
 export function remainingCapacity(event: Event, currentRegistrations: readonly Registration[]): number {

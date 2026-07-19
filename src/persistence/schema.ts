@@ -129,6 +129,20 @@ export const authSessions = pgTable(
   ]
 );
 
+export const authFlows = pgTable(
+  "auth_flows",
+  {
+    stateHash: text("state_hash").primaryKey(),
+    codeVerifier: text("code_verifier").notNull(),
+    nonce: text("nonce").notNull(),
+    returnTo: text("return_to").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+    consumedAt: timestamp("consumed_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [index("auth_flows_expires_idx").on(table.expiresAt)]
+);
+
 export const authorizationGrants = pgTable(
   "authorization_grants",
   {
@@ -155,5 +169,6 @@ export type PersistenceSchema = {
   auditLog: typeof auditLog;
   authIdentities: typeof authIdentities;
   authSessions: typeof authSessions;
+  authFlows: typeof authFlows;
   authorizationGrants: typeof authorizationGrants;
 };

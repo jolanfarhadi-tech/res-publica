@@ -8,6 +8,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { organizations, payments, people } from "./schema";
 
@@ -27,7 +28,7 @@ export const members = pgTable(
     }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
   },
-  (table) => [index("members_person_idx").on(table.personId)]
+  (table) => [uniqueIndex("members_person_uq").on(table.personId)]
 );
 
 export const membershipStatusChanges = pgTable(

@@ -36,6 +36,20 @@
       "when": 1784446036317,
       "tag": "0004_m3-auth-foundation",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1784446845762,
+      "tag": "0005_m3-oidc-flows",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1784447211978,
+      "tag": "0006_m2-membership-uniqueness",
+      "breakpoints": true
     }
   ]
 }
