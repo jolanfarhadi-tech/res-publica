@@ -14,7 +14,7 @@ export const harmGovernanceManifest: ModuleManifest = {
     "scientific_reviews",
     "repair_plans",
   ],
-  apiRoutes: [],
+  apiRoutes: ["/api/governance/grants"],
   dashboardContribution: "harm-case-work-queue",
   aiLayerCapabilities: [],
 };
