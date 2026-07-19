@@ -12,7 +12,7 @@ import * as moduleSchema from "../persistence/module-schema";
 import { auditLog, people } from "../persistence/schema";
 import { events, members, registrations } from "../persistence/module-schema";
 import { createMembership, DuplicateMembershipError } from "./membership";
-import { registerAuthenticatedActorForEvent } from "./events";
+import { getEventCapacity, registerAuthenticatedActorForEvent } from "./events";
 
 const schema = { ...coreSchema, ...moduleSchema };
 
@@ -55,7 +55,9 @@ describe("authenticated Membership and Events flows", () => {
 
       const member = await createMembership(db, actor, "basic");
       await expect(createMembership(db, actor, "supporter")).rejects.toBeInstanceOf(DuplicateMembershipError);
+      expect(await getEventCapacity(db, "event-flow")).toMatchObject({ capacity: 10, remaining: 10, waitlistActive: false });
       const registration = await registerAuthenticatedActorForEvent(db, actor, "event-flow");
+      expect(await getEventCapacity(db, "event-flow")).toMatchObject({ capacity: 10, remaining: 9, waitlistActive: false });
 
       expect(member.personId).toBe(actor.personId);
       expect(registration.registration.status).toBe("confirmed");

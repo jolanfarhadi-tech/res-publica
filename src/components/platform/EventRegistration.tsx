@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +9,17 @@ import { actionStateFromResponse, type ActionState } from "./ActionStatus";
 export function EventRegistration({ locale, eventId, dict }: { locale: Locale; eventId: string; dict: Dictionary }) {
   const t = dict.platform.eventRegistration;
   const [state, setState] = useState<ActionState>("idle");
+  const [available, setAvailable] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch(`/api/events/capacity?eventId=${encodeURIComponent(eventId)}`, { cache: "no-store" })
+      .then((response) => {
+        if (active) setAvailable(response.ok);
+      })
+      .catch(() => undefined);
+    return () => { active = false; };
+  }, [eventId]);
 
   async function register() {
     setState("submitting");
@@ -30,6 +41,8 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
     : state === "unavailable" ? t.unavailable
     : state === "error" ? t.error
     : null;
+
+  if (!available) return null;
 
   return (
     <aside className="mt-10 rounded-2xl border border-border bg-surface p-6" aria-labelledby="event-registration-title">
