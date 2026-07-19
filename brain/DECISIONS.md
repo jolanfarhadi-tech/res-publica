@@ -1,6 +1,6 @@
 # Res Publica — Decision Log
 
-*An index into the ten approved Architecture Decision Records. The ADRs themselves remain unchanged at `../architecture/adr/`, per the Foundation Stabilization rule "do not change approved ADRs." This file cross-references; it does not restate.*
+*Canonical index of the adopted and accepted Architecture Decision Records. The ADRs themselves remain unchanged at `../architecture/adr/`; this file cross-references their current decisions and status.*
 
 | ADR | Decision | Amended during Stabilization? |
 |---|---|---|
@@ -26,17 +26,32 @@
 
 The Res Publica Accountability Constitution — [`00_constitution/00_constitution.md`](00_constitution/00_constitution.md), tagged `constitution-v1.0` — is the highest authority for conduct/accountability matters (who is answerable, what evidence compliance requires, how compliance is checked), per its own Section 6 Decision Hierarchy. Approved ADRs and the Foundation Architecture remain highest authority for architecture/domain-model matters; neither document outranks the other outside its own domain. Its review history: [`00_constitution/CONSTITUTION_REVIEW.md`](00_constitution/CONSTITUTION_REVIEW.md) (first pass, 12 finding categories) and [`00_constitution/CONSTITUTION_REVIEW_2.md`](00_constitution/CONSTITUTION_REVIEW_2.md) (re-validation, zero critical findings, recommended APPROVE). ADR-012 onward is governed by the Constitution's own ADR Governance Workflow (§17); ADR-001 through ADR-011 are grandfathered as validly adopted.
 
-## Pending / draft ADRs (not yet approved)
+## Current ADR index (ADR-013 through ADR-034)
 
-This index otherwise lists only approved ADRs (ADR-001 through ADR-012, above). It has not been kept current for ADR-013 through ADR-018 — a known gap, not resolved here. One pending item is recorded explicitly so it is not silently missed:
-
-| ADR | Proposed Decision | Status |
+| ADR | Decision | Status |
 |---|---|---|
-| [ADR-019](../architecture/adr/ADR-019-civic-intelligence-layer-and-knowledge-graph-relationship.md) | Civic Intelligence Layer (deepens Innovation 5) and its relationship to the Knowledge Graph (specializes ADR-007) | **Draft — not final, pending review** |
-| [ADR-020](../architecture/adr/ADR-020-dual-intake-and-review-paths.md) | Resolves the Structured Hearing/Expert Review ordering conflict between `01_HARM_OPERATING_SYSTEM.md` and `03_ANNEX_BLOCKCHAIN_CIVIC_CONTRIBUTION_ARCHITECTURE.md` as two distinct, intentional paths (Primary Lifecycle vs. Direct Annex Path), not a contradiction | **Accepted** |
-| [ADR-021](../architecture/adr/ADR-021-national-harm-taxonomy-classification-layer.md) | Names `HARM_CODEX.md`'s existing 3-category taxonomy the "National Harm Taxonomy" and integrates it as the Annex lifecycle's classification layer; adds Governance Rule 7 (every validated Annex is classified under ≥1 Harm Category, applied after validation — classification does not generate the Annex) | **Accepted** |
-| [ADR-022](../architecture/adr/ADR-022-transferable-civic-value.md) | Adds Transferable Civic Value (evidence/governance/learning/policy/repair/contribution value) as what an Approved Annex produces; reconciles the philosophical Annex-generation narrative as a value-view of the existing SS2 process lifecycle, not a parallel one | **Accepted** |
-| [ADR-023](../architecture/adr/ADR-023-mvp-annex-phasing-governance-modules.md) | Classifies Ethics Charter, DPIA, AI Governance, and Early Warning as Phase 2 / governance-hardening, not MVP blockers; adds stub files for DPIA and Early Warning (new) and MVP-status/extension-point sections to Ethics Charter and AI Policy (existing, additive only) | **Accepted** |
+| [ADR-013](../architecture/adr/ADR-013-contribution-impact-framework-reconciliation.md) | Reconciles the Contribution and Impact Framework with the canonical architecture. | **Accepted** |
+| [ADR-014](../architecture/adr/ADR-014-annex-blockchain-civic-contribution-architecture.md) | Adopts the Annex, blockchain-verification, and civic-contribution architecture. | **Accepted** |
+| [ADR-015](../architecture/adr/ADR-015-annex-architecture-extension.md) | Extends the Annex architecture with ERD, immutability, and full-system integration. | **Accepted** |
+| [ADR-016](../architecture/adr/ADR-016-responsibility-dashboard-specification.md) | Specifies the Responsibility Dashboard and corrects its lifecycle position. | **Accepted** |
+| [ADR-017](../architecture/adr/ADR-017-scientific-review-validation-engine.md) | Establishes Scientific Review as the ecosystem's human validation engine. | **Accepted** |
+| [ADR-018](../architecture/adr/ADR-018-rp-standard-001-documentation-architecture.md) | Adopts RP Standard 001 as the documentation architecture standard. | **Accepted** |
+| [ADR-019](../architecture/adr/ADR-019-civic-intelligence-layer-and-knowledge-graph-relationship.md) | Accepts the HARM-specific Knowledge Graph specialization under ADR-007/026/028; reserves Innovations 6/7 and new operational graph rules for ADR-035. | **Accepted** |
+| [ADR-020](../architecture/adr/ADR-020-dual-intake-and-review-paths.md) | Establishes distinct Primary Lifecycle and Direct Annex intake/review paths. | **Accepted** |
+| [ADR-021](../architecture/adr/ADR-021-national-harm-taxonomy-classification-layer.md) | Establishes the National Harm Taxonomy as the Annex classification layer. | **Accepted** |
+| [ADR-022](../architecture/adr/ADR-022-transferable-civic-value.md) | Defines Transferable Civic Value as an output of an approved Annex. | **Accepted** |
+| [ADR-023](../architecture/adr/ADR-023-mvp-annex-phasing-governance-modules.md) | Places Ethics Charter, DPIA, AI Governance, and Early Warning in non-blocking Phase 2 governance hardening. | **Accepted** |
+| [ADR-024](../architecture/adr/ADR-024-executive-ai-office.md) | Establishes the Executive AI Office and its phased activation model. | **Accepted** |
+| [ADR-025](../architecture/adr/ADR-025-eao-generation-2-constitutional-architecture-adoption.md) | Adopts the EAO Generation 2 constitutional architecture. | **Accepted** |
+| [ADR-026](../architecture/adr/ADR-026-constitutional-domain-architecture.md) | Separates Civic Domain, Governance Domain, and Shared Platform Services. | **Accepted** |
+| [ADR-027](../architecture/adr/ADR-027-identity-authentication-authorization.md) | Defines identity, authentication, session, and authorization boundaries. | **Accepted** |
+| [ADR-028](../architecture/adr/ADR-028-knowledge-graph-boundary.md) | Assigns the generic graph mechanism to Shared Platform Services and graph semantics to their owning domains. | **Accepted** |
+| [ADR-029](../architecture/adr/ADR-029-audit-and-event-bus-boundary.md) | Defines the append-only audit and domain-event boundary. | **Accepted** |
+| [ADR-030](../architecture/adr/ADR-030-ai-runtime-boundary.md) | Defines the shared AI runtime mechanism while keeping domain decisions human and domain-owned. | **Accepted** |
+| [ADR-031](../architecture/adr/ADR-031-project-ownership-and-cross-domain-collaboration.md) | Assigns Project ownership and governs cross-domain collaboration. | **Accepted** |
+| [ADR-032](../architecture/adr/ADR-032-license-strategy.md) | Adopts AGPL-3.0-only core licensing, CLA requirements, and a dual-licensing reservation. | **Accepted** |
+| [ADR-033](../architecture/adr/ADR-033-delegation-of-authority.md) | Defines Governance operational roles, powers, appointment, scope, and revocation. | **Accepted** |
+| [ADR-034](../architecture/adr/ADR-034-member-profile-visibility-and-self-service-authorization.md) | Defines member-profile visibility and protected self-service authorization. | **Accepted** |
 
 ## Reading the amendments
 
