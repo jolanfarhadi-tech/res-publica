@@ -2,7 +2,7 @@
 
 ```
 Type: Project/Product (Member-facing transparency and participation interface)
-Status: Substantially specified — architecture only; implementation not started
+Status: Substantially specified — Membership lifecycle and journey view implemented; Member Profile interface not started
 Version: 1.0
 Extends/Reconciles with: brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md (Verification status,
   Privacy Rules), docs/source/academy/RPCS_LEVELS.md, docs/source/academy/RPCS_PROGRAM.md,
@@ -59,9 +59,9 @@ Displays: Member ID, Ticket ID, Membership Number, Membership Status, Membership
 
 Displays: Current Membership Status, Previous Status, Status History, Status Change Date, Triggering Activity, Next Available Status, Required Next Steps. Membership Status must always answer: *why do I currently have this status, and what must I do to reach the next one?* This is a read-only history/explanation view over Membership System's (`brain/MODULE_INDEX.md` #4) own status field — it does not define new status values or new transition logic; those remain Membership System's own.
 
-**Required future addition — flagged, not invented here.** The future Membership System specification must define a full exit and deactivation lifecycle, at minimum distinguishing: (1) membership deactivation/inactivity, (2) temporary pause, (3) self-isolation, (4) voluntary withdrawal, (5) retirement, (6) suspension, (7) termination, and how each relates to the separate treatment of a member's documented contributions. This is not a defect in MEMBER_PROFILE — it is a genuine gap in Membership System's own not-yet-written specification, surfaced here because Membership Journey is the section that will eventually display it.
+**Implemented Membership System dependency.** The Membership module now defines the full exit and deactivation lifecycle, distinguishing: (1) membership deactivation/inactivity, (2) temporary pause, (3) self-isolation, (4) voluntary withdrawal, (5) retirement, (6) suspension, (7) termination, and preserving the separate treatment of documented contributions. The Member Profile consumes this lifecycle through the module's presentation-ready journey view; it does not redefine the transitions here.
 
-**Important distinction for that future specification — person-centered, not account-centered.** Membership represents civic participation and institutional memory, not a normal platform account. A person's membership state may change, but their documented contributions must not disappear from the civic record. Accordingly, **"Deleted" should not be used as a Membership Lifecycle term:**
+**Important distinction — person-centered, not account-centered.** Membership represents civic participation and institutional memory, not a normal platform account. A person's membership state may change, but their documented contributions must not disappear from the civic record. Accordingly, **"Deleted" is not a Membership Lifecycle term:**
 
 ```
 Membership Lifecycle:  REGISTERED → VERIFIED → ACTIVE →
@@ -72,11 +72,11 @@ Membership Lifecycle:  REGISTERED → VERIFIED → ACTIVE →
 
 **Why "Civic Contribution Framework," not "Contribution/Evidence Architecture":** Evidence is only one category of civic contribution — the canonical owner should eventually govern the complete lifecycle, governance, attribution, preservation, and recognition of all civic contributions, not evidence alone. Illustrative, non-normative examples of what its scope may eventually cover: Civic Participation, Volunteer Activities, Research Contributions, Academy Achievements, Mentoring, Publications, Dialogue Facilitation, Project Leadership, Community Service, Evidence Contributions, Repair Contributions. **This list is illustrative, not normative — MEMBER_PROFILE does not define these categories or their lifecycle.** Their canonical definition belongs to the future Civic Contribution Framework.
 
-MEMBER_PROFILE.md does not define the Membership Lifecycle, nor any Contribution lifecycle, now — this note exists solely so the requirement is not lost before their respective canonical owners (Membership System; the Civic Contribution Framework) are specified.
+MEMBER_PROFILE.md does not own the Membership Lifecycle or any Contribution lifecycle. The implemented Membership module owns the Membership Lifecycle; the future Civic Contribution Framework remains the owner of Contribution Governance. This profile only displays outputs from those canonical owners.
 
 ### Membership Types
 
-Reuses the existing Membership System architecture (`brain/MODULE_INDEX.md` #4). Displays the member's current type only: Basic, Supporter, Volunteer, Research, Institutional. **Gap, flagged not invented:** Membership System's own current specification (`06_ECOSYSTEM.md`, `MODULE_INDEX.md`) describes it only as "recurring individual/institutional financial support" and does not yet define this five-type taxonomy anywhere. This document displays whatever type Membership System eventually assigns — it does not create the taxonomy on Membership System's behalf.
+Reuses the existing Membership System architecture (`brain/MODULE_INDEX.md` #4). Displays the member's current type only: Basic, Supporter, Volunteer, Research, Institutional. The Membership module now defines this five-type taxonomy. This document consumes the assigned type and does not create or alter Membership taxonomy.
 
 ### Community Participation
 
@@ -363,7 +363,7 @@ Notification preferences; profile export; multilingual profile rendering; access
 - [ ] Build the Community Participation and Community Systems status/progress/actions views over the existing Community, Fellowship, Academy, Speech Academy, Writing Academy, News Analysis Lab, and Research Lab modules.
 - [ ] Build the Application History view over the existing Community/Events application and registration flows.
 - [ ] Build the Payments and Notifications views over the existing `Payment` and `Notification` entities.
-- [ ] **Blocking on Membership System, not on this document:** once Membership System defines its exit/deactivation lifecycle (Membership Lifecycle: REGISTERED/VERIFIED/ACTIVE/INACTIVE/PAUSED/SELF-ISOLATED/WITHDRAWN/RETIRED/SUSPENDED/TERMINATED — never "Deleted"; see Membership Journey, above), update this document's display of those states. Do not invent this lifecycle here in the meantime.
+- [x] Membership System defines the exit/deactivation lifecycle (REGISTERED/VERIFIED/ACTIVE/INACTIVE/PAUSED/SELF-ISOLATED/WITHDRAWN/RETIRED/SUSPENDED/TERMINATED — never "Deleted"), and this document now identifies the implemented module as its canonical owner.
 - [ ] **Blocking on the future Civic Contribution Framework (CCF), not on this document:** once the CCF defines its own governance lifecycle for documented contributions (retention, archival, anonymization, transfer, preservation, recognition) across all civic contribution categories (not evidence alone), update this document's display accordingly. MEMBER_PROFILE deliberately does not define a Contribution Record Lifecycle, contribution categories, or their governance — only the principle that Membership state changes never delete, invalidate, or remove documented contributions (see Membership Journey, above).
 - [ ] If AI Mentor, Skill Graph, Mentorship Platform, Career & Leadership Development, Volunteer & Project Marketplace, or Alumni Network are ever ratified as real modules (via their own ADR), integrate each explicitly here rather than assuming this document already covers them.
 
