@@ -29,6 +29,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Production-safe fallback when an edge deployment does not invoke
+      // locale middleware for the bare domain root.
+      {
+        source: "/",
+        destination: "/de",
+        permanent: false,
+      },
       // Old URL kept alive: /de/mission → /de/mission-vision etc.
       {
         source: "/:locale(de|en|fa)/mission",
