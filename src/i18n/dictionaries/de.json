@@ -12,6 +12,7 @@
     "research": "Forschung",
     "publications": "Publikationen",
     "events": "Veranstaltungen",
+    "membership": "Mitgliedschaft",
     "team": "Team",
     "partners": "Partner",
     "contact": "Kontakt",
@@ -49,11 +50,11 @@
     "intro": "Res Publica entwickelt sich zu einer vollständigen zivilgesellschaftlichen Plattform. Die folgenden Bereiche sind auf der Architektur- und Modul-Ebene bereits als Fundament umgesetzt — die meisten sind noch nicht mit einer öffentlichen Oberfläche verbunden. Das ist Fundament-Arbeit im Aufbau, keine Liste fertiger Funktionen.",
     "badge": "Fundament im Aufbau",
     "items": [
-      { "title": "Mitgliedschaft", "text": "Modul-Ebene umgesetzt — Lebenszyklus, Stufen und Anbindungen; Oberfläche noch nicht verbunden." },
+      { "title": "Mitgliedschaft", "text": "Mit sicherer Kontoanbindung und nachvollziehbarer Antragstellung jetzt über die öffentliche Oberfläche erreichbar." },
       { "title": "Community", "text": "Modul-Ebene umgesetzt — Teilhabe-Stufen und einwilligungsbasierte Interaktion; für künftige Anbindung vorbereitet." },
       { "title": "CRM / Partner", "text": "Modul-Ebene umgesetzt — Förder- und Partnerbeziehungen samt Interessenkonflikt-Prüfung als Fundament." },
       { "title": "Projekte", "text": "Heute bereits öffentlich sichtbar; tiefere Plattform-Anbindung im Aufbau." },
-      { "title": "Veranstaltungen", "text": "Heute bereits öffentlich sichtbar; Anmeldung und veranstaltungsbezogene Fragen als Modul-Fundament umgesetzt." },
+      { "title": "Veranstaltungen", "text": "Öffentlich sichtbar und für kommende Termine mit persönlicher Anmeldung sowie Warteliste verbunden." },
       { "title": "Lernen", "text": "Fundament im Aufbau — noch nicht als eigenständiges Modul umgesetzt." },
       { "title": "Publikationen", "text": "Heute bereits öffentlich sichtbar; redaktioneller Workflow als separates Modul-Fundament umgesetzt." },
       { "title": "Forschung", "text": "Heute bereits öffentlich sichtbar als Teil unserer Arbeit." },
@@ -180,5 +181,39 @@
     "errorInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "errorExists": "Diese Adresse ist bereits angemeldet.",
     "errorServer": "Anmeldung derzeit nicht möglich. Bitte versuchen Sie es später erneut."
+  },
+  "platform": {
+    "eventRegistration": {
+      "title": "Für diese Veranstaltung anmelden",
+      "text": "Die Anmeldung wird Ihrem persönlichen Konto zugeordnet. Ist die Kapazität erreicht, werden Sie auf die Warteliste gesetzt.",
+      "submit": "Jetzt anmelden",
+      "submitting": "Anmeldung läuft …",
+      "login": "Anmelden und fortfahren",
+      "success": "Ihre Teilnahme ist bestätigt.",
+      "waitlisted": "Sie wurden auf die Warteliste gesetzt.",
+      "duplicate": "Sie sind bereits für diese Veranstaltung registriert.",
+      "unavailable": "Die Anmeldung ist derzeit nicht verfügbar.",
+      "error": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut."
+    },
+    "membership": {
+      "title": "Mitgliedschaft",
+      "lede": "Werden Sie Teil von Res Publica und wählen Sie die Form der Mitwirkung, die zu Ihnen passt.",
+      "tierLabel": "Form der Mitgliedschaft",
+      "tiers": {
+        "basic": "Basismitgliedschaft",
+        "supporter": "Fördermitgliedschaft",
+        "volunteer": "Ehrenamtliche Mitwirkung",
+        "research": "Forschungsmitgliedschaft",
+        "institutional": "Institutionelle Mitgliedschaft"
+      },
+      "accountableNotice": "Die Mitgliedschaft wird Ihrem verifizierten Konto zugeordnet und nachvollziehbar protokolliert.",
+      "submit": "Mitgliedschaft beantragen",
+      "submitting": "Antrag wird übermittelt …",
+      "login": "Anmelden und fortfahren",
+      "success": "Ihre Mitgliedschaft wurde angelegt.",
+      "duplicate": "Für Ihr Konto besteht bereits eine Mitgliedschaft.",
+      "unavailable": "Die Mitgliedschaftsfunktion ist derzeit nicht verfügbar.",
+      "error": "Der Antrag konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut."
+    }
   }
 }

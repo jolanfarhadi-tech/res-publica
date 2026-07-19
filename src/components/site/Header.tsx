@@ -20,6 +20,7 @@ export function navItems(locale: Locale, dict: Dictionary) {
     { href: `/${locale}/research`, label: t.research },
     { href: `/${locale}/publications`, label: t.publications },
     { href: `/${locale}/events`, label: t.events },
+    { href: `/${locale}/membership`, label: t.membership },
     { href: `/${locale}/team`, label: t.team },
     { href: `/${locale}/partners`, label: t.partners },
     { href: `/${locale}/contact`, label: t.contact },

@@ -26,6 +26,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     { href: `/${locale}/research`, label: t.research },
     { href: `/${locale}/publications`, label: t.publications },
     { href: `/${locale}/events`, label: t.events },
+    { href: `/${locale}/membership`, label: t.membership },
   ];
 
   const groupHeading =

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
-import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
+import { getDictionary } from "@/i18n/dictionaries";
 import { getEntries, type Entry } from "@/lib/collections";
 import { formatDate, todayIso } from "@/lib/dates";
 import { Container } from "@/components/ui/Container";
@@ -47,11 +47,9 @@ function SectionRow({
 function EntryGrid({
   entries,
   locale,
-  dict,
 }: {
   entries: Entry[];
   locale: Locale;
-  dict: Dictionary;
 }) {
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -197,7 +195,7 @@ export default async function HomePage({
                 viewAll={dict.home.viewAll}
               />
             </FadeIn>
-            <EntryGrid entries={projects} locale={locale} dict={dict} />
+            <EntryGrid entries={projects} locale={locale} />
           </Container>
         </section>
       )}
@@ -213,7 +211,7 @@ export default async function HomePage({
                 viewAll={dict.home.viewAll}
               />
             </FadeIn>
-            <EntryGrid entries={research} locale={locale} dict={dict} />
+            <EntryGrid entries={research} locale={locale} />
           </Container>
         </section>
       )}
@@ -229,7 +227,7 @@ export default async function HomePage({
                 viewAll={dict.home.viewAll}
               />
             </FadeIn>
-            <EntryGrid entries={publications} locale={locale} dict={dict} />
+            <EntryGrid entries={publications} locale={locale} />
           </Container>
         </section>
       )}
@@ -245,7 +243,7 @@ export default async function HomePage({
                 viewAll={dict.home.viewAll}
               />
             </FadeIn>
-            <EntryGrid entries={upcomingEvents} locale={locale} dict={dict} />
+            <EntryGrid entries={upcomingEvents} locale={locale} />
           </Container>
         </section>
       )}

@@ -5,6 +5,8 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { getEntry, getSlugs } from "@/lib/collections";
 import { pageAlternates } from "@/lib/seo";
 import { CollectionDetail } from "@/components/site/CollectionDetail";
+import { EventRegistration } from "@/components/platform/EventRegistration";
+import { todayIso } from "@/lib/dates";
 
 const COLLECTION = "events" as const;
 
@@ -49,6 +51,9 @@ export default async function Page({ params }: Props) {
       locale={locale as Locale}
       entry={entry}
       dict={getDictionary(locale as Locale)}
+      action={(entry.endDate ?? entry.date) >= todayIso()
+        ? <EventRegistration locale={locale as Locale} eventId={entry.slug} dict={getDictionary(locale as Locale)} />
+        : undefined}
     />
   );
 }

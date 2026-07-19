@@ -29,10 +29,12 @@ export function CollectionDetail({
   locale,
   entry,
   dict,
+  action,
 }: {
   locale: Locale;
   entry: Entry;
   dict: Dictionary;
+  action?: React.ReactNode;
 }) {
   const labels = dict.collections.labels;
   const basePath = `/${locale}/${entry.collection}`;
@@ -130,6 +132,7 @@ export function CollectionDetail({
         <Prose>
           <MDXRemote source={entry.body} />
         </Prose>
+        {action}
 
         <p className="mt-12">
           <Link

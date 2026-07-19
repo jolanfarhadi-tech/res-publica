@@ -12,6 +12,7 @@
     "research": "Research",
     "publications": "Publications",
     "events": "Events",
+    "membership": "Membership",
     "team": "Team",
     "partners": "Partners",
     "contact": "Contact",
@@ -49,11 +50,11 @@
     "intro": "Res Publica is becoming a full civic platform. The areas below already have a foundation implemented at the architecture and module level — most are not yet connected to a public interface. This is foundation work in progress, not a list of finished features.",
     "badge": "Foundation in progress",
     "items": [
-      { "title": "Membership", "text": "Module layer implemented — lifecycle, tiers, and integrations; frontend not yet connected." },
+      { "title": "Membership", "text": "Now available through the public interface with secure account linking and accountable applications." },
       { "title": "Community", "text": "Module layer implemented — participation stages and consent-based interaction; prepared for future frontend integration." },
       { "title": "CRM / Partners", "text": "Module layer implemented — donor and partner relationships, including conflict-of-interest review, as a governance foundation." },
       { "title": "Projects", "text": "Already visible publicly today; deeper platform integration in progress." },
-      { "title": "Events", "text": "Already visible publicly today; registration and event-scoped Q&A implemented as a module-level foundation." },
+      { "title": "Events", "text": "Publicly visible and connected to personal registration and waitlisting for upcoming dates." },
       { "title": "Learning", "text": "Foundation in progress — not yet implemented as its own module." },
       { "title": "Publications", "text": "Already visible publicly today; editorial workflow implemented as a separate module-level foundation." },
       { "title": "Research", "text": "Already visible publicly today as part of our work." },
@@ -180,5 +181,39 @@
     "errorInvalid": "Please enter a valid email address.",
     "errorExists": "This address is already subscribed.",
     "errorServer": "Subscription is currently unavailable. Please try again later."
+  },
+  "platform": {
+    "eventRegistration": {
+      "title": "Register for this event",
+      "text": "Registration is linked to your personal account. If capacity is reached, you will be placed on the waitlist.",
+      "submit": "Register now",
+      "submitting": "Registering …",
+      "login": "Sign in to continue",
+      "success": "Your participation is confirmed.",
+      "waitlisted": "You have been placed on the waitlist.",
+      "duplicate": "You are already registered for this event.",
+      "unavailable": "Registration is currently unavailable.",
+      "error": "Registration could not be completed. Please try again."
+    },
+    "membership": {
+      "title": "Membership",
+      "lede": "Become part of Res Publica and choose the form of participation that suits you.",
+      "tierLabel": "Type of membership",
+      "tiers": {
+        "basic": "Basic membership",
+        "supporter": "Supporting membership",
+        "volunteer": "Volunteer participation",
+        "research": "Research membership",
+        "institutional": "Institutional membership"
+      },
+      "accountableNotice": "Membership is linked to your verified account and recorded in the audit trail.",
+      "submit": "Apply for membership",
+      "submitting": "Submitting application …",
+      "login": "Sign in to continue",
+      "success": "Your membership has been created.",
+      "duplicate": "A membership already exists for your account.",
+      "unavailable": "Membership is currently unavailable.",
+      "error": "The application could not be completed. Please try again."
+    }
   }
 }
