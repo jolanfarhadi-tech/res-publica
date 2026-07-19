@@ -26,7 +26,7 @@
 
 The Res Publica Accountability Constitution — [`00_constitution/00_constitution.md`](00_constitution/00_constitution.md), tagged `constitution-v1.0` — is the highest authority for conduct/accountability matters (who is answerable, what evidence compliance requires, how compliance is checked), per its own Section 6 Decision Hierarchy. Approved ADRs and the Foundation Architecture remain highest authority for architecture/domain-model matters; neither document outranks the other outside its own domain. Its review history: [`00_constitution/CONSTITUTION_REVIEW.md`](00_constitution/CONSTITUTION_REVIEW.md) (first pass, 12 finding categories) and [`00_constitution/CONSTITUTION_REVIEW_2.md`](00_constitution/CONSTITUTION_REVIEW_2.md) (re-validation, zero critical findings, recommended APPROVE). ADR-012 onward is governed by the Constitution's own ADR Governance Workflow (§17); ADR-001 through ADR-011 are grandfathered as validly adopted.
 
-## Current ADR index (ADR-013 through ADR-034)
+## Current ADR index (ADR-013 onward)
 
 | ADR | Decision | Status |
 |---|---|---|
@@ -52,6 +52,8 @@ The Res Publica Accountability Constitution — [`00_constitution/00_constitutio
 | [ADR-032](../architecture/adr/ADR-032-license-strategy.md) | Adopts AGPL-3.0-only core licensing, CLA requirements, and a dual-licensing reservation. | **Accepted** |
 | [ADR-033](../architecture/adr/ADR-033-delegation-of-authority.md) | Defines Governance operational roles, powers, appointment, scope, and revocation. | **Accepted** |
 | [ADR-034](../architecture/adr/ADR-034-member-profile-visibility-and-self-service-authorization.md) | Defines member-profile visibility and protected self-service authorization. | **Accepted** |
+| ADR-035 | Reserved for Innovations 6/7 and the operational Governance, status, retention, withdrawal, and deletion rules deferred by ADR-019; no ADR file or decision exists yet. | **Pending** |
+| [ADR-036](../architecture/adr/ADR-036-civic-editorial-delegation-of-authority.md) | Defines scoped Civic editorial roles, session-derived authority, separation of duties, human-only sign-off, and the no-auto-publish boundary. | **Accepted** |
 
 ## Reading the amendments
 
