@@ -100,4 +100,4 @@ This document does not alter the governance of any Innovation or supporting syst
 
 ## Related Documents
 
-All nine documents listed in §7, plus `standards/RP_STANDARD_001_DOCUMENTATION_ARCHITECTURE.md` (the governance standard this document itself conforms to).
+All nine documents listed in §7. The repository-level documentation standard described in §1 also governs this document.

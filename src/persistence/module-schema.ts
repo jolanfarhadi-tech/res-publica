@@ -236,6 +236,75 @@ export const aiCostLedger = pgTable("ai_cost_ledger", {
   monthlySpendCeiling: numeric("monthly_spend_ceiling", { precision: 14, scale: 2, mode: "number" }).notNull(),
 });
 
+export const harmCases = pgTable(
+  "harm_cases",
+  {
+    id: text("id").primaryKey(),
+    reportedAt: timestamp("reported_at", { withTimezone: true, mode: "date" }).notNull(),
+    location: text("location").notNull(),
+    harmCategory: text("harm_category").notNull(),
+    description: text("description").notNull(),
+    affectedGroups: jsonb("affected_groups").$type<string[]>().notNull(),
+    allegedResponsibleActors: jsonb("alleged_responsible_actors").$type<string[]>().notNull(),
+    sourceType: text("source_type").notNull(),
+    reporterPersonId: text("reporter_person_id").references(() => people.id, { onDelete: "restrict" }),
+    confidentialityLevel: text("confidentiality_level", {
+      enum: ["public", "restricted", "confidential"],
+    }).notNull(),
+    status: text("status", {
+      enum: [
+        "registered", "evidence-collection", "validation-pending", "information-requested",
+        "hearing-ready", "hearing-documented", "scientific-review-pending", "repair-planning", "closed",
+      ],
+    }).notNull(),
+  },
+  (table) => [index("harm_cases_status_idx").on(table.status)]
+);
+
+export const harmEvidenceItems = pgTable(
+  "harm_evidence_items",
+  {
+    id: text("id").primaryKey(),
+    caseId: text("case_id").notNull().references(() => harmCases.id, { onDelete: "restrict" }),
+    description: text("description").notNull(),
+    source: text("source").notNull(),
+    mediaType: text("media_type").notNull(),
+    storageReference: text("storage_reference").notNull(),
+    collectedAt: timestamp("collected_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("harm_evidence_items_case_idx").on(table.caseId)]
+);
+
+export const basicValidationDecisions = pgTable(
+  "basic_validation_decisions",
+  {
+    id: text("id").primaryKey(),
+    caseId: text("case_id").notNull().references(() => harmCases.id, { onDelete: "restrict" }),
+    status: text("status", {
+      enum: ["valid", "valid-with-minor-issues", "incomplete", "duplicate", "invalid-submission"],
+    }).notNull(),
+    reviewerPersonId: text("reviewer_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    missingInformation: jsonb("missing_information").$type<string[]>().notNull(),
+    duplicateOfCaseId: text("duplicate_of_case_id").references(() => harmCases.id, { onDelete: "restrict" }),
+    notes: text("notes").notNull(),
+    decidedAt: timestamp("decided_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("basic_validation_case_idx").on(table.caseId)]
+);
+
+export const structuredHearings = pgTable(
+  "structured_hearings",
+  {
+    id: text("id").primaryKey(),
+    caseId: text("case_id").notNull().references(() => harmCases.id, { onDelete: "restrict" }),
+    moderatorPersonId: text("moderator_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    participantConsentConfirmedAt: timestamp("participant_consent_confirmed_at", { withTimezone: true, mode: "date" }).notNull(),
+    documentedAt: timestamp("documented_at", { withTimezone: true, mode: "date" }),
+    reportReference: text("report_reference"),
+  },
+  (table) => [uniqueIndex("structured_hearings_case_uq").on(table.caseId)]
+);
+
 export const dashboardModuleManifestEntries = pgTable(
   "dashboard_module_manifest_entries",
   {

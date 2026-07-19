@@ -4,7 +4,7 @@
 States how personal and testimony data is collected, minimized, protected, and retained across the ecosystem.
 
 ## Background
-Confirmed real policy references in project material: a DPIA (Data Protection Impact Assessment, `DPIA_v2.0.md`), an Ethics Protocol, and GDPR (DSGVO) compliance requirements. The actual DPIA/legal documents themselves are not present in this repository (they are referenced as read-only legal source documents in a separate project structure).
+Confirmed real policy references in project material: the repository's Data Protection Impact Assessment (`DPIA.md`), its Ethics Charter (`ETHICS_CHARTER.md`), and GDPR (DSGVO) compliance requirements. Any separately maintained legal source documents remain read-only external inputs.
 
 **Status: Version 1.0 summary**, reflecting confirmed policy commitments; the full legal DPIA content itself is out of scope for this documentation tree and remains the authoritative legal source once available.
 
@@ -41,7 +41,7 @@ AI systems do not access raw participant data beyond what their scoped, approved
 The RPCS application form's exact, minimal field set (`../academy/RPCS_PROGRAM.md` §Inputs) is the confirmed reference implementation of this policy.
 
 ## References
-Project material referencing `DPIA_v2.0.md`, `ETHICS_PROTOCOL.md` (legal source documents, not present in this documentation tree); `brain/DOMAIN/CORE_DOMAIN_MODEL.md` (`ConsentRecord`)
+`DPIA.md`; `ETHICS_CHARTER.md`; `brain/DOMAIN/CORE_DOMAIN_MODEL.md` (`ConsentRecord`)
 
 ## Related Documents
 `ETHICS_CHARTER.md` · `../projects/COMMUNITY.md`

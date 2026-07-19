@@ -9,6 +9,7 @@ import { eventsManifest } from "../modules/events/manifest";
 import { knowledgeGraphManifest } from "../modules/knowledge-graph/manifest";
 import { membershipManifest } from "../modules/membership/manifest";
 import { publishingManifest } from "../modules/publishing/manifest";
+import { harmGovernanceManifest } from "../modules/harm-governance/manifest";
 import * as moduleSchema from "./module-schema";
 
 const manifests = [
@@ -21,6 +22,7 @@ const manifests = [
   dashboardManifest,
   crmManifest,
   analyticsManifest,
+  harmGovernanceManifest,
 ];
 
 describe("M1 module persistence coverage", () => {

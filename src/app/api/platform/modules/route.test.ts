@@ -9,8 +9,9 @@ describe("GET /api/platform/modules", () => {
     };
 
     expect(response.status).toBe(200);
-    expect(body.modules).toHaveLength(9);
+    expect(body.modules).toHaveLength(10);
     expect(body.modules.map((module) => module.moduleName)).toContain("membership");
     expect(body.modules.map((module) => module.moduleName)).toContain("events");
+    expect(body.modules.map((module) => module.moduleName)).toContain("harm-governance");
   });
 });
