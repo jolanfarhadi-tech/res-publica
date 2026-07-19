@@ -28,6 +28,10 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     { href: `/${locale}/events`, label: t.events },
     { href: `/${locale}/membership`, label: t.membership },
   ];
+  const legal = [
+    { href: `/${locale}/impressum`, label: "Impressum" },
+    { href: `/${locale}/datenschutz`, label: "Datenschutz" },
+  ];
 
   const groupHeading =
     "mb-4 text-xs font-medium uppercase tracking-[0.2em] text-gold";
@@ -37,7 +41,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <footer className="border-t border-border bg-surface">
       <Container className="py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div>
             <p className="font-serif text-lg tracking-[0.18em]">
@@ -67,6 +71,20 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <p className={groupHeading}>{dict.footer.groups.work}</p>
             <ul className="space-y-2.5">
               {work.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className={link}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* The approved legal texts are intentionally German in every locale. */}
+          <nav aria-label="Rechtliches">
+            <p className={groupHeading}>Rechtliches</p>
+            <ul className="space-y-2.5">
+              {legal.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={link}>
                     {item.label}
