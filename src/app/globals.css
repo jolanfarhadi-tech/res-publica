@@ -18,6 +18,10 @@
   --gold: #8a6d2f;       /* muted gold — darkened for AA text contrast (4.6:1+) */
   --muted: #5c6675;      /* secondary text */
   --border: #e3e4de;     /* hairline dividers */
+  --night: #07111f;
+  --paper: #f3f0e8;
+  --signal: #b59a5b;
+  --deep-blue: #173b70;
 }
 
 [data-theme="dark"] {
@@ -29,6 +33,10 @@
   --gold: #c9a75c;
   --muted: #93a0b4;
   --border: #22304a;
+  --night: #050b14;
+  --paper: #f3f0e8;
+  --signal: #d0b873;
+  --deep-blue: #234f8d;
 }
 
 /* Map the tokens into Tailwind, so classes like `bg-bg`,
@@ -42,6 +50,10 @@
   --color-gold: var(--gold);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-night: var(--night);
+  --color-paper: var(--paper);
+  --color-signal: var(--signal);
+  --color-deep-blue: var(--deep-blue);
 
   /* Font families are provided by next/font in the layout. */
   --font-sans: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
@@ -78,6 +90,42 @@ h1, h2, h3 {
   font-family: var(--font-serif);
   letter-spacing: -0.01em;
   text-wrap: balance;
+}
+
+.display-hero {
+  font-size: clamp(3.5rem, 8.5vw, 8.75rem);
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+}
+
+:lang(fa) .display-hero {
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+
+.institutional-grid {
+  background-image:
+    linear-gradient(to right, rgb(243 240 232 / 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(243 240 232 / 0.07) 1px, transparent 1px);
+  background-size: min(12vw, 9rem) min(12vw, 9rem);
+  background-position: center;
+}
+
+.institutional-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 72% 30%, rgb(30 79 163 / 0.22), transparent 34%);
+}
+
+[dir="rtl"] .institutional-grid::after {
+  background: radial-gradient(circle at 28% 30%, rgb(30 79 163 / 0.22), transparent 34%);
+}
+
+.editorial-index {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
 /* Persian headings stay in Vazirmatn (Fraunces has no Arabic script). */
