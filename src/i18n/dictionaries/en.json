@@ -160,6 +160,12 @@
     "languageSwitcher": "Choose language",
     "mainNavigation": "Main navigation"
   },
+  "account": {
+    "login": "Sign in",
+    "logout": "Sign out",
+    "loggingOut": "Signing out …",
+    "loading": "Loading account status"
+  },
   "search": {
     "title": "Search",
     "lede": "Search news, projects, research, publications, and events.",

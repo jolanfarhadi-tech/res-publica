@@ -160,6 +160,12 @@
     "languageSwitcher": "Sprache wählen",
     "mainNavigation": "Hauptnavigation"
   },
+  "account": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "loggingOut": "Abmeldung …",
+    "loading": "Kontostatus wird geladen"
+  },
   "search": {
     "title": "Suche",
     "lede": "Durchsuchen Sie Aktuelles, Projekte, Forschung, Publikationen und Veranstaltungen.",

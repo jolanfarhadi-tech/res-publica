@@ -1,12 +1,19 @@
 import { describe, expect, it } from "vitest";
 import { GET as login } from "./login/route";
 import { POST as logout } from "./logout/route";
+import { GET as session } from "./session/route";
 
 describe("authentication routes fail closed", () => {
   it("does not invent authentication when provider configuration is absent", async () => {
     const response = await login(new Request("https://res-publica.org/api/auth/login"));
     expect(response.status).toBe(503);
     await expect(response.json()).resolves.toEqual({ error: "authentication_not_configured" });
+  });
+
+  it("keeps anonymous UI operational when authentication is not configured", async () => {
+    const response = await session(new Request("https://res-publica.org/api/auth/session"));
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({ authenticated: false, available: false });
   });
 
   it("rejects cross-origin logout before reading session state", async () => {

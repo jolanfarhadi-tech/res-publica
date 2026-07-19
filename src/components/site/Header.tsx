@@ -8,6 +8,7 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import { Container } from "@/components/ui/Container";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
+import { AccountControl } from "./AccountControl";
 
 /** The one place the main navigation is defined (header + footer). */
 export function navItems(locale: Locale, dict: Dictionary) {
@@ -88,6 +89,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          <AccountControl locale={locale} dict={dict} />
           {/* Search */}
           <Link
             href={`/${locale}/search`}
