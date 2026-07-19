@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyBasicValidation, documentStructuredHearing, transitionHarmCase } from "./workflow";
+import { applyBasicValidation, applyScientificReview, createRepairPlan, documentStructuredHearing, transitionHarmCase, verifyEvidenceAssessment } from "./workflow";
 import type { BasicValidationDecision, HarmCase } from "./types";
 
 const baseCase: HarmCase = {
@@ -60,5 +60,33 @@ describe("HARM governance workflow", () => {
     expect(() => transitionHarmCase(baseCase, "repair-planning")).toThrow(
       "invalid_harm_case_transition",
     );
+  });
+
+  it("preserves contradictions in a human evidence assessment", () => {
+    const assessment = verifyEvidenceAssessment({
+      id: "eqa-1", evidenceItemId: "evidence-1", reviewerPersonId: "reviewer-1",
+      satisfiedCriteria: ["traceability", "relevance"], contradictions: ["Dates differ"],
+      corroboratingEvidenceItemIds: [], confidence: "low", reviewedAt: new Date(),
+    });
+    expect(assessment.contradictions).toEqual(["Dates differ"]);
+  });
+
+  it("opens repair planning only after accepted human scientific review", () => {
+    const pending = { ...baseCase, status: "scientific-review-pending" as const };
+    const review = {
+      id: "review-1", caseId: pending.id, reviewerPersonIds: ["scientist-1"],
+      conflictDeclarationsComplete: true, methodologyAssessment: "documented",
+      evidenceAssessment: "documented", findings: "documented", scientificConfidence: 3 as const,
+      recommendations: [], output: "accepted" as const, decidedAt: new Date(),
+    };
+    const repairReady = applyScientificReview(pending, review);
+    expect(repairReady.status).toBe("repair-planning");
+    expect(createRepairPlan(repairReady, {
+      id: "repair-1", caseId: pending.id, approvedScientificReviewId: review.id,
+      objectives: ["repair"], expectedOutcomes: ["measurable improvement"],
+      responsibleActors: ["institution"], requiredResources: ["staff"], timeline: "12 months",
+      successIndicators: ["documented outcome"], monitoringMethods: ["quarterly review"],
+      risks: [], dependencies: [], createdByPersonId: "planner-1", createdAt: new Date(),
+    }).caseId).toBe(pending.id);
   });
 });

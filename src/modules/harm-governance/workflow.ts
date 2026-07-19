@@ -3,6 +3,9 @@ import type {
   HarmCase,
   HarmCaseStatus,
   StructuredHearing,
+  EvidenceQualityAssessment,
+  ScientificReview,
+  RepairPlan,
 } from "./types";
 
 const allowedTransitions: Readonly<Record<HarmCaseStatus, readonly HarmCaseStatus[]>> = {
@@ -22,6 +25,43 @@ export function transitionHarmCase(harmCase: HarmCase, next: HarmCaseStatus): Ha
     throw new Error(`invalid_harm_case_transition:${harmCase.status}:${next}`);
   }
   return { ...harmCase, status: next };
+}
+
+export function verifyEvidenceAssessment(assessment: EvidenceQualityAssessment): EvidenceQualityAssessment {
+  if (!assessment.reviewerPersonId || !assessment.reviewedAt) {
+    throw new Error("human_evidence_review_required");
+  }
+  if (assessment.satisfiedCriteria.length === 0) {
+    throw new Error("evidence_criteria_required");
+  }
+  return assessment;
+}
+
+export function applyScientificReview(harmCase: HarmCase, review: ScientificReview): HarmCase {
+  if (harmCase.status !== "scientific-review-pending" || review.caseId !== harmCase.id) {
+    throw new Error("scientific_review_not_applicable");
+  }
+  if (review.reviewerPersonIds.length === 0 || !review.conflictDeclarationsComplete) {
+    throw new Error("reviewers_and_conflict_declarations_required");
+  }
+  if (review.output === "accepted" || review.output === "accepted-with-minor-revisions") {
+    return transitionHarmCase(harmCase, "repair-planning");
+  }
+  return transitionHarmCase(harmCase, "closed");
+}
+
+export function createRepairPlan(harmCase: HarmCase, plan: RepairPlan): RepairPlan {
+  if (harmCase.status !== "repair-planning" || plan.caseId !== harmCase.id) {
+    throw new Error("validated_harm_required");
+  }
+  const requiredCollections = [
+    plan.objectives, plan.expectedOutcomes, plan.responsibleActors, plan.requiredResources,
+    plan.successIndicators, plan.monitoringMethods,
+  ];
+  if (!plan.createdByPersonId || !plan.approvedScientificReviewId || requiredCollections.some((v) => v.length === 0)) {
+    throw new Error("complete_human_authored_repair_plan_required");
+  }
+  return plan;
 }
 
 export function applyBasicValidation(

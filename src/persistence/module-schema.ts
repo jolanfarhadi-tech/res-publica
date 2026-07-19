@@ -305,6 +305,59 @@ export const structuredHearings = pgTable(
   (table) => [uniqueIndex("structured_hearings_case_uq").on(table.caseId)]
 );
 
+export const evidenceQualityAssessments = pgTable("evidence_quality_assessments", {
+  id: text("id").primaryKey(),
+  evidenceItemId: text("evidence_item_id").notNull().references(() => harmEvidenceItems.id, { onDelete: "restrict" }),
+  reviewerPersonId: text("reviewer_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  satisfiedCriteria: jsonb("satisfied_criteria").$type<string[]>().notNull(),
+  contradictions: jsonb("contradictions").$type<string[]>().notNull(),
+  corroboratingEvidenceItemIds: jsonb("corroborating_evidence_item_ids").$type<string[]>().notNull(),
+  confidence: text("confidence", { enum: ["very-low", "low", "moderate", "high", "very-high"] }).notNull(),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const documentationQualityReviews = pgTable("documentation_quality_reviews", {
+  id: text("id").primaryKey(),
+  caseId: text("case_id").notNull().references(() => harmCases.id, { onDelete: "restrict" }),
+  artifactReference: text("artifact_reference").notNull(),
+  reviewerPersonId: text("reviewer_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  outcome: text("outcome", { enum: ["approved", "approved-with-minor-corrections", "revision-required", "incomplete-documentation", "rejected"] }).notNull(),
+  findings: jsonb("findings").$type<string[]>().notNull(),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const hearingQualityReviews = pgTable("hearing_quality_reviews", {
+  id: text("id").primaryKey(),
+  hearingId: text("hearing_id").notNull().references(() => structuredHearings.id, { onDelete: "restrict" }),
+  reviewerPersonId: text("reviewer_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  outcome: text("outcome", { enum: ["approved", "approved-with-recommendations", "minor-improvements-required", "major-improvements-required", "re-hearing-recommended"] }).notNull(),
+  recommendations: jsonb("recommendations").$type<string[]>().notNull(),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const scientificReviews = pgTable("scientific_reviews", {
+  id: text("id").primaryKey(),
+  caseId: text("case_id").notNull().references(() => harmCases.id, { onDelete: "restrict" }),
+  reviewerPersonIds: jsonb("reviewer_person_ids").$type<string[]>().notNull(),
+  conflictDeclarationsComplete: boolean("conflict_declarations_complete").notNull(),
+  methodologyAssessment: text("methodology_assessment").notNull(),
+  evidenceAssessment: text("evidence_assessment").notNull(),
+  findings: text("findings").notNull(),
+  scientificConfidence: integer("scientific_confidence").notNull(),
+  recommendations: jsonb("recommendations").$type<string[]>().notNull(),
+  output: text("output", { enum: ["accepted", "accepted-with-minor-revisions", "major-revision-required", "insufficient-evidence", "rejected-for-scientific-reasons"] }).notNull(),
+  decidedAt: timestamp("decided_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const repairPlans = pgTable("repair_plans", {
+  id: text("id").primaryKey(),
+  caseId: text("case_id").notNull().references(() => harmCases.id, { onDelete: "restrict" }),
+  approvedScientificReviewId: text("approved_scientific_review_id").notNull().references(() => scientificReviews.id, { onDelete: "restrict" }),
+  plan: jsonb("plan").$type<{ objectives: string[]; expectedOutcomes: string[]; responsibleActors: string[]; requiredResources: string[]; timeline: string; successIndicators: string[]; monitoringMethods: string[]; risks: string[]; dependencies: string[] }>().notNull(),
+  createdByPersonId: text("created_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
 export const dashboardModuleManifestEntries = pgTable(
   "dashboard_module_manifest_entries",
   {
