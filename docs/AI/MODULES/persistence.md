@@ -1,0 +1,61 @@
+# Module: Persistence
+
+## Purpose
+
+The shared Drizzle/Postgres persistence layer underlying every domain and per-module table in the repository, plus the offline-first local-dev database strategy. Evidence: `src/persistence/` directory (grepped in full this session); `architecture/adr/ADR-010-offline-first-development.md`.
+
+## Canonical authority
+
+- `architecture/adr/ADR-002-domain-model.md` — canonical domain entities.
+- `architecture/adr/ADR-010-offline-first-development.md` — offline-first as platform-wide principle.
+- No single dedicated "persistence architecture" ADR was found; this module's shape is inferred from ADR-002/010 plus direct code inspection.
+
+## Current implementation
+
+`src/persistence/{database.ts, index.ts, module-schema.ts, persistence.integration.test.ts, repositories.ts, runtime.ts, schema.test.ts, schema.ts}` (directory listing this session). Drizzle ORM 0.45 + `pg` (production Postgres) + `@electric-sql/pglite` (local dev), per `package.json` (read in full this session).
+
+## Data and persistence (this module's own subject)
+
+**Core domain schema** (`src/persistence/schema.ts`, grepped this session): `people` (L13), `consentRecords` (L22), `payments` (L38), `organizations` (L56), `notifications` (L65), `auditLog` (L81), `authIdentities` (L99), `authSessions` (L115), `authFlows` (L132), `authorizationGrants` (L146) — 10 tables.
+
+**Per-module schema** (`src/persistence/module-schema.ts`, grepped this session, ~40 tables): Membership (`members`, `membershipStatusChanges`, `recurringPledges`, `institutionalSupporterProfiles`, `membershipBenefitGrants`), Events (`events`, `registrations`, `waitlistEntries`, `eventQaLog`, `outcomePublications`), Publishing (`submissions`, `moderationQueue`, `drafts`, `translationHandoffs`, `signOffRecords`, `publishCommits`), Community (`communityMembers`, `ladderStageTransitions`, `evangelismInvitations`), Knowledge Graph (`kgEntities`, `kgRelationships`), AI Layer (`aiQueryLog`, `aiCostLedger`), HARM Governance (`harmCases`, `harmEvidenceItems`, `basicValidationDecisions`, `structuredHearings`, `evidenceQualityAssessments`, `documentationQualityReviews`, `hearingQualityReviews`, `scientificReviews`, `repairPlans`), Dashboard (`dashboardModuleManifestEntries`, `userPreferences`, `impactEvidenceRecords`), CRM (`donorRecords`, `institutionalPartners`, `grantFunders`, `conflictOfInterestDisclosures`, `fundingSourcePublicationRecords`, `partnershipStatusLogs`), Analytics (`metricSnapshots`, `funnelStageEvents`).
+
+**Migrations** (`drizzle/`, directory listing this session): `0000_m1-canonical-domain.sql` → `0011_publishing-authority.sql` (12 total). The last, `0011`, is **UNCOMMITTED_WORKTREE** (untracked file; matching `_journal.json` entry unstaged) — see `MODULES/publishing.md`. All others (`0000`–`0010`) are `REMOTE_VERIFIED` (on `origin/main`).
+
+## Authorization and trust boundaries
+
+Not this module's concern directly — authorization is layered on top by `src/auth/authorize.ts` and per-module `authority.ts` files (see `MODULES/identity-auth.md`). This module provides the tables those layers read/write.
+
+## Public interfaces
+
+Not an HTTP-facing module. Consumed via `Database` type (imported across `src/application/*.ts`, confirmed via imports in `src/application/publishing.ts`, read this session). `scripts/check-fresh-migrations.mjs`, `npm run db:generate`/`db:migrate`/`db:check`/`db:check:fresh` (`package.json`).
+
+## Verification
+
+Tests confirmed to exist: `src/persistence/persistence.integration.test.ts`, `src/persistence/schema.test.ts`. **Not run this session.** CI (`.github/workflows/ci.yml`) runs `db:check` and `db:check:fresh` on every push/PR — **not run by this compilation** for the current working tree (which includes the uncommitted migration `0011`).
+
+## Decisions and rejected approaches
+
+Offline-first (`@electric-sql/pglite` for local dev vs. `pg` for production) is a deliberate platform-wide principle (ADR-010), not an ad hoc convenience — see `ARCHITECTURE_MEMORY.md` and `WARNINGS_AND_DEBT.md` WARN-010 for the associated environment-parity risk class.
+
+## Current status
+
+**REMOTE_VERIFIED** for migrations `0000`–`0010` and the schema state they produce. **UNCOMMITTED_WORKTREE** for migration `0011` and its corresponding `module-schema.ts`/`_journal.json` changes. **UNKNOWN** whether `db:check`/`db:check:fresh` currently pass against the full working tree (not run this session).
+
+## Open work
+
+Verify migration `0011` against a fresh database before it is committed — see `OPEN_WORK.md` OPEN-001, `WARNINGS_AND_DEBT.md` WARN-006.
+
+## Do not redo
+
+Do not re-create any of the ~50 tables enumerated above — all exist. Do not create a second schema file for a new module's tables without first checking whether `module-schema.ts` is the established convention (it is, for every module inspected this session).
+
+## Evidence index
+
+- `architecture/adr/ADR-002-domain-model.md`, `ADR-010-offline-first-development.md`
+- `src/persistence/{schema.ts, module-schema.ts, database.ts, index.ts, repositories.ts, runtime.ts}` (grepped/listed this session)
+- `drizzle/0000_m1-canonical-domain.sql` … `0011_publishing-authority.sql`
+- `package.json` (dependencies, scripts — full read this session)
+- `.github/workflows/ci.yml` (full read this session)
+- tests: `persistence.integration.test.ts`, `schema.test.ts`
+- command: `grep "pgTable" src/persistence/schema.ts src/persistence/module-schema.ts`, this session

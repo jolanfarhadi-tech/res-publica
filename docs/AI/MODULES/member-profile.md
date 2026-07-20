@@ -1,0 +1,62 @@
+# Module: Member Profile
+
+## Purpose
+
+A read-only, self-facing transparency/participation interface — "the member's personal operating system," answering only "what should I do next?" **Explicitly not a governance decision interface.** Evidence: `docs/source/projects/MEMBER_PROFILE.md` (read in full, prior session), §"Purpose", §"Member Profile Visibility" (Architectural Rule stated four times).
+
+## Canonical authority
+
+- `architecture/adr/ADR-034-member-profile-visibility-and-self-service-authorization.md` — visibility tiers + protected self-service authorization. Accepted.
+- `docs/source/projects/MEMBER_PROFILE.md` — the full canonical spec (377 lines, read in full prior session): tri-tier visibility (member-facing / internal-administrative / governance-sensitive), Dashboard Domains, Civic Progression System, Opportunity Engine, Personal Civic Roadmap, Activity-to-Status Logic, Membership Compliance.
+- References (per that document): `brain/GOVERNANCE/RESPONSIBILITY_EVIDENCE_MODEL.md`, `docs/source/academy/RPCS_LEVELS.md`, `docs/source/projects/COMMUNITY.md`, `brain/DOMAIN/CORE_DOMAIN_MODEL.md` (Person/Payment/Notification/ConsentRecord — LOCKED, referenced not modified).
+
+## Current implementation
+
+`src/app/[locale]/profile/page.tsx`, `src/app/api/membership/profile/route.ts` (+`route.test.ts`), `src/app/api/membership/create/route.ts`, `src/i18n/member-profile.ts`, `src/application/member-profile.ts` (+`member-profile.integration.test.ts`), `src/components/platform/MemberProfileDashboard.test.ts` — all confirmed to exist via directory listing this session; **not all read line-by-line**. Committed via `3a75efd` ("feat: add protected member profile self-service") and `a31afef` ("feat: add trilingual member profile interface"), both ≤ `origin/main` tip `7025e6f`.
+Per the spec's own `## MVP Status` (read in full): *"the protected, read-only Membership profile slice is implemented according to ADR-034: session-derived self-authorization, query-level ownership enforcement, an allowlisted member-facing projection, and a trilingual DE/EN/FA interface with Persian RTL support."*
+
+## Data and persistence
+
+This module is explicitly a **display layer only** — it does not own any table. It reads from `people` (core, `schema.ts`), `members`/`membershipStatusChanges` (`module-schema.ts` L15, L34), and (per the spec, not yet all wired per its own TODO) `Payment`, `Notification` entities. No dedicated `member_profile`-named table exists or should exist, per the spec's own "does not own the underlying business logic" rule.
+
+## Authorization and trust boundaries
+
+**Tri-tier visibility, binding architectural constraint** (`MEMBER_PROFILE.md`, quoted in full previously): member-facing / internal-administrative / governance-sensitive — "No implementation of this profile may merge the three tiers into a single queryable object... internal-administrative and governance-sensitive data must be excluded at the data-access layer, not merely hidden in the UI." Self-service authorization is session-derived (ADR-034), enforced at the query/projection boundary per the spec's own MVP Status claim — **this specific enforcement claim was not re-verified against the route's source code line-by-line this session**; it is reported as the spec's own self-assessment.
+
+## Public interfaces
+
+`GET`/relevant methods on `src/app/api/membership/profile/route.ts`; `src/app/api/membership/create/route.ts`; UI at `src/app/[locale]/profile/page.tsx`.
+
+## Verification
+
+Tests confirmed to exist: `src/app/api/membership/profile/route.test.ts`, `src/application/member-profile.integration.test.ts`, `src/components/platform/MemberProfileDashboard.test.ts`. **Not run this session.**
+
+## Decisions and rejected approaches
+
+- Rejected: Member Profile defining its own "Contribution Record Lifecycle" — deliberately not done; reserved for a future, not-yet-ratified "Civic Contribution Framework" (`MEMBER_PROFILE.md` §"Membership Journey").
+- Rejected: treating AI Mentor, Skill Graph, Mentorship Platform, Career & Leadership Development, Volunteer & Project Marketplace, Alumni Network as real, buildable systems — named only as an unratified wishlist (`MEMBER_PROFILE.md` §"Community Systems").
+- Rejected: any social-media-style framing ("What do you think?", "React to this", "Compete with others") — explicitly forbidden, in favor of action-oriented civic-progression language (`MEMBER_PROFILE.md` §"Opportunity Engine").
+
+## Current status
+
+**PARTIAL** / **REMOTE_VERIFIED** for the implemented first slice. Per the spec's own TODO checklist (`MEMBER_PROFILE.md`, verbatim, read in full):
+
+Done: self-service ownership + tier separation at query/projection boundary (ADR-034 first slice); protected read-only Membership profile API + DE/EN/FA interface; Membership exit/deactivation lifecycle defined.
+
+Not done: Codex Potential/Hearing Candidate approval workflow + consent-capture UX; integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6; "Next Recommended Steps" generation logic; remaining Identity view; Community Participation/Systems views; Application History view; Payments/Notifications views; six unratified Community Systems items (each needs its own future ADR); Civic Contribution Framework integration (blocked on a framework that doesn't exist yet).
+
+## Open work
+
+See `OPEN_WORK.md` OPEN-004 for the full itemization and blockers.
+
+## Do not redo
+
+Do not re-derive the tri-tier visibility model or the "not a governance interface" architectural rule — both are settled, binding, and stated four times in the canonical spec. Do not re-invent Membership Lifecycle states (`REGISTERED → VERIFIED → ACTIVE → INACTIVE/PAUSED/SELF-ISOLATED/WITHDRAWN/RETIRED/SUSPENDED/TERMINATED`, never "Deleted") — this is owned by the Membership module (`MODULES/membership.md`), only displayed here.
+
+## Evidence index
+
+- `architecture/adr/ADR-034-member-profile-visibility-and-self-service-authorization.md`
+- `docs/source/projects/MEMBER_PROFILE.md` (full read, prior session)
+- `src/app/[locale]/profile/page.tsx`, `src/app/api/membership/{profile,create}/route.ts`, `src/i18n/member-profile.ts`, `src/application/member-profile.ts`
+- commits `3a75efd`, `a31afef`
+- tests: `route.test.ts`, `member-profile.integration.test.ts`, `MemberProfileDashboard.test.ts`
