@@ -32,7 +32,7 @@ Not an HTTP-facing module. Consumed via `Database` type (imported across `src/ap
 
 ## Verification
 
-Tests confirmed to exist: `src/persistence/persistence.integration.test.ts`, `src/persistence/schema.test.ts`. **Not run this session.** CI (`.github/workflows/ci.yml`) runs `db:check` and `db:check:fresh` on every push/PR — **not run by this compilation** for the current working tree (which includes the uncommitted migration `0011`).
+Tests confirmed to exist: `src/persistence/persistence.integration.test.ts`, `src/persistence/schema.test.ts`. **Verified 2026-07-24:** the final focused set passed 32/32 and the full one-worker suite passed 156/156. `db:check` passed and `db:check:fresh` applied all 12 migrations, creating 53 tables. Migration `0011` leaves unknown legacy Publishing authorship, assignment time, review target, and translation content nullable instead of fabricating provenance; all new writes persist those fields, and sign-off rejects incomplete legacy provenance.
 
 ## Decisions and rejected approaches
 
@@ -40,11 +40,11 @@ Offline-first (`@electric-sql/pglite` for local dev vs. `pg` for production) is 
 
 ## Current status
 
-**REMOTE_VERIFIED** for migrations `0000`–`0010` and the schema state they produce. **UNCOMMITTED_WORKTREE** for migration `0011` and its corresponding `module-schema.ts`/`_journal.json` changes. **UNKNOWN** whether `db:check`/`db:check:fresh` currently pass against the full working tree (not run this session).
+**REMOTE_VERIFIED** for migrations `0000`–`0010`. **UNCOMMITTED_WORKTREE, LOCALLY_VERIFIED 2026-07-24** for migration `0011` and its corresponding schema/journal changes.
 
 ## Open work
 
-Verify migration `0011` against a fresh database before it is committed — see `OPEN_WORK.md` OPEN-001, `WARNINGS_AND_DEBT.md` WARN-006.
+Migration verification is complete. Remaining work is the human-approved Publishing-only commit decision; see `OPEN_WORK.md` OPEN-001.
 
 ## Do not redo
 

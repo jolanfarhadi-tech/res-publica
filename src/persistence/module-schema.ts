@@ -1,4 +1,5 @@
 import {
+  type AnyPgColumn,
   boolean,
   index,
   integer,
@@ -117,14 +118,7 @@ export const submissions = pgTable("submissions", {
   submittedByPersonId: text("submitted_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
   submittedAt: timestamp("submitted_at", { withTimezone: true, mode: "date" }).notNull(),
   status: text("status", { enum: ["pending", "moderated"] }).notNull(),
-});
-
-export const moderationQueue = pgTable("moderation_queue", {
-  id: text("id").primaryKey(),
-  submissionId: text("submission_id").notNull().references(() => submissions.id, { onDelete: "restrict" }),
-  decision: text("decision", { enum: ["pending", "approved", "rejected"] }).notNull(),
-  assignedReviewerPersonId: text("assigned_reviewer_person_id").references(() => people.id, { onDelete: "restrict" }),
-  reason: text("reason"),
+  publicationScope: text("publication_scope").notNull().default("website"),
 });
 
 export const drafts = pgTable("drafts", {
@@ -135,15 +129,40 @@ export const drafts = pgTable("drafts", {
   weakCitationFlags: jsonb("weak_citation_flags").$type<string[]>().notNull(),
   authorType: text("author_type", { enum: ["ai", "human"] }).notNull(),
   version: integer("version").notNull(),
+  authoredByPersonId: text("authored_by_person_id").references(() => people.id, { onDelete: "restrict" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }),
 });
 
-export const translationHandoffs = pgTable("translation_handoffs", {
-  id: text("id").primaryKey(),
-  draftId: text("draft_id").notNull().references(() => drafts.id, { onDelete: "restrict" }),
-  locale: text("locale").notNull(),
-  status: text("status", { enum: ["pending", "ai-draft", "human-finalized"] }).notNull(),
-  assigneePersonId: text("assignee_person_id").references(() => people.id, { onDelete: "restrict" }),
-});
+export const moderationQueue = pgTable(
+  "moderation_queue",
+  {
+    id: text("id").primaryKey(),
+    submissionId: text("submission_id").notNull().references(() => submissions.id, { onDelete: "restrict" }),
+    draftId: text("draft_id").references(() => drafts.id, { onDelete: "restrict" }),
+    decision: text("decision", { enum: ["pending", "approved", "rejected"] }).notNull(),
+    assignedReviewerPersonId: text("assigned_reviewer_person_id").references(() => people.id, { onDelete: "restrict" }),
+    assignedByPersonId: text("assigned_by_person_id").references(() => people.id, { onDelete: "restrict" }),
+    assignedAt: timestamp("assigned_at", { withTimezone: true, mode: "date" }),
+    decidedAt: timestamp("decided_at", { withTimezone: true, mode: "date" }),
+    reason: text("reason"),
+  },
+  (table) => [uniqueIndex("moderation_queue_draft_uq").on(table.draftId)]
+);
+
+export const translationHandoffs = pgTable(
+  "translation_handoffs",
+  {
+    id: text("id").primaryKey(),
+    draftId: text("draft_id").notNull().references(() => drafts.id, { onDelete: "restrict" }),
+    locale: text("locale").notNull(),
+    status: text("status", { enum: ["pending", "ai-draft", "human-finalized"] }).notNull(),
+    content: text("content"),
+    assigneePersonId: text("assignee_person_id").references(() => people.id, { onDelete: "restrict" }),
+    assignedByPersonId: text("assigned_by_person_id").references(() => people.id, { onDelete: "restrict" }),
+    finalizedAt: timestamp("finalized_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [uniqueIndex("translation_handoffs_draft_locale_uq").on(table.draftId, table.locale)]
+);
 
 export const signOffRecords = pgTable("sign_off_records", {
   id: text("id").primaryKey(),
@@ -155,8 +174,11 @@ export const signOffRecords = pgTable("sign_off_records", {
 export const publishCommits = pgTable("publish_commits", {
   id: text("id").primaryKey(),
   draftId: text("draft_id").notNull().references(() => drafts.id, { onDelete: "restrict" }),
-  status: text("status", { enum: ["pending", "ready", "committed"] }).notNull(),
+  status: text("status", { enum: ["pending", "ready", "superseded", "committed"] }).notNull(),
   commitHash: text("commit_hash"),
+  supersedesPublishCommitId: text("supersedes_publish_commit_id")
+    .references((): AnyPgColumn => publishCommits.id, { onDelete: "restrict" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }),
 });
 
 export const communityMembers = pgTable(

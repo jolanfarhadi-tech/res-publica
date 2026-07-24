@@ -15,6 +15,7 @@ export type AuthorizationRequest = {
   domain: AuthorizationDomain;
   capability: string;
   target?: string;
+  requireExactTarget?: boolean;
   minimumAssurance?: AssuranceLevel;
   now?: Date;
 };
@@ -37,7 +38,9 @@ export function isAuthorized(
     grant.personId === actor.personId &&
     grant.domain === request.domain &&
     grant.capability === request.capability &&
-    (grant.target === null || grant.target === request.target) &&
+    (request.requireExactTarget
+      ? grant.target === request.target
+      : grant.target === null || grant.target === request.target) &&
     assuranceRank[actor.assurance] >= assuranceRank[grant.assuranceRequired] &&
     isGrantActive(grant, now)
   );

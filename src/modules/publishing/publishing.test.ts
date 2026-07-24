@@ -93,4 +93,14 @@ describe("Publishing pipeline — intake through publish-ready", () => {
 
     expect(() => markReadyToPublish(draft.id, record)).toThrow(/does not match/);
   });
+
+  it("allows a human-started translation to be finalized without inventing an AI draft", () => {
+    const submission = submitIntake({ title: "T", rawContent: "participation", submittedByPersonId: "s" });
+    const provider = createLocalProvider(graphWithEntity());
+    const { draft } = authorDraft(submission, provider, createLedger(100));
+    const assigned = assignTranslator(createTranslationHandoff(draft, "fa"), "translator-id", "human");
+
+    expect(assigned.status).toBe("pending");
+    expect(finalizeTranslation(assigned).status).toBe("human-finalized");
+  });
 });

@@ -1,6 +1,6 @@
 # Current State — Live Repository Snapshot
 
-**Verified.** Re-run fresh, this session, 2026-07-20 (repository date context; git commit dates shown below are their own recorded dates, not this verification date). Do not reuse this file's content past its next re-run — re-execute the commands below before trusting it on a later date.
+**Verified.** Re-run fresh, this session, 2026-07-24 (repository date context; git commit dates shown below are their own recorded dates, not this verification date). Do not reuse this file's content past its next re-run — re-execute the commands below before trusting it on a later date.
 
 ---
 
@@ -10,22 +10,35 @@
 
 ## Latest commit
 
-**Verified.** `5212636` — "docs: accept civic editorial authority model" — 2026-07-19 (`git log -1 --format='%h|%ad|%s' --date=short` → `5212636|2026-07-19|docs: accept civic editorial authority model`). Full hash: `521263657d04aeeee4da7c2aa8b7241a19002d41`.
+**Verified.** `890f97f` — "docs: add permanent AI repository memory system". This branch is one commit ahead of local `main` (`5212636`) and two commits ahead of `origin/main` (`7025e6f`).
 
-This is also the tip of local `main`. `origin/main` is one commit behind, at `7025e6f` ("docs: synchronize ADR decision index") — `git log origin/main..main` → `5212636` only; `git log main..origin/main` → empty.
+Local `main` remains one commit ahead of `origin/main`: `5212636` only.
 
 ## Current git status
 
 **Verified**, `git status --short`, run this session:
 
 ```
+ M docs/AI/ARCHITECTURE_INDEX.md
+ M docs/AI/ARCHITECTURE_MEMORY.md
  M drizzle/meta/_journal.json
+ M docs/AI/CURRENT_STATE.md
+ M docs/AI/DECISION_LOG.md
+ M docs/AI/MODULES/identity-auth.md
+ M docs/AI/MODULES/persistence.md
+ M docs/AI/MODULES/publishing.md
+ M docs/AI/OPEN_WORK.md
+ M docs/AI/WARNINGS_AND_DEBT.md
+ M src/auth/authorize.ts
  M src/persistence/module-schema.ts
-?? docs/AI/
-?? docs/source/communication/
+ M src/modules/publishing/publishing.test.ts
+ M src/modules/publishing/translation.ts
+ M src/modules/publishing/types.ts
+ M tsconfig.json
 ?? drizzle/0011_publishing-authority.sql
 ?? src/app/api/publishing/
 ?? src/application/publishing-authority.ts
+?? src/application/publishing-authority.integration.test.ts
 ?? src/application/publishing.integration.test.ts
 ?? src/application/publishing.ts
 ?? src/modules/publishing/authority.test.ts
@@ -33,9 +46,9 @@ This is also the tip of local `main`. `origin/main` is one commit behind, at `70
 ?? tatus
 ```
 
-Staged: none. Unstaged (modified, tracked): `drizzle/meta/_journal.json`, `src/persistence/module-schema.ts`. Untracked: `docs/AI/` (this directory), `docs/source/communication/`, `drizzle/0011_publishing-authority.sql`, `src/app/api/publishing/`, `src/application/publishing-authority.ts`, `src/application/publishing.integration.test.ts`, `src/application/publishing.ts`, `src/modules/publishing/authority.test.ts`, `src/modules/publishing/authority.ts`, `tatus`.
+Staged: none. Publishing-scope changes are unstaged/untracked. `tsconfig.json` remains a pre-existing unrelated final-newline-only change and is excluded from the Publishing boundary. `tatus` remains untracked and untouched.
 
-**Verified — no change from the immediately preceding verification** of this same state (checked twice this session, identical output both times).
+`docs/AI/` and `docs/source/communication/` are no longer untracked: both were committed by `890f97f`.
 
 ## Implemented modules
 
@@ -60,28 +73,28 @@ Staged: none. Unstaged (modified, tracked): `drizzle/meta/_journal.json`, `src/p
 
 **Verified:**
 
-- **Publishing — authority/persistence/API layer**: `src/modules/publishing/authority.ts`, `src/application/publishing.ts`, `src/application/publishing-authority.ts`, `src/app/api/publishing/{grants,workflow}/`. **Entirely uncommitted** — not on any commit, local or remote. Tests exist (`authority.test.ts`, `publishing.integration.test.ts`, `route.test.ts`) but have not been run against this tree.
+- **Publishing — authority/persistence/API layer**: production-readiness defects found in the uncommitted implementation were fixed and locally verified. ADR-036 reconciliation now binds moderation to the exact latest draft, records assignment/decision actors and timestamps, rejects stale/unreviewed drafts and incomplete legacy provenance, enforces exact publication scope plus the full separation-of-duties set, requires nonblank human translation content, emits separate atomic sign-off/readiness audit records, rejects duplicate readiness, and append-only supersedes prior readiness when a new draft is created. The work remains entirely uncommitted.
 - **AI Layer — external provider**: not started (module's own README, direct quote: "Real external provider... not started").
 - **Member Profile**: multiple TODO items unchecked in `docs/source/projects/MEMBER_PROFILE.md`'s own checklist (see `docs/AI/OPEN_WORK.md` OPEN-004).
 - **Knowledge Graph HTTP routes** (`/api/knowledge-graph/{lookup,related,search}`): declared in the module's manifest, not found under `src/app/api/` in this session's listing — status genuinely undetermined (may be in-process-only, may be unbuilt).
 
 ## Pending migrations
 
-**Verified.** `drizzle/0011_publishing-authority.sql` — untracked, not applied to any tracked migration history, matching `drizzle/meta/_journal.json` entry present only as an unstaged change. `npm run db:check` / `npm run db:check:fresh` have not been run against it by any session that produced this document.
+**Verified.** `drizzle/0011_publishing-authority.sql` remains untracked with a matching unstaged journal entry. On 2026-07-24, `npm run db:check` passed and `npm run db:check:fresh` applied all 12 journaled migrations and created 53 tables.
 
 ## Pending tests
 
-**Verified — not run this session or (as far as this session can determine) any prior session that produced current `docs/AI/` content.** The following test files exist on disk with unknown pass/fail status: every test file listed in the "Implemented modules" table above, plus `src/modules/publishing/authority.test.ts`, `src/application/publishing.integration.test.ts`, `src/app/api/publishing/workflow/route.test.ts` (all three uncommitted). `npm test`, `npm run typecheck`, `npm run lint`, `npm run build` have not been executed.
+**Verified 2026-07-24.** Final focused Publishing/Auth/Persistence verification passed: 8 files, 32 tests. The complete deterministic suite `npm test -- --maxWorkers=1` passed all 34 files / 156 tests. `check-structure`, lint, typecheck, `db:check`, `db:check:fresh` (12 migrations / 53 tables), production build with `NEXT_PUBLIC_SITE_URL=https://example.org`, and `git diff --check` all passed. The build required approved network access for Google Fonts.
 
 ## Known problems
 
 **Verified:**
-1. Publishing-authority work is uncommitted and at risk of loss from a destructive git operation (see `docs/AI/WARNINGS_AND_DEBT.md` WARN-001).
+1. Publishing-authority work is verified but uncommitted and remains at risk of loss from a destructive git operation (see `docs/AI/WARNINGS_AND_DEBT.md` WARN-001).
 2. `src/modules/membership/README.md` contains a stale claim that ADR-027 "remains unresolved" — ADR-027 is Accepted and `src/auth/` has committed source (WARN-004).
-3. `docs/source/communication/{brand-identity,pitch-arsenal}.md` are untracked with unconfirmed purpose (WARN-008).
+3. `tsconfig.json` has an unrelated final-newline-only working-tree change; exclude it from the Publishing commit boundary.
 4. Five `worktree-agent-*` branches are stale (zero unique commits, verified) — harmless but unswept.
-5. An untracked stray file `tatus` exists at repo root — confirmed harmless (colorized `git log` output), left in place.
+5. An untracked stray file `tatus` exists at repo root — left untouched and excluded.
 
 ## Next recommended development step
 
-**Not speculation — directly derived from the evidence above, per this document's own scope rule (report evidenced next steps, not aspirational ones):** run `npm test`, `npm run typecheck`, `npm run db:check`, and `npm run db:check:fresh` against the current working tree to determine whether the uncommitted publishing-authority implementation (migration `0011` + `src/modules/publishing/authority.ts` + `src/application/publishing*.ts` + `src/app/api/publishing/*`) is ready to commit. This is the single concrete, evidenced, actionable next step available in this repository as of this snapshot. See `docs/AI/OPEN_WORK.md` OPEN-001 for the full item record.
+**Verified next step:** review the explicit Publishing-only commit boundary documented in `OPEN_WORK.md` OPEN-001, excluding `tsconfig.json` and `tatus`, then obtain the required human approval before staging or committing. No stage, commit, or push has been performed.

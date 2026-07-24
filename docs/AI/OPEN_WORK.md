@@ -6,13 +6,14 @@
 
 ## Active worktree work
 
-### OPEN-001 — Publishing-authority implementation is entirely uncommitted
-- **Task:** decide the fate of the uncommitted publishing-authority/persistence/API layer (ADR-036 realization).
-- **Evidence:** `git status --short` (this session) shows `src/modules/publishing/authority.ts`, `src/application/publishing.ts`, `src/application/publishing-authority.ts`, `src/app/api/publishing/`, `drizzle/0011_publishing-authority.sql` all untracked; `drizzle/meta/_journal.json` and `src/persistence/module-schema.ts` unstaged. `git log main..HEAD` empty — no commit anywhere captures this work.
+### OPEN-001 — Publishing-authority implementation is verified but entirely uncommitted
+- **Task:** review and approve the explicit Publishing-only commit boundary for the ADR-036 realization.
+- **Evidence:** `git status --short` (this session) shows the Publishing authority/application/API/integration tests and migration untracked, with shared authorization, schema/journal, translation/type, domain tests, and relevant memory files unstaged. `git log main..HEAD` contains only `890f97f`, a docs-only commit; no commit captures the Publishing implementation.
 - **Prerequisite:** none technical; a human decision to keep or discard is needed first.
-- **Blocker:** none identified in code; blocked only on verification (tests/typecheck/db:check have not been run against this exact tree by any session that produced this documentation).
-- **Safe next action:** run `npm test`, `npm run typecheck`, `npm run db:check`, `npm run db:check:fresh` against the current working tree; only after that, decide to commit or discard. **Do not commit blindly on the assumption that a previous agent's report of passing tests still holds** — no such report from an accessible session exists, and even if one did, the working tree may have changed since.
-- **Non-goals:** this task does not include applying the migration to a real database, does not include modifying the publishing code, and does not include choosing between "committed" vs. "uncommitted" as competing implementations — there is only one publishing-authority implementation in this repository; it is simply not yet committed.
+- **Verification:** **Verified 2026-07-24.** Final focused set passed 32/32; full one-worker suite passed 156/156; structure, lint, typecheck, both migration checks, production build, and `git diff --check` passed.
+- **Blocker:** human approval is required before staging or committing.
+- **Safe next action:** stage only migration/schema/journal, shared exact-target authorization, Publishing domain/application/API/tests, and the relevant incremental `docs/AI` updates. Explicitly exclude `tsconfig.json` and `tatus`. Re-run `git diff --staged` before requesting commit approval.
+- **Non-goals:** this task does not include applying the migration to a production database and does not include choosing between competing implementations — there is only one Publishing Authority implementation in this repository; it is simply not yet committed.
 
 ## Documentation gaps
 
@@ -24,13 +25,9 @@
 - **Safe next action:** do nothing without a human decision. **Do not regenerate this content from scratch and present it as the migrated original** — `brain/PROJECT_BRAIN_STATUS.md` §3 explicitly calls this "regeneration, not migration."
 - **Non-goals:** writing a new audit report or a new experience-journey narrative under either document's name.
 
-### OPEN-003 — `docs/source/communication/` contents unexplained
-- **Task:** determine the purpose and completeness of `brand-identity.md` and `pitch-arsenal.md`.
-- **Evidence:** untracked (`git status --short`, this session); content not read by this compilation.
-- **Prerequisite:** read the files; ask the repository owner if their purpose/relationship to the publishing-authority worktree changes is unclear.
-- **Blocker:** none technical.
-- **Safe next action:** read the two files before assuming they relate (or don't relate) to the publishing-authority work they were introduced alongside.
-- **Non-goals:** none identified.
+### OPEN-003 — Resolved: `docs/source/communication/` is committed separately
+- **Evidence:** commit `890f97f` includes `brand-identity.md` and `pitch-arsenal.md`; they are no longer untracked and are outside the Publishing Authority commit boundary.
+- **Resolution:** no Publishing action required.
 
 ## Technical debt (see `WARNINGS_AND_DEBT.md` for the full risk register; cross-listed here only where it constitutes unfinished work, not merely risk)
 
@@ -50,13 +47,9 @@
 - **Safe next action:** none until a provider decision is made; the `AIProvider` interface (`src/modules/ai-layer/types.ts`) is already the documented extension point.
 - **Non-goals:** implementing a real LLM call without a prior infrastructure/cost decision.
 
-### OPEN-006 — ADR-029's "event bus" half not confirmed implemented
-- **Task:** none active — this compilation could not confirm whether an event-bus mechanism exists or was deliberately not yet built.
-- **Evidence:** no message-queue dependency in `package.json`; no `event-bus`-named file found under `src/` this session. Audit-log half of ADR-029 is confirmed implemented (see `ARCHITECTURE_MEMORY.md`).
-- **Prerequisite:** confirm with the repository owner or a deeper code search whether this is unbuilt or realized through a different mechanism (e.g., direct function calls) not recognized as "event bus" by this search.
-- **Blocker:** none identified; this is a verification gap in this compilation, not a confirmed missing feature.
-- **Safe next action:** search more specifically (e.g., grep for domain-event type names) before assuming this is unbuilt.
-- **Non-goals:** building a new event-bus mechanism without first confirming one doesn't already exist under different naming.
+### OPEN-006 — Resolved: ADR-029 explicitly has no event bus in M1
+- **Evidence:** ADR-029 was read in full on 2026-07-24 and explicitly states “No event bus in M1.” The implemented canonical append-only audit repository is the accepted M1 boundary.
+- **Resolution:** absence of an event-bus dependency or implementation is conformant, not unfinished work. Do not build one as part of M1 Publishing.
 
 ### OPEN-007 — ADR-031 (Project ownership / cross-domain collaboration) implementation not confirmed
 - **Task:** none active — verification gap, not a confirmed missing feature.

@@ -58,7 +58,7 @@ export type SignOffRecord = {
   timestamp: Date;
 };
 
-export type PublishCommitStatus = "pending" | "ready" | "committed";
+export type PublishCommitStatus = "pending" | "ready" | "superseded" | "committed";
 
 export type PublishCommit = {
   id: string;

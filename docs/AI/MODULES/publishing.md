@@ -13,64 +13,64 @@ The back-stage editorial pipeline: intake → moderation → AI-assisted draft a
 
 This module has **two distinct layers with two different git states.** Do not conflate them.
 
-### Layer A — domain logic (REMOTE_VERIFIED, committed)
+### Layer A — domain logic (committed baseline with scoped uncommitted fixes)
 
-`src/modules/publishing/{intake.ts, moderation.ts, draft-authoring.ts, translation.ts, sign-off.ts, publish.ts, manifest.ts, types.ts, publishing.test.ts, README.md}`. Committed via `9f9ec5f` and `7ba7fd1` (2026-07-07), both ≤ `origin/main` tip `7025e6f` — **on the remote.** The module's own README (as committed) states its own status verbatim: *"Domain logic, moderation, draft authoring (AI-integrated), translation handoff, sign-off (audit-integrated), and publish-readiness are implemented and tested. No persistence layer, no API routes wired, no CLI `publish-draft` lookup yet (all await Backend Architecture)."*
+`src/modules/publishing/{intake.ts, moderation.ts, draft-authoring.ts, sign-off.ts, publish.ts, manifest.ts, README.md}` remains committed via `9f9ec5f` and `7ba7fd1` (2026-07-07), both ≤ `origin/main` tip `7025e6f`. `translation.ts`, `types.ts`, and `publishing.test.ts` now also contain scoped uncommitted ADR-036 fixes: human-first translation is valid, final translation requires nonblank human content, and the types preserve that content. The module README describes only the older committed Layer-A baseline and is not final evidence for the current working tree.
 
 ### Layer B — authority, persistence, and API (UNCOMMITTED_WORKTREE — this session's primary finding)
 
-`src/modules/publishing/{authority.ts, authority.test.ts}`, `src/application/{publishing.ts, publishing-authority.ts, publishing.integration.test.ts}`, `src/app/api/publishing/{grants/route.ts, workflow/{route.ts, route.test.ts}}`, `drizzle/0011_publishing-authority.sql`, plus unstaged changes to `drizzle/meta/_journal.json` and `src/persistence/module-schema.ts`.
-**Git status, verified this session:** every one of these paths is `??` (untracked) or ` M` (modified, unstaged) in `git status --short`. **`git log main..HEAD` on the current branch (`integration/publishing-reconciliation`) is empty** — this branch has never committed anything. **This code is not on any commit, local or remote, anywhere in this repository as of this compilation.**
+`src/modules/publishing/{authority.ts, authority.test.ts}`, `src/application/{publishing.ts, publishing-authority.ts, publishing.integration.test.ts, publishing-authority.integration.test.ts}`, `src/app/api/publishing/{grants/route.ts, workflow/{route.ts, route.test.ts}}`, `src/auth/authorize.ts`, `drizzle/0011_publishing-authority.sql`, plus unstaged changes to `drizzle/meta/_journal.json` and `src/persistence/module-schema.ts`.
+**Git status, verified this session:** every implementation path above is `??` (untracked) or ` M` (modified, unstaged). The current branch (`integration/publishing-reconciliation`) has one docs-only commit (`890f97f`) beyond `main`; no commit contains the Publishing Authority implementation.
 
 **This is not a patch file and no patch was applied or evaluated by this session** — it is the actual, live, uncommitted working-tree state, read directly from disk (`Read` tool, full contents) and cross-checked against `git status --short` and `git diff` (unstaged) run this session. This compilation did not rely on, and could not find, any "previous browser-session patch report" in the repository — no such report exists as a file here (see `INDEX.md` conversation-history disclosure).
 
 **No duplicate or competing implementation exists.** There is exactly one publishing-authority implementation in this repository; it simply exists only in the working tree, not in history. This is not a case requiring a choice between competing versions.
 
-Content summary (from direct reads this session): `authority.ts` defines `EDITORIAL_ROLES = ["editor","reviewer","translator","publisher"]`, `requireEditorialRole()`, `assertEditorialDelegation()` (forbids self-grant; forbids granting `publisher` except via a founder-only path). `publishing-authority.ts` implements `grantEditorialRole()`/`revokeEditorialRole()`, transactional, writing `authorizationGrants` + `auditLog` together. `publishing.ts` implements the full workflow (`createSubmission` → `assignReviewer` → `decideModeration` → `createDraftVersion` → `createTranslationAssignment` → `finalizeTranslation` → `signOffAndMarkReady`), enforcing separation of duties (author ≠ reviewer ≠ publisher; no self-assignment). API routes (`grants`, `workflow`) use `zod` discriminated unions, reject untrusted writes, and map errors to `403`/`404`/`409`/`503`.
+Content summary (re-verified 2026-07-24): `authority.ts` defines the four editorial roles and scoped MFA enforcement. Shared authorization now supports an opt-in exact-target requirement, which Publishing uses so a null-target grant cannot act as a wildcard publication scope. `publishing-authority.ts` implements transactional, audited grants/revocations with grant date validation and row-locked revocation. `publishing.ts` uses shared repositories for atomic canonical audit writes and enforces the complete persistent workflow: exact latest-draft review, controlled missing-person errors, assignment/decision provenance, no review before a reviewer assignment, no translation before approval, nonblank human translation content, duplicate-locale and duplicate-ready rejection, full participant separation of duties, separate sign-off/readiness audit records, and append-only readiness supersession. API routes use session-derived actors, trusted-write checks, and Zod payload validation.
 
 ## Data and persistence
 
 Committed tables (Layer A dependencies, `src/persistence/module-schema.ts`, all `REMOTE_VERIFIED`): `submissions` (L113), `moderationQueue` (L123), `drafts` (L131), `translationHandoffs` (L143), `signOffRecords` (L152), `publishCommits` (L159).
-**Uncommitted schema changes (Layer B, `UNCOMMITTED_WORKTREE`):** `publicationScope` added to `submissions`; `authoredByPersonId` (FK → `people`) + `createdAt` added to `drafts`; `finalizedAt` added to `translationHandoffs` — exact diff read in full this session. New migration `drizzle/0011_publishing-authority.sql` (untracked) with a matching `drizzle/meta/_journal.json` entry (`idx: 11`, unstaged).
-**Not verified this session:** whether `npm run db:check`/`db:check:fresh` pass against this migration. **Do not assume they do.**
+**Uncommitted schema changes (Layer B, `UNCOMMITTED_WORKTREE`):** publication scope and authorship, exact draft-bound moderation, reviewer/translator assignment actors and timestamps, decision timestamps, persisted translation content, sign-off/finalization provenance, a unique translation-locale constraint, and append-only readiness supersession. Migration `0011` does not invent provenance for legacy rows: unknown authorship, assignment times, review targets, and translation content remain nullable, while current writes always populate them and sign-off rejects incomplete legacy provenance. The migration has a matching journal entry. **Verified 2026-07-24:** `db:check` passed; `db:check:fresh` applied 12 migrations and created 53 tables.
 
 ## Authorization and trust boundaries
 
-Capability-tuple pattern (`domain:"civic"`, `capability:"publishing.role.<role>"`, `minimumAssurance:"mfa"`), same primitive as `src/auth/authorize.ts` (see `MODULES/identity-auth.md`). Enforced separation-of-duties, directly read in `publishing.ts`: an author cannot review their own submission (`author_review_forbidden`); a publisher cannot sign off if they were the draft's author, its assigned reviewer, or a translation assignee (`publisher_separation_required`); no self-assignment to translation/review; `publisher` role cannot be granted or revoked through the ordinary grant/revoke path (founder-only, per `assertEditorialDelegation`).
+Capability-tuple pattern (`domain:"civic"`, `capability:"publishing.role.<role>"`, `minimumAssurance:"mfa"`), using shared `src/auth/authorize.ts` with Publishing's opt-in `requireExactTarget: true` (see `MODULES/identity-auth.md`). Enforced separation of duties: a submission author cannot be assigned to or decide review; there is no self-assignment to review/translation; and a Publisher cannot sign off if they were the submission submitter, draft author, reviewer assigner, reviewer, translation assigner, or translator. The `publisher` role cannot be granted or revoked through the ordinary delegation path (founder-only, per `assertEditorialDelegation`).
 
 ## Public interfaces
 
-`POST /api/publishing/workflow` (seven discriminated actions: create-submission, create-draft, assign-reviewer, decide-moderation, assign-translation, finalize-translation, mark-ready). `POST`/`DELETE /api/publishing/grants`. **All of this API surface is UNCOMMITTED_WORKTREE** — it exists on disk, not in git history.
+`POST /api/publishing/workflow` (seven discriminated actions; reviewer assignment and moderation decisions require `draftId`, and final translation requires `content`). `POST`/`DELETE /api/publishing/grants`. **All of this API surface remains UNCOMMITTED_WORKTREE.**
 
 ## Verification
 
-- Layer A test: `src/modules/publishing/publishing.test.ts` — REMOTE_VERIFIED (committed), not run this session.
-- Layer B tests: `src/modules/publishing/authority.test.ts`, `src/application/publishing.integration.test.ts`, `src/app/api/publishing/workflow/route.test.ts` — **exist on disk, UNCOMMITTED_WORKTREE, not run this session.**
-- **This compilation did not run `npm test` and therefore cannot and does not claim these tests pass.** Any prior report (from this session or any other) that these tests "passed" is not independently re-verified here and must not be trusted without re-running them against the exact current working tree — per this task's explicit instruction not to mark publishing complete merely because a previous agent reported passing tests.
+- **Verified 2026-07-24:** final focused Publishing/Auth/Persistence set passed, 8 files / 32 tests.
+- **Verified 2026-07-24:** full suite passed with constrained concurrency, 34 files / 156 tests.
+- Structure, lint, typecheck, `db:check`, `db:check:fresh`, production build, and `git diff --check` passed.
+- Integration coverage proves audit failure rolls back both sign-off and readiness atomically. Static inspection confirms no filesystem, Git, deployment, or auto-publish action exists at the ready boundary; `commitHash` remains `null`.
 
 ## Decisions and rejected approaches
 
-No explicit rejected-alternatives text was found for the publishing-authority design specifically (no ADR "Alternatives Considered" section for ADR-036 was read in full this session — only its title/decision summary via `brain/DECISIONS.md`). The module's own committed README documents one explicit non-goal: *"`publish.ts` marks a draft 'ready to publish' but never writes a file or invokes Git. The actual commit is a separate, explicitly-approved action outside this module's scope."*
+ADR-036's full “Alternatives Considered” section was read on 2026-07-24. It rejects a single-role workflow, automatic authority from identity-provider groups, automatic Git commits by Publishers, and AI approval of low-risk content. The implementation continues to stop at `ready` with `commitHash: null`.
 
 ## Current status
 
-- Layer A (domain logic): **REMOTE_VERIFIED**, **IMPLEMENTED_NOT_REVERIFIED**.
-- Layer B (authority/persistence/API): **UNCOMMITTED_WORKTREE**. Not LOCALLY_COMMITTED, not REMOTE_VERIFIED, not IMPLEMENTED_AND_TESTED (tests exist but unexecuted this session — do not upgrade this status without an actual test run).
+- Layer A (domain logic): committed baseline plus scoped **UNCOMMITTED_WORKTREE, LOCALLY_VERIFIED 2026-07-24** translation/type/test fixes.
+- Layer B (authority/persistence/API): **UNCOMMITTED_WORKTREE, LOCALLY_VERIFIED 2026-07-24**. Not locally committed and not remote-verified.
 
 ## Open work
 
-See `OPEN_WORK.md` OPEN-001 (primary item) and `WARNINGS_AND_DEBT.md` WARN-001/WARN-006 (data-loss and migration-verification risk). Safe next action: run `npm test`, `npm run typecheck`, `npm run db:check`, `npm run db:check:fresh` against the current tree before any commit decision. **This compilation did not run any of these and did not apply, stage, or modify any publishing code or patch.**
+See `OPEN_WORK.md` OPEN-001 and `WARNINGS_AND_DEBT.md` WARN-001. Verification is complete; the remaining action is a human-approved Publishing-only stage/commit decision. Exclude `tsconfig.json` and `tatus`.
 
 ## Do not redo
 
-Do not re-implement the publishing domain logic (intake/moderation/draft-authoring/translation/sign-off/publish) — Layer A already exists, is committed, and is tested. Do not re-implement the authority/persistence/API layer either — Layer B already exists in the working tree; the open task is verification and a commit decision, not a rewrite.
+Do not re-implement the publishing domain logic or authority/persistence/API services. Both layers exist and are verified in the current working tree; the remaining action is a commit decision, not a rewrite.
 
 ## Evidence index
 
 - `architecture/adr/ADR-036-civic-editorial-delegation-of-authority.md`
 - `src/modules/publishing/README.md` (full read)
-- `src/modules/publishing/{intake,moderation,draft-authoring,translation,sign-off,publish,manifest,types}.ts` (Layer A, committed `9f9ec5f`/`7ba7fd1`)
-- `src/modules/publishing/{authority.ts, authority.test.ts}`, `src/application/{publishing.ts, publishing-authority.ts, publishing.integration.test.ts}`, `src/app/api/publishing/{grants,workflow}/route.ts` (Layer B, all read in full this session, all uncommitted)
+- `src/modules/publishing/{intake,moderation,draft-authoring,translation,sign-off,publish,manifest,types}.ts` and `publishing.test.ts` (committed baseline with scoped uncommitted translation/type/test fixes)
+- `src/modules/publishing/{authority.ts, authority.test.ts}`, `src/application/{publishing.ts, publishing-authority.ts, publishing.integration.test.ts, publishing-authority.integration.test.ts}`, `src/app/api/publishing/{grants,workflow}/route.ts`, `src/auth/authorize.ts` (Layer B and shared exact-target support, all uncommitted)
 - `drizzle/0011_publishing-authority.sql`, `drizzle/meta/_journal.json` diff, `src/persistence/module-schema.ts` diff (all read in full this session)
 - command: `git status --short` → full output reproduced in `CURRENT_STATE.md`
-- command: `git log main..HEAD` (on `integration/publishing-reconciliation`) → empty
+- command: `git log main..HEAD` (on `integration/publishing-reconciliation`) → `890f97f` (docs-only; no Publishing implementation)

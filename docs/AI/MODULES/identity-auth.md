@@ -12,7 +12,7 @@ Session/identity resolution and a shared, capability-based authorization primiti
 
 ## Current implementation
 
-`src/auth/{oidc.ts, actor-resolver.ts, runtime.ts, store.ts, authorize.ts, request-security.ts, crypto.ts, types.ts}` (all confirmed to exist this session via directory listing; `oidc.ts`, `authorize.ts`, `request-security.ts`, `types.ts` sampled/read in the course of reading dependent modules, not all read line-by-line independently). `types.ts` defines `AuthenticatedActor`. `authorize.ts` implements the capability-based `requireAuthorization`/similar core, consumed by `src/modules/publishing/authority.ts` and `src/modules/harm-governance/authority.ts` (both directly read this session, confirming the calling pattern).
+`src/auth/{oidc.ts, actor-resolver.ts, runtime.ts, store.ts, authorize.ts, request-security.ts, crypto.ts, types.ts}`. `types.ts` defines `AuthenticatedActor`. `authorize.ts` implements the shared capability-based authorization primitive consumed by Publishing and HARM Governance. A scoped uncommitted change adds `AuthorizationRequest.requireExactTarget`; its default preserves existing module behavior, while Publishing opts in so a null-target grant cannot authorize a publication-scoped operation.
 Committed via commits `a9fac9c` ("Add M2 module bootstrap and auth foundation"), `e31ca3c` ("Add OIDC membership and event flows"), `770857e` ("Add authenticated session controls") — all on `main`, all ≤ `origin/main`'s tip `7025e6f` (i.e., pushed to remote).
 
 ## Data and persistence
@@ -21,7 +21,7 @@ Committed via commits `a9fac9c` ("Add M2 module bootstrap and auth foundation"),
 
 ## Authorization and trust boundaries
 
-Capability-tuple model: `{domain, capability, target, minimumAssurance}`. Example usage pattern (from `src/modules/publishing/authority.ts`, read in full): `requireAuthorization(actor, {domain: "civic", capability: "publishing.role.editor", target: publicationScope, minimumAssurance: "mfa"})`. This module defines the primitive; it does not itself define domain-specific capabilities (`publishing.role.*`, HARM-governance capabilities) — those are owned by their respective modules, consistent with ADR-030's "domain decisions stay domain-owned."
+Capability-tuple model: `{domain, capability, target, minimumAssurance, requireExactTarget?}`. Publishing calls it with `domain: "civic"`, `capability: "publishing.role.<role>"`, the exact publication scope, `minimumAssurance: "mfa"`, and `requireExactTarget: true`. The opt-in flag prevents wildcard/null-target grants only for callers that require exact scoping; other domains retain the established matching behavior. Domain-specific capabilities remain owned by their modules.
 
 ## Public interfaces
 
@@ -29,7 +29,7 @@ Capability-tuple model: `{domain, capability, target, minimumAssurance}`. Exampl
 
 ## Verification
 
-Tests: `src/auth/authorize.test.ts`, `src/auth/config.test.ts`, `src/app/api/auth/routes.test.ts` (all confirmed to exist this session via file listing). **Not run by this session** — existence only, not pass/fail status.
+Tests: `src/auth/authorize.test.ts`, `src/auth/config.test.ts`, `src/app/api/auth/routes.test.ts`. **Verified 2026-07-24:** authorization tests passed in the final 32-test focused set, and the full one-worker suite passed 156/156.
 
 ## Decisions and rejected approaches
 
@@ -37,7 +37,7 @@ No explicit "rejected alternative" text was found for this module specifically i
 
 ## Current status
 
-**REMOTE_VERIFIED** (all identity-auth commits are on `origin/main`, tip `7025e6f`). **IMPLEMENTED_NOT_REVERIFIED** (source and tests exist; tests not run this session). See `CURRENT_STATE.md`.
+**REMOTE_VERIFIED** for the committed identity/auth baseline. The exact-target authorization option is **UNCOMMITTED_WORKTREE, LOCALLY_VERIFIED 2026-07-24** and is part of the Publishing Authority commit boundary.
 
 ## Open work
 

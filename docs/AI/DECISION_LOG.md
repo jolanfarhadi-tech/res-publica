@@ -83,7 +83,7 @@
 **Decision:** four editorial roles (`editor`, `reviewer`, `translator`, `publisher`), session-derived authority, strict separation of duties (author ≠ reviewer ≠ publisher, no self-assignment), human-only sign-off, no automatic publish action.
 **Rationale:** directly evidenced in the implementing code's own logic (not a separately-read rationale document): `src/application/publishing.ts` (read in full) enforces `author_review_forbidden`, `publisher_separation_required`, and forbids self-assignment to translation/review at the function level, consistent with a deliberate anti-collusion/accountability design.
 **Evidence:** `architecture/adr/ADR-036-civic-editorial-delegation-of-authority.md`; `src/modules/publishing/authority.ts`, `src/application/publishing.ts`, `src/application/publishing-authority.ts` (all read in full, all **currently uncommitted**).
-**Related commit:** the ADR document itself is committed as `5212636`; the implementing code has **no commit** (verified via `git log main..HEAD` on branch `integration/publishing-reconciliation`, empty).
+**Related commit:** the ADR document itself is committed as `5212636`; the implementing code has **no commit**. The branch-only commit `890f97f` contains repository-memory and communication documentation, not the Publishing implementation.
 **Related ADR:** ADR-036.
 **Status caveat:** this is the one decision in this log whose governing document is committed but whose implementation is not — see `docs/AI/MODULES/publishing.md` for full detail.
 
@@ -135,6 +135,24 @@
 **Evidence:** `architecture/adr/ADR-024-executive-ai-office.md`, `ADR-025-eao-generation-2-constitutional-architecture-adoption.md`; this session's system context describing the `program-orchestrator` agent's tool access as `Read, Grep, Bash, Glob` (no `Write`/`Edit`).
 **Related commit:** `627802c` ("Register EAO roster and activate Chief Systems Officer per ADR-024").
 **Related ADR:** ADR-024, ADR-025.
+
+## D-17: Publishing readiness supersession is append-only
+
+**Decision:** when a new draft version is created after an earlier version reached `ready`, the original ready record is retained and a new `superseded` event references it. Sign-off separately requires the exact latest draft to have its own approved moderation record.
+**Rationale:** ADR-036 requires subsequent edits to invalidate prior readiness while also requiring historical editorial decisions to remain append-only. Updating or deleting the original ready record would satisfy invalidation but violate the historical-record boundary; an explicit supersession event satisfies both requirements.
+**Evidence:** `src/application/publishing.ts`; `src/persistence/module-schema.ts`; `drizzle/0011_publishing-authority.sql`; `src/application/publishing.integration.test.ts` (verified passing 2026-07-24).
+**Related commit:** none — implementation remains uncommitted.
+**Related ADR:** ADR-036, ADR-029.
+**Rejected alternative:** mutating the existing ready row in place, because that would rewrite the historical decision rather than append superseding evidence.
+
+## D-18: Unknown legacy Publishing provenance remains explicitly unknown
+
+**Decision:** migration `0011` leaves legacy draft authorship, reviewer assignment time, reviewed draft target, and translation content nullable when the historical value cannot be established. Current writes always persist this provenance, and sign-off rejects records whose required provenance remains incomplete.
+**Rationale:** deterministic backfills would create plausible-looking but false authorship, timing, review-target, or content evidence. ADR-029 and ADR-036 require trustworthy canonical audit and named-human accountability, so explicit unknowns are safer than fabricated history.
+**Evidence:** `drizzle/0011_publishing-authority.sql`; `src/persistence/module-schema.ts`; `src/application/publishing.ts`; `src/application/publishing.integration.test.ts` (verified passing 2026-07-24).
+**Related commit:** none — implementation remains uncommitted.
+**Related ADR:** ADR-029, ADR-036.
+**Rejected alternative:** assigning submission timestamps/authors or a latest draft as migration defaults, because those values are not recoverable historical facts.
 
 ---
 

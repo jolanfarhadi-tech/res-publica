@@ -78,6 +78,13 @@
       "when": 1784454600000,
       "tag": "0010_harm-case-institution-scope",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1784475000000,
+      "tag": "0011_publishing-authority",
+      "breakpoints": true
     }
   ]
 }

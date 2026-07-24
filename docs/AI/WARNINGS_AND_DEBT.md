@@ -5,11 +5,11 @@
 ---
 
 ### WARN-001 — Publishing-authority implementation exists only in the uncommitted working tree
-- **Evidence:** `git status --short` (this session): `src/modules/publishing/authority.ts`, `src/application/publishing.ts`, `src/application/publishing-authority.ts`, `src/app/api/publishing/`, `drizzle/0011_publishing-authority.sql` all untracked; `drizzle/meta/_journal.json`, `src/persistence/module-schema.ts` unstaged. No commit on any branch (local or remote) contains this code (`git log main..HEAD`, `git log --all --oneline` cross-checked this session and the prior one).
-- **Impact:** real, apparently-complete implementation work (domain logic, persistence, authority enforcement, API routes, tests) could be silently lost — e.g., by a `git checkout`/`git clean`/branch switch performed without awareness of this state.
+- **Evidence:** `git status --short` re-verified 2026-07-24: Publishing authority/application/API/tests and migration remain untracked; schema/journal/type changes remain unstaged. The branch has one docs-only commit beyond `main`; no commit contains the Publishing implementation.
+- **Impact:** production-readiness-verified implementation work (domain logic, persistence, authority enforcement, API routes, tests) could be silently lost — e.g., by a `git checkout`/`git clean`/branch switch performed without awareness of this state.
 - **Severity:** **High** (data-loss risk for real engineering work), not urgent (no external system depends on it yet).
 - **Safe handling:** do not run any destructive git operation (`checkout --`, `clean -f`, `reset --hard`, branch switch away from `integration/publishing-reconciliation`) without first confirming this work has been committed or is intentionally being discarded.
-- **Resolution condition:** the work is either committed (after verification, see `OPEN_WORK.md` OPEN-001) or explicitly, deliberately discarded by the repository owner.
+- **Resolution condition:** the locally verified work is committed after explicit human approval, or deliberately discarded by the repository owner.
 
 ### WARN-002 — Five stale worktree-agent branches
 - **Evidence:** `git branch -a` lists `worktree-agent-{a41b2f98bb4889568,ac265ef0dcfbd1d11,aca5f3876aea4f4e9,adee0af9fffa74fc8,afb36aeffa2f75bec}`, all physically backed by `.claude/worktrees/agent-*/` directories (`git worktree list`, prior session). **Directly verified this session:** all five are at commit `af64931` with zero commits ahead of `main` (`git log main..<branch>` empty for each).
@@ -39,26 +39,21 @@
 - **Safe handling:** be aware that `origin/main` is not the full picture of local progress before assuming a fresh clone/checkout reflects everything described in this documentation set.
 - **Resolution condition:** repository owner pushes `main`, at their discretion — outside this task's scope (this task must not push).
 
-### WARN-006 — Uncommitted migration (`0011_publishing-authority`) not verified against a fresh database
-- **Evidence:** `drizzle/0011_publishing-authority.sql` untracked; CI (`.github/workflows/ci.yml`) runs `npm run db:check` and `npm run db:check:fresh` on every push/PR, but this migration has never been pushed, so it has never run through CI. This compilation did not run `db:check`/`db:check:fresh` itself (out of scope — no migration commands were executed).
-- **Impact:** unknown whether this migration is valid/conflict-free against a fresh database until actually checked.
-- **Severity:** **Medium** (standard pre-merge risk for any uncommitted migration, not elevated beyond that).
-- **Safe handling:** run `npm run db:check` and `npm run db:check:fresh` before committing or merging this migration. This documentation task does not run them.
-- **Resolution condition:** both checks pass in an actual run, recorded by whoever performs it.
+### WARN-006 — Resolved 2026-07-24: migration `0011` verified against a fresh database
+- **Evidence:** `npm run db:check` passed. `npm run db:check:fresh` applied 12 journaled migrations and created 53 tables.
+- **Remaining handling:** migration `0011` is still uncommitted and remains covered by WARN-001, but migration validity is no longer an unknown local risk.
+- **Resolution condition:** satisfied for local verification; CI will independently re-run both checks after a future approved push/PR.
 
-### WARN-007 — Incomplete authorization coverage: two ADRs accepted but not confirmed implemented
-- **Evidence:** ADR-029's event-bus half and ADR-031 (project ownership/cross-domain collaboration) — see `OPEN_WORK.md` OPEN-006/OPEN-007 and `ARCHITECTURE_MEMORY.md` for full detail. Marked **UNVERIFIED**, not **PARTIALLY IMPLEMENTED**, because no code was found either confirming or ruling out an implementation under different naming.
-- **Impact:** if a future task assumes these are fully implemented (because their governing ADR says "Accepted"), it risks building on a boundary that doesn't actually exist in code yet.
+### WARN-007 — ADR-031 implementation is accepted but not confirmed
+- **Evidence:** ADR-031 (project ownership/cross-domain collaboration) remains unverified — see `OPEN_WORK.md` OPEN-007 and `ARCHITECTURE_MEMORY.md`. ADR-029 is no longer part of this warning: its explicit M1 decision is canonical append-only audit with no event bus.
+- **Impact:** if a future task assumes ADR-031 is fully implemented because the ADR says “Accepted,” it risks building on a boundary that may not exist in code yet.
 - **Severity:** **Medium** — a documentation-verification gap, not a confirmed code defect.
-- **Safe handling:** do not treat "ADR accepted" as "code implemented" for these two without a targeted search first (see `ARCHITECTURE_MEMORY.md`'s explicit ACCEPTED-vs-IMPLEMENTED distinction throughout).
+- **Safe handling:** do not treat “ADR accepted” as “code implemented” for ADR-031 without a targeted search first (see `ARCHITECTURE_MEMORY.md`'s explicit ACCEPTED-vs-IMPLEMENTED distinction throughout).
 - **Resolution condition:** a targeted code search either confirms an implementation (update `ARCHITECTURE_MEMORY.md`) or confirms the gap is real (move to `OPEN_WORK.md` as an active item).
 
-### WARN-008 — `docs/source/communication/` untracked, unexplained
-- **Evidence:** `brand-identity.md`, `pitch-arsenal.md`, untracked (`git status --short`), content not read by this compilation.
-- **Impact:** unknown — could be unrelated in-progress work bundled into the same working tree as the publishing-authority changes, or could be part of the same effort. Not knowing which risks accidental inclusion/exclusion if the publishing-authority work is committed separately.
-- **Severity:** **Low-Medium**, pending investigation.
-- **Safe handling:** read the files before committing anything else in this working tree, to avoid accidentally bundling unrelated work into one commit.
-- **Resolution condition:** contents read and purpose confirmed (see `OPEN_WORK.md` OPEN-003).
+### WARN-008 — Resolved: `docs/source/communication/` committed separately
+- **Evidence:** commit `890f97f` includes both communication documents. They are no longer untracked and are outside the Publishing Authority commit boundary.
+- **Resolution condition:** satisfied; no Publishing action required.
 
 ### WARN-009 — Two Foundation-era documentation artifacts have no surviving original text
 - **Evidence:** `brain/PROJECT_BRAIN_STATUS.md` §3 — the Engineering/Security Audit report and the 9-stage Experience Blueprint originals do not exist anywhere in this repository, only compressed summaries.

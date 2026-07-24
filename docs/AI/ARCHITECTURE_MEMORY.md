@@ -42,7 +42,7 @@ Status: **IMPLEMENTED** (not a separate ADR; a design pattern realized identical
 Status: **ACCEPTED** — `architecture/adr/ADR-029-audit-and-event-bus-boundary.md`.
 Implementation, split:
 - **Append-only audit log: IMPLEMENTED.** Evidence: `auditLog` table (`src/persistence/schema.ts` L81); every mutating action in `src/application/publishing.ts`, `src/application/publishing-authority.ts`, and (by module pattern) `src/modules/membership/lifecycle.ts`, `src/modules/events/registration.ts` writes an `auditLog` row in the same transaction (directly read this session for publishing; membership/events READMEs assert the same pattern for their own modules, not independently re-verified line-by-line).
-- **Domain-event bus mechanism: UNVERIFIED.** This compilation found no dedicated event-bus/pub-sub implementation (no message-queue library in `package.json`, no `event-bus`-named file under `src/`). The ADR's "event bus" half of its scope was not confirmed implemented; it may be realized differently (e.g., via direct function calls between modules) or not yet built — not confirmed either way this session.
+- **No domain-event bus in M1: ACCEPTED DECISION.** ADR-029 explicitly states that M1 does not introduce an event bus. The absence of a message-queue/pub-sub mechanism is therefore conformant, not an implementation gap. The canonical append-only audit repository is the required M1 boundary and is used by Publishing.
 
 ## Knowledge Graph boundary
 
