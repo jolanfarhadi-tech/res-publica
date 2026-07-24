@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { NewsletterSignup } from "./NewsletterSignup";
+import { getPublicSiteCopy } from "@/i18n/public-site";
 
 /**
  * Footer — full sitemap in two grouped columns (Organization /
@@ -11,22 +12,23 @@ import { NewsletterSignup } from "./NewsletterSignup";
  */
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const year = new Date().getFullYear();
-  const t = dict.nav;
+  const t = getPublicSiteCopy(locale);
 
   const organization = [
-    { href: `/${locale}/about`, label: t.about },
-    { href: `/${locale}/mission-vision`, label: t.missionVision },
-    { href: `/${locale}/team`, label: t.team },
-    { href: `/${locale}/partners`, label: t.partners },
-    { href: `/${locale}/contact`, label: t.contact },
+    { href: `/${locale}/about`, label: t.nav.about },
+    { href: `/${locale}/mission-vision`, label: t.nav.mission },
+    { href: `/${locale}/team`, label: t.nav.team },
+    { href: `/${locale}/partners`, label: t.nav.partners },
+    { href: `/${locale}/contact`, label: t.nav.contact },
   ];
   const work = [
-    { href: `/${locale}/news`, label: t.news },
-    { href: `/${locale}/projects`, label: t.projects },
-    { href: `/${locale}/research`, label: t.research },
-    { href: `/${locale}/publications`, label: t.publications },
-    { href: `/${locale}/events`, label: t.events },
-    { href: `/${locale}/membership`, label: t.membership },
+    { href: `/${locale}/method`, label: t.nav.method },
+    { href: `/${locale}/offerings`, label: t.nav.offerings },
+    { href: `/${locale}/projects`, label: t.nav.projects },
+    { href: `/${locale}/research`, label: t.nav.research },
+    { href: `/${locale}/publications`, label: t.nav.publications },
+    { href: `/${locale}/events`, label: t.nav.events },
+    { href: `/${locale}/membership`, label: t.nav.membership },
   ];
   const legal = [
     { href: `/${locale}/impressum`, label: "Impressum" },
@@ -94,8 +96,17 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </ul>
           </nav>
 
-          {/* Newsletter */}
-          <NewsletterSignup dict={dict} />
+          {/* Newsletter is offered only when a provider is operationally configured. */}
+          {isNewsletterConfigured() ? (
+            <NewsletterSignup dict={dict} />
+          ) : (
+            <div>
+              <p className={groupHeading}>{dict.newsletter.title}</p>
+              <p className="max-w-xs text-sm leading-relaxed text-muted">
+                {t.newsletterUnavailable}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-12 border-t border-border pt-6">
@@ -106,4 +117,14 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       </Container>
     </footer>
   );
+}
+
+function isNewsletterConfigured(): boolean {
+  if (process.env.NEWSLETTER_PROVIDER === "buttondown") {
+    return Boolean(process.env.BUTTONDOWN_API_KEY);
+  }
+  if (process.env.NEWSLETTER_PROVIDER === "mailchimp") {
+    return Boolean(process.env.MAILCHIMP_API_KEY && process.env.MAILCHIMP_AUDIENCE_ID);
+  }
+  return false;
 }

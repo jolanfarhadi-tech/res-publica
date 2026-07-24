@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { PersonCard } from "@/components/ui/PersonCard";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { getPublicSiteCopy } from "@/i18n/public-site";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -29,8 +30,7 @@ export default async function TeamPage({ params }: Props) {
 
   return (
     <>
-      <JsonLd
-        data={{
+      {team.length > 0 && <JsonLd data={{
           "@context": "https://schema.org",
           "@type": "ItemList",
           itemListElement: team.map((member, index) => ({
@@ -43,10 +43,14 @@ export default async function TeamPage({ params }: Props) {
               worksFor: { "@type": "Organization", name: "Res Publica" },
             },
           })),
-        }}
-      />
+        }} />}
       <PageHeader title={dict.pages.team.title} lede={dict.pages.team.lede} />
       <Container className="py-14 sm:py-20">
+        {team.length === 0 && (
+          <p className="max-w-2xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
+            {getPublicSiteCopy(locale as Locale).people.team}
+          </p>
+        )}
         <ul className="grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {team.map((member) => (
             <li key={member.id}>

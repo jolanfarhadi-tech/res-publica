@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { EntryCard } from "@/components/ui/EntryCard";
 import { TagFilter } from "@/components/ui/TagFilter";
 import { Pagination } from "@/components/ui/Pagination";
+import { getPublicSiteCopy } from "@/i18n/public-site";
 
 const PAGE_SIZE = 9;
 
@@ -89,7 +90,9 @@ export function CollectionIndex({
         />
 
         {filtered.length === 0 && (
-          <p className="text-muted">{labels.noEntries}</p>
+          <p className="max-w-3xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
+            {getPublicSiteCopy(locale).empty}
+          </p>
         )}
 
         {collection === "events" ? (

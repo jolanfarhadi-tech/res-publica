@@ -9,29 +9,17 @@ import { Container } from "@/components/ui/Container";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 import { AccountControl } from "./AccountControl";
+import { publicNavigation } from "@/data/public-navigation";
 
-export function navItems(locale: Locale, dict: Dictionary) {
-  const t = dict.nav;
-  return [
-    { href: `/${locale}/news`, label: t.news },
-    { href: `/${locale}/about`, label: t.about },
-    { href: `/${locale}/mission-vision`, label: t.missionVision },
-    { href: `/${locale}/projects`, label: t.projects },
-    { href: `/${locale}/research`, label: t.research },
-    { href: `/${locale}/publications`, label: t.publications },
-    { href: `/${locale}/events`, label: t.events },
-    { href: `/${locale}/membership`, label: t.membership },
-    { href: `/${locale}/team`, label: t.team },
-    { href: `/${locale}/partners`, label: t.partners },
-    { href: `/${locale}/contact`, label: t.contact },
-  ];
+export function navItems(locale: Locale) {
+  return publicNavigation(locale);
 }
 
 export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-  const items = navItems(locale, dict);
+  const items = navItems(locale);
 
   useEffect(() => setOpen(false), [pathname]);
 

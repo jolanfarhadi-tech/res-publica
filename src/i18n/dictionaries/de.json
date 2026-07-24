@@ -69,11 +69,11 @@
   "pages": {
     "team": {
       "title": "Team",
-      "lede": "Die Menschen hinter Res Publica."
+      "lede": "Bestätigte Namen und Rollen werden erst nach Freigabe öffentlich angezeigt."
     },
     "partners": {
       "title": "Partner",
-      "lede": "Wir arbeiten mit Organisationen zusammen, die unsere Werte teilen."
+      "lede": "Bestätigte institutionelle Beziehungen werden erst nach Freigabe öffentlich angezeigt."
     }
   },
   "contact": {
@@ -103,23 +103,23 @@
   "collections": {
     "news": {
       "title": "Aktuelles",
-      "lede": "Neuigkeiten aus der Organisation."
+      "lede": "Quellengeprüfte Mitteilungen aus der Organisation."
     },
     "projects": {
       "title": "Projekte",
-      "lede": "Konkrete Vorhaben, die Teilhabe möglich machen."
+      "lede": "Bestätigte zivile Praxis und institutionenbildende Vorhaben."
     },
     "research": {
       "title": "Forschung",
-      "lede": "Unabhängige Analysen als Grundlage unserer Arbeit."
+      "lede": "Quellen, Methoden und Unsicherheit in öffentlicher Forschung."
     },
     "publications": {
       "title": "Publikationen",
-      "lede": "Berichte, Papiere und Stellungnahmen — frei zugänglich."
+      "lede": "Geprüfte Beiträge zum öffentlichen institutionellen Gedächtnis."
     },
     "events": {
       "title": "Veranstaltungen",
-      "lede": "Orte des Dialogs: kommende und vergangene Termine."
+      "lede": "Bestätigte Gelegenheiten für Dialog und Beteiligung."
     },
     "labels": {
       "all": "Alle",
@@ -168,7 +168,7 @@
   },
   "search": {
     "title": "Suche",
-    "lede": "Durchsuchen Sie Aktuelles, Projekte, Forschung, Publikationen und Veranstaltungen.",
+    "lede": "Durchsuchen Sie die tatsächlich veröffentlichten Inhalte dieser Website.",
     "placeholder": "Suchbegriff eingeben …",
     "label": "Website durchsuchen",
     "results": "{count} Ergebnisse",
@@ -180,7 +180,7 @@
   },
   "newsletter": {
     "title": "Newsletter",
-    "text": "Neuigkeiten von Res Publica — unregelmäßig, werbefrei, jederzeit abbestellbar.",
+    "text": "Anmeldung zu bestätigten Mitteilungen von Res Publica.",
     "placeholder": "E-Mail-Adresse",
     "submit": "Anmelden",
     "success": "Fast geschafft! Bitte bestätigen Sie die E-Mail, die wir Ihnen gesendet haben.",
@@ -203,7 +203,7 @@
     },
     "membership": {
       "title": "Mitgliedschaft",
-      "lede": "Werden Sie Teil von Res Publica und wählen Sie die Form der Mitwirkung, die zu Ihnen passt.",
+      "lede": "Ein geschützter Einstieg in langfristige zivilgesellschaftliche Beteiligung.",
       "tierLabel": "Form der Mitgliedschaft",
       "tiers": {
         "basic": "Basismitgliedschaft",

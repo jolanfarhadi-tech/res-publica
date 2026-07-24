@@ -6,6 +6,7 @@ import { pageAlternates } from "@/lib/seo";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { MembershipForm } from "@/components/platform/MembershipForm";
+import { getPublicSiteCopy } from "@/i18n/public-site";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -23,7 +24,12 @@ export default async function MembershipPage({ params }: Props) {
   return (
     <>
       <PageHeader title={dict.platform.membership.title} lede={dict.platform.membership.lede} />
-      <Container className="py-14 sm:py-20"><MembershipForm locale={locale as Locale} dict={dict} /></Container>
+      <Container className="py-14 sm:py-20">
+        <p className="mb-10 max-w-3xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
+          {getPublicSiteCopy(locale as Locale).membershipIntro}
+        </p>
+        <MembershipForm locale={locale as Locale} dict={dict} />
+      </Container>
     </>
   );
 }

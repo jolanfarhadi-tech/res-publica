@@ -69,11 +69,11 @@
   "pages": {
     "team": {
       "title": "Team",
-      "lede": "The people behind Res Publica."
+      "lede": "Confirmed names and roles are displayed only after publication approval."
     },
     "partners": {
       "title": "Partners",
-      "lede": "We work with organizations that share our values."
+      "lede": "Confirmed institutional relationships are displayed only after publication approval."
     }
   },
   "contact": {
@@ -103,23 +103,23 @@
   "collections": {
     "news": {
       "title": "News",
-      "lede": "News from the organization."
+      "lede": "Source-reviewed notices from the organisation."
     },
     "projects": {
       "title": "Projects",
-      "lede": "Concrete initiatives that make participation possible."
+      "lede": "Confirmed civic practice and institution-building initiatives."
     },
     "research": {
       "title": "Research",
-      "lede": "Independent analysis as the foundation of our work."
+      "lede": "Sources, methods and uncertainty in public research."
     },
     "publications": {
       "title": "Publications",
-      "lede": "Reports, papers, and statements — freely available."
+      "lede": "Reviewed contributions to public institutional memory."
     },
     "events": {
       "title": "Events",
-      "lede": "Places of dialogue: upcoming and past dates."
+      "lede": "Confirmed opportunities for dialogue and participation."
     },
     "labels": {
       "all": "All",
@@ -168,7 +168,7 @@
   },
   "search": {
     "title": "Search",
-    "lede": "Search news, projects, research, publications, and events.",
+    "lede": "Search the content that is actually published on this website.",
     "placeholder": "Enter a search term …",
     "label": "Search the website",
     "results": "{count} results",
@@ -180,7 +180,7 @@
   },
   "newsletter": {
     "title": "Newsletter",
-    "text": "News from Res Publica — occasional, ad-free, unsubscribe anytime.",
+    "text": "Subscribe to confirmed notices from Res Publica.",
     "placeholder": "Email address",
     "submit": "Subscribe",
     "success": "Almost done! Please confirm the email we just sent you.",
@@ -203,7 +203,7 @@
     },
     "membership": {
       "title": "Membership",
-      "lede": "Become part of Res Publica and choose the form of participation that suits you.",
+      "lede": "A protected entry point into sustained civic participation.",
       "tierLabel": "Type of membership",
       "tiers": {
         "basic": "Basic membership",

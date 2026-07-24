@@ -13,10 +13,12 @@ const STATIC_PATHS = [
   "",
   "/about",
   "/mission-vision",
+  "/method",
+  "/offerings",
+  "/membership",
   "/team",
   "/partners",
   "/contact",
-  "/search",
   ...collections.map((collection) => `/${collection}`),
 ];
 
@@ -27,7 +29,10 @@ function urlSet(path: string, lastModified?: string) {
     ...(lastModified ? { lastModified: new Date(lastModified) } : {}),
     alternates: {
       languages: Object.fromEntries(
-        locales.map((l) => [l, `${base}/${l}${path}`])
+        [
+          ...locales.map((l) => [l, `${base}/${l}${path}`]),
+          ["x-default", `${base}/de${path}`],
+        ]
       ),
     },
   }));

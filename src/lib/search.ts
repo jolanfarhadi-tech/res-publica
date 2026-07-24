@@ -1,5 +1,8 @@
 import type { Locale } from "@/i18n/config";
 import { collections, getEntries } from "@/lib/collections";
+import { getPage } from "@/lib/content";
+import { getDictionary } from "@/i18n/dictionaries";
+import { getPublicSiteCopy } from "@/i18n/public-site";
 
 /**
  * Full-text search — Milestone 6.
@@ -15,6 +18,7 @@ export type SearchDocument = {
   title: string;
   description: string;
   collection: string;
+  section: string;
   date: string;
   tags: string[];
   /** Lower-cased, normalized text used for matching. */
@@ -40,12 +44,59 @@ export function normalizeForSearch(input: string): string {
 }
 
 export function buildSearchIndex(locale: Locale): SearchDocument[] {
-  return collections.flatMap((collection) =>
+  const dictionary = getDictionary(locale);
+  const publicCopy = getPublicSiteCopy(locale);
+  const pages = [
+    {
+      url: `/${locale}`,
+      title: publicCopy.home.hero.title,
+      description: publicCopy.home.hero.lede,
+      body: JSON.stringify(publicCopy.home),
+    },
+    {
+      url: `/${locale}/mission-vision`,
+      ...pageForSearch(locale, "mission"),
+    },
+    {
+      url: `/${locale}/about`,
+      ...pageForSearch(locale, "about"),
+    },
+    {
+      url: `/${locale}/method`,
+      title: publicCopy.method.title,
+      description: publicCopy.method.lede,
+      body: JSON.stringify(publicCopy.method),
+    },
+    {
+      url: `/${locale}/offerings`,
+      title: publicCopy.offerings.title,
+      description: publicCopy.offerings.lede,
+      body: JSON.stringify(publicCopy.offerings),
+    },
+    {
+      url: `/${locale}/membership`,
+      title: dictionary.platform.membership.title,
+      description: dictionary.platform.membership.lede,
+      body: publicCopy.membershipIntro,
+    },
+  ].map((page) => ({
+    ...page,
+    collection: "pages",
+    section: dictionary.meta.title,
+    date: "2026-07-24",
+    tags: [],
+    text: normalizeForSearch(
+      [page.title, page.description, page.body].join(" ")
+    ),
+  }));
+
+  const entries = collections.flatMap((collection) =>
     getEntries(locale, collection).map((entry) => ({
       url: `/${locale}/${collection}/${entry.slug}`,
       title: entry.title,
       description: entry.description,
       collection,
+      section: dictionary.collections[collection].title,
       date: entry.date,
       tags: entry.tags,
       text: normalizeForSearch(
@@ -55,4 +106,14 @@ export function buildSearchIndex(locale: Locale): SearchDocument[] {
       ),
     }))
   );
+  return [...pages, ...entries];
+}
+
+function pageForSearch(locale: Locale, slug: "mission" | "about") {
+  const page = getPage(locale, slug);
+  return {
+    title: page.frontmatter.title,
+    description: page.frontmatter.description,
+    body: page.body,
+  };
 }

@@ -95,17 +95,6 @@ export function SearchClient({
   const showNoResults =
     index !== null && trimmed.length >= 2 && results.length === 0;
 
-  function sectionTitle(collection: string): string {
-    const sections = dict.collections as Record<
-      string,
-      { title: string } | unknown
-    >;
-    const section = sections[collection];
-    return section && typeof section === "object" && "title" in section
-      ? (section as { title: string }).title
-      : collection;
-  }
-
   return (
     <div className="max-w-2xl">
       <label htmlFor="site-search" className="sr-only">
@@ -141,7 +130,7 @@ export function SearchClient({
               className="block rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-accent"
             >
               <p className="text-xs uppercase tracking-[0.15em] text-gold">
-                {sectionTitle(doc.collection)}
+                {doc.section}
               </p>
               <h2 className="mt-2 text-xl">{doc.title}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">

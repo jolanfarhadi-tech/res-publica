@@ -1,0 +1,179 @@
+import type { Locale } from "@/i18n/config";
+
+export type OfferingMaturity =
+  | "available"
+  | "partial"
+  | "documented"
+  | "methodology";
+
+export type PublicOffering = {
+  id: string;
+  maturity: OfferingMaturity;
+  href?: `/${string}`;
+  operational: boolean;
+  title: Record<Locale, string>;
+  description: Record<Locale, string>;
+};
+
+/**
+ * Public-facing capabilities only. Internal infrastructure, governance
+ * machinery and the AI/EAO layers are intentionally absent.
+ */
+export const publicOfferings: readonly PublicOffering[] = [
+  {
+    id: "website",
+    maturity: "available",
+    href: "/",
+    operational: true,
+    title: {
+      de: "Mehrsprachige öffentliche Website",
+      en: "Multilingual public website",
+      fa: "وب‌سایت عمومی چندزبانه",
+    },
+    description: {
+      de: "Öffentliche Orientierung in Deutsch, Englisch und Persisch mit RTL-Unterstützung.",
+      en: "Public orientation in German, English and Persian, including RTL support.",
+      fa: "راهنمایی عمومی به زبان‌های آلمانی، انگلیسی و فارسی، با پشتیبانی راست‌به‌چپ.",
+    },
+  },
+  {
+    id: "search",
+    maturity: "available",
+    href: "/search",
+    operational: true,
+    title: {
+      de: "Suche in veröffentlichten Inhalten",
+      en: "Published-content search",
+      fa: "جست‌وجو در محتوای منتشرشده",
+    },
+    description: {
+      de: "Eine lokale Suche über tatsächlich veröffentlichte Seiten und Beiträge.",
+      en: "A local search across pages and entries that are actually published.",
+      fa: "جست‌وجویی محلی در صفحه‌ها و مطالبی که واقعاً منتشر شده‌اند.",
+    },
+  },
+  {
+    id: "membership",
+    maturity: "available",
+    href: "/membership",
+    operational: true,
+    title: {
+      de: "Mitgliedschaftsantrag",
+      en: "Membership application",
+      fa: "درخواست عضویت",
+    },
+    description: {
+      de: "Ein geschützter Einstieg in langfristige zivilgesellschaftliche Beteiligung.",
+      en: "A protected entry point into sustained civic participation.",
+      fa: "درگاهی حفاظت‌شده برای ورود به مشارکت مدنی پایدار.",
+    },
+  },
+  {
+    id: "profile",
+    maturity: "available",
+    href: "/profile",
+    operational: true,
+    title: {
+      de: "Geschütztes Mitgliedsprofil",
+      en: "Protected Member Profile",
+      fa: "پروفایل حفاظت‌شده عضو",
+    },
+    description: {
+      de: "Angemeldete Personen sehen ausschließlich ihren eigenen Mitgliedschaftsstatus, Änderungen und mögliche nächste Zustände.",
+      en: "Signed-in people see only their own membership status, changes and possible next states.",
+      fa: "افراد واردشده فقط وضعیت عضویت خود، تغییرات و حالت‌های بعدی ممکن را می‌بینند.",
+    },
+  },
+  {
+    id: "events",
+    maturity: "partial",
+    href: "/events",
+    operational: true,
+    title: {
+      de: "Veranstaltungen und Anmeldung",
+      en: "Events and registration",
+      fa: "رویدادها و ثبت‌نام",
+    },
+    description: {
+      de: "Die Anmeldemechanik ist vorhanden; öffentliche Termine erscheinen erst nach Quellenprüfung.",
+      en: "Registration mechanics exist; public dates appear only after source review.",
+      fa: "سازوکار ثبت‌نام موجود است؛ تاریخ‌های عمومی فقط پس از بررسی منبع نمایش داده می‌شوند.",
+    },
+  },
+  {
+    id: "harm",
+    maturity: "methodology",
+    href: "/method",
+    operational: false,
+    title: {
+      de: "HARM Operating System",
+      en: "HARM Operating System",
+      fa: "سامانه عملیاتی HARM",
+    },
+    description: {
+      de: "Eine zwölfstufige Methodik, die Erfahrung, Dokumentation, Verantwortung, Lernen und Governance verbindet.",
+      en: "A twelve-stage methodology connecting experience, documentation, responsibility, learning and governance.",
+      fa: "روشی دوازده‌مرحله‌ای که تجربه، مستندسازی، مسئولیت، یادگیری و حکمرانی را به هم پیوند می‌دهد.",
+    },
+  },
+  {
+    id: "responsibility-tools",
+    maturity: "methodology",
+    href: "/method",
+    operational: false,
+    title: {
+      de: "Responsibility-Innovationen",
+      en: "Responsibility innovations",
+      fa: "نوآوری‌های مسئولیت",
+    },
+    description: {
+      de: "Fünf methodische Instrumente für Biografien, Zuordnung, Übersicht, Anhänge und Civic Intelligence.",
+      en: "Five methodological instruments for biographies, mapping, dashboards, annexes and civic intelligence.",
+      fa: "پنج ابزار روشی برای زندگی‌نامه‌ها، نگاشت، داشبوردها، ضمیمه‌ها و هوشمندی مدنی.",
+    },
+  },
+  {
+    id: "fellowship",
+    maturity: "documented",
+    operational: false,
+    title: {
+      de: "Civic Fellowship",
+      en: "Civic Fellowship",
+      fa: "همراهی مدنی",
+    },
+    description: {
+      de: "Ein dokumentiertes Modell für dauerhafte Zugehörigkeit, gegenseitiges Lernen und gemeinsame institutionelle Praxis.",
+      en: "A documented model for sustained belonging, mutual learning and shared institutional practice.",
+      fa: "الگویی مستند برای تعلق پایدار، یادگیری متقابل و کنش نهادی مشترک.",
+    },
+  },
+  {
+    id: "rpcs",
+    maturity: "documented",
+    operational: false,
+    title: {
+      de: "RPCS / Civic School",
+      en: "RPCS / Civic School",
+      fa: "RPCS / مدرسه مدنی",
+    },
+    description: {
+      de: "Ein dokumentiertes Bildungsprogramm; derzeit kein öffentlich gestartetes Kursangebot.",
+      en: "A documented education programme; not currently presented as a launched public course.",
+      fa: "برنامه‌ای آموزشی و مستند؛ در حال حاضر به‌عنوان دوره عمومی آغازشده معرفی نمی‌شود.",
+    },
+  },
+] as const;
+
+export function offeringsForLocale(locale: Locale) {
+  return publicOfferings.map((offering) => ({
+    ...offering,
+    title: offering.title[locale],
+    description: offering.description[locale],
+  }));
+}
+
+export function hasOperationalCallToAction(
+  offering: Pick<PublicOffering, "operational" | "href">
+): boolean {
+  return offering.operational && Boolean(offering.href);
+}

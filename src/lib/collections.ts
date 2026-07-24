@@ -56,6 +56,13 @@ const entryFrontmatter = z.object({
   authors: z.array(z.string()).optional(),
   /** Projects */
   status: z.enum(["ongoing", "completed"]).optional(),
+  /**
+   * Public collection content is opt-in. Existing legacy/demo entries
+   * remain internal until provenance and review are explicitly recorded.
+   */
+  visibility: z.enum(["public", "internal"]).default("internal"),
+  source: z.string().min(1).optional(),
+  reviewed: z.boolean().default(false),
 });
 
 export type EntryFrontmatter = z.infer<typeof entryFrontmatter>;
@@ -90,17 +97,26 @@ function readEntry(
         .join("; ")}`
     );
   }
+  if (parsed.data.visibility !== "public" || !parsed.data.reviewed || !parsed.data.source) {
+    return null;
+  }
   return { ...parsed.data, slug, collection, body: content };
 }
 
-/** Slugs are defined by the German (primary) content folder. */
-export function getSlugs(collection: Collection): string[] {
+function getCandidateSlugs(collection: Collection): string[] {
   const dir = path.join(CONTENT_DIR, "de", collection);
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
     .filter((name) => name.endsWith(".mdx"))
     .map((name) => name.replace(/\.mdx$/, ""));
+}
+
+/** Public slugs are defined by source-reviewed German entries. */
+export function getSlugs(collection: Collection): string[] {
+  return getCandidateSlugs(collection).filter(
+    (slug) => readEntry("de", collection, slug) !== null
+  );
 }
 
 /** All entries of one collection, newest first. */

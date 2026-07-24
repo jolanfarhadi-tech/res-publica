@@ -6,6 +6,7 @@ import { partners } from "@/data/partners";
 import { pageAlternates } from "@/lib/seo";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { getPublicSiteCopy } from "@/i18n/public-site";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -32,6 +33,11 @@ export default async function PartnersPage({ params }: Props) {
         lede={dict.pages.partners.lede}
       />
       <Container className="py-14 sm:py-20">
+        {partners.length === 0 && (
+          <p className="max-w-2xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
+            {getPublicSiteCopy(locale as Locale).people.partners}
+          </p>
+        )}
         <ul className="grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {partners.map((partner) => {
             const card = (
