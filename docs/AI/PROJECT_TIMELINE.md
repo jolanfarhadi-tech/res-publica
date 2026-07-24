@@ -77,9 +77,23 @@
 
 **[FACT]:** `origin/main` (the remote) is at `7025e6f` as of this compilation — **one commit behind** local `main`'s tip `5212636` (verified this session: `git log origin/main..main` → `5212636` only; `git log main..origin/main` → empty). See `CURRENT_STATE.md`.
 
-## Phase 9 — Present: uncommitted work on `integration/publishing-reconciliation`
+## Phase 9 — 2026-07-24: Publishing Authority backend
 
-**[FACT]:** this branch has zero commits of its own (`git log main..HEAD` empty, this session). All content beyond `main`'s `5212636` tip is uncommitted working-tree changes implementing ADR-036 (Civic Editorial Delegation of Authority) at the code level. Full detail: `MODULES/publishing.md`, `CURRENT_STATE.md`, `OPEN_WORK.md`.
+**[FACT]:** commit `09c160b` completes the Publishing Authority backend on
+`integration/publishing-reconciliation`. Full detail:
+`MODULES/publishing.md` and `CURRENT_STATE.md`.
+
+## Phase 10 — 2026-07-24: Public narrative transformation
+
+**[VERIFIED RELEASE CANDIDATE]:** a separate frontend transformation adds the
+WHY / HOW / WHAT / JOIN public narrative, localized Method and Offerings,
+source-grounded Mission/Vision/About content, product maturity, accessible
+star/constellation symbolism, provenance-gated collections, truthful
+contact/newsletter states, and non-ADR website architecture documentation.
+It is committed at `afa2207` and pushed to
+`origin/integration/publishing-reconciliation`. Production deployment was not
+attempted because the existing Vercel project lacks required database and OIDC
+production configuration.
 
 ---
 

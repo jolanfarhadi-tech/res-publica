@@ -10,6 +10,22 @@ No dedicated ADR found specifically for frontend/i18n architecture this session 
 
 ## Current implementation
 
+**Incremental frontend transformation, verified 2026-07-24:** the route tree now
+also contains localized `method` and `offerings` segments. The homepage carries
+the complete two-layer public narrative; `src/i18n/public-site.ts` provides
+DE/EN/FA parity; `src/data/public-navigation.ts` provides a seven-item
+WHY/HOW/WHAT/JOIN primary navigation; and
+`docs/website/STORYTELLING_EXPERIENCE_ARCHITECTURE.md` records the non-ADR
+experience architecture. Persian rendering was manually verified with
+`lang=fa`, `dir=rtl`, and no horizontal overflow at a 390 px viewport.
+
+Collection publication is now provenance-aware in `src/lib/collections.ts`.
+Legacy/demo MDX is not public unless it explicitly records public visibility,
+review, and source provenance. Search indexes published static pages plus only
+collection entries that pass that gate. Team/partner placeholders are hidden,
+contact cannot simulate success, and newsletter UI appears only with a
+configured provider.
+
 **Routing:** single tree `src/app/[locale]/`, enforced by `scripts/check-structure.mjs` (runs as `predev`/`prebuild`; README: fails the build on a duplicate root `app/`/`content/` folder — "causes silent 404s/empty pages"). Route segments confirmed present (directory listing, prior session): `about`, `contact`, `datenschutz`, `events`(+`[slug]`), `impressum`, `membership`, `mission`, `mission-vision`, `news`(+`[slug]`), `partners`, `profile`, `projects`(+`[slug]`), `publications`(+`[slug]`), `research`(+`[slug]`), `rss.xml`, `search`, `search-index.json`, `team`, `[...rest]` catch-all.
 
 **Middleware** (`middleware.ts`, read in full this session): redirects locale-less paths to the `Accept-Language`-preferred locale (German fallback via `detectLocale()`); sets `x-locale` header on locale-prefixed paths for pages without route params (e.g., `not-found.tsx`). **Documented, non-obvious bug-fix, inline comment (read in full, verbatim):** *"NOTE: dot-exclusion uses a character class `[.]` rather than `\.`. A backslash-escaped dot is silently unescaped by this project's path-to-regexp-based matcher compiler, turning `\.` into a bare `.` wildcard and making the exclusion match nearly every path. `[.]` reaches the compiled regex as a literal dot without going through that backslash-consuming step. Verified directly against this build's own `tryToParsePath` compiler, not assumed."* Matcher: `["/((?!api|_next/static|_next/image|.*[.].*).*)"]`.
@@ -29,6 +45,16 @@ Not applicable to routing/i18n itself — the middleware performs locale detecti
 All public site routes under `src/app/[locale]/`; the middleware itself is not a route but intercepts all matching requests per its `config.matcher`.
 
 ## Verification
+
+**Verified 2026-07-24:** focused frontend suite 12/12; full suite 168/168;
+structure, lint, typecheck, migration checks, production build with the real
+production URL, and `git diff --check` passed. The production-mode build
+returned 200 for 53 core route checks and all 42 sitemap URLs. Lighthouse
+accessibility scored the DE/EN/FA homepages at 96 and Method, Offerings, and
+Membership at 100. Manual review covered desktop, mobile, RTL, heading
+hierarchy, figcaption text equivalence, keyboard menu Escape/focus return,
+empty states, metadata, and sitemap. The implementation is committed and
+pushed at `afa2207`.
 
 No dedicated middleware test file was directly found this session under a `middleware.test.ts` name search at repo root — **not confirmed either way**; this session's full-repo test listing (`find src -name "*.test.ts"`) covered `src/`, not the repo root where `middleware.ts` itself lives. **Correction/clarification needed:** a repo-root `middleware.test.ts` file was noted in the initial repository listing (prior session) — its content was not read this session, but its existence is likely; treat as UNVERIFIED pass/fail status regardless.
 

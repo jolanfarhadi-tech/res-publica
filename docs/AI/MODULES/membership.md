@@ -10,6 +10,11 @@ One of the 9 ratified MVP modules (`brain/ROADMAP.md` build order). Lifecycle an
 
 ## Current implementation
 
+**Frontend presentation update, 2026-07-24:** the existing application form and
+API remain unchanged. The localized page now frames membership as sustained
+civic participation and explicitly rejects rank/reward framing before the
+existing protected form.
+
 `src/modules/membership/{auth-extension-point.ts, benefits.ts, community-integration.ts, institutional.ts, lifecycle.ts, manifest.ts, pledge.ts, types.ts, view.ts, membership.test.ts, README.md}` (directory listing, this session). Application layer: `src/application/membership.ts`. Committed via `2194b7e` (M1 persistence), `a9fac9c` (M2 module bootstrap) — both ≤ `origin/main` tip `7025e6f`.
 Per the README (read in full), its own stated status: *"Full lifecycle, pledges/renewals, institutional profiles, benefit grants, Community-standing review, and the journey view model are implemented and tested. Dashboard/CRM integration deferred until those modules exist."*
 

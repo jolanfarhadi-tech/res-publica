@@ -4,17 +4,44 @@
 
 ---
 
+## Incremental update — public frontend release
+
+**Verified 2026-07-24.** The public narrative implementation is committed at
+`afa22073f8e85dfc2885c052365ac90a853e2391`
+(`feat: transform public narrative experience`) and pushed to
+`origin/integration/publishing-reconciliation`. The remote branch hash was
+verified with `git ls-remote`. Publishing Authority remains the stable backend
+baseline at `09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`.
+
+Release verification passed: focused frontend tests 12/12; full suite 35 files
+/ 168 tests; structure, lint, typecheck, `db:check`, `db:check:fresh`
+(12 migrations / 53 tables), production build with
+`NEXT_PUBLIC_SITE_URL=https://respublica-ev.de`, and `git diff --check`.
+The production-mode build returned 200 for 53 core route checks and all 42
+sitemap URLs. Metadata checks confirmed DE/EN/FA direction, canonical URLs,
+hreflang, and x-default. Lighthouse accessibility scores were 96 for all three
+localized homepages and 100 for Method, Offerings, and Membership.
+
+Production deployment is externally blocked. The verified existing Vercel
+project is `res-publica` with production domain `https://respublica-ev.de` and
+Git production branch `main`. Its production environment contains only
+`NEXT_PUBLIC_SITE_URL`; `/api/health/ready` returns 503 with
+`configured:false`. A production `DATABASE_URL` is required for readiness, and
+OIDC issuer/client/redirect configuration is required for the protected
+authentication and Member Profile path. No guessed values were supplied and no
+production deployment was attempted.
+
 ## Current branch
 
 **Verified.** `integration/publishing-reconciliation` (`git branch --show-current`).
 
 ## Latest commit
 
-**Verified.** `890f97f` — "docs: add permanent AI repository memory system". This branch is one commit ahead of local `main` (`5212636`) and two commits ahead of `origin/main` (`7025e6f`).
+**Verified.** `afa2207` — "feat: transform public narrative experience".
 
 Local `main` remains one commit ahead of `origin/main`: `5212636` only.
 
-## Current git status
+## Prior pre-commit git status (historical; superseded by the incremental update above)
 
 **Verified**, `git status --short`, run this session:
 
@@ -59,7 +86,7 @@ Staged: none. Publishing-scope changes are unstaged/untracked. `tsconfig.json` r
 | Identity/Auth | `src/auth/*` | `authorize.test.ts`, `config.test.ts`, `src/app/api/auth/routes.test.ts` |
 | Member Profile (first slice) | `src/app/[locale]/profile/`, `src/application/member-profile.ts` | `member-profile.integration.test.ts`, `route.test.ts`, `MemberProfileDashboard.test.ts` |
 | HARM Governance | `src/modules/harm-governance/*` | `authority.test.ts`, `harm-governance.test.ts`, `harm-governance.integration.test.ts` |
-| Publishing (domain logic layer only) | `src/modules/publishing/{intake,moderation,draft-authoring,translation,sign-off,publish}.ts` | `publishing.test.ts` |
+| Publishing Authority | `src/modules/publishing/*`, `src/application/publishing*.ts`, `src/app/api/publishing/*` | domain, authority, application, and route tests |
 | Events | `src/modules/events/*` | `events.test.ts`, `src/app/api/events/capacity/route.test.ts` |
 | Membership | `src/modules/membership/*` | `membership.test.ts` |
 | Knowledge Graph | `src/modules/knowledge-graph/*` | `knowledge-graph.test.ts` |
@@ -73,23 +100,35 @@ Staged: none. Publishing-scope changes are unstaged/untracked. `tsconfig.json` r
 
 **Verified:**
 
-- **Publishing — authority/persistence/API layer**: production-readiness defects found in the uncommitted implementation were fixed and locally verified. ADR-036 reconciliation now binds moderation to the exact latest draft, records assignment/decision actors and timestamps, rejects stale/unreviewed drafts and incomplete legacy provenance, enforces exact publication scope plus the full separation-of-duties set, requires nonblank human translation content, emits separate atomic sign-off/readiness audit records, rejects duplicate readiness, and append-only supersedes prior readiness when a new draft is created. The work remains entirely uncommitted.
+- **Publishing Authority**: no longer unfinished. The verified ADR-036
+  implementation is committed at `09c160b`.
 - **AI Layer — external provider**: not started (module's own README, direct quote: "Real external provider... not started").
 - **Member Profile**: multiple TODO items unchecked in `docs/source/projects/MEMBER_PROFILE.md`'s own checklist (see `docs/AI/OPEN_WORK.md` OPEN-004).
 - **Knowledge Graph HTTP routes** (`/api/knowledge-graph/{lookup,related,search}`): declared in the module's manifest, not found under `src/app/api/` in this session's listing — status genuinely undetermined (may be in-process-only, may be unbuilt).
 
 ## Pending migrations
 
-**Verified.** `drizzle/0011_publishing-authority.sql` remains untracked with a matching unstaged journal entry. On 2026-07-24, `npm run db:check` passed and `npm run db:check:fresh` applied all 12 journaled migrations and created 53 tables.
+**Verified.** `drizzle/0011_publishing-authority.sql` and its journal/schema
+changes are committed in `09c160b`. On 2026-07-24, `npm run db:check` passed
+and `npm run db:check:fresh` applied all 12 journaled migrations and created
+53 tables.
 
 ## Pending tests
 
-**Verified 2026-07-24.** Final focused Publishing/Auth/Persistence verification passed: 8 files, 32 tests. The complete deterministic suite `npm test -- --maxWorkers=1` passed all 34 files / 156 tests. `check-structure`, lint, typecheck, `db:check`, `db:check:fresh` (12 migrations / 53 tables), production build with `NEXT_PUBLIC_SITE_URL=https://example.org`, and `git diff --check` all passed. The build required approved network access for Google Fonts.
+**Verified 2026-07-24 after frontend release.** Focused frontend tests
+passed 12/12. The complete deterministic suite
+`npm test -- --maxWorkers=1` passed all 35 files / 168 tests.
+`check-structure`, lint, typecheck, `db:check`, `db:check:fresh`
+(12 migrations / 53 tables), production build with
+`NEXT_PUBLIC_SITE_URL=https://respublica-ev.de`, and `git diff --check` all
+passed.
 
 ## Known problems
 
 **Verified:**
-1. Publishing-authority work is verified but uncommitted and remains at risk of loss from a destructive git operation (see `docs/AI/WARNINGS_AND_DEBT.md` WARN-001).
+1. The frontend release candidate is pushed at `afa2207`, but production
+   deployment is blocked by missing database and OIDC configuration
+   (WARN-012).
 2. `src/modules/membership/README.md` contains a stale claim that ADR-027 "remains unresolved" — ADR-027 is Accepted and `src/auth/` has committed source (WARN-004).
 3. `tsconfig.json` has an unrelated final-newline-only working-tree change; exclude it from the Publishing commit boundary.
 4. Five `worktree-agent-*` branches are stale (zero unique commits, verified) — harmless but unswept.
@@ -97,4 +136,7 @@ Staged: none. Publishing-scope changes are unstaged/untracked. `tsconfig.json` r
 
 ## Next recommended development step
 
-**Verified next step:** review the explicit Publishing-only commit boundary documented in `OPEN_WORK.md` OPEN-001, excluding `tsconfig.json` and `tatus`, then obtain the required human approval before staging or committing. No stage, commit, or push has been performed.
+**Verified next step:** configure the existing Vercel project's production
+database and OIDC values, confirm `/api/health/ready` returns 200 and auth is
+operational, then deploy the exact pushed revision through the existing
+project. `tsconfig.json` and `tatus` remain unrelated and excluded.

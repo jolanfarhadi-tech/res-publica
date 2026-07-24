@@ -6,14 +6,37 @@
 
 ## Active worktree work
 
-### OPEN-001 — Publishing-authority implementation is verified but entirely uncommitted
-- **Task:** review and approve the explicit Publishing-only commit boundary for the ADR-036 realization.
-- **Evidence:** `git status --short` (this session) shows the Publishing authority/application/API/integration tests and migration untracked, with shared authorization, schema/journal, translation/type, domain tests, and relevant memory files unstaged. `git log main..HEAD` contains only `890f97f`, a docs-only commit; no commit captures the Publishing implementation.
-- **Prerequisite:** none technical; a human decision to keep or discard is needed first.
-- **Verification:** **Verified 2026-07-24.** Final focused set passed 32/32; full one-worker suite passed 156/156; structure, lint, typecheck, both migration checks, production build, and `git diff --check` passed.
-- **Blocker:** human approval is required before staging or committing.
-- **Safe next action:** stage only migration/schema/journal, shared exact-target authorization, Publishing domain/application/API/tests, and the relevant incremental `docs/AI` updates. Explicitly exclude `tsconfig.json` and `tatus`. Re-run `git diff --staged` before requesting commit approval.
-- **Non-goals:** this task does not include applying the migration to a production database and does not include choosing between competing implementations — there is only one Publishing Authority implementation in this repository; it is simply not yet committed.
+### OPEN-001 — Resolved: Publishing Authority committed
+- **Resolution:** committed at `09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`
+  (`feat: complete Publishing Authority backend`). The frontend treats this
+  commit as a stable boundary.
+
+### OPEN-010 — Frontend owner decisions before public launch
+- **Task:** confirm any real identities, partnerships, contact route,
+  newsletter provider, and collection entries intended for publication.
+- **Evidence:** placeholder people/partners and unreviewed MDX were removed
+  from public rendering; contact and newsletter now show truthful unavailable
+  states when no confirmed delivery path is configured.
+- **Safe next action:** provide explicit provenance and publication approval.
+  For collection entries, add `visibility: public`, `reviewed: true`, and a
+  non-empty `source` only after review.
+- **Blocker:** owner authorship/approval; it does not block review of the
+  implemented website architecture.
+
+### OPEN-011 — Production runtime configuration blocks deployment
+- **Task:** configure the existing Vercel project `res-publica` for database
+  readiness and protected OIDC authentication.
+- **Evidence:** production has only `NEXT_PUBLIC_SITE_URL`;
+  `https://respublica-ev.de/api/health/ready` returns 503 with
+  `{"status":"not_ready","dependency":"database","configured":false}`.
+- **Required values:** `DATABASE_URL`, `OIDC_ISSUER`, `OIDC_CLIENT_ID`, and
+  `OIDC_REDIRECT_URI`; add `OIDC_CLIENT_SECRET` when the selected provider
+  requires a confidential client.
+- **Safe next action:** add verified values with
+  `npx.cmd --yes vercel@latest env add <NAME> production --project res-publica`,
+  then recheck readiness/auth before deploying the exact pushed commit.
+- **Blocker:** production owner credentials and provider values; values must not
+  be invented.
 
 ## Documentation gaps
 

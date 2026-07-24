@@ -4,12 +4,33 @@
 
 ---
 
-### WARN-001 — Publishing-authority implementation exists only in the uncommitted working tree
-- **Evidence:** `git status --short` re-verified 2026-07-24: Publishing authority/application/API/tests and migration remain untracked; schema/journal/type changes remain unstaged. The branch has one docs-only commit beyond `main`; no commit contains the Publishing implementation.
-- **Impact:** production-readiness-verified implementation work (domain logic, persistence, authority enforcement, API routes, tests) could be silently lost — e.g., by a `git checkout`/`git clean`/branch switch performed without awareness of this state.
-- **Severity:** **High** (data-loss risk for real engineering work), not urgent (no external system depends on it yet).
-- **Safe handling:** do not run any destructive git operation (`checkout --`, `clean -f`, `reset --hard`, branch switch away from `integration/publishing-reconciliation`) without first confirming this work has been committed or is intentionally being discarded.
-- **Resolution condition:** the locally verified work is committed after explicit human approval, or deliberately discarded by the repository owner.
+### WARN-001 — Resolved: Publishing Authority is committed
+- **Evidence:** commit
+  `09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`
+  (`feat: complete Publishing Authority backend`).
+- **Remaining handling:** preserve this as the stable backend boundary; do not
+  rewrite it while integrating the later frontend commit `afa2207`.
+
+### WARN-011 — Legacy/demo MDX lacks publication provenance
+- **Evidence:** existing collection entries do not contain the explicit
+  `visibility`, `reviewed`, and `source` fields required by the public loader.
+- **Impact:** entries are intentionally absent from indexes, details, search,
+  RSS, generated static params, and sitemap until reviewed.
+- **Severity:** **Low / intentional safeguard**.
+- **Safe handling:** do not bypass the loader or bulk-mark entries public.
+  Confirm provenance, authorship, dates, claims, and publication rights first.
+
+### WARN-012 — Production readiness and auth configuration are absent
+- **Evidence:** Vercel project `res-publica` exposes only
+  `NEXT_PUBLIC_SITE_URL` in production. The live health endpoint succeeds, but
+  `/api/health/ready` returns 503 with database `configured:false`; OIDC
+  issuer/client/redirect variables are also absent.
+- **Impact:** database-backed APIs and protected authentication/Profile paths
+  cannot be release-verified in production.
+- **Severity:** **High / external release blocker**.
+- **Safe handling:** obtain and add verified production values; do not deploy
+  the release candidate or substitute guessed credentials until readiness and
+  auth checks pass.
 
 ### WARN-002 — Five stale worktree-agent branches
 - **Evidence:** `git branch -a` lists `worktree-agent-{a41b2f98bb4889568,ac265ef0dcfbd1d11,aca5f3876aea4f4e9,adee0af9fffa74fc8,afb36aeffa2f75bec}`, all physically backed by `.claude/worktrees/agent-*/` directories (`git worktree list`, prior session). **Directly verified this session:** all five are at commit `af64931` with zero commits ahead of `main` (`git log main..<branch>` empty for each).
@@ -27,21 +48,23 @@
 
 ### WARN-004 — Stale documentation: `src/modules/membership/README.md` contradicts current auth state
 - **Evidence:** `src/modules/membership/README.md` (read in full, this session) states: *"This module does not define, implement, or own Authentication; `ADR-027` remains unresolved."* This was true as of the commit that introduced it (`9f9ec5f`, 2026-07-07). **Directly verified this session:** ADR-027 (`architecture/adr/ADR-027-identity-authentication-authorization.md`) now states `## Status` → "Accepted — explicitly approved by the Founder on 2026-07-19," and `src/auth/` contains committed, tested-in-principle source for OIDC, sessions, and authorization (commits `a9fac9c`, `e31ca3c`, `770857e`, all 2026-07-19; tests exist but were not run this session — see `MODULES/identity-auth.md`).
-- **Impact:** a future agent reading only this module's README could incorrectly conclude authentication is unimplemented repository-wide, when it is in fact implemented and used elsewhere (including by the uncommitted publishing-authority code, WARN-001).
+- **Impact:** a future agent reading only this module's README could incorrectly conclude authentication is unimplemented repository-wide, when it is implemented and used by the committed Publishing Authority.
 - **Severity:** **Medium** — documentation drift that could mislead an agent into redundant or contradictory work.
 - **Safe handling:** when working on membership/auth integration, trust `src/auth/` and ADR-027's current status over this specific README line; do not treat the README's auth claim as current.
 - **Resolution condition:** the README is updated to reflect that `ADR-027` is accepted and `src/auth/` exists — an application-code-adjacent doc change, out of scope for this documentation-only task.
 
 ### WARN-005 — `main` has one commit not yet pushed to `origin/main`
 - **Evidence:** `git log origin/main..main` → `5212636` only (this session); `git log main..origin/main` → empty.
-- **Impact:** low in isolation, but combined with WARN-001 (uncommitted work on a separate branch), means this repository currently has real work at two different "not yet on remote" levels — one commit ahead locally, and a full feature entirely uncommitted. A force-push, remote reset, or fresh clone from `origin` would not include `5212636` or the publishing-authority work.
+- **Impact:** low in isolation. The feature branch is now pushed, but local
+  `main` and `origin/main` still differ and production follows `main`.
 - **Severity:** **Medium**.
 - **Safe handling:** be aware that `origin/main` is not the full picture of local progress before assuming a fresh clone/checkout reflects everything described in this documentation set.
 - **Resolution condition:** repository owner pushes `main`, at their discretion — outside this task's scope (this task must not push).
 
 ### WARN-006 — Resolved 2026-07-24: migration `0011` verified against a fresh database
 - **Evidence:** `npm run db:check` passed. `npm run db:check:fresh` applied 12 journaled migrations and created 53 tables.
-- **Remaining handling:** migration `0011` is still uncommitted and remains covered by WARN-001, but migration validity is no longer an unknown local risk.
+- **Remaining handling:** migration `0011` is committed at `09c160b`; CI will
+  independently re-run both checks after a future approved push/PR.
 - **Resolution condition:** satisfied for local verification; CI will independently re-run both checks after a future approved push/PR.
 
 ### WARN-007 — ADR-031 implementation is accepted but not confirmed

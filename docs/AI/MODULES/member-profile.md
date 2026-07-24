@@ -29,7 +29,13 @@ This module is explicitly a **display layer only** — it does not own any table
 
 ## Verification
 
-Tests confirmed to exist: `src/app/api/membership/profile/route.test.ts`, `src/application/member-profile.integration.test.ts`, `src/components/platform/MemberProfileDashboard.test.ts`. **Not run this session.**
+**Incremental verification 2026-07-24:** the frontend narrative work did not
+change the profile API, projection, status semantics, or dashboard component.
+The full suite still passes 168/168. Manual anonymous/unavailable rendering
+confirmed a self-facing localized page with `noindex, nofollow`; no score,
+rank, badge, governance standing, or public profile was introduced.
+
+Tests confirmed to exist: `src/app/api/membership/profile/route.test.ts`, `src/application/member-profile.integration.test.ts`, `src/components/platform/MemberProfileDashboard.test.ts`. They passed as part of the 35-file / 168-test release suite.
 
 ## Decisions and rejected approaches
 

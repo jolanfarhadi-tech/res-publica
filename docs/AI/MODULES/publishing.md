@@ -11,6 +11,15 @@ The back-stage editorial pipeline: intake → moderation → AI-assisted draft a
 
 ## Current implementation — split explicitly by commit status (special handling per task instructions)
 
+**Commit-state correction, verified 2026-07-24:** both layers described below
+were committed together at
+`09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`
+(`feat: complete Publishing Authority backend`). References below to
+`UNCOMMITTED_WORKTREE` describe the pre-commit audit state and are superseded
+by this correction. The public frontend added only explanatory safeguard copy:
+it makes no `/api/publishing` write call, exposes no assignments/workflow
+status, and does not equate readiness with publication.
+
 This module has **two distinct layers with two different git states.** Do not conflate them.
 
 ### Layer A — domain logic (committed baseline with scoped uncommitted fixes)
@@ -54,12 +63,15 @@ ADR-036's full “Alternatives Considered” section was read on 2026-07-24. It 
 
 ## Current status
 
-- Layer A (domain logic): committed baseline plus scoped **UNCOMMITTED_WORKTREE, LOCALLY_VERIFIED 2026-07-24** translation/type/test fixes.
-- Layer B (authority/persistence/API): **UNCOMMITTED_WORKTREE, LOCALLY_VERIFIED 2026-07-24**. Not locally committed and not remote-verified.
+- Layer A and Layer B: **LOCALLY_COMMITTED, LOCALLY_VERIFIED 2026-07-24** at
+  `09c160b`. The branch containing this baseline and frontend commit `afa2207`
+  is pushed to `origin/integration/publishing-reconciliation`.
 
 ## Open work
 
-See `OPEN_WORK.md` OPEN-001 and `WARNINGS_AND_DEBT.md` WARN-001. Verification is complete; the remaining action is a human-approved Publishing-only stage/commit decision. Exclude `tsconfig.json` and `tatus`.
+No backend implementation work remains in this frontend phase. Public
+collection publication still requires confirmed provenance and owner approval;
+see `OPEN_WORK.md` OPEN-010.
 
 ## Do not redo
 

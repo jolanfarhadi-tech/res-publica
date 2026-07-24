@@ -24,12 +24,12 @@ Evidence: directory listing of `src/app/[locale]/`, this session and the prior c
 
 ## API route organization
 
-`src/app/api/`, one directory per capability area: `auth/{callback,login,logout,session}`, `events/{capacity,registration}`, `governance/{cases,documentation-quality,evidence,evidence-quality,grants,hearing-quality,hearings,repair-plans,scientific-reviews,validation}`, `health/{live,ready}`, `membership/{create,profile}`, `newsletter`, `platform/modules`, `publishing/{grants,workflow}` (the last **uncommitted** — see `CURRENT_STATE.md`).
+`src/app/api/`, one directory per capability area: `auth/{callback,login,logout,session}`, `events/{capacity,registration}`, `governance/{cases,documentation-quality,evidence,evidence-quality,grants,hearing-quality,hearings,repair-plans,scientific-reviews,validation}`, `health/{live,ready}`, `membership/{create,profile}`, `newsletter`, `platform/modules`, `publishing/{grants,workflow}`. Publishing is committed at `09c160b`.
 Evidence: directory listing this session (`find src/app/api -type f`, prior turn).
 
 ## Application layer
 
-`src/application/` — one file per cross-module workflow: `events.ts`, `governance-authority.ts`, `harm-governance.ts` + `harm-governance-review.ts`, `member-profile.ts`, `membership.ts`, `publishing.ts` + `publishing-authority.ts` (**uncommitted**). Shared cross-module test: `flows.integration.test.ts`. Each has an adjacent `*.integration.test.ts` except where noted.
+`src/application/` — one file per cross-module workflow: `events.ts`, `governance-authority.ts`, `harm-governance.ts` + `harm-governance-review.ts`, `member-profile.ts`, `membership.ts`, `publishing.ts` + `publishing-authority.ts` (committed at `09c160b`). Shared cross-module test: `flows.integration.test.ts`. Each has an adjacent `*.integration.test.ts` except where noted.
 Evidence: `find src/application -type f`, this session.
 
 ## Domain modules
@@ -40,7 +40,8 @@ Shared registration: `src/modules/manifest.ts` (the `ModuleManifest` type), `src
 ## Persistence and Drizzle
 
 Two schema files: `src/persistence/schema.ts` (core domain entities — `people`, `consentRecords`, `payments`, `organizations`, `notifications`, `auditLog`, `authIdentities`, `authSessions`, `authFlows`, `authorizationGrants` — 10 tables, directly grepped) and `src/persistence/module-schema.ts` (per-module tables — ~40 tables spanning membership, events, publishing, community, knowledge-graph, ai-layer, harm-governance, dashboard, crm, analytics, directly grepped this session). Supporting files: `database.ts`, `index.ts`, `repositories.ts`, `runtime.ts`, and tests `persistence.integration.test.ts`, `schema.test.ts`.
-Migrations: `drizzle/0000_m1-canonical-domain.sql` through `drizzle/0011_publishing-authority.sql` (12 total; the last is **uncommitted** — untracked file + unstaged `_journal.json`/`module-schema.ts` changes, see `CURRENT_STATE.md`).
+Migrations: `drizzle/0000_m1-canonical-domain.sql` through
+`drizzle/0011_publishing-authority.sql` (12 total, all committed).
 Scripts: `db:generate`/`db:migrate`/`db:check`/`db:check:fresh` (`package.json`), `scripts/check-fresh-migrations.mjs`.
 
 ## Authentication / session implementation
@@ -63,9 +64,31 @@ Every mutating publishing-workflow function writes an `auditLog` row inside the 
 
 `src/components/{motion,platform,seo,site,ui}/` — top-level folder names confirmed; not individually enumerated file-by-file this session, except `src/components/platform/{ActionStatus.test.ts, MemberProfileDashboard.test.ts}` (confirmed to exist via the repository-wide test-file listing run this session).
 
+### Public narrative implementation (2026-07-24 incremental update)
+
+The public site now implements a non-ADR WHY / HOW / WHAT / JOIN experience.
+`src/i18n/public-site.ts` owns the trilingual editorial synthesis;
+`src/data/public-offerings.ts` owns the public-only maturity inventory; and
+`src/data/public-navigation.ts` owns the seven-item primary navigation.
+Localized `/method` and `/offerings` routes are static server components.
+The homepage carries the full human and institutional paths plus trust,
+fellowship, audience, and participation sections.
+
+`src/lib/collections.ts` now makes public collection content opt-in:
+`visibility: public`, `reviewed: true`, and a non-empty `source` are all
+required. The same loader feeds indexes, details, search, RSS, static params,
+and sitemap generation, so legacy/demo MDX is hidden consistently.
+`src/lib/search.ts` indexes the published static pages plus any entries passing
+that gate. Contact renders an explicit unavailable state instead of simulated
+delivery; newsletter signup renders only when a supported provider is
+operationally configured.
+
+The stable Membership, Member Profile, auth, persistence, and Publishing
+Authority API contracts were not changed.
+
 ## CI and repository checks
 
-`.github/workflows/ci.yml` (read in full): on push/PR to `main` — checkout → Node 20 setup → `npm ci` → `node scripts/check-structure.mjs` → `npm run lint` → `npm run typecheck` → `npm test` → `npm run db:check` → `npm run db:check:fresh` → `npm run build`. Runs against a placeholder `NEXT_PUBLIC_SITE_URL`. **This compilation did not run any of these steps** — it reports the pipeline's existence and configuration, not a passing/failing result for the current working tree.
+`.github/workflows/ci.yml` (read in full): on push/PR to `main` — checkout → Node 20 setup → `npm ci` → `node scripts/check-structure.mjs` → `npm run lint` → `npm run typecheck` → `npm test` → `npm run db:check` → `npm run db:check:fresh` → `npm run build`. The 2026-07-24 frontend release independently ran and passed the equivalent local checks, using `NEXT_PUBLIC_SITE_URL=https://respublica-ev.de` for the release build. The feature branch push does not trigger this main-only workflow.
 
 ## Scripts and operational tooling
 
