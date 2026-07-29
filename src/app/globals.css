@@ -1,46 +1,61 @@
 @import "tailwindcss";
 
-/* ============================================================
-   Res Publica — Design tokens
-   ------------------------------------------------------------
-   The palette: deep navy ink on warm paper white, with a
-   European civic blue for actions and a restrained gold for
-   highlights. Dark mode swaps the tokens; components never
-   hard-code colors — they only use the semantic names below.
-   ============================================================ */
-
 :root {
-  --ink: #0f1b2d;        /* primary text */
-  --bg: #fafaf7;         /* warm paper white */
-  --surface: #ffffff;    /* cards, header */
-  --accent: #1e4fa3;     /* civic blue — links, primary actions */
+  --ink: #0a1b2b;
+  --bg: #f4f7f8;
+  --surface: #ffffff;
+  --accent: #075dcc;
   --accent-contrast: #ffffff;
-  --gold: #8a6d2f;       /* muted gold — darkened for AA text contrast (4.6:1+) */
-  --muted: #5c6675;      /* secondary text */
-  --border: #e3e4de;     /* hairline dividers */
-  --night: #07111f;
-  --paper: #f3f0e8;
-  --signal: #b59a5b;
-  --deep-blue: #173b70;
+  --gold: #775c20;
+  --muted: #506171;
+  --border: #d6e0e5;
+  --night: #061522;
+  --paper: #f7fafb;
+  --signal: #94d7cf;
+  --deep-blue: #0d3b66;
+  --verdigris: #087a70;
+  --amber: #9a6410;
+  --critical: #b42318;
+  --glass: rgb(250 253 255 / 0.78);
+  --glass-strong: rgb(255 255 255 / 0.92);
+  --shadow-glass: 0 20px 55px -34px rgb(5 26 43 / 0.48),
+    0 8px 20px -16px rgb(5 26 43 / 0.28);
+  --radius: 1rem;
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --section: clamp(4.5rem, 9vw, 8.5rem);
 }
 
 [data-theme="dark"] {
-  --ink: #e8ecf2;
-  --bg: #0b1220;
-  --surface: #111a2b;
-  --accent: #5b8def;
-  --accent-contrast: #0b1220;
-  --gold: #c9a75c;
-  --muted: #93a0b4;
-  --border: #22304a;
-  --night: #050b14;
-  --paper: #f3f0e8;
-  --signal: #d0b873;
-  --deep-blue: #234f8d;
+  --ink: #eff6f7;
+  --bg: #07131f;
+  --surface: #0d1e2b;
+  --accent: #76adff;
+  --accent-contrast: #061522;
+  --gold: #d7bd78;
+  --muted: #a8bac5;
+  --border: #263d4c;
+  --night: #030b12;
+  --paper: #edf4f5;
+  --signal: #77c8bf;
+  --deep-blue: #113f6b;
+  --verdigris: #68c8bc;
+  --amber: #e6b45d;
+  --critical: #ff8f86;
+  --glass: rgb(8 25 38 / 0.8);
+  --glass-strong: rgb(11 30 44 / 0.94);
+  --shadow-glass: 0 22px 60px -34px rgb(0 0 0 / 0.84),
+    0 8px 24px -18px rgb(0 0 0 / 0.64);
 }
 
-/* Map the tokens into Tailwind, so classes like `bg-bg`,
-   `text-ink`, `border-border`, `text-accent` exist. */
+[data-contrast="high"] {
+  --muted: var(--ink);
+  --border: color-mix(in srgb, var(--ink) 42%, transparent);
+}
+
+[data-text="large"] {
+  font-size: 112.5%;
+}
+
 @theme inline {
   --color-ink: var(--ink);
   --color-bg: var(--bg);
@@ -54,73 +69,273 @@
   --color-paper: var(--paper);
   --color-signal: var(--signal);
   --color-deep-blue: var(--deep-blue);
-
-  /* Font families are provided by next/font in the layout. */
-  --font-sans: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
-  --font-serif: var(--font-fraunces), Georgia, serif;
+  --color-verdigris: var(--verdigris);
+  --color-amber: var(--amber);
+  --color-critical: var(--critical);
+  --font-sans: var(--font-figtree), var(--font-vazirmatn), system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, serif;
 }
-
-/* ------------------------------------------------------------
-   Base styles
-   ------------------------------------------------------------ */
 
 html {
   color-scheme: light;
+  scroll-behavior: smooth;
 }
+
 html[data-theme="dark"] {
   color-scheme: dark;
 }
 
 body {
-  background-color: var(--bg);
+  background:
+    radial-gradient(circle at 12% 0%, rgb(7 93 204 / 0.06), transparent 31rem),
+    var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Persian pages: Vazirmatn first. The layout sets lang="fa". */
 :lang(fa) body,
-body:lang(fa) {
-  font-family: var(--font-vazirmatn), var(--font-inter), system-ui, sans-serif;
-}
-
-/* Headings carry the serif voice of the brand. */
-h1, h2, h3 {
-  font-family: var(--font-serif);
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-}
-
-.display-hero {
-  font-size: clamp(3.5rem, 8.5vw, 8.75rem);
-  line-height: 0.88;
-  letter-spacing: -0.055em;
-}
-
-:lang(fa) .display-hero {
-  line-height: 1.06;
+body:lang(fa),
+:lang(fa) h1,
+:lang(fa) h2,
+:lang(fa) h3 {
+  font-family: var(--font-vazirmatn), system-ui, sans-serif;
   letter-spacing: 0;
 }
 
-.institutional-grid {
-  background-image:
-    linear-gradient(to right, rgb(243 240 232 / 0.09) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(243 240 232 / 0.07) 1px, transparent 1px);
-  background-size: min(12vw, 9rem) min(12vw, 9rem);
-  background-position: center;
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
 }
 
-.institutional-grid::after {
+p,
+li {
+  text-wrap: pretty;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+select:disabled,
+input:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 0.25rem;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.display-hero {
+  min-width: 0;
+  max-width: min(14ch, 100%);
+  hyphens: auto;
+  overflow-wrap: anywhere;
+  font-size: clamp(3.25rem, 8vw, 6rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+}
+
+:lang(fa) .display-hero {
+  line-height: 1.14;
+}
+
+.civic-label {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:lang(fa) .civic-label {
+  letter-spacing: 0;
+}
+
+.glass-panel {
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: var(--glass);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  backdrop-filter: blur(24px) saturate(135%);
+}
+
+.glass-panel.inverse-panel {
+  border-color: rgb(247 250 251 / 0.18);
+  background: rgb(6 21 34 / 0.72);
+  color: var(--paper);
+}
+
+.civic-label.inverse-label {
+  color: var(--signal);
+}
+
+.button-primary,
+.button-secondary,
+.button-quiet {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 0.75rem;
+  padding-inline: 1.1rem;
+  padding-block: 0.7rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.button-primary {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  box-shadow: 0 12px 28px -20px color-mix(in srgb, var(--accent) 78%, transparent);
+}
+
+.button-primary:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--accent) 88%, var(--ink));
+}
+
+.button-secondary {
+  border: 1px solid var(--border);
+  background: var(--glass-strong);
+  color: var(--ink);
+}
+
+.button-secondary:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  color: var(--accent);
+}
+
+.button-quiet {
+  color: var(--accent);
+}
+
+.button-quiet:hover {
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.icon-button {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--glass);
+  color: var(--ink);
+  transition: border-color 180ms ease, color 180ms ease, background 180ms ease;
+}
+
+.mobile-menu-dialog::backdrop {
+  background: rgb(6 21 34 / 0.36);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.icon-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.institutional-grid {
+  background:
+    radial-gradient(circle at 76% 28%, rgb(118 173 255 / 0.24), transparent 28rem),
+    linear-gradient(135deg, rgb(255 255 255 / 0.03), transparent 55%),
+    var(--night);
+}
+
+[dir="rtl"] .institutional-grid {
+  background:
+    radial-gradient(circle at 24% 28%, rgb(118 173 255 / 0.24), transparent 28rem),
+    linear-gradient(225deg, rgb(255 255 255 / 0.03), transparent 55%),
+    var(--night);
+}
+
+.observatory-orbit {
+  position: absolute;
+  inset-block-start: 10%;
+  inset-inline-end: -8rem;
+  width: min(52vw, 44rem);
+  aspect-ratio: 1;
+  border: 1px solid rgb(148 215 207 / 0.25);
+  border-radius: 50%;
+}
+
+.observatory-orbit::before,
+.observatory-orbit::after {
   content: "";
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle at 72% 30%, rgb(30 79 163 / 0.22), transparent 34%);
+  border: 1px solid rgb(118 173 255 / 0.18);
+  border-radius: inherit;
 }
 
-[dir="rtl"] .institutional-grid::after {
-  background: radial-gradient(circle at 28% 30%, rgb(30 79 163 / 0.22), transparent 34%);
+.observatory-orbit::before {
+  inset: 12%;
+}
+
+.observatory-orbit::after {
+  inset: 29%;
+  background: rgb(148 215 207 / 0.08);
+  box-shadow: inset 0 0 60px rgb(118 173 255 / 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+[dir="rtl"] .observatory-orbit {
+  inset-inline-start: -8rem;
+  inset-inline-end: auto;
+}
+
+.section-shell {
+  padding-block: var(--section);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 48rem;
+}
+
+.reading-measure {
+  max-width: 72ch;
+}
+
+.field-grid {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--border);
+  background: var(--border);
+}
+
+.field-grid > * {
+  background: var(--surface);
 }
 
 .editorial-index {
@@ -128,35 +343,143 @@ h1, h2, h3 {
   font-feature-settings: "tnum" 1;
 }
 
-/* Persian headings stay in Vazirmatn (Fraunces has no Arabic script). */
-:lang(fa) h1, :lang(fa) h2, :lang(fa) h3 {
-  font-family: var(--font-vazirmatn), system-ui, sans-serif;
-  letter-spacing: 0;
+.consent-banner {
+  position: fixed;
+  z-index: 70;
+  inset-inline: max(1rem, env(safe-area-inset-left));
+  inset-block-end: max(1rem, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 1.25rem;
+  max-width: 76rem;
+  margin-inline: auto;
+  border-radius: var(--radius);
+  padding: 1.25rem;
 }
 
-/* Visible, consistent keyboard focus everywhere (WCAG 2.4.7). */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 2px;
+.preference-dialog {
+  width: min(54rem, calc(100% - 2rem));
+  max-height: min(88vh, 54rem);
+  margin: auto;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--glass-strong);
+  color: var(--ink);
+  box-shadow: 0 28px 90px -32px rgb(0 0 0 / 0.62);
+  -webkit-backdrop-filter: blur(28px) saturate(135%);
+  backdrop-filter: blur(28px) saturate(135%);
 }
 
-/* Smooth theme transitions — but never for people who opt out. */
-body, header, footer {
-  transition: background-color 200ms ease, color 200ms ease,
-    border-color 200ms ease;
+.preference-dialog::backdrop {
+  background: rgb(3 12 20 / 0.64);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
+
+.preference-switch {
+  width: 3rem;
+  height: 1.75rem;
+  margin-block-start: 0.25rem;
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.preference-switch::before {
+  content: "";
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.1875rem;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.preference-switch:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.preference-switch:checked::before {
+  transform: translateX(1.2rem);
+  background: var(--accent-contrast);
+}
+
+[dir="rtl"] .preference-switch:checked::before {
+  transform: translateX(-1.2rem);
+}
+
+.preference-switch:disabled {
+  opacity: 0.72;
+}
+
+.toggle-card {
+  display: flex;
+  min-height: 4rem;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  padding: 1rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.toggle-card:has(input:checked) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+.toggle-card input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+}
+
+@media (min-width: 64rem) {
+  .consent-banner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
   }
 }
 
-/* Text selection in brand colors. */
-::selection {
-  background: var(--accent);
-  color: var(--accent-contrast);
+@media (max-width: 48rem) {
+  .observatory-orbit {
+    inset-block-start: 17%;
+    opacity: 0.62;
+    width: 34rem;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-panel,
+  .preference-dialog {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+[data-motion="reduced"] *,
+[data-motion="reduced"] *::before,
+[data-motion="reduced"] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }

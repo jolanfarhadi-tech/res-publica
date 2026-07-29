@@ -1,11 +1,14 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { usePreferences } from "@/components/privacy/PreferenceProvider";
 
 /**
- * FadeIn — the site's one standard entrance animation:
- * a quiet fade-up when the element scrolls into view.
- * Respects `prefers-reduced-motion` automatically.
+ * FadeIn — the site's one standard entrance animation.
+ *
+ * Content is rendered visibly before hydration. This avoids hiding core
+ * information when JavaScript, IntersectionObserver, or motion is unavailable.
+ * Supporting browsers receive a quiet one-time settle into place.
  */
 export function FadeIn({
   children,
@@ -16,15 +19,17 @@ export function FadeIn({
   delay?: number;
   className?: string;
 }) {
-  const reduceMotion = useReducedMotion();
+  const systemReduceMotion = useReducedMotion();
+  const { preferences } = usePreferences();
+  const reduceMotion = systemReduceMotion || preferences.reduceMotion;
 
   return (
     <motion.div
       className={className}
-      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={false}
+      whileInView={reduceMotion ? undefined : { opacity: [0.94, 1], y: [8, 0] }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.45, ease: "easeOut", delay }}
+      transition={{ duration: 0.38, ease: "easeOut", delay }}
     >
       {children}
     </motion.div>

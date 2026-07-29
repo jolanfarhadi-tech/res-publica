@@ -17,7 +17,7 @@ export function PublicCategoryPage({
   return (
     <>
       <PageHeader title={copy.title} lede={copy.lede} />
-      <Container className="py-14 sm:py-20">
+      <Container className="section-shell">
         <section aria-labelledby={`${category}-maturity`}>
           <h2 id={`${category}-maturity`} className="mb-10 text-4xl sm:text-5xl">
             {getPublicSiteCopy(locale).offerings.maturityTitle}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 
 /**
@@ -8,11 +10,12 @@ import type { Dictionary } from "@/i18n/dictionaries";
  * come from the server response: success, invalid email, or
  * "currently unavailable" (e.g. provider not configured).
  */
-export function NewsletterSignup({ dict }: { dict: Dictionary }) {
+export function NewsletterSignup({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const t = dict.newsletter;
   const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [state, setState] = useState<
-    "idle" | "sending" | "success" | "invalid" | "error"
+    "idle" | "sending" | "success" | "invalid" | "consent" | "error"
   >("idle");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -21,6 +24,10 @@ export function NewsletterSignup({ dict }: { dict: Dictionary }) {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setState("invalid");
+      return;
+    }
+    if (!consent) {
+      setState("consent");
       return;
     }
 
@@ -46,18 +53,18 @@ export function NewsletterSignup({ dict }: { dict: Dictionary }) {
 
   return (
     <div>
-      <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-gold">
+      <p className="civic-label mb-4 text-signal">
         {t.title}
       </p>
-      <p className="mb-4 max-w-xs text-sm leading-relaxed text-muted">
+      <p className="mb-4 max-w-xs text-sm leading-relaxed text-paper/58">
         {t.text}
       </p>
       {state === "success" ? (
-        <p role="status" className="text-sm font-medium text-accent">
+          <p role="status" className="text-sm font-medium text-signal">
           {t.success}
         </p>
       ) : (
-        <form onSubmit={handleSubmit} noValidate className="flex max-w-xs gap-2">
+        <form onSubmit={handleSubmit} noValidate className="grid max-w-md gap-3">
           <label htmlFor="newsletter-email" className="sr-only">
             {t.placeholder}
           </label>
@@ -72,24 +79,47 @@ export function NewsletterSignup({ dict }: { dict: Dictionary }) {
             required
             aria-invalid={state === "invalid"}
             aria-describedby={
-              state === "invalid" || state === "error"
+              state === "invalid" || state === "consent" || state === "error"
                 ? "newsletter-message"
                 : undefined
             }
-            className="min-w-0 flex-1 rounded-full border border-border bg-bg px-4 py-2 text-sm text-ink placeholder:text-muted focus:border-accent"
+            className="min-h-11 min-w-0 rounded-xl border border-paper/22 bg-paper/8 px-4 py-2 text-sm text-paper placeholder:text-paper/42 focus:border-signal"
           />
+          <label className="grid cursor-pointer grid-cols-[auto_1fr] gap-2 text-xs leading-relaxed text-paper/62">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(event) => {
+                setConsent(event.target.checked);
+                if (event.target.checked && state === "consent") setState("idle");
+              }}
+              aria-invalid={state === "consent"}
+              aria-describedby={state === "consent" ? "newsletter-message" : undefined}
+              className="mt-0.5 h-4 w-4 accent-signal"
+            />
+            <span>
+              {t.consent}{" "}
+              <Link href={`/${locale}/datenschutz`} className="font-semibold text-paper underline underline-offset-4">
+                {dict.footer.privacy}
+              </Link>
+            </span>
+          </label>
           <button
             type="submit"
             disabled={state === "sending"}
-            className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="button-primary w-fit border-paper bg-paper text-night hover:bg-signal disabled:opacity-60"
           >
             {t.submit}
           </button>
         </form>
       )}
-      {(state === "invalid" || state === "error") && (
-        <p id="newsletter-message" role="status" className="mt-2 text-sm text-gold">
-          {state === "invalid" ? t.errorInvalid : t.errorServer}
+      {(state === "invalid" || state === "consent" || state === "error") && (
+        <p id="newsletter-message" role="status" className="mt-2 text-sm text-signal">
+          {state === "invalid"
+            ? t.errorInvalid
+            : state === "consent"
+              ? t.consentRequired
+              : t.errorServer}
         </p>
       )}
     </div>

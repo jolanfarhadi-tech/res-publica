@@ -1,86 +1,98 @@
 # Res Publica Website Design System
 
-## Direction
+## Direction: Civic Observatory
 
-The visual language is **Civic Editorial Monument**: a contemporary public
-institution expressed through strong typography, architectural spacing,
-editorial rules, and restrained contrast. It avoids startup gradients,
-consultancy imagery, decorative dashboards, and generic rounded-card systems.
+The public website presents Res Publica as a calm European civic institution:
+precise enough for research, open enough for dialogue, and accountable enough
+for public trust. The interface combines editorial typography, observatory-like
+circles and grids, mineral surfaces, and restrained translucent layers.
+
+This is not a commercial product aesthetic. It avoids growth language,
+gamification, unsupported social proof, stock imagery, and decorative
+dashboards.
 
 ## Typography
 
-- Fraunces carries institutional display headings in German and English.
-- Vazirmatn carries Persian text and headings without forcing a Latin display
-  face onto Arabic script.
-- Inter carries navigation, metadata, controls, and body copy.
-- The homepage hero uses a fluid `clamp()` scale from 3.5rem to 8.75rem.
-- Body copy remains between 1rem and 1.25rem with generous leading.
+- **Source Serif 4** carries institutional headings and long-form emphasis.
+- **Figtree** carries body text, navigation, forms, metadata, and controls.
+- **Vazirmatn** carries Persian text and headings with native RTL shaping.
+- Display sizes use fluid `clamp()` scales; body copy remains readable at
+  1rem or larger with generous line height.
+- Core content never depends on web-font loading to remain visible or usable.
 
-## Spacing Rhythm
+## Color and surfaces
 
-- Primary page sections: 5rem mobile, 7rem desktop.
-- Hero: viewport-based height with 2.5–4rem internal edges.
-- Editorial modules: 1.5–2.25rem vertical rhythm.
-- Hairline rules separate content; whitespace, not boxes, creates hierarchy.
+- **Mineral white / paper**: primary reading surfaces.
+- **Deep civic ink / night**: institutional hero and high-emphasis sections.
+- **Observatory blue**: links, focus, and primary action.
+- **Verdigris**: verified state and quiet institutional emphasis.
+- **Signal brass**: sparse editorial indexing only.
 
-## Surface Hierarchy
+Glass is functional, not ornamental. It marks layered controls, consent,
+status, and selected editorial surfaces. Reduced-transparency preferences
+replace it with solid surfaces.
 
-1. Institutional Night (`--night`) — hero, major project narrative, final CTA.
-2. Editorial Paper (`--paper`) — thesis, research, and publication reading plane.
-3. Site Background (`--bg`) — operational and foundation sections.
-4. Deep Civic Blue (`--deep-blue`) — participation and membership invitation.
-5. Signal Brass (`--signal`) — indices and quiet institutional emphasis only.
+## Spacing and shape
 
-Core text/background combinations are selected to exceed WCAG AA. Existing
-semantic light/dark tokens remain the default for all non-homepage routes.
-
-## Visual Motifs
-
-- Fine architectural grid in the hero.
-- Oversized translucent “R” as a typographic institution mark, not an image.
-- Two-digit editorial indices for narrative orientation.
-- Rules, columns, and asymmetric editorial proportions instead of card stacks.
-- The Res Publica wordmark combines a compact RP seal with the full name.
+- Section rhythm is defined by `--section` and scales by viewport.
+- Reading widths remain bounded even on wide displays.
+- Cards use 1.25–1.5rem radii; controls use 0.75rem radii.
+- Hairline rules and whitespace establish hierarchy before shadows do.
+- Touch targets are at least 44px.
 
 ## Motion
 
-- One restrained fade-and-rise entrance pattern using the existing Framer
-  Motion component.
-- Short duration, one-time viewport entry, no parallax or continuous movement.
-- `prefers-reduced-motion` removes meaningful animation duration globally.
+Framer Motion provides one quiet, one-time settle animation. Content renders
+visibly before hydration and remains visible when animation or JavaScript is
+unavailable. `prefers-reduced-motion` and the local accessibility preference
+remove non-essential motion.
 
-## Responsive and RTL Rules
+## Accessibility and preferences
 
-- Mobile starts as a single editorial column; two- and three-column structures
-  enter only when content width permits.
-- Desktop navigation uses a dedicated second row to prevent horizontal overflow.
-- Mobile navigation is a full-width institutional panel with large targets.
-- Layout uses logical `start`/`end` and `border-e` utilities; no directional
-  spacing is introduced.
-- Persian inherits `dir="rtl"` from the locale layout and uses a mirrored hero
-  light field plus Vazirmatn typography.
+- WCAG 2.2 AA contrast and visible `:focus-visible` treatment.
+- Keyboard-operable header, mobile menu, dialog, forms, and settings.
+- Semantic headings, landmarks, labels, live regions, and error associations.
+- Local controls for reduced motion, higher contrast, and larger text.
+- Necessary local storage is always available; functional, analytics, and
+  newsletter categories are off until explicit consent.
+- The preference layer does not itself load analytics or third-party scripts.
 
-## Component States
+## Responsive and RTL rules
 
-- Header: sticky, translucent background, desktop two-tier and mobile panel.
-- CTA: solid paper-on-night primary; transparent bordered secondary.
-- Editorial entry: rule-separated link with date, title, description, metadata.
-- Collection emphasis: feature entry plus compact supporting entries.
-- Theme, search, account, and language controls preserve existing behavior and
-  visible focus treatment.
+- Layouts begin as one column and expand only when content width permits.
+- At narrow widths the wordmark contracts to the RP seal so controls never
+  force horizontal overflow.
+- The mobile menu is an opaque, full-height layer below the sticky masthead.
+- Logical `start`/`end` properties govern spacing and borders.
+- Persian uses `lang="fa"`, `dir="rtl"`, Vazirmatn, mirrored observatory
+  composition, and localized dates.
 
-## Governance Constraints
+## Core components
 
-- No engagement scores, ranks, badges, or competitive visual language.
-- No fabricated statistics, testimonials, partners, awards, or case studies.
-- No distress imagery or sensational treatment.
-- Existing anonymous access, locale routing, RTL behavior, and backend flows
-  remain unchanged.
+- Sticky institutional masthead and responsive navigation.
+- Editorial page headers and collection reading templates.
+- Glass and solid cards with restrained hover feedback.
+- Primary, secondary, and quiet action styles.
+- Provenance-gated project, publication, research, event, and news entries.
+- Consent banner, preference center, and privacy dashboard.
+- Accessible membership, event-registration, and newsletter forms.
+- Protected Member Profile status panels.
 
-## References
+## Governance constraints
 
-`brain/00_constitution/00_constitution.md`;
-`docs/source/foundation/00_MANIFESTO.md`;
-`docs/source/foundation/03_VALUES.md`;
-`docs/source/foundation/06_ECOSYSTEM.md`;
-`src/app/globals.css`.
+- No engagement scores, ranks, points, streaks, or competitive badges.
+- No invented people, partners, projects, publications, impact figures,
+  testimonials, or launched capabilities.
+- HARM is a research project and methodology in development, never a product.
+- RPCS / Civic School and Civic Fellowship are programmes, never products.
+- Publishing Authority remains an internal human-accountability boundary.
+- Backend, authentication, persistence, and audit contracts are unchanged.
+
+## Sources
+
+The design and copy are grounded in the signed Satzung supplied for this
+release review, `brain/00_constitution/00_constitution.md`,
+`docs/source/foundation/`, `docs/source/methodology/`,
+`docs/source/projects/`, and the existing accepted repository boundaries.
+The signed PDF is not copied into the repository because it contains
+signatures and personal data.

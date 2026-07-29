@@ -96,23 +96,39 @@ export function SearchClient({
     index !== null && trimmed.length >= 2 && results.length === 0;
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-4xl">
       <label htmlFor="site-search" className="sr-only">
         {t.label}
       </label>
-      <input
-        ref={inputRef}
-        id="site-search"
-        type="search"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder={t.placeholder}
-        autoComplete="off"
-        className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-lg text-ink placeholder:text-muted focus:border-accent"
-      />
+      <div className="glass-panel relative rounded-2xl">
+        <svg
+          aria-hidden="true"
+          className="absolute start-5 top-1/2 -translate-y-1/2 text-muted"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
+        <input
+          ref={inputRef}
+          id="site-search"
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={t.placeholder}
+          autoComplete="off"
+          className="min-h-16 w-full rounded-2xl border border-transparent bg-transparent ps-14 pe-5 text-lg text-ink placeholder:text-muted focus:border-accent"
+        />
+      </div>
 
       {/* Status line — polite live region for screen readers. */}
-      <p role="status" aria-live="polite" className="mt-3 text-sm text-muted">
+      <p role="status" aria-live="polite" className="mt-4 min-h-6 text-sm text-muted">
         {failed && t.errorLoading}
         {!failed && index === null && t.loading}
         {tooShort && t.minChars}
@@ -122,24 +138,32 @@ export function SearchClient({
           t.results.replace("{count}", String(results.length))}
       </p>
 
-      <ul className="mt-6 space-y-4">
-        {results.map((doc) => (
+      <ol className="mt-8 divide-y divide-border border-y border-border">
+        {results.map((doc, index) => (
           <li key={doc.url}>
             <Link
               href={doc.url}
-              className="block rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-accent"
+              className="group grid gap-3 py-6 transition-colors hover:text-accent sm:grid-cols-[3rem_1fr_auto] sm:items-start"
             >
-              <p className="text-xs uppercase tracking-[0.15em] text-gold">
-                {doc.section}
-              </p>
-              <h2 className="mt-2 text-xl">{doc.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {doc.description}
-              </p>
+              <span className="editorial-index text-xs text-muted">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span>
+                <span className="civic-label">{doc.section}</span>
+                <span className="mt-2 block font-serif text-2xl font-semibold">
+                  {doc.title}
+                </span>
+                <span className="mt-2 block max-w-2xl text-sm leading-relaxed text-muted">
+                  {doc.description}
+                </span>
+              </span>
+              <span aria-hidden="true" className="text-muted group-hover:text-accent">
+                ↗
+              </span>
             </Link>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   );
 }

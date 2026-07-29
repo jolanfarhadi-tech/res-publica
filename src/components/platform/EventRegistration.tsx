@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { Button } from "@/components/ui/Button";
@@ -10,6 +11,8 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
   const t = dict.platform.eventRegistration;
   const [state, setState] = useState<ActionState>("idle");
   const [available, setAvailable] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -22,6 +25,11 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
   }, [eventId]);
 
   async function register() {
+    if (!consent) {
+      setConsentError(true);
+      return;
+    }
+    setConsentError(false);
     setState("submitting");
     try {
       const response = await fetch("/api/events/registration", {
@@ -45,10 +53,30 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
   if (!available) return null;
 
   return (
-    <aside className="mt-10 rounded-2xl border border-border bg-surface p-6" aria-labelledby="event-registration-title">
+    <aside className="glass-panel mt-12 rounded-2xl p-6 sm:p-8" aria-labelledby="event-registration-title">
       <h2 id="event-registration-title" className="text-2xl">{t.title}</h2>
-      <p className="mt-2 text-muted">{t.text}</p>
-      <div className="mt-5 flex flex-wrap items-center gap-4">
+      <p className="mt-3 max-w-2xl leading-relaxed text-muted">{t.text}</p>
+      <label className="mt-6 grid cursor-pointer grid-cols-[auto_1fr] gap-3 rounded-xl bg-bg p-4">
+        <input
+          type="checkbox"
+          checked={consent}
+          onChange={(event) => {
+            setConsent(event.target.checked);
+            if (event.target.checked) setConsentError(false);
+          }}
+          aria-invalid={consentError}
+          aria-describedby={consentError ? "event-consent-error" : undefined}
+          className="mt-1 h-5 w-5 accent-accent"
+        />
+        <span className="text-sm leading-relaxed">
+          {t.consent}{" "}
+          <Link href={`/${locale}/datenschutz`} className="font-semibold text-accent underline underline-offset-4">
+            {dict.footer.privacy}
+          </Link>
+        </span>
+      </label>
+      {consentError && <p id="event-consent-error" role="alert" className="mt-2 text-sm text-critical">{t.consentRequired}</p>}
+      <div className="mt-6 flex flex-wrap items-center gap-4">
         <Button type="button" onClick={register} disabled={state === "submitting" || state === "success" || state === "waitlisted"}>
           {state === "submitting" ? t.submitting : t.submit}
         </Button>
@@ -58,7 +86,7 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
           </a>
         )}
       </div>
-      {message && <p role="status" className="mt-4 text-sm text-muted">{message}</p>}
+      {message && <p role="status" aria-live="polite" className="mt-4 rounded-xl bg-bg p-4 text-sm text-muted">{message}</p>}
     </aside>
   );
 }

@@ -3,14 +3,16 @@ import Link from "next/link";
 type Variant = "primary" | "secondary" | "ghost";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-2.5 " +
-  "text-sm font-medium transition-colors";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 " +
+  "text-sm font-semibold transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-200 " +
+  "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-accent-contrast hover:opacity-90",
+  primary:
+    "border border-accent bg-accent text-accent-contrast shadow-[0_12px_28px_-20px_var(--accent)] hover:-translate-y-0.5 hover:bg-ink",
   secondary:
     "border border-border bg-surface text-ink hover:border-accent hover:text-accent",
-  ghost: "text-accent hover:underline underline-offset-4",
+  ghost: "text-accent hover:bg-accent/8",
 };
 
 /**

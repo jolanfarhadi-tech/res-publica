@@ -19,7 +19,7 @@ export function MdxPage({ locale, slug }: { locale: Locale; slug: string }) {
         title={page.frontmatter.title}
         lede={page.frontmatter.description}
       />
-      <Container className="py-14 sm:py-20">
+      <Container className="section-shell">
         <Prose>
           <MDXRemote source={page.body} />
         </Prose>

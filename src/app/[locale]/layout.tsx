@@ -1,29 +1,30 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, Vazirmatn } from "next/font/google";
+import { Figtree, Source_Serif_4, Vazirmatn } from "next/font/google";
 import { notFound } from "next/navigation";
 import { getDirection, isLocale, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { PreferenceProvider } from "@/components/privacy/PreferenceProvider";
 import "../globals.css";
 
 /* Brand fonts, self-hosted by next/font (no external requests). */
-const inter = Inter({
+const figtree = Figtree({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
-  display: "swap",
+  variable: "--font-figtree",
+  display: "optional",
 });
 
-const fraunces = Fraunces({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
+  variable: "--font-source-serif",
+  display: "optional",
 });
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
   variable: "--font-vazirmatn",
-  display: "swap",
+  display: "optional",
 });
 
 /* Pre-render one page tree per language at build time. */
@@ -55,6 +56,11 @@ export async function generateMetadata({
       title: dict.meta.title,
       description: dict.meta.description,
       locale,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.title,
+      description: dict.meta.description,
     },
   };
 }
@@ -97,7 +103,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       suppressHydrationWarning
-      className={`${inter.variable} ${fraunces.variable} ${vazirmatn.variable}`}
+      className={`${figtree.variable} ${sourceSerif.variable} ${vazirmatn.variable}`}
     >
       <body className="flex min-h-screen flex-col">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
@@ -108,11 +114,13 @@ export default async function LocaleLayout({
         >
           {dict.a11y.skipToContent}
         </a>
-        <Header locale={locale as Locale} dict={dict} />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer locale={locale as Locale} dict={dict} />
+        <PreferenceProvider locale={locale as Locale}>
+          <Header locale={locale as Locale} dict={dict} />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <Footer locale={locale as Locale} dict={dict} />
+        </PreferenceProvider>
       </body>
     </html>
   );

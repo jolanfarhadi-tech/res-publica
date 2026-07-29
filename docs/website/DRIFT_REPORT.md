@@ -1,29 +1,58 @@
 # Website Drift Report
 
-**Date:** 2026-07-24
-
-**Release candidate:** frontend working tree based on `09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`
+**Date:** 2026-07-29
 
 ## Result
 
-No blocker or major content drift was found.
+No blocking content, terminology, product-classification, or constitutional
+drift was found.
 
-## Checks
+## Verified checks
 
-- **Terminology and zero gamification:** no public reputation, leaderboard, rank, points, score, or competitive badge mechanic is present. Search scoring terms are private implementation details; maturity labels describe offerings, not people.
-- **Claims and figures:** the transformed narrative introduces no impact figures, partnerships, testimonials, completed capabilities, or institutional history beyond the verified source material.
-- **Provenance:** public collection indexes continue to use the publication/provenance gate; unsupported records are not promoted as verified public work.
-- **Identity:** placeholder team members and partners are suppressed rather than presented as real people or organizations.
-- **Language equivalence:** the WHY / HOW / WHAT / JOIN narrative, Method, Offerings, Membership boundary, and trust safeguards are represented in DE, EN, and FA.
-- **Public boundaries:** the website does not issue Publishing Authority write requests. Publishing Authority is described only as a protected human-accountability layer.
-- **Operational honesty:** Contact does not simulate delivery, and future/non-operational offerings do not expose operational calls to action.
-- **Legal continuity:** existing legal routes and content remain unchanged by the narrative transformation.
+- **Institutional identity:** public copy reflects the signed Satzung's
+  charitable purposes, political independence, political education,
+  intercultural dialogue, digital governance, democratic innovation, civic
+  self-organisation, and cooperation boundaries.
+- **Membership:** ordinary and supporting membership remain the only
+  statutory membership classes presented as such. Volunteer, research, and
+  institutional options are labelled as participation relationships. The
+  board's admission decision remains explicit.
+- **HARM:** presented only as a reviewed research project and methodology in
+  development. It is absent from Products.
+- **RPCS / Civic School and Civic Fellowship:** presented only as documented
+  programmes and not as launched courses or products.
+- **Lab:** presented as a website collection and research/innovation
+  environment, not as a separately incorporated research organization.
+- **Products and services:** only implemented interfaces and real contact,
+  membership, event, and search capabilities are listed. Internal
+  infrastructure is not marketed.
+- **Claims:** no impact figures, testimonials, public member profiles,
+  partnerships, team identities, awards, or launched publications/events were
+  invented.
+- **Provenance:** collection content remains public only when visibility,
+  review, and source are explicit. The new HARM project entry passes that gate
+  in DE/EN/FA.
+- **Publishing Authority:** no public write request was added; it remains a
+  protected human-accountability layer and no-auto-publish boundary.
+- **Consent and privacy:** optional categories begin disabled; necessary
+  storage is immutable; legal labels and links are localized.
+- **Internationalization:** the new narrative, Lab, privacy settings, forms,
+  HARM project, legal labels, and empty states have DE/EN/FA parity.
+- **Zero gamification:** no points, rank, leaderboard, streak, reputation
+  score, or competitive badge mechanic is present.
+- **Automated terminology scan:** zero live occurrences of retired
+  terminology.
+- **Documentation links:** 189 documentation files scanned, zero broken
+  Markdown links.
 
-## Minor observations
+## Deliberate exclusions
 
-- `SearchClient.tsx` uses internal `score`, `points`, and `Ranking` terminology for local text-result ordering. These terms are not rendered as civic status, trust, or member comparison.
-- The newsletter remains provider-dependent and must continue to show its unavailable state when production provider configuration is absent.
-
-## Follow-up
-
-- Re-run this check after any substantial public-content, offering-maturity, identity, partnership, or translation update.
+- Contact remains a truthful localized email action because no verified
+  contact-submission backend exists.
+- No research-participation intake form is exposed because no approved
+  collection purpose, retention path, consent record, or receiving workflow
+  exists.
+- Unreviewed legacy/demo MDX remains excluded from search, RSS, sitemap,
+  indexes, and static generation.
+- The signed Satzung PDF is not copied into the repository because it contains
+  signatures and personal data.

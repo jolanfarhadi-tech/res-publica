@@ -18,15 +18,15 @@ export function PersonCard({
     .join("");
 
   return (
-    <div className="rounded-2xl border border-border bg-surface p-7">
+    <div className="glass-panel h-full rounded-3xl p-7 transition-transform duration-300 motion-safe:hover:-translate-y-1">
       <div
         aria-hidden="true"
-        className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-accent font-serif text-lg text-accent-contrast"
+        className="mb-7 flex h-16 w-16 items-center justify-center rounded-full border border-accent/20 bg-accent/10 font-serif text-xl text-accent"
       >
         {initials}
       </div>
       <h3 className="text-xl">{name}</h3>
-      <p className="mt-1 text-sm font-medium text-gold">{role}</p>
+      <p className="mt-2 text-sm font-semibold text-verdigris">{role}</p>
       <p className="mt-3 leading-relaxed text-muted">{bio}</p>
     </div>
   );

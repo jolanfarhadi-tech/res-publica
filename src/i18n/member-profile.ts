@@ -44,11 +44,11 @@ export const germanMembershipStatusLabels: Record<MembershipStatus, string> = {
 };
 
 export const germanMembershipTierLabels: Record<MembershipTier, string> = {
-  basic: "Basismitgliedschaft",
+  basic: "Ordentliche Mitgliedschaft",
   supporter: "Fördermitgliedschaft",
   volunteer: "Ehrenamtliche Mitwirkung",
-  research: "Forschungsmitgliedschaft",
-  institutional: "Institutionelle Mitgliedschaft",
+  research: "Forschungsbezogene Mitwirkung",
+  institutional: "Institutionelle Mitwirkung",
 };
 
 export type MemberProfileCopy = { [Key in keyof typeof germanMemberProfileCopy]: string };
@@ -97,11 +97,11 @@ export const englishMembershipStatusLabels: Record<MembershipStatus, string> = {
 };
 
 export const englishMembershipTierLabels: Record<MembershipTier, string> = {
-  basic: "Basic membership",
+  basic: "Ordinary membership",
   supporter: "Supporting membership",
-  volunteer: "Volunteer membership",
-  research: "Research membership",
-  institutional: "Institutional membership",
+  volunteer: "Volunteer participation",
+  research: "Research participation",
+  institutional: "Institutional participation",
 };
 
 export const persianMemberProfileCopy: MemberProfileCopy = {
@@ -148,11 +148,11 @@ export const persianMembershipStatusLabels: Record<MembershipStatus, string> = {
 };
 
 export const persianMembershipTierLabels: Record<MembershipTier, string> = {
-  basic: "عضویت پایه",
+  basic: "عضویت عادی",
   supporter: "عضویت حامی",
   volunteer: "مشارکت داوطلبانه",
-  research: "عضویت پژوهشی",
-  institutional: "عضویت نهادی",
+  research: "مشارکت پژوهشی",
+  institutional: "مشارکت نهادی",
 };
 
 export const memberProfileCopy = {

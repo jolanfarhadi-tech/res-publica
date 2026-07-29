@@ -14,16 +14,17 @@ export function PageHeader({
   updated?: string;
 }) {
   return (
-    <section className="border-b border-border">
-      <Container className="py-16 sm:py-20">
-        <h1 className="text-4xl sm:text-5xl">{title}</h1>
+    <section className="relative isolate overflow-hidden border-b border-border bg-paper text-night">
+      <div className="observatory-orbit opacity-35" aria-hidden="true" />
+      <Container className="relative z-10 py-16 sm:py-24">
+        <h1 className="max-w-4xl text-5xl leading-[1.02] sm:text-6xl">{title}</h1>
         {lede && (
-          <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-night/66">
             {lede}
           </p>
         )}
         {updated && (
-          <p className="mt-4 text-xs uppercase tracking-[0.2em] text-gold">
+          <p className="civic-label mt-5">
             {updated}
           </p>
         )}

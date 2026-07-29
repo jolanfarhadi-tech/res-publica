@@ -24,20 +24,20 @@ export function EntryCard({
   return (
     <Link
       href={href}
-      className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-7 transition-[border-color,transform,box-shadow] duration-200 hover:border-accent motion-safe:hover:-translate-y-1 hover:shadow-md"
+      className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-6 transition-[border-color,transform,box-shadow] duration-200 hover:border-accent motion-safe:hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-32px_rgb(5_26_43_/_0.42)] sm:p-7"
     >
-      <p className="text-xs uppercase tracking-[0.15em] text-gold">{date}</p>
-      <h3 className="mt-3 text-xl transition-colors group-hover:text-accent">
+      <p className="civic-label">{date}</p>
+      <h3 className="mt-5 text-2xl transition-colors group-hover:text-accent">
         {title}
       </h3>
       {meta && <p className="mt-1 text-sm text-muted">{meta}</p>}
-      <p className="mt-3 flex-1 leading-relaxed text-muted">{description}</p>
+      <p className="mt-4 flex-1 leading-relaxed text-muted">{description}</p>
       {tags && tags.length > 0 && (
         <p className="mt-4 flex flex-wrap gap-2">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted"
+              className="rounded-lg bg-bg px-2.5 py-1 text-xs font-medium text-muted"
             >
               {tag}
             </span>

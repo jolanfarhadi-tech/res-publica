@@ -47,7 +47,7 @@ export default async function TeamPage({ params }: Props) {
       <PageHeader title={dict.pages.team.title} lede={dict.pages.team.lede} />
       <Container className="py-14 sm:py-20">
         {team.length === 0 && (
-          <p className="max-w-2xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
+          <p className="glass-panel max-w-2xl rounded-3xl p-6 text-lg leading-relaxed text-muted sm:p-8">
             {getPublicSiteCopy(locale as Locale).people.team}
           </p>
         )}

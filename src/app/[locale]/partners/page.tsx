@@ -34,14 +34,14 @@ export default async function PartnersPage({ params }: Props) {
       />
       <Container className="py-14 sm:py-20">
         {partners.length === 0 && (
-          <p className="max-w-2xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
+          <p className="glass-panel max-w-2xl rounded-3xl p-6 text-lg leading-relaxed text-muted sm:p-8">
             {getPublicSiteCopy(locale as Locale).people.partners}
           </p>
         )}
         <ul className="grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {partners.map((partner) => {
             const card = (
-              <div className="h-full rounded-2xl border border-border bg-surface p-7 transition-colors hover:border-accent">
+              <div className="glass-panel h-full rounded-3xl p-7 transition-transform motion-safe:hover:-translate-y-1">
                 <p className="font-serif text-xl">{partner.name}</p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {partner.description[locale as Locale]}

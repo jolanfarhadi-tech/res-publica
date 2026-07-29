@@ -21,7 +21,7 @@ export function LanguageSwitcher({
 
   return (
     <nav aria-label={dict.a11y.languageSwitcher}>
-      <ul className="flex items-center gap-1">
+      <ul className="flex flex-wrap items-center gap-1 rounded-xl border border-border bg-surface/60 p-1">
         {locales.map((locale) => {
           const active = locale === current;
           return (
@@ -30,10 +30,10 @@ export function LanguageSwitcher({
                 href={`/${locale}${rest ? `/${rest}` : ""}`}
                 lang={locale}
                 aria-current={active ? "true" : undefined}
-                className={`rounded-full px-2.5 py-1 text-sm transition-colors ${
+                className={`inline-flex min-h-9 items-center rounded-lg px-2.5 py-1 text-sm transition-colors ${
                   active
-                    ? "font-semibold text-ink"
-                    : "text-muted hover:text-accent"
+                    ? "bg-ink font-semibold text-bg"
+                    : "text-muted hover:bg-bg hover:text-accent"
                 }`}
               >
                 {localeNames[locale]}

@@ -10,8 +10,8 @@ export function LegalPage({ document }: { document: LegalDocument }) {
   const source = readFileSync(path.join(process.cwd(), `${document}.md`), "utf8");
 
   return (
-    <Container className="py-14 sm:py-20">
-      <div lang="de" dir="ltr" className="[&_p]:whitespace-pre-line">
+    <Container className="section-shell">
+      <div lang="de" dir="ltr" className="glass-panel rounded-2xl p-6 [&_p]:whitespace-pre-line sm:p-10">
         <Prose>
           <MDXRemote source={source} />
         </Prose>

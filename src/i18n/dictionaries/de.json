@@ -143,6 +143,8 @@
   "footer": {
     "tagline": "Für Demokratie, Verantwortung und öffentliche Teilhabe.",
     "rights": "Alle Rechte vorbehalten.",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
     "groups": {
       "organization": "Organisation",
       "work": "Unsere Arbeit",
@@ -183,6 +185,8 @@
     "text": "Anmeldung zu bestätigten Mitteilungen von Res Publica.",
     "placeholder": "E-Mail-Adresse",
     "submit": "Anmelden",
+    "consent": "Ich möchte den Newsletter erhalten und willige in die Verarbeitung meiner E-Mail-Adresse ein. Die Einwilligung kann jederzeit widerrufen werden.",
+    "consentRequired": "Bitte erteilen Sie Ihre Einwilligung, bevor Sie sich anmelden.",
     "success": "Fast geschafft! Bitte bestätigen Sie die E-Mail, die wir Ihnen gesendet haben.",
     "errorInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "errorExists": "Diese Adresse ist bereits angemeldet.",
@@ -192,6 +196,8 @@
     "eventRegistration": {
       "title": "Für diese Veranstaltung anmelden",
       "text": "Die Anmeldung wird Ihrem persönlichen Konto zugeordnet. Ist die Kapazität erreicht, werden Sie auf die Warteliste gesetzt.",
+      "consent": "Ich möchte mich verbindlich anmelden und habe die Datenschutzerklärung gelesen.",
+      "consentRequired": "Bitte bestätigen Sie die Datenschutzhinweise, bevor Sie sich anmelden.",
       "submit": "Jetzt anmelden",
       "submitting": "Anmeldung läuft …",
       "login": "Anmelden und fortfahren",
@@ -206,18 +212,29 @@
       "lede": "Ein geschützter Einstieg in langfristige zivilgesellschaftliche Beteiligung.",
       "tierLabel": "Form der Mitgliedschaft",
       "tiers": {
-        "basic": "Basismitgliedschaft",
+        "basic": "Ordentliche Mitgliedschaft",
         "supporter": "Fördermitgliedschaft",
         "volunteer": "Ehrenamtliche Mitwirkung",
-        "research": "Forschungsmitgliedschaft",
-        "institutional": "Institutionelle Mitgliedschaft"
+        "research": "Forschungsbezogene Mitwirkung",
+        "institutional": "Institutionelle Mitwirkung"
       },
-      "accountableNotice": "Die Mitgliedschaft wird Ihrem verifizierten Konto zugeordnet und nachvollziehbar protokolliert.",
+      "accountableNotice": "Der Antrag wird Ihrem verifizierten Konto zugeordnet und nachvollziehbar protokolliert. Über die Aufnahme entscheidet gemäß Satzung der Vorstand.",
+      "processLabel": "Ablauf des Antrags",
+      "processSelect": "Beteiligungsform wählen",
+      "processReview": "Prüfung und Entscheidung durch den Vorstand",
+      "profileConsentsTitle": "Bestätigungen vor dem Absenden",
+      "profileConsentsRequired": "Beide Bestätigungen sind erforderlich, bevor Sie den Antrag absenden können.",
+      "dataProtectionTitle": "Datenschutz",
+      "dataProtectionConsent": "Ich bestätige, dass ich die Informationen zum Datenschutz gelesen habe und in die Verarbeitung meiner personenbezogenen Daten zur Erstellung und Verwaltung meines Profils einwillige.",
+      "dataProtectionConsentRequired": "Bitte bestätigen Sie den Datenschutzhinweis, um fortzufahren.",
+      "consentTitle": "Einwilligung",
+      "programmeParticipationConsent": "Ich bestätige, dass die Angaben, die ich in meinem Profil mache, im Rahmen der Programme und Aktivitäten von Res Publica und entsprechend den bereitgestellten Erläuterungen verwendet werden dürfen.",
+      "programmeParticipationConsentRequired": "Bitte bestätigen Sie die Verwendung Ihrer Profilangaben, um fortzufahren.",
       "submit": "Mitgliedschaft beantragen",
       "submitting": "Antrag wird übermittelt …",
       "login": "Anmelden und fortfahren",
-      "success": "Ihre Mitgliedschaft wurde angelegt.",
-      "duplicate": "Für Ihr Konto besteht bereits eine Mitgliedschaft.",
+      "success": "Ihr Antrag wurde registriert. Über die Aufnahme entscheidet der Vorstand.",
+      "duplicate": "Für Ihr Konto besteht bereits ein Antrag oder eine Mitgliedschaft.",
       "unavailable": "Die Mitgliedschaftsfunktion ist derzeit nicht verfügbar.",
       "error": "Der Antrag konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut."
     }

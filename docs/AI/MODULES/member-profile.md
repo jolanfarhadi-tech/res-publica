@@ -4,6 +4,21 @@
 
 A read-only, self-facing transparency/participation interface — "the member's personal operating system," answering only "what should I do next?" **Explicitly not a governance decision interface.** Evidence: `docs/source/projects/MEMBER_PROFILE.md` (read in full, prior session), §"Purpose", §"Member Profile Visibility" (Architectural Rule stated four times).
 
+## Incremental implementation — profile creation consent, 2026-07-29
+
+**Verified, unstaged local worktree.** The Membership application that creates
+the first member-facing profile now requires two independent confirmations:
+data protection and described programme/activity use of profile information.
+Both start unchecked; the submit action remains disabled until both are
+selected; the API independently requires both literal `true` values.
+
+The confirmation receipt does not create a Member Profile-owned table or
+change the read-only profile projection. It reuses ADR-002's canonical
+`ConsentRecord`: two locale-specific version-`v1` purposes and one grant
+timestamp are written atomically with Membership creation. The localized
+data-protection link was browser-verified after separating it from the checkbox
+label so navigation does not toggle consent.
+
 ## Canonical authority
 
 - `architecture/adr/ADR-034-member-profile-visibility-and-self-service-authorization.md` — visibility tiers + protected self-service authorization. Accepted.
@@ -29,6 +44,13 @@ This module is explicitly a **display layer only** — it does not own any table
 
 ## Verification
 
+**Verified 2026-07-29:** focused profile-consent/frontend tests passed 36/36;
+the complete suite passed 37 files / 191 tests. Structure, lint, typecheck,
+database checks, fresh 12-migration/53-table verification, and the optimized
+99-page production build passed. Production-mode browser checks covered
+DE/EN/FA copy, default-off state, submit gating, Persian RTL, and localized
+data-protection navigation.
+
 **Incremental verification 2026-07-24:** the frontend narrative work did not
 change the profile API, projection, status semantics, or dashboard component.
 The full suite still passes 168/168. Manual anonymous/unavailable rendering
@@ -47,9 +69,9 @@ Tests confirmed to exist: `src/app/api/membership/profile/route.test.ts`, `src/a
 
 **PARTIAL** / **REMOTE_VERIFIED** for the implemented first slice. Per the spec's own TODO checklist (`MEMBER_PROFILE.md`, verbatim, read in full):
 
-Done: self-service ownership + tier separation at query/projection boundary (ADR-034 first slice); protected read-only Membership profile API + DE/EN/FA interface; Membership exit/deactivation lifecycle defined.
+Done: self-service ownership + tier separation at query/projection boundary (ADR-034 first slice); protected read-only Membership profile API + DE/EN/FA interface; Membership exit/deactivation lifecycle defined; purpose-scoped consent receipts for initial Membership/profile creation.
 
-Not done: Codex Potential/Hearing Candidate approval workflow + consent-capture UX; integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6; "Next Recommended Steps" generation logic; remaining Identity view; Community Participation/Systems views; Application History view; Payments/Notifications views; six unratified Community Systems items (each needs its own future ADR); Civic Contribution Framework integration (blocked on a framework that doesn't exist yet).
+Not done: Codex Potential/Hearing Candidate approval workflow and its separate Governance-disclosure consent; integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6; "Next Recommended Steps" generation logic; remaining Identity view; Community Participation/Systems views; Application History view; Payments/Notifications views; six unratified Community Systems items (each needs its own future ADR); Civic Contribution Framework integration (blocked on a framework that doesn't exist yet).
 
 ## Open work
 

@@ -39,9 +39,9 @@ export function AccountControl({ locale, dict }: { locale: Locale; dict: Diction
     }
   }
 
-  const classes = "inline-flex h-9 items-center justify-center rounded-full border border-border px-3 text-xs font-medium text-muted transition-colors hover:border-accent hover:text-accent disabled:cursor-wait disabled:opacity-60";
+  const classes = "button-secondary min-h-10 px-3.5 text-xs disabled:cursor-wait disabled:opacity-60";
 
-  if (state === "loading") return <span className="h-9 w-16 animate-pulse rounded-full bg-border" aria-label={t.loading} />;
+  if (state === "loading") return <span className="h-10 w-16 animate-pulse rounded-xl bg-border" aria-label={t.loading} />;
   if (state === "unavailable") return null;
   if (state === "authenticated") {
     return (

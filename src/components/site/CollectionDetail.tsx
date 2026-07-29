@@ -99,18 +99,19 @@ export function CollectionDetail({
     <>
       <JsonLd data={structuredData} />
       <JsonLd data={breadcrumbs} />
-      <section className="border-b border-border">
-        <Container className="py-16 sm:py-20">
-          <p className="text-xs uppercase tracking-[0.2em] text-gold">
+      <section className="relative isolate overflow-hidden border-b border-border bg-paper text-night">
+        <div className="observatory-orbit opacity-30" aria-hidden="true" />
+        <Container className="relative z-10 py-16 sm:py-24">
+          <p className="civic-label">
             {dict.collections[entry.collection].title} · {dateText}
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl sm:text-5xl">{entry.title}</h1>
-          <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
+          <h1 className="mt-5 max-w-4xl text-5xl leading-[1.02] sm:text-6xl">{entry.title}</h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-night/66">
             {entry.description}
           </p>
 
           {(entry.location || entry.authors || entry.status) && (
-            <dl className="mt-8 space-y-2">
+            <dl className="glass-panel mt-9 grid max-w-2xl gap-3 rounded-2xl p-5 sm:grid-cols-2">
               {entry.location && (
                 <MetaRow label={labels.location} value={entry.location} />
               )}
@@ -128,7 +129,7 @@ export function CollectionDetail({
         </Container>
       </section>
 
-      <Container className="py-14 sm:py-20">
+      <Container className="section-shell">
         <Prose>
           <MDXRemote source={entry.body} />
         </Prose>
@@ -137,15 +138,15 @@ export function CollectionDetail({
         <p className="mt-12">
           <Link
             href={basePath}
-            className="text-sm text-accent underline underline-offset-4"
+            className="button-secondary"
           >
             {labels.back}
           </Link>
         </p>
 
         {related.length > 0 && (
-          <section className="mt-16 border-t border-border pt-12">
-            <h2 className="mb-6 text-2xl">{labels.related}</h2>
+          <section className="mt-20 border-t border-border pt-12">
+            <h2 className="mb-7 text-3xl">{labels.related}</h2>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((other) => (
                 <EntryCard

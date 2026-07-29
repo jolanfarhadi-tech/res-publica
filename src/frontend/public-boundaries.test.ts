@@ -36,9 +36,13 @@ describe("public website boundaries", () => {
 
   it("requires explicit publication provenance for collection entries", () => {
     for (const collection of collections) {
-      expect(getSlugs(collection)).toEqual([]);
       for (const locale of locales) {
-        expect(getEntries(locale, collection)).toEqual([]);
+        for (const entry of getEntries(locale, collection)) {
+          expect(entry.visibility).toBe("public");
+          expect(entry.reviewed).toBe(true);
+          expect(entry.source?.trim()).toBeTruthy();
+          expect(getSlugs(collection)).toContain(entry.slug);
+        }
       }
     }
   });
@@ -93,13 +97,39 @@ describe("public website boundaries", () => {
       expect(items.map((item) => item.href)).toEqual(
         expect.arrayContaining([
           `/${locale}/programs`,
-          `/${locale}/products`,
-          `/${locale}/services`,
           `/${locale}/projects`,
+          `/${locale}/lab`,
+          `/${locale}/research`,
+          `/${locale}/publications`,
+          `/${locale}/membership`,
+          `/${locale}/contact`,
         ])
+      );
+      expect(items.map((item) => item.href)).not.toContain(
+        `/${locale}/products`
+      );
+      expect(items.map((item) => item.href)).not.toContain(
+        `/${locale}/services`
       );
       expect(items.map((item) => item.href)).not.toContain(`/${locale}/offerings`);
     }
+  });
+
+  it("presents HARM as a reviewed research project, not a product", () => {
+    for (const locale of locales) {
+      const entry = getEntries(locale, "projects").find(
+        (project) => project.slug === "harm-research"
+      );
+      expect(entry).toMatchObject({
+        visibility: "public",
+        reviewed: true,
+        status: "ongoing",
+      });
+      expect(entry?.source).toBe(
+        "docs/source/foundation/01_HARM_OPERATING_SYSTEM.md"
+      );
+    }
+    expect(publicOfferings.map((offering) => offering.id)).not.toContain("harm");
   });
 
   it("classifies RPCS Civic School as a documented Program, never as a Project", () => {
@@ -123,13 +153,62 @@ describe("public website boundaries", () => {
   it("keeps Persian RTL and a complete reduced-motion fallback", () => {
     expect(getDirection("fa")).toBe("rtl");
     const css = source("src", "app", "globals.css");
+    const motion = source("src", "components", "motion", "FadeIn.tsx");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain("animation-iteration-count: 1");
+    expect(motion).toContain("preferences.reduceMotion");
+  });
+
+  it("keeps the mobile menu modal, focus-contained and desktop-safe", () => {
+    const header = source("src", "components", "site", "Header.tsx");
+    const css = source("src", "app", "globals.css");
+    expect(header).toContain("<dialog");
+    expect(header).toContain("showModal()");
+    expect(header).toContain('className="icon-button inline-grid lg:hidden"');
+    expect(css).not.toMatch(
+      /\.icon-button\s*\{[\s\S]*?display:\s*inline-grid/
+    );
+    expect(css).toContain("overflow-wrap: anywhere");
+    expect(css).toContain("hyphens: auto");
+  });
+
+  it("localizes legal links and keeps structured-data claims bounded", () => {
+    const footer = source("src", "components", "site", "Footer.tsx");
+    const membership = source(
+      "src",
+      "components",
+      "platform",
+      "MembershipForm.tsx"
+    );
+    const event = source(
+      "src",
+      "components",
+      "platform",
+      "EventRegistration.tsx"
+    );
+    const newsletter = source(
+      "src",
+      "components",
+      "site",
+      "NewsletterSignup.tsx"
+    );
+    expect(footer).toContain("dict.footer.imprint");
+    expect(footer).toContain("dict.footer.privacy");
+    for (const form of [membership, event, newsletter]) {
+      expect(form).toContain("dict.footer.privacy");
+      expect(form).toContain("/datenschutz");
+    }
+    const homepage = source("src", "app", "[locale]", "page.tsx");
+    const lab = source("src", "app", "[locale]", "lab", "page.tsx");
+    expect(homepage).not.toContain("areaServed");
+    expect(lab).toContain('"@type": "CollectionPage"');
+    expect(lab).not.toContain('"@type": "ResearchOrganization"');
   });
 
   it("includes the four public categories, Method and Membership in every localized sitemap", () => {
     const sitemapSource = source("src", "app", "sitemap.ts");
     expect(sitemapSource).toContain('"/method"');
+    expect(sitemapSource).toContain('"/lab"');
     expect(sitemapSource).toContain('"/programs"');
     expect(sitemapSource).toContain('"/products"');
     expect(sitemapSource).toContain('"/services"');
@@ -151,6 +230,106 @@ describe("public website boundaries", () => {
     for (const locale of locales) {
       expect(robots).toContain(`"/${locale}/profile"`);
       expect(robots).toContain(`"/${locale}/dashboard"`);
+    }
+  });
+
+  it("keeps optional consent off by default and necessary storage immutable", () => {
+    const preferences = source(
+      "src",
+      "components",
+      "privacy",
+      "PreferenceProvider.tsx"
+    );
+    expect(preferences).toContain("functional: false");
+    expect(preferences).toContain("analytics: false");
+    expect(preferences).toContain("newsletter: false");
+    expect(preferences).toContain("checked");
+    expect(preferences).toContain("disabled");
+    expect(preferences).not.toMatch(
+      /googletagmanager|google-analytics|segment\.com|hotjar/i
+    );
+    expect(
+      fs.existsSync(
+        path.join(process.cwd(), "src", "app", "[locale]", "privacy", "page.tsx")
+      )
+    ).toBe(true);
+  });
+
+  it("requires two separate, default-off profile confirmations before membership submission", () => {
+    const membership = source(
+      "src",
+      "components",
+      "platform",
+      "MembershipForm.tsx"
+    );
+    expect(membership).toContain("dataProtectionConsent");
+    expect(membership).toContain("programmeParticipationConsent");
+    expect(membership).toContain(
+      "!dataProtectionConsent || !programmeParticipationConsent"
+    );
+    expect(membership).toContain('href={`/${locale}/datenschutz`}');
+    const dataProtectionLabel = membership.match(
+      /<label[\s\S]*?htmlFor="data-protection-consent"[\s\S]*?<\/label>/
+    )?.[0];
+    expect(dataProtectionLabel).toBeTruthy();
+    expect(dataProtectionLabel).not.toContain("<Link");
+
+    const expectedCopy = {
+      de: {
+        dataProtectionConsent:
+          "Ich bestätige, dass ich die Informationen zum Datenschutz gelesen habe und in die Verarbeitung meiner personenbezogenen Daten zur Erstellung und Verwaltung meines Profils einwillige.",
+        programmeParticipationConsent:
+          "Ich bestätige, dass die Angaben, die ich in meinem Profil mache, im Rahmen der Programme und Aktivitäten von Res Publica und entsprechend den bereitgestellten Erläuterungen verwendet werden dürfen.",
+      },
+      en: {
+        dataProtectionConsent:
+          "I confirm that I have read the data protection information and consent to the processing of my personal data for creating and managing my profile.",
+        programmeParticipationConsent:
+          "I confirm that the information I provide in my profile may be used within Res Publica programmes and activities, as described in the information provided.",
+      },
+      fa: {
+        dataProtectionConsent:
+          "تأیید می‌کنم که اطلاعات مربوط به حفاظت از داده‌ها را مطالعه کرده‌ام و با پردازش داده‌های شخصی‌ام برای ایجاد و مدیریت پروفایل موافقم.",
+        programmeParticipationConsent:
+          "تأیید می‌کنم که اطلاعاتی که در پروفایل ارائه می‌دهم، در چارچوب برنامه‌ها و فعالیت‌های Res Publica و مطابق توضیحات ارائه‌شده استفاده شود.",
+      },
+    } as const;
+
+    for (const locale of locales) {
+      const dictionary = JSON.parse(
+        source("src", "i18n", "dictionaries", `${locale}.json`)
+      );
+      expect(dictionary.platform.membership.dataProtectionConsent).toBe(
+        expectedCopy[locale].dataProtectionConsent
+      );
+      expect(dictionary.platform.membership.programmeParticipationConsent).toBe(
+        expectedCopy[locale].programmeParticipationConsent
+      );
+      expect(dictionary.platform.membership.dataProtectionConsentRequired).toBeTruthy();
+      expect(dictionary.platform.membership.programmeParticipationConsentRequired).toBeTruthy();
+    }
+  });
+
+  it("requires explicit privacy consent in every data-entry form", () => {
+    const formFiles = [
+      source("src", "components", "platform", "MembershipForm.tsx"),
+      source("src", "components", "platform", "EventRegistration.tsx"),
+      source("src", "components", "site", "NewsletterSignup.tsx"),
+    ];
+    for (const form of formFiles) {
+      expect(form).toContain('type="checkbox"');
+      expect(form).toContain("consent");
+    }
+    for (const locale of locales) {
+      const dictionary = JSON.parse(
+        source("src", "i18n", "dictionaries", `${locale}.json`)
+      );
+      expect(dictionary.platform.membership.dataProtectionConsent).toBeTruthy();
+      expect(
+        dictionary.platform.membership.programmeParticipationConsent
+      ).toBeTruthy();
+      expect(dictionary.platform.eventRegistration.consent).toBeTruthy();
+      expect(dictionary.newsletter.consent).toBeTruthy();
     }
   });
 

@@ -20,12 +20,12 @@ export function OfferingMatrix({
   const offerings = offeringsForCategory(locale, category).slice(0, limit);
 
   return (
-    <ul className="grid list-none gap-px border border-border bg-border md:grid-cols-2">
+    <ul className="grid list-none gap-4 md:grid-cols-2">
       {offerings.map((offering) => {
         const operational = hasOperationalCallToAction(offering);
         return (
-          <li key={offering.id} className="flex min-h-72 flex-col bg-bg p-7 sm:p-9">
-            <p className="text-xs font-medium uppercase tracking-[0.16em] text-gold">
+          <li key={offering.id} className="glass-panel flex min-h-72 flex-col rounded-2xl p-7 sm:p-9">
+            <p className="civic-label">
               {copy.labels[offering.maturity]}
             </p>
             <h3 className="mt-8 text-3xl leading-tight">{offering.title}</h3>
@@ -35,7 +35,7 @@ export function OfferingMatrix({
             {offering.href ? (
               <Link
                 href={`/${locale}${offering.href === "/" ? "" : offering.href}`}
-                className="mt-8 inline-flex min-h-11 w-fit items-center border-b border-current text-sm font-semibold text-accent"
+                className="button-secondary mt-8 w-fit"
               >
                 {operational ? copy.open : copy.learn}
                 <span aria-hidden="true" className="ms-2">↗</span>

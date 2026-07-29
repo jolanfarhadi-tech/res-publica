@@ -25,7 +25,7 @@ export default async function MembershipPage({ params }: Props) {
     <>
       <PageHeader title={dict.platform.membership.title} lede={dict.platform.membership.lede} />
       <Container className="py-14 sm:py-20">
-        <p className="mb-10 max-w-3xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
+        <p className="glass-panel mb-10 max-w-3xl rounded-3xl p-6 text-lg leading-relaxed text-muted sm:p-8">
           {getPublicSiteCopy(locale as Locale).membershipIntro}
         </p>
         <MembershipForm locale={locale as Locale} dict={dict} />

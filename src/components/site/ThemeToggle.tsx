@@ -58,10 +58,10 @@ export function ThemeToggle({ dict }: { dict: Dictionary }) {
       onClick={cycle}
       aria-label={`${dict.theme.label}: ${labels[theme]}`}
       title={`${dict.theme.label}: ${labels[theme]}`}
-      className="inline-flex h-9 items-center gap-2 rounded-full border border-border px-3 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+      className="icon-button inline-grid"
     >
       <span aria-hidden="true">{mounted ? icons[theme] : "◐"}</span>
-      <span className="hidden sm:inline">{mounted ? labels[theme] : dict.theme.system}</span>
+      <span className="sr-only">{mounted ? labels[theme] : dict.theme.system}</span>
     </button>
   );
 }

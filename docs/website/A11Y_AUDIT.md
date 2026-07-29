@@ -1,37 +1,55 @@
-# Accessibility Audit
+# Accessibility and Performance Audit
 
-**Date:** 2026-07-24
+**Date:** 2026-07-29
 
-**Release candidate:** frontend working tree based on `09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`
+**Build target:** `NEXT_PUBLIC_SITE_URL=https://respublica-ev.de`
 
-**Production URL used for metadata/build configuration:** `https://respublica-ev.de`
+## Automated result
 
-## Result
+Lighthouse 13.0.1 ran against the local optimized production build in
+headless Microsoft Edge.
 
-No release-blocking accessibility defect was found.
+| Profile | Performance | Accessibility | Best Practices | SEO |
+| --- | ---: | ---: | ---: | ---: |
+| Desktop `/de` | 100 | 100 | 100 | 100 |
+| Mobile `/de` | 95 | 100 | 100 | 100 |
 
-| Page | Lighthouse accessibility |
-| --- | ---: |
-| `/de` | 96 |
-| `/en` | 96 |
-| `/fa` | 96 |
-| `/de/method` | 100 |
-| `/de/offerings` | 100 |
-| `/de/membership` | 100 |
+The final mobile sample reported FCP 1.6s, LCP 2.7s, TBT 100ms, and CLS 0.
+The desktop sample reported FCP 0.4s, LCP 0.7s, TBT 10ms, and CLS 0.
+Windows occasionally reported an Edge temporary-profile cleanup warning after
+writing a complete Lighthouse JSON report; this did not affect the audit data.
 
-Lighthouse 13.4.1 ran against the local production build with Microsoft Edge in headless mode.
+## Rendered verification
 
-## Verified safeguards
+- The document language and direction are `de|en|fa` and Persian uses
+  `dir="rtl"`.
+- German and Persian hero headings remain inside a 375px content viewport.
+- No horizontal overflow is present at 375px.
+- The desktop hamburger is hidden at 1265px.
+- The mobile menu is a native modal dialog: background content is inert,
+  focus enters the dialog, Escape/close restores the trigger, and body
+  scrolling is locked while open.
+- Core homepage content is server-rendered and never hidden before hydration.
+- Framer Motion is reserved for the Lab route and respects both the operating
+  system preference and the website's local reduced-motion setting.
+- Necessary, functional, analytics, newsletter, reduced-motion,
+  high-contrast, and larger-text controls are keyboard operable.
+- Optional consent starts disabled; accept and reject actions have equal
+  visual weight.
+- Membership, event, and newsletter consent notices link directly to the
+  localized privacy policy.
+- Visible focus, semantic landmarks, labels, live regions, and error
+  associations remain present.
+- A fresh production browser tab produced no console warning or error.
 
-- One visible `h1` is present on each localized homepage.
-- The root document uses `lang="de|en|fa"` and `dir="rtl"` for Persian.
-- The skip link, semantic navigation labels, current-page state, menu expanded state, form status regions, and field error associations are present.
-- Keyboard opening and closing of the mobile menu, Escape handling, and focus return were checked.
-- The constellation is decorative to assistive technology and has an adjacent textual equivalent.
-- Global `:focus-visible` and `prefers-reduced-motion: reduce` rules remain active.
-- Responsive Persian pages were checked without horizontal overflow.
-- The tested foreground/background combinations meet WCAG AA contrast requirements.
+## Performance decisions
 
-## Non-blocking follow-up
-
-- Repeat the Lighthouse sample and a Persian screen-reader pass after future design-token or navigation changes.
+- Homepage entrance effects were removed from the long primary narrative,
+  reducing first-load JavaScript from 142kB to 106kB.
+- Framer Motion remains on the dedicated Lab experience.
+- Off-screen sections use `content-visibility: auto` with an intrinsic-size
+  fallback to avoid initial layout work.
+- Web fonts use `display: optional`, preserving readable system fallbacks and
+  eliminating layout shift.
+- CSS remains cacheable rather than enabling Next.js's experimental,
+  production-discouraged global CSS inlining.

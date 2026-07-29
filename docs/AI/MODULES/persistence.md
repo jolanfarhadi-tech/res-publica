@@ -14,6 +14,12 @@ The shared Drizzle/Postgres persistence layer underlying every domain and per-mo
 
 `src/persistence/{database.ts, index.ts, module-schema.ts, persistence.integration.test.ts, repositories.ts, runtime.ts, schema.test.ts, schema.ts}` (directory listing this session). Drizzle ORM 0.45 + `pg` (production Postgres) + `@electric-sql/pglite` (local dev), per `package.json` (read in full this session).
 
+**Incremental update 2026-07-29, verified unstaged worktree:** initial
+Membership/profile creation now writes two locale-specific version-`v1`
+`consent_records` in the same transaction as the Membership and canonical
+audit record. The existing `purpose` column is PostgreSQL `text`; extending
+its TypeScript allowlist introduces no table, column, constraint, or migration.
+
 ## Data and persistence (this module's own subject)
 
 **Core domain schema** (`src/persistence/schema.ts`, grepped this session): `people` (L13), `consentRecords` (L22), `payments` (L38), `organizations` (L56), `notifications` (L65), `auditLog` (L81), `authIdentities` (L99), `authSessions` (L115), `authFlows` (L132), `authorizationGrants` (L146) — 10 tables.
@@ -31,6 +37,11 @@ Not this module's concern directly — authorization is layered on top by `src/a
 Not an HTTP-facing module. Consumed via `Database` type (imported across `src/application/*.ts`, confirmed via imports in `src/application/publishing.ts`, read this session). `scripts/check-fresh-migrations.mjs`, `npm run db:generate`/`db:migrate`/`db:check`/`db:check:fresh` (`package.json`).
 
 ## Verification
+
+**Verified 2026-07-29:** consent persistence is covered by domain, route, and
+PGlite integration tests. The full suite passed 37 files / 191 tests.
+`db:check` passed; `db:check:fresh` still applied exactly 12 migrations and
+created 53 tables. No migration was generated or run against production.
 
 Tests confirmed to exist: `src/persistence/persistence.integration.test.ts`, `src/persistence/schema.test.ts`. **Verified 2026-07-24:** the final focused set passed 32/32 and the full one-worker suite passed 156/156. `db:check` passed and `db:check:fresh` applied all 12 migrations, creating 53 tables. Migration `0011` leaves unknown legacy Publishing authorship, assignment time, review target, and translation content nullable instead of fabricating provenance; all new writes persist those fields, and sign-off rejects incomplete legacy provenance.
 

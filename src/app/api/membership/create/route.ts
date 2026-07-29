@@ -4,8 +4,12 @@ import { AuthorizationDeniedError } from "../../../../auth/authorize";
 import { getAuthRuntime } from "../../../../auth/runtime";
 import { rejectUntrustedWriteRequest } from "../../../../auth/request-security";
 import { createMembership, DuplicateMembershipError } from "../../../../application/membership";
+import { profileConsentSubmissionSchema } from "../../../../domain/consent";
 
-const bodySchema = z.object({ tier: z.enum(["basic", "supporter", "volunteer", "research", "institutional"]) });
+const bodySchema = z.object({
+  tier: z.enum(["basic", "supporter", "volunteer", "research", "institutional"]),
+  profileConsents: profileConsentSubmissionSchema,
+});
 
 export async function POST(request: Request) {
   const rejection = rejectUntrustedWriteRequest(request);
@@ -16,7 +20,12 @@ export async function POST(request: Request) {
   if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
   try {
     const actor = await createActorResolver(runtime.db).resolve(request);
-    const member = await createMembership(runtime.db, actor, parsed.data.tier);
+    const member = await createMembership(
+      runtime.db,
+      actor,
+      parsed.data.tier,
+      parsed.data.profileConsents
+    );
     return Response.json({ member }, { status: 201 });
   } catch (error) {
     if (error instanceof AuthorizationDeniedError) return Response.json({ error: "forbidden" }, { status: 403 });

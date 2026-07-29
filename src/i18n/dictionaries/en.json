@@ -143,6 +143,8 @@
   "footer": {
     "tagline": "For democracy, responsibility, and public participation.",
     "rights": "All rights reserved.",
+    "imprint": "Legal notice",
+    "privacy": "Privacy policy",
     "groups": {
       "organization": "Organization",
       "work": "Our work",
@@ -183,6 +185,8 @@
     "text": "Subscribe to confirmed notices from Res Publica.",
     "placeholder": "Email address",
     "submit": "Subscribe",
+    "consent": "I want to receive the newsletter and consent to the processing of my email address. I can withdraw consent at any time.",
+    "consentRequired": "Please provide consent before subscribing.",
     "success": "Almost done! Please confirm the email we just sent you.",
     "errorInvalid": "Please enter a valid email address.",
     "errorExists": "This address is already subscribed.",
@@ -192,6 +196,8 @@
     "eventRegistration": {
       "title": "Register for this event",
       "text": "Registration is linked to your personal account. If capacity is reached, you will be placed on the waitlist.",
+      "consent": "I want to register and have read the privacy policy.",
+      "consentRequired": "Please confirm the privacy notice before registering.",
       "submit": "Register now",
       "submitting": "Registering …",
       "login": "Sign in to continue",
@@ -206,18 +212,29 @@
       "lede": "A protected entry point into sustained civic participation.",
       "tierLabel": "Type of membership",
       "tiers": {
-        "basic": "Basic membership",
+        "basic": "Ordinary membership",
         "supporter": "Supporting membership",
         "volunteer": "Volunteer participation",
-        "research": "Research membership",
-        "institutional": "Institutional membership"
+        "research": "Research participation",
+        "institutional": "Institutional participation"
       },
-      "accountableNotice": "Membership is linked to your verified account and recorded in the audit trail.",
+      "accountableNotice": "The application is linked to your verified account and recorded in the audit trail. Under the constitution, the board decides on admission.",
+      "processLabel": "Application process",
+      "processSelect": "Choose a participation relationship",
+      "processReview": "Review and decision by the board",
+      "profileConsentsTitle": "Confirmations before submission",
+      "profileConsentsRequired": "Both confirmations are required before you can submit the application.",
+      "dataProtectionTitle": "Data protection",
+      "dataProtectionConsent": "I confirm that I have read the data protection information and consent to the processing of my personal data for creating and managing my profile.",
+      "dataProtectionConsentRequired": "Please confirm the data protection notice to continue.",
+      "consentTitle": "Consent",
+      "programmeParticipationConsent": "I confirm that the information I provide in my profile may be used within Res Publica programmes and activities, as described in the information provided.",
+      "programmeParticipationConsentRequired": "Please confirm the use of your profile information to continue.",
       "submit": "Apply for membership",
       "submitting": "Submitting application …",
       "login": "Sign in to continue",
-      "success": "Your membership has been created.",
-      "duplicate": "A membership already exists for your account.",
+      "success": "Your application has been registered. The board decides on admission.",
+      "duplicate": "An application or membership already exists for your account.",
       "unavailable": "Membership is currently unavailable.",
       "error": "The application could not be completed. Please try again."
     }

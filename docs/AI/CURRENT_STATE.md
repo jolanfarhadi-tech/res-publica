@@ -1,5 +1,58 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — profile consent receipts
+
+**Verified 2026-07-29 on local `main` at base
+`7a6ce1bc22b4dcc767b6515c498a4ece9b9b0cfe`.** The current unstaged worktree
+requires two separate, default-off confirmations before the authenticated
+membership/profile-creation request can be submitted: data protection and use
+of profile information within described Res Publica programmes and activities.
+The route rejects missing or false confirmations. Successful creation writes
+two locale-specific, version-`v1` canonical `consent_records` with one grant
+timestamp inside the same transaction as the Membership row and its audit
+record.
+
+No migration was created: the existing `consent_records.purpose` column is
+PostgreSQL `text`; the Drizzle enum is a TypeScript allowlist, so the six
+DE/EN/FA versioned purposes require no structural database change.
+`db:check` passed and a fresh database still applies exactly 12 migrations and
+creates 53 tables.
+
+Verification on the final source: focused consent/frontend tests 36/36, full
+suite 37 files / 191 tests, structure, lint, typecheck, `db:check`,
+`db:check:fresh`, and the optimized 99-page production build passed.
+Production-mode browser checks confirmed two unchecked controls, a disabled
+submit action until both are selected, correct DE/EN/FA copy, Persian RTL, and
+working localized data-protection navigation. No production deployment has
+yet occurred.
+
+## Incremental update — Civic Observatory frontend redesign
+
+**Verified 2026-07-29 on local `main` at base
+`7a6ce1bc22b4dcc767b6515c498a4ece9b9b0cfe`.** The current unstaged frontend
+worktree introduces the Civic Observatory design system, complete homepage
+narrative, localized Lab and privacy-settings routes, conservative consent UI,
+a reviewed DE/EN/FA HARM research-project entry, updated collection/search/form
+surfaces, and a redesigned private Member Profile display. That redesign alone
+did not change backend contracts, authentication, persistence, migrations, or
+Publishing Authority semantics.
+
+Verification on the current source: structure, lint, typecheck, 20 focused
+frontend boundary tests, full suite 36 files / 182 tests with a 60-second
+PGlite test budget, `db:check`, `db:check:fresh` (12 migrations / 53 tables),
+optimized production build (99 generated static pages), 71 localized route
+smoke checks, zero browser console errors, zero broken documentation links,
+zero live retired-term drift, and `git diff --check`. Lighthouse against the
+optimized build scored desktop 100/100/100/100 and mobile
+95/100/100/100 (performance/accessibility/best-practices/SEO), CLS 0.
+
+The exact homepage first-load JavaScript is 106kB; Framer Motion remains scoped
+to the Lab route. Rendered checks confirmed desktop/mobile navigation, native
+modal focus containment, German wrapping, Persian RTL, no 375px overflow,
+metadata in `<head>`, and truthful private-profile fallback behavior.
+`tsconfig.json` and `tatus` remain pre-existing unrelated changes and are
+excluded. No commit, push, or deployment was performed.
+
 **Verified.** Re-run fresh, this session, 2026-07-24 (repository date context; git commit dates shown below are their own recorded dates, not this verification date). Do not reuse this file's content past its next re-run — re-execute the commands below before trusting it on a later date.
 
 ---

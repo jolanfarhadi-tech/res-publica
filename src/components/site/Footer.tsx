@@ -2,122 +2,143 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { NewsletterSignup } from "./NewsletterSignup";
 import { getPublicSiteCopy } from "@/i18n/public-site";
+import { getExperienceCopy } from "@/i18n/experience";
+import { PreferenceTrigger } from "@/components/privacy/PreferenceProvider";
+import { NewsletterSignup } from "./NewsletterSignup";
 
-/**
- * Footer — full sitemap in two grouped columns (Organization /
- * Our work), plus tagline and copyright. Grid + logical text
- * alignment, so it mirrors correctly on RTL pages.
- */
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const year = new Date().getFullYear();
-  const t = getPublicSiteCopy(locale);
+  const site = getPublicSiteCopy(locale);
+  const experience = getExperienceCopy(locale);
 
-  const organization = [
-    { href: `/${locale}/about`, label: t.nav.about },
-    { href: `/${locale}/mission-vision`, label: t.nav.mission },
-    { href: `/${locale}/team`, label: t.nav.team },
-    { href: `/${locale}/partners`, label: t.nav.partners },
-    { href: `/${locale}/contact`, label: t.nav.contact },
+  const institution = [
+    { href: `/${locale}/mission-vision`, label: site.nav.mission },
+    { href: `/${locale}/about`, label: site.nav.about },
+    { href: `/${locale}/team`, label: site.nav.team },
+    { href: `/${locale}/partners`, label: site.nav.partners },
+    { href: `/${locale}/contact`, label: site.nav.contact },
   ];
   const work = [
-    { href: `/${locale}/method`, label: t.nav.method },
-    { href: `/${locale}/programs`, label: t.nav.programs },
-    { href: `/${locale}/products`, label: t.nav.products },
-    { href: `/${locale}/services`, label: t.nav.services },
-    { href: `/${locale}/projects`, label: t.nav.projects },
-    { href: `/${locale}/research`, label: t.nav.research },
-    { href: `/${locale}/publications`, label: t.nav.publications },
-    { href: `/${locale}/events`, label: t.nav.events },
-    { href: `/${locale}/membership`, label: t.nav.membership },
+    { href: `/${locale}/programs`, label: site.nav.programs },
+    { href: `/${locale}/projects`, label: site.nav.projects },
+    { href: `/${locale}/lab`, label: experience.home.lab.label },
+    { href: `/${locale}/research`, label: site.nav.research },
+    { href: `/${locale}/publications`, label: site.nav.publications },
+    { href: `/${locale}/events`, label: site.nav.events },
   ];
-  const legal = [
-    { href: `/${locale}/impressum`, label: "Impressum" },
-    { href: `/${locale}/datenschutz`, label: "Datenschutz" },
+  const participation = [
+    { href: `/${locale}/membership`, label: site.nav.membership },
+    { href: `/${locale}/products`, label: site.nav.products },
+    { href: `/${locale}/services`, label: site.nav.services },
+    { href: `/${locale}/search`, label: dict.search.label },
   ];
-
-  const groupHeading =
-    "mb-4 text-xs font-medium uppercase tracking-[0.2em] text-gold";
-  const link =
-    "text-sm text-muted transition-colors hover:text-accent";
 
   return (
-    <footer className="border-t border-border bg-surface">
-      <Container className="py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
-          {/* Brand */}
+    <footer className="border-t border-border bg-night text-paper">
+      <Container className="py-14 sm:py-18">
+        <div className="grid gap-12 border-b border-paper/15 pb-12 lg:grid-cols-[1.2fr_2fr]">
           <div>
-            <p className="font-serif text-lg tracking-[0.18em]">
-              RES<span className="text-gold">·</span>PUBLICA
-            </p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
+            <Link
+              href={`/${locale}`}
+              className="inline-flex items-center gap-3 text-paper"
+            >
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-paper font-serif text-sm text-night">
+                RP
+              </span>
+              <span className="font-serif text-xl font-semibold tracking-[0.12em]">
+                RES<span className="text-signal">·</span>PUBLICA
+              </span>
+            </Link>
+            <p className="mt-5 max-w-sm leading-relaxed text-paper/65">
               {dict.footer.tagline}
+            </p>
+            <p className="mt-8 max-w-sm text-sm leading-relaxed text-paper/52">
+              {experience.home.mission.text}
             </p>
           </div>
 
-          {/* Sitemap: organization */}
-          <nav aria-label={dict.footer.groups.organization}>
-            <p className={groupHeading}>{dict.footer.groups.organization}</p>
-            <ul className="space-y-2.5">
-              {organization.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className={link}>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <div className="grid gap-10 sm:grid-cols-3">
+            <FooterGroup
+              title={dict.footer.groups.organization}
+              links={institution}
+            />
+            <FooterGroup title={dict.footer.groups.work} links={work} />
+            <FooterGroup
+              title={experience.home.close.label}
+              links={participation}
+            />
+          </div>
+        </div>
 
-          {/* Sitemap: our work */}
-          <nav aria-label={dict.footer.groups.work}>
-            <p className={groupHeading}>{dict.footer.groups.work}</p>
-            <ul className="space-y-2.5">
-              {work.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className={link}>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* The approved legal texts are intentionally German in every locale. */}
-          <nav aria-label="Rechtliches">
-            <p className={groupHeading}>Rechtliches</p>
-            <ul className="space-y-2.5">
-              {legal.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className={link}>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Newsletter is offered only when a provider is operationally configured. */}
+        <div className="grid gap-10 py-10 lg:grid-cols-[1fr_auto] lg:items-start">
           {isNewsletterConfigured() ? (
-            <NewsletterSignup dict={dict} />
+            <NewsletterSignup locale={locale} dict={dict} />
           ) : (
             <div>
-              <p className={groupHeading}>{dict.newsletter.title}</p>
-              <p className="max-w-xs text-sm leading-relaxed text-muted">
-                {t.newsletterUnavailable}
+              <p className="civic-label inverse-label">{dict.newsletter.title}</p>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-paper/58">
+                {site.newsletterUnavailable}
               </p>
             </div>
           )}
+          <div className="flex flex-wrap gap-2 lg:justify-end">
+            <Link
+              href={`/${locale}/impressum`}
+              className="button-secondary border-paper/20 bg-paper/5 text-paper hover:text-signal"
+            >
+              {dict.footer.imprint}
+            </Link>
+            <Link
+              href={`/${locale}/datenschutz`}
+              className="button-secondary border-paper/20 bg-paper/5 text-paper hover:text-signal"
+            >
+              {dict.footer.privacy}
+            </Link>
+            <Link
+              href={`/${locale}/privacy`}
+              className="button-secondary border-paper/20 bg-paper/5 text-paper hover:text-signal"
+            >
+              {experience.privacy.preferences}
+            </Link>
+            <PreferenceTrigger className="button-secondary border-paper/20 bg-paper/5 text-paper hover:text-signal">
+              {experience.privacy.accessibilityTitle}
+            </PreferenceTrigger>
+          </div>
         </div>
 
-        <div className="mt-12 border-t border-border pt-6">
-          <p className="text-sm text-muted">
-            © {year} Res Publica. {dict.footer.rights}
-          </p>
+        <div className="flex flex-col gap-2 border-t border-paper/15 pt-6 text-sm text-paper/48 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {year} Res Publica e.V.</p>
+          <p>{dict.footer.rights}</p>
         </div>
       </Container>
     </footer>
+  );
+}
+
+function FooterGroup({
+  title,
+  links,
+}: {
+  title: string;
+  links: Array<{ href: string; label: string }>;
+}) {
+  return (
+    <nav aria-label={title}>
+      <p className="text-sm font-semibold text-paper">{title}</p>
+      <ul className="mt-4 space-y-2.5">
+        {links.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              className="text-sm text-paper/58 transition-colors hover:text-signal"
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 
@@ -126,7 +147,9 @@ function isNewsletterConfigured(): boolean {
     return Boolean(process.env.BUTTONDOWN_API_KEY);
   }
   if (process.env.NEWSLETTER_PROVIDER === "mailchimp") {
-    return Boolean(process.env.MAILCHIMP_API_KEY && process.env.MAILCHIMP_AUDIENCE_ID);
+    return Boolean(
+      process.env.MAILCHIMP_API_KEY && process.env.MAILCHIMP_AUDIENCE_ID
+    );
   }
   return false;
 }

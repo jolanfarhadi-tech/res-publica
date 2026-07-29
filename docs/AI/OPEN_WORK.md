@@ -22,6 +22,13 @@
   non-empty `source` only after review.
 - **Blocker:** owner authorship/approval; it does not block review of the
   implemented website architecture.
+- **Incremental status 2026-07-29:** HARM is now the one explicitly reviewed
+  and provenance-gated public project in DE/EN/FA. Team identities,
+  partnerships, publications, events, research entries, and news remain
+  suppressed until independently approved. Contact remains a truthful email
+  action and no research-participation intake form is exposed because no
+  verified receiving workflow, collection purpose, retention path, or consent
+  record exists.
 
 ### OPEN-011 — Production runtime configuration blocks deployment
 - **Task:** configure the existing Vercel project `res-publica` for database
@@ -57,6 +64,10 @@
 ### OPEN-004 — Member Profile: unchecked TODO items in the canonical spec
 - **Task:** the specific unchecked items in `docs/source/projects/MEMBER_PROFILE.md`'s own TODO list.
 - **Evidence:** direct quotes, read in full: unchecked items include the Codex Potential/Hearing Candidate approval workflow and consent-capture UX, integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6, "Next Recommended Steps" generation logic, remaining Identity view fields, Community Participation/Systems views, Application History view, Payments/Notifications views.
+- **Incremental status 2026-07-29:** purpose-scoped consent capture for initial
+  Membership/profile creation is implemented and locally verified. This does
+  not complete or authorize the distinct Codex Potential/Hearing Candidate
+  disclosure workflow or its Governance-sensitive consent.
 - **Prerequisite:** the first slice (ADR-034) is checked done in the same document — this is additive work, not a fix.
 - **Blocker:** one item is explicitly blocked in the source document itself: *"Blocking on the future Civic Contribution Framework (CCF), not on this document"* — CCF does not yet exist / is not yet ratified.
 - **Safe next action:** pick the next unchecked item that is *not* CCF-blocked (e.g., Payments/Notifications views over the already-implemented `Payment`/`Notification` entities) if this becomes the task focus.

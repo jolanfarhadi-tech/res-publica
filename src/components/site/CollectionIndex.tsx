@@ -80,7 +80,7 @@ export function CollectionIndex({
   return (
     <>
       <PageHeader title={section.title} lede={section.lede} />
-      <Container className="py-14 sm:py-20">
+      <Container className="section-shell">
         <TagFilter
           basePath={basePath}
           tags={getTags(locale, collection)}
@@ -90,9 +90,12 @@ export function CollectionIndex({
         />
 
         {filtered.length === 0 && (
-          <p className="max-w-3xl border-s-4 border-gold ps-6 text-lg leading-relaxed text-muted">
-            {getPublicSiteCopy(locale).empty}
-          </p>
+          <div className="glass-panel max-w-3xl rounded-2xl p-6 sm:p-8">
+            <p className="civic-label">{section.title}</p>
+            <p className="mt-4 text-lg leading-relaxed text-muted">
+              {getPublicSiteCopy(locale).empty}
+            </p>
+          </div>
         )}
 
         {collection === "events" ? (
@@ -178,10 +181,10 @@ function EventsList({
   const labels = dict.collections.labels;
 
   return (
-    <div className="space-y-14">
+    <div className="space-y-16">
       {upcoming.length > 0 && (
         <section>
-          <h2 className="mb-6 text-2xl">{labels.upcoming}</h2>
+          <h2 className="mb-7 text-3xl">{labels.upcoming}</h2>
           <CardGrid
             entries={upcoming}
             locale={locale}
@@ -192,7 +195,7 @@ function EventsList({
       )}
       {past.length > 0 && (
         <section>
-          <h2 className="mb-6 text-2xl">{labels.past}</h2>
+          <h2 className="mb-7 text-3xl">{labels.past}</h2>
           <CardGrid
             entries={past}
             locale={locale}

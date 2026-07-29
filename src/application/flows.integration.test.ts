@@ -9,7 +9,7 @@ import type { AuthenticatedActor, AuthorizationGrant } from "../auth/types";
 import type { Database } from "../persistence";
 import * as coreSchema from "../persistence/schema";
 import * as moduleSchema from "../persistence/module-schema";
-import { auditLog, people } from "../persistence/schema";
+import { auditLog, consentRecords, people } from "../persistence/schema";
 import { events, members, registrations } from "../persistence/module-schema";
 import { createMembership, DuplicateMembershipError } from "./membership";
 import { getEventCapacity, registerAuthenticatedActorForEvent } from "./events";
@@ -53,8 +53,13 @@ describe("authenticated Membership and Events flows", () => {
         grants: [grant("membership.create"), grant("events.register", "event-flow")],
       };
 
-      const member = await createMembership(db, actor, "basic");
-      await expect(createMembership(db, actor, "supporter")).rejects.toBeInstanceOf(DuplicateMembershipError);
+      const profileConsents = {
+        dataProtection: true,
+        programmeParticipation: true,
+        locale: "de",
+      } as const;
+      const member = await createMembership(db, actor, "basic", profileConsents);
+      await expect(createMembership(db, actor, "supporter", profileConsents)).rejects.toBeInstanceOf(DuplicateMembershipError);
       expect(await getEventCapacity(db, "event-flow")).toMatchObject({ capacity: 10, remaining: 10, waitlistActive: false });
       const registration = await registerAuthenticatedActorForEvent(db, actor, "event-flow");
       expect(await getEventCapacity(db, "event-flow")).toMatchObject({ capacity: 10, remaining: 9, waitlistActive: false });
@@ -63,6 +68,24 @@ describe("authenticated Membership and Events flows", () => {
       expect(registration.registration.status).toBe("confirmed");
       expect(await db.select().from(members)).toHaveLength(1);
       expect(await db.select().from(registrations)).toHaveLength(1);
+      expect(
+        (await db.select().from(consentRecords)).map((record) => ({
+          purpose: record.purpose,
+          grantedAt: record.grantedAt,
+          revokedAt: record.revokedAt,
+        }))
+      ).toEqual([
+        {
+          purpose: "profile-data-protection-v1-de",
+          grantedAt: expect.any(Date),
+          revokedAt: null,
+        },
+        {
+          purpose: "profile-programme-participation-v1-de",
+          grantedAt: expect.any(Date),
+          revokedAt: null,
+        },
+      ]);
       expect((await db.select().from(auditLog)).map((entry) => entry.action)).toEqual([
         "membership.created",
         "events.registration",

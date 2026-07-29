@@ -27,7 +27,18 @@ export const consentRecords = pgTable(
       .notNull()
       .references(() => people.id, { onDelete: "restrict" }),
     purpose: text("purpose", {
-      enum: ["tracking", "invitations", "payment-processing", "event-pii"],
+      enum: [
+        "tracking",
+        "invitations",
+        "payment-processing",
+        "event-pii",
+        "profile-data-protection-v1-de",
+        "profile-data-protection-v1-en",
+        "profile-data-protection-v1-fa",
+        "profile-programme-participation-v1-de",
+        "profile-programme-participation-v1-en",
+        "profile-programme-participation-v1-fa",
+      ],
     }).notNull(),
     grantedAt: timestamp("granted_at", { withTimezone: true, mode: "date" }).notNull(),
     revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),

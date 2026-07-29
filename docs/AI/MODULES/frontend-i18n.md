@@ -4,6 +4,45 @@
 
 The single App Router tree (`src/app/[locale]/`) and the trilingual (German/English/Persian) localization system serving it, including locale-detection middleware. Evidence: `README.md` (read in full, prior session); `middleware.ts` (read in full, this session and prior).
 
+## Incremental implementation — 2026-07-29
+
+The Membership/profile-creation form now presents two separate localized
+confirmations in DE/EN/FA, both default-off, with individual accessible errors
+and a disabled final action until both are selected. The data-protection link
+is outside the checkbox label and was verified to navigate correctly.
+
+The current unstaged frontend worktree replaces the visual system with Civic
+Observatory while preserving the single App Router and DE/EN/FA dictionaries.
+It adds localized `lab` and `privacy` routes, a source-reviewed HARM project in
+all locales, a local consent/preferences layer, localized privacy links in all
+data-entry surfaces, and the same design language across collections, search,
+public categories, forms, team/partner empty states, and private Member
+Profile status views.
+
+The homepage is a server-rendered institutional narrative with 106kB first-load
+JavaScript. Framer Motion is scoped to the Lab route and observes both system
+and local reduced-motion preferences. The mobile menu is a native modal dialog
+with focus containment; the desktop menu trigger is hidden correctly. German
+and Persian headings remain within a 375px viewport and Persian retains
+`lang=fa`, `dir=rtl`, and zero horizontal overflow.
+
+SEO metadata is forced into `<head>` for all clients through the documented
+Next.js 15 `htmlLimitedBots` configuration. Organization, CollectionPage,
+Article/Event, breadcrumb, canonical, hreflang, x-default, OpenGraph, and
+Twitter metadata remain bounded to verified claims. The Lab is not declared as
+a separate ResearchOrganization and no unsupported geographic service area is
+declared.
+
+Verification after the profile-consent addition: focused consent/frontend
+tests 36/36; full suite 37 files / 191 tests. The final structure, lint,
+typecheck, database checks, and 99-page production build passed.
+
+Earlier redesign verification: focused frontend boundaries 20/20; full suite 36 files / 182
+tests with a 60-second PGlite budget; structure, lint, typecheck, migration
+checks, 99-page production build, 71 route smoke checks, and `git diff --check`
+passed. Lighthouse desktop scored 100/100/100/100 and mobile
+95/100/100/100; rendered production-mode browser checks had no console errors.
+
 ## Canonical authority
 
 No dedicated ADR found specifically for frontend/i18n architecture this session (ADR-001's Tier 1 "Static Core" covers the general MDX-in-Git rendering approach this frontend implements, but no i18n-specific ADR was located). `README.md` is the closest canonical source for stack/feature claims; `docs/source/standards/{BRAND_GUIDE,WRITING_STYLE,TERMINOLOGY}.md` for content standards (not read in full this session).

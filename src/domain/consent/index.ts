@@ -25,9 +25,47 @@ export const CONSENT_PURPOSES = [
   "invitations",
   "payment-processing",
   "event-pii",
+  "profile-data-protection-v1-de",
+  "profile-data-protection-v1-en",
+  "profile-data-protection-v1-fa",
+  "profile-programme-participation-v1-de",
+  "profile-programme-participation-v1-en",
+  "profile-programme-participation-v1-fa",
 ] as const;
 
 export type ConsentPurpose = (typeof CONSENT_PURPOSES)[number];
+
+export const PROFILE_CONSENT_TEXT_VERSION = "v1" as const;
+export const PROFILE_CONSENT_LOCALES = ["de", "en", "fa"] as const;
+export type ProfileConsentLocale = (typeof PROFILE_CONSENT_LOCALES)[number];
+
+export const profileConsentSubmissionSchema = z.object({
+  dataProtection: z.literal(true),
+  programmeParticipation: z.literal(true),
+  locale: z.enum(PROFILE_CONSENT_LOCALES),
+});
+
+export type ProfileConsentSubmission = z.infer<
+  typeof profileConsentSubmissionSchema
+>;
+
+const profileConsentPurposes: Record<
+  ProfileConsentLocale,
+  { dataProtection: ConsentPurpose; programmeParticipation: ConsentPurpose }
+> = {
+  de: {
+    dataProtection: "profile-data-protection-v1-de",
+    programmeParticipation: "profile-programme-participation-v1-de",
+  },
+  en: {
+    dataProtection: "profile-data-protection-v1-en",
+    programmeParticipation: "profile-programme-participation-v1-en",
+  },
+  fa: {
+    dataProtection: "profile-data-protection-v1-fa",
+    programmeParticipation: "profile-programme-participation-v1-fa",
+  },
+};
 
 const consentRecordSchema = z.object({
   id: z.string(),
@@ -39,15 +77,32 @@ const consentRecordSchema = z.object({
 
 export type ConsentRecord = z.infer<typeof consentRecordSchema>;
 
-export function grantConsent(personId: EntityId, purpose: ConsentPurpose): ConsentRecord {
+export function grantConsent(
+  personId: EntityId,
+  purpose: ConsentPurpose,
+  grantedAt = new Date()
+): ConsentRecord {
   const record: ConsentRecord = {
     id: createId(),
     personId,
     purpose,
-    grantedAt: new Date(),
+    grantedAt,
     revokedAt: null,
   };
   return consentRecordSchema.parse(record);
+}
+
+export function grantProfileConsents(
+  personId: EntityId,
+  submission: ProfileConsentSubmission,
+  grantedAt = new Date()
+): readonly [ConsentRecord, ConsentRecord] {
+  const verified = profileConsentSubmissionSchema.parse(submission);
+  const purposes = profileConsentPurposes[verified.locale];
+  return [
+    grantConsent(personId, purposes.dataProtection, grantedAt),
+    grantConsent(personId, purposes.programmeParticipation, grantedAt),
+  ];
 }
 
 export function revokeConsent(record: ConsentRecord): ConsentRecord {

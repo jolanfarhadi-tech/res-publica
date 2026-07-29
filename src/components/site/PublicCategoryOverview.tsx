@@ -6,12 +6,12 @@ export function PublicCategoryOverview({ locale }: { locale: Locale }) {
   const links = getPublicSiteCopy(locale).home.offerings.links;
 
   return (
-    <ul className="grid list-none gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+    <ul className="grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {links.map(([label, href], index) => (
-        <li key={href} className="bg-bg">
+        <li key={href}>
           <Link
             href={`/${locale}${href}`}
-            className="group flex min-h-40 flex-col justify-between p-6 transition-colors hover:bg-surface"
+            className="glass-panel group flex min-h-44 flex-col justify-between rounded-2xl p-6 transition-[transform,border-color] hover:-translate-y-0.5 hover:border-accent"
           >
             <span className="editorial-index text-xs text-gold">
               {String(index + 1).padStart(2, "0")}

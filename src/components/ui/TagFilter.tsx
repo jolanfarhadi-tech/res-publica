@@ -21,14 +21,14 @@ export function TagFilter({
   if (tags.length === 0) return null;
 
   const pill = (isActive: boolean) =>
-    `inline-block rounded-full border px-3.5 py-1 text-sm transition-colors ${
+    `inline-flex min-h-10 items-center rounded-xl border px-3.5 py-1 text-sm font-semibold transition-colors ${
       isActive
         ? "border-accent bg-accent text-accent-contrast"
         : "border-border text-muted hover:border-accent hover:text-accent"
     }`;
 
   return (
-    <nav aria-label={ariaLabel} className="mb-10">
+    <nav aria-label={ariaLabel} className="mb-10 overflow-x-auto pb-2">
       <ul className="flex flex-wrap gap-2">
         <li>
           <Link href={basePath} className={pill(!active)}>

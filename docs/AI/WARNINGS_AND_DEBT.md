@@ -19,6 +19,10 @@
 - **Severity:** **Low / intentional safeguard**.
 - **Safe handling:** do not bypass the loader or bulk-mark entries public.
   Confirm provenance, authorship, dates, claims, and publication rights first.
+- **Incremental status 2026-07-29:** `harm-research` is the only newly public
+  exception and carries explicit public visibility, review, and canonical
+  source in DE/EN/FA. All other unreviewed legacy/demo collection content
+  remains suppressed.
 
 ### WARN-012 — Production readiness and auth configuration are absent
 - **Evidence:** Vercel project `res-publica` exposes only

@@ -11,6 +11,10 @@ import type { NextConfig } from "next";
  * (see scripts/check-structure.mjs).
  */
 const nextConfig: NextConfig = {
+  // Keep canonical, hreflang, description, OpenGraph and JSON-linked metadata
+  // in <head> for every crawler and audit client. All metadata is local/static,
+  // so blocking it does not introduce a remote data dependency.
+  htmlLimitedBots: /.*/,
   async headers() {
     return [
       {
