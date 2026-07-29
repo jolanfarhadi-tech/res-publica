@@ -1,4 +1,14 @@
-export type ActionState = "idle" | "submitting" | "success" | "waitlisted" | "forbidden" | "duplicate" | "unavailable" | "error";
+export type ActionState =
+  | "idle"
+  | "submitting"
+  | "success"
+  | "waitlisted"
+  | "cancelling"
+  | "cancelled"
+  | "forbidden"
+  | "duplicate"
+  | "unavailable"
+  | "error";
 
 export async function actionStateFromResponse(response: Response): Promise<ActionState> {
   if (response.ok) {
@@ -7,6 +17,15 @@ export async function actionStateFromResponse(response: Response): Promise<Actio
   }
   if (response.status === 403) return "forbidden";
   if (response.status === 409) return "duplicate";
+  if (response.status === 503) return "unavailable";
+  return "error";
+}
+
+export async function cancellationStateFromResponse(
+  response: Response
+): Promise<ActionState> {
+  if (response.ok) return "cancelled";
+  if (response.status === 403) return "forbidden";
   if (response.status === 503) return "unavailable";
   return "error";
 }

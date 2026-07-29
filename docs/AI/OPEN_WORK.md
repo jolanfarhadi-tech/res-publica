@@ -14,8 +14,11 @@
 - **Completed event backend slice:** authenticated owner cancellation now
   atomically persists cancellation, waitlist cleanup/promotion, notification,
   and audit evidence.
-- **Still open for Events acceptance:** localized DE/EN/FA event interaction
-  states and end-to-end browser coverage against approved event content.
+- **Completed event frontend slice:** DE/EN/FA interaction states now cover
+  success, waitlist, cancellation, login, duplicate, unavailable, and error.
+- **Still open for Events acceptance:** end-to-end browser coverage requires
+  an independently approved event record; truthful empty-state policy remains
+  in force and no event was fabricated for testing.
 - **Architecture gates:** ADR-034 permits read-only self-profile only; consent
   withdrawal/pseudonymization remains blocked by the absent ADR-035 and the
   legal gate preserved in ADR-029.

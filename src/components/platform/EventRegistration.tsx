@@ -5,7 +5,11 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { Button } from "@/components/ui/Button";
-import { actionStateFromResponse, type ActionState } from "./ActionStatus";
+import {
+  actionStateFromResponse,
+  cancellationStateFromResponse,
+  type ActionState,
+} from "./ActionStatus";
 
 export function EventRegistration({ locale, eventId, dict }: { locale: Locale; eventId: string; dict: Dictionary }) {
   const t = dict.platform.eventRegistration;
@@ -13,6 +17,7 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
   const [available, setAvailable] = useState(false);
   const [consent, setConsent] = useState(false);
   const [consentError, setConsentError] = useState(false);
+  const [activeRegistration, setActiveRegistration] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -37,7 +42,27 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ eventId }),
       });
-      setState(await actionStateFromResponse(response));
+      const nextState = await actionStateFromResponse(response);
+      setState(nextState);
+      if (nextState === "success" || nextState === "waitlisted") {
+        setActiveRegistration(true);
+      }
+    } catch {
+      setState("error");
+    }
+  }
+
+  async function cancel() {
+    setState("cancelling");
+    try {
+      const response = await fetch("/api/events/registration", {
+        method: "DELETE",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ eventId }),
+      });
+      const nextState = await cancellationStateFromResponse(response);
+      setState(nextState);
+      if (nextState === "cancelled") setActiveRegistration(false);
     } catch {
       setState("error");
     }
@@ -45,6 +70,7 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
 
   const message = state === "success" ? t.success
     : state === "waitlisted" ? t.waitlisted
+    : state === "cancelled" ? t.cancelled
     : state === "duplicate" ? t.duplicate
     : state === "unavailable" ? t.unavailable
     : state === "error" ? t.error
@@ -77,9 +103,27 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
       </label>
       {consentError && <p id="event-consent-error" role="alert" className="mt-2 text-sm text-critical">{t.consentRequired}</p>}
       <div className="mt-6 flex flex-wrap items-center gap-4">
-        <Button type="button" onClick={register} disabled={state === "submitting" || state === "success" || state === "waitlisted"}>
+        <Button
+          type="button"
+          onClick={register}
+          disabled={
+            state === "submitting" ||
+            state === "cancelling" ||
+            activeRegistration
+          }
+        >
           {state === "submitting" ? t.submitting : t.submit}
         </Button>
+        {activeRegistration && (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={cancel}
+            disabled={state === "cancelling"}
+          >
+            {state === "cancelling" ? t.cancelling : t.cancel}
+          </Button>
+        )}
         {state === "forbidden" && (
           <a className="text-sm text-accent underline underline-offset-4" href={`/api/auth/login?returnTo=/${locale}/events/${eventId}`}>
             {t.login}

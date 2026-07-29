@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { actionStateFromResponse } from "./ActionStatus";
+import {
+  actionStateFromResponse,
+  cancellationStateFromResponse,
+} from "./ActionStatus";
 
 describe("platform action response mapping", () => {
   it("distinguishes confirmation and waitlist results", async () => {
@@ -12,5 +15,19 @@ describe("platform action response mapping", () => {
     await expect(actionStateFromResponse(Response.json({}, { status: 409 }))).resolves.toBe("duplicate");
     await expect(actionStateFromResponse(Response.json({}, { status: 503 }))).resolves.toBe("unavailable");
     await expect(actionStateFromResponse(Response.json({}, { status: 500 }))).resolves.toBe("error");
+  });
+
+  it("maps a completed cancellation without treating it as registration success", async () => {
+    await expect(
+      cancellationStateFromResponse(
+        Response.json({ cancelled: { status: "cancelled" } })
+      )
+    ).resolves.toBe("cancelled");
+    await expect(
+      cancellationStateFromResponse(Response.json({}, { status: 403 }))
+    ).resolves.toBe("forbidden");
+    await expect(
+      cancellationStateFromResponse(Response.json({}, { status: 404 }))
+    ).resolves.toBe("error");
   });
 });

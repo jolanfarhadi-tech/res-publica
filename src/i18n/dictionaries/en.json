@@ -200,9 +200,12 @@
       "consentRequired": "Please confirm the privacy notice before registering.",
       "submit": "Register now",
       "submitting": "Registering …",
+      "cancel": "Cancel registration",
+      "cancelling": "Cancelling …",
       "login": "Sign in to continue",
       "success": "Your participation is confirmed.",
       "waitlisted": "You have been placed on the waitlist.",
+      "cancelled": "Your registration has been cancelled.",
       "duplicate": "You are already registered for this event.",
       "unavailable": "Registration is currently unavailable.",
       "error": "Registration could not be completed. Please try again."

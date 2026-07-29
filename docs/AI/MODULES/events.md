@@ -15,6 +15,11 @@ Notification entity, and canonical AuditLog are reused; no migration or
 parallel service was introduced. Focused domain/application/route regression
 tests pass 15/15.
 
+`EventRegistration` now exposes localized cancellation controls and feedback
+in DE/EN/FA after a successful registration or waitlist response. It preserves
+the default-off event privacy confirmation for registration; cancellation is
+an owner lifecycle action and does not request a second consent.
+
 ## Incremental implementation — registration request protection, 2026-07-29
 
 `POST /api/events/registration` now receives a server-generated request ID and

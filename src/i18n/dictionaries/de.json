@@ -200,9 +200,12 @@
       "consentRequired": "Bitte bestätigen Sie die Datenschutzhinweise, bevor Sie sich anmelden.",
       "submit": "Jetzt anmelden",
       "submitting": "Anmeldung läuft …",
+      "cancel": "Anmeldung stornieren",
+      "cancelling": "Stornierung läuft …",
       "login": "Anmelden und fortfahren",
       "success": "Ihre Teilnahme ist bestätigt.",
       "waitlisted": "Sie wurden auf die Warteliste gesetzt.",
+      "cancelled": "Ihre Anmeldung wurde storniert.",
       "duplicate": "Sie sind bereits für diese Veranstaltung registriert.",
       "unavailable": "Die Anmeldung ist derzeit nicht verfügbar.",
       "error": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut."

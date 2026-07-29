@@ -12,10 +12,17 @@ still-valid waitlisted registration when a confirmed seat opens, persists the
 pending promotion notification, and appends the canonical
 `events.registration.cancelled` audit record.
 
+The existing public event interaction now presents DE/EN/FA registration,
+waitlist, cancellation-in-progress, cancellation-complete, login, duplicate,
+unavailable, and error states. The cancel control appears only after the
+current browser session completes a registration or waitlist action; persisted
+self-facing event history belongs in the protected Dashboard slice.
+
 No schema change was required: the existing registration status, waitlist,
 Notification, and AuditLog persistence remain authoritative. Focused
-domain/application/route tests pass 15/15; the full suite passes 41 files /
-207 tests. Structure, lint, typecheck, `db:check`, `db:check:fresh` (13
+domain/application/route tests pass 15/15 and focused frontend/route tests
+pass 6/6; the full suite passes 41 files / 208 tests. Structure, lint,
+typecheck, `db:check`, `db:check:fresh` (13
 migrations / 54 tables), `git diff --check`, and the 99-page Production build
 also pass.
 
