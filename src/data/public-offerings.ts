@@ -3,11 +3,13 @@ import type { Locale } from "@/i18n/config";
 export type OfferingMaturity =
   | "available"
   | "partial"
-  | "documented"
-  | "methodology";
+  | "documented";
+
+export type PublicCategory = "programs" | "products" | "services";
 
 export type PublicOffering = {
   id: string;
+  category: PublicCategory;
   maturity: OfferingMaturity;
   href?: `/${string}`;
   operational: boolean;
@@ -22,6 +24,7 @@ export type PublicOffering = {
 export const publicOfferings: readonly PublicOffering[] = [
   {
     id: "website",
+    category: "products",
     maturity: "available",
     href: "/",
     operational: true,
@@ -38,6 +41,7 @@ export const publicOfferings: readonly PublicOffering[] = [
   },
   {
     id: "search",
+    category: "products",
     maturity: "available",
     href: "/search",
     operational: true,
@@ -54,6 +58,7 @@ export const publicOfferings: readonly PublicOffering[] = [
   },
   {
     id: "membership",
+    category: "services",
     maturity: "available",
     href: "/membership",
     operational: true,
@@ -70,6 +75,7 @@ export const publicOfferings: readonly PublicOffering[] = [
   },
   {
     id: "profile",
+    category: "products",
     maturity: "available",
     href: "/profile",
     operational: true,
@@ -86,6 +92,7 @@ export const publicOfferings: readonly PublicOffering[] = [
   },
   {
     id: "events",
+    category: "services",
     maturity: "partial",
     href: "/events",
     operational: true,
@@ -101,39 +108,25 @@ export const publicOfferings: readonly PublicOffering[] = [
     },
   },
   {
-    id: "harm",
-    maturity: "methodology",
-    href: "/method",
-    operational: false,
+    id: "contact",
+    category: "services",
+    maturity: "available",
+    href: "/contact",
+    operational: true,
     title: {
-      de: "HARM Operating System",
-      en: "HARM Operating System",
-      fa: "سامانه عملیاتی HARM",
+      de: "Direkter Kontakt",
+      en: "Direct contact",
+      fa: "تماس مستقیم",
     },
     description: {
-      de: "Eine zwölfstufige Methodik, die Erfahrung, Dokumentation, Verantwortung, Lernen und Governance verbindet.",
-      en: "A twelve-stage methodology connecting experience, documentation, responsibility, learning and governance.",
-      fa: "روشی دوازده‌مرحله‌ای که تجربه، مستندسازی، مسئولیت، یادگیری و حکمرانی را به هم پیوند می‌دهد.",
-    },
-  },
-  {
-    id: "responsibility-tools",
-    maturity: "methodology",
-    href: "/method",
-    operational: false,
-    title: {
-      de: "Responsibility-Innovationen",
-      en: "Responsibility innovations",
-      fa: "نوآوری‌های مسئولیت",
-    },
-    description: {
-      de: "Fünf methodische Instrumente für Biografien, Zuordnung, Übersicht, Anhänge und Civic Intelligence.",
-      en: "Five methodological instruments for biographies, mapping, dashboards, annexes and civic intelligence.",
-      fa: "پنج ابزار روشی برای زندگی‌نامه‌ها، نگاشت، داشبوردها، ضمیمه‌ها و هوشمندی مدنی.",
+      de: "Kontakt per E-Mail an die in der Datenschutzerklärung bestätigte Vereinsadresse.",
+      en: "Email contact through the association address confirmed in the privacy notice.",
+      fa: "تماس ایمیلی از طریق نشانی انجمن که در اطلاعیه حریم خصوصی تأیید شده است.",
     },
   },
   {
     id: "fellowship",
+    category: "programs",
     maturity: "documented",
     operational: false,
     title: {
@@ -149,6 +142,7 @@ export const publicOfferings: readonly PublicOffering[] = [
   },
   {
     id: "rpcs",
+    category: "programs",
     maturity: "documented",
     operational: false,
     title: {
@@ -170,6 +164,15 @@ export function offeringsForLocale(locale: Locale) {
     title: offering.title[locale],
     description: offering.description[locale],
   }));
+}
+
+export function offeringsForCategory(
+  locale: Locale,
+  category: PublicCategory
+) {
+  return offeringsForLocale(locale).filter(
+    (offering) => offering.category === category
+  );
 }
 
 export function hasOperationalCallToAction(

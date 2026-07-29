@@ -14,12 +14,17 @@ const STATIC_PATHS = [
   "/about",
   "/mission-vision",
   "/method",
-  "/offerings",
+  "/programs",
+  "/products",
+  "/services",
+  "/projects",
   "/membership",
   "/team",
   "/partners",
   "/contact",
-  ...collections.map((collection) => `/${collection}`),
+  ...collections
+    .filter((collection) => collection !== "projects")
+    .map((collection) => `/${collection}`),
 ];
 
 function urlSet(path: string, lastModified?: string) {

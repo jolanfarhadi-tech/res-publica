@@ -9,8 +9,10 @@ export const publicSiteCopy = {
     nav: {
       mission: "Mission & Vision",
       method: "Methode",
-      offerings: "Angebote",
-      projects: "Praxis",
+      programs: "Programme",
+      products: "Produkte",
+      services: "Dienstleistungen",
+      projects: "Projekte",
       events: "Termine",
       membership: "Mitmachen",
       contact: "Kontakt",
@@ -77,9 +79,14 @@ export const publicSiteCopy = {
       offerings: {
         index: "07",
         eyebrow: "Was Res Publica ermöglicht",
-        title: "Methoden, öffentliche Dienste und Programme — mit ehrlichem Reifegrad.",
-        text: "Einige Angebote sind bereits nutzbar, andere sind teilweise umgesetzt oder als Methodik und Programm dokumentiert. Der Reifegrad wird sichtbar ausgewiesen; interne Infrastruktur ist kein öffentliches Produkt.",
-        cta: "Alle Angebote ansehen",
+        title: "Programme, Produkte, Dienstleistungen und Projekte — klar getrennt.",
+        text: "Jede öffentliche Kategorie folgt einer eigenen Aufgabe. Reifegrad und Herkunft bleiben sichtbar; Methodiken und interne Infrastruktur werden nicht als Produkte dargestellt.",
+        links: [
+          ["Programme", "/programs"],
+          ["Produkte", "/products"],
+          ["Dienstleistungen", "/services"],
+          ["Projekte", "/projects"],
+        ],
       },
       work: {
         index: "08",
@@ -87,7 +94,7 @@ export const publicSiteCopy = {
         title: "Praxis, Forschung und Publikation brauchen nachweisbare Herkunft.",
         text: "Derzeit sind keine quellengeprüften Sammlungseinträge zur öffentlichen Anzeige freigegeben. Die Bereiche bleiben als ehrliche Leerräume sichtbar, bis Herkunft, Status, Autorschaft und Veröffentlichungsrecht bestätigt sind.",
         links: [
-          ["Praxis", "/projects"],
+          ["Projekte", "/projects"],
           ["Forschung", "/research"],
           ["Publikationen", "/publications"],
           ["Termine", "/events"],
@@ -152,17 +159,26 @@ export const publicSiteCopy = {
       publishingTitle: "Mehrsprachig veröffentlichen, ohne Autorität zu automatisieren",
       publishing: "Die Publishing Authority ist eine geschützte menschliche Verantwortlichkeitsschicht. Sie trennt Entwurf, Review, Moderation, Sign-off und spätere Veröffentlichung. Ein freigegebener Bereitschaftszustand ist keine automatische Publikation. Die öffentliche Website ruft keine geschützten Schreibabläufe auf und zeigt keine internen Zuweisungen oder Workflow-Status.",
     },
+    categories: {
+      programs: {
+        title: "Programme",
+        lede: "Dokumentierte Bildungs- und Fellowship-Programme werden mit ihrem tatsächlichen Reifegrad dargestellt.",
+      },
+      products: {
+        title: "Produkte",
+        lede: "Öffentlich nutzbare digitale Produkte von Res Publica.",
+      },
+      services: {
+        title: "Dienstleistungen",
+        lede: "Öffentliche Dienste für Mitgliedschaft, Veranstaltungen und verantwortliche Beteiligung.",
+      },
+    },
     offerings: {
-      title: "Angebote",
-      lede: "Öffentliche Dienste, Methoden und Programme werden nach ihrem tatsächlichen Reifegrad unterschieden.",
-      ecosystemTitle: "Ein Ökosystem, keine flache Produktliste",
-      ecosystem: "Die öffentliche Erfahrung verbindet zivile Beteiligung, HARM-Methodik, Lernen, Forschung und verantwortliche Publikation. Governance und gemeinsame technische Dienste tragen diese Arbeit intern; sie werden nicht als Marktangebot dargestellt.",
       maturityTitle: "Reifegrad",
       labels: {
         available: "Jetzt verfügbar",
         partial: "Teilweise verfügbar",
         documented: "Dokumentiert / in Entwicklung",
-        methodology: "Methodik",
       },
       open: "Öffnen",
       learn: "Mehr erfahren",
@@ -171,8 +187,9 @@ export const publicSiteCopy = {
     empty: "Derzeit sind keine quellengeprüften Einträge zur öffentlichen Anzeige freigegeben.",
     contact: {
       title: "Kontakt",
-      lede: "Kontaktwege werden erst veröffentlicht, wenn eine bestätigte Zustellung möglich ist.",
-      status: "Das Kontaktformular ist derzeit nicht verfügbar. Es wurde deaktiviert, damit keine Nachricht fälschlich als zugestellt erscheint. Ein bestätigter Kontaktweg wird hier veröffentlicht, sobald er betrieblich eingerichtet ist.",
+      lede: "Sie erreichen Res Publica e.V. direkt per E-Mail.",
+      action: "E-Mail schreiben",
+      notice: "Ihre Nachricht wird in Ihrem E-Mail-Programm geöffnet und erst nach Ihrer Bestätigung versendet.",
     },
     people: {
       team: "Derzeit sind keine Namen und Rollen für die öffentliche Anzeige bestätigt.",
@@ -185,8 +202,10 @@ export const publicSiteCopy = {
     nav: {
       mission: "Mission & Vision",
       method: "Method",
-      offerings: "Offerings",
-      projects: "Practice",
+      programs: "Programs",
+      products: "Products",
+      services: "Services",
+      projects: "Projects",
       events: "Events",
       membership: "Participate",
       contact: "Contact",
@@ -253,9 +272,14 @@ export const publicSiteCopy = {
       offerings: {
         index: "07",
         eyebrow: "What Res Publica enables",
-        title: "Methods, public services and programmes—with honest maturity.",
-        text: "Some offerings are usable now; others are partly implemented or documented as methodologies and programmes. Maturity is explicit, and internal infrastructure is not presented as a public product.",
-        cta: "View all offerings",
+        title: "Programs, products, services and projects—clearly separated.",
+        text: "Each public category has a distinct purpose. Maturity and provenance remain visible; methodologies and internal infrastructure are not presented as products.",
+        links: [
+          ["Programs", "/programs"],
+          ["Products", "/products"],
+          ["Services", "/services"],
+          ["Projects", "/projects"],
+        ],
       },
       work: {
         index: "08",
@@ -263,7 +287,7 @@ export const publicSiteCopy = {
         title: "Practice, research and publication require traceable provenance.",
         text: "No source-reviewed collection entries are currently cleared for public display. These areas remain as honest empty spaces until provenance, status, authorship and publication rights are confirmed.",
         links: [
-          ["Practice", "/projects"],
+          ["Projects", "/projects"],
           ["Research", "/research"],
           ["Publications", "/publications"],
           ["Events", "/events"],
@@ -328,17 +352,26 @@ export const publicSiteCopy = {
       publishingTitle: "Multilingual publication without automated authority",
       publishing: "Publishing Authority is a protected layer of human accountability. It separates drafting, review, moderation, sign-off and later publication. A ready state is not automatic publication. The public website makes no protected write calls and exposes no internal assignments or workflow status.",
     },
+    categories: {
+      programs: {
+        title: "Programs",
+        lede: "Documented education and fellowship programs are presented with their actual maturity.",
+      },
+      products: {
+        title: "Products",
+        lede: "Publicly usable digital products from Res Publica.",
+      },
+      services: {
+        title: "Services",
+        lede: "Public services for membership, events and accountable participation.",
+      },
+    },
     offerings: {
-      title: "Offerings",
-      lede: "Public services, methods and programmes are distinguished by their actual maturity.",
-      ecosystemTitle: "An ecosystem, not a flat product list",
-      ecosystem: "The public experience connects civic participation, HARM methodology, learning, research and accountable publication. Governance and shared technical services support this work internally; they are not marketed as offerings.",
       maturityTitle: "Maturity",
       labels: {
         available: "Available now",
         partial: "Partially available",
         documented: "Documented / in development",
-        methodology: "Methodology",
       },
       open: "Open",
       learn: "Learn more",
@@ -347,8 +380,9 @@ export const publicSiteCopy = {
     empty: "No source-reviewed entries are currently cleared for public display.",
     contact: {
       title: "Contact",
-      lede: "Contact routes are published only when confirmed delivery is available.",
-      status: "The contact form is currently unavailable. It has been disabled so that no message can appear delivered when it is not. A confirmed contact route will be published here once it is operationally configured.",
+      lede: "Contact Res Publica e.V. directly by email.",
+      action: "Write an email",
+      notice: "Your message opens in your email application and is sent only after you confirm it.",
     },
     people: {
       team: "No names or roles are currently confirmed for public display.",
@@ -361,8 +395,10 @@ export const publicSiteCopy = {
     nav: {
       mission: "مأموریت و چشم‌انداز",
       method: "روش",
-      offerings: "امکانات",
-      projects: "کنش مدنی",
+      programs: "برنامه‌ها",
+      products: "محصولات",
+      services: "خدمات",
+      projects: "پروژه‌ها",
       events: "رویدادها",
       membership: "مشارکت",
       contact: "تماس",
@@ -429,9 +465,14 @@ export const publicSiteCopy = {
       offerings: {
         index: "۰۷",
         eyebrow: "آنچه رس پوبلیکا ممکن می‌سازد",
-        title: "روش‌ها، خدمات عمومی و برنامه‌ها، با سطح بلوغ صادقانه.",
-        text: "برخی امکانات اکنون قابل‌استفاده‌اند؛ برخی دیگر بخشی پیاده‌سازی شده یا به‌صورت روش و برنامه مستند شده‌اند. سطح بلوغ آشکار است و زیرساخت داخلی به‌عنوان محصول عمومی معرفی نمی‌شود.",
-        cta: "مشاهده همه امکانات",
+        title: "برنامه‌ها، محصولات، خدمات و پروژه‌ها — به‌روشنی از هم جدا.",
+        text: "هر دسته عمومی هدفی متمایز دارد. سطح بلوغ و منشأ آشکار می‌ماند؛ روش‌ها و زیرساخت داخلی به‌عنوان محصول معرفی نمی‌شوند.",
+        links: [
+          ["برنامه‌ها", "/programs"],
+          ["محصولات", "/products"],
+          ["خدمات", "/services"],
+          ["پروژه‌ها", "/projects"],
+        ],
       },
       work: {
         index: "۰۸",
@@ -439,7 +480,7 @@ export const publicSiteCopy = {
         title: "کنش، پژوهش و انتشار به منشأ قابل‌پیگیری نیاز دارند.",
         text: "در حال حاضر هیچ مدخل مجموعه‌ای که منبع آن بازبینی شده باشد برای نمایش عمومی تأیید نشده است. این بخش‌ها تا تأیید منشأ، وضعیت، پدیدآورندگی و حق انتشار، به‌صورت فضای خالی صادقانه باقی می‌مانند.",
         links: [
-          ["کنش مدنی", "/projects"],
+          ["پروژه‌ها", "/projects"],
           ["پژوهش", "/research"],
           ["انتشارات", "/publications"],
           ["رویدادها", "/events"],
@@ -504,17 +545,26 @@ export const publicSiteCopy = {
       publishingTitle: "انتشار چندزبانه بدون خودکارسازی اختیار",
       publishing: "Publishing Authority لایه‌ای حفاظت‌شده برای پاسخ‌گویی انسانی است. این لایه نگارش، بازبینی، نظارت، تأیید نهایی و انتشار بعدی را از هم جدا می‌کند. آمادگی به معنای انتشار خودکار نیست. وب‌سایت عمومی هیچ درخواست نوشتن حفاظت‌شده‌ای ارسال نمی‌کند و تکالیف یا وضعیت گردش‌کار داخلی را نمایش نمی‌دهد.",
     },
+    categories: {
+      programs: {
+        title: "برنامه‌ها",
+        lede: "برنامه‌های مستند آموزشی و همراهی مدنی با سطح بلوغ واقعی خود معرفی می‌شوند.",
+      },
+      products: {
+        title: "محصولات",
+        lede: "محصولات دیجیتال عمومی و قابل‌استفاده رس پوبلیکا.",
+      },
+      services: {
+        title: "خدمات",
+        lede: "خدمات عمومی برای عضویت، رویدادها و مشارکت پاسخ‌گو.",
+      },
+    },
     offerings: {
-      title: "امکانات",
-      lede: "خدمات عمومی، روش‌ها و برنامه‌ها بر اساس سطح بلوغ واقعی خود از هم متمایز می‌شوند.",
-      ecosystemTitle: "یک زیست‌بوم، نه فهرستی تخت از محصولات",
-      ecosystem: "تجربه عمومی، مشارکت مدنی، روش HARM، یادگیری، پژوهش و انتشار پاسخ‌گو را به هم پیوند می‌دهد. حکمرانی و خدمات فنی مشترک درون سازمان از این کار پشتیبانی می‌کنند و به‌عنوان محصول عرضه نمی‌شوند.",
       maturityTitle: "سطح بلوغ",
       labels: {
         available: "اکنون در دسترس",
         partial: "تا حدی در دسترس",
         documented: "مستند / در حال توسعه",
-        methodology: "روش",
       },
       open: "باز کردن",
       learn: "بیشتر بدانید",
@@ -523,8 +573,9 @@ export const publicSiteCopy = {
     empty: "در حال حاضر هیچ مدخلِ بازبینی‌شده از نظر منبع برای نمایش عمومی تأیید نشده است.",
     contact: {
       title: "تماس",
-      lede: "راه‌های تماس فقط زمانی منتشر می‌شوند که تحویل پیام قابل‌تأیید باشد.",
-      status: "فرم تماس در حال حاضر در دسترس نیست. این فرم غیرفعال شده تا هیچ پیامی به‌اشتباه تحویل‌شده نشان داده نشود. پس از راه‌اندازی عملیاتی، راه تماس تأییدشده در همین‌جا منتشر می‌شود.",
+      lede: "می‌توانید مستقیماً از طریق ایمیل با رس پوبلیکا تماس بگیرید.",
+      action: "نوشتن ایمیل",
+      notice: "پیام در برنامه ایمیل شما باز می‌شود و فقط پس از تأیید شما ارسال خواهد شد.",
     },
     people: {
       team: "در حال حاضر هیچ نام یا نقشی برای نمایش عمومی تأیید نشده است.",

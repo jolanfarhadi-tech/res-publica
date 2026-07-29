@@ -3,18 +3,21 @@ import type { Locale } from "@/i18n/config";
 import { getPublicSiteCopy } from "@/i18n/public-site";
 import {
   hasOperationalCallToAction,
-  offeringsForLocale,
+  offeringsForCategory,
+  type PublicCategory,
 } from "@/data/public-offerings";
 
 export function OfferingMatrix({
   locale,
+  category,
   limit,
 }: {
   locale: Locale;
+  category: PublicCategory;
   limit?: number;
 }) {
   const copy = getPublicSiteCopy(locale).offerings;
-  const offerings = offeringsForLocale(locale).slice(0, limit);
+  const offerings = offeringsForCategory(locale, category).slice(0, limit);
 
   return (
     <ul className="grid list-none gap-px border border-border bg-border md:grid-cols-2">

@@ -23,7 +23,9 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   ];
   const work = [
     { href: `/${locale}/method`, label: t.nav.method },
-    { href: `/${locale}/offerings`, label: t.nav.offerings },
+    { href: `/${locale}/programs`, label: t.nav.programs },
+    { href: `/${locale}/products`, label: t.nav.products },
+    { href: `/${locale}/services`, label: t.nav.services },
     { href: `/${locale}/projects`, label: t.nav.projects },
     { href: `/${locale}/research`, label: t.nav.research },
     { href: `/${locale}/publications`, label: t.nav.publications },

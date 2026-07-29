@@ -42,6 +42,13 @@ const nextConfig: NextConfig = {
         destination: "/:locale/mission-vision",
         permanent: true,
       },
+      // The former combined category now resolves to the first explicit
+      // public category instead of remaining a primary information bucket.
+      {
+        source: "/:locale(de|en|fa)/offerings",
+        destination: "/:locale/programs",
+        permanent: true,
+      },
     ];
   },
 };

@@ -9,7 +9,7 @@ import { FadeIn } from "@/components/motion/FadeIn";
 import { pageAlternates, absoluteUrl } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ConstellationNarrative } from "@/components/site/ConstellationNarrative";
-import { OfferingMatrix } from "@/components/site/OfferingMatrix";
+import { PublicCategoryOverview } from "@/components/site/PublicCategoryOverview";
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
@@ -143,13 +143,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <section className="bg-bg">
         <Container className="py-20 sm:py-28">
           <FadeIn><SectionHeading index={copy.offerings.index} eyebrow={copy.offerings.eyebrow} title={copy.offerings.title} /></FadeIn>
-          <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <p className="max-w-3xl text-lg leading-relaxed text-muted">{copy.offerings.text}</p>
-            <Link href={`/${locale}/offerings`} className="inline-flex shrink-0 items-center gap-3 text-sm font-semibold text-accent">
-              {copy.offerings.cta} <Arrow />
-            </Link>
-          </div>
-          <div className="mt-12"><OfferingMatrix locale={locale} limit={4} /></div>
+          <p className="mt-8 max-w-3xl text-lg leading-relaxed text-muted">{copy.offerings.text}</p>
+          <div className="mt-12"><PublicCategoryOverview locale={locale} /></div>
         </Container>
       </section>
 

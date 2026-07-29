@@ -3,6 +3,7 @@ import { collections, getEntries } from "@/lib/collections";
 import { getPage } from "@/lib/content";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getPublicSiteCopy } from "@/i18n/public-site";
+import { offeringsForCategory } from "@/data/public-offerings";
 
 /**
  * Full-text search — Milestone 6.
@@ -67,12 +68,12 @@ export function buildSearchIndex(locale: Locale): SearchDocument[] {
       description: publicCopy.method.lede,
       body: JSON.stringify(publicCopy.method),
     },
-    {
-      url: `/${locale}/offerings`,
-      title: publicCopy.offerings.title,
-      description: publicCopy.offerings.lede,
-      body: JSON.stringify(publicCopy.offerings),
-    },
+    ...(["programs", "products", "services"] as const).map((category) => ({
+      url: `/${locale}/${category}`,
+      title: publicCopy.categories[category].title,
+      description: publicCopy.categories[category].lede,
+      body: JSON.stringify(offeringsForCategory(locale, category)),
+    })),
     {
       url: `/${locale}/membership`,
       title: dictionary.platform.membership.title,

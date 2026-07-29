@@ -72,11 +72,11 @@ describe("public website boundaries", () => {
     const contact = source("src", "components", "site", "ContactForm.tsx");
     expect(contact).not.toContain("setSent");
     expect(contact).not.toContain("<form");
-    expect(contact).toContain('role="status"');
+    expect(contact).toContain("mailto:kontakt@respublica-ev.de");
   });
 
-  it("provides every new public route and the same narrative structure in DE/EN/FA", () => {
-    for (const route of ["method", "offerings"]) {
+  it("provides separate Programs, Products, Services and Projects routes", () => {
+    for (const route of ["programs", "products", "services", "projects"]) {
       expect(
         fs.existsSync(path.join(process.cwd(), "src", "app", "[locale]", route, "page.tsx"))
       ).toBe(true);
@@ -90,9 +90,34 @@ describe("public website boundaries", () => {
     for (const locale of locales) {
       const items = publicNavigation(locale);
       expect(items).toHaveLength(7);
-      expect(items.map((item) => item.href)).toContain(`/${locale}/method`);
-      expect(items.map((item) => item.href)).toContain(`/${locale}/offerings`);
+      expect(items.map((item) => item.href)).toEqual(
+        expect.arrayContaining([
+          `/${locale}/programs`,
+          `/${locale}/products`,
+          `/${locale}/services`,
+          `/${locale}/projects`,
+        ])
+      );
+      expect(items.map((item) => item.href)).not.toContain(`/${locale}/offerings`);
     }
+  });
+
+  it("classifies RPCS Civic School as a documented Program, never as a Project", () => {
+    const rpcs = publicOfferings.find((offering) => offering.id === "rpcs");
+    expect(rpcs).toMatchObject({
+      category: "programs",
+      maturity: "documented",
+      operational: false,
+    });
+    for (const locale of locales) {
+      expect(getEntries(locale, "projects").some((entry) => /RPCS|Civic School/i.test(entry.title))).toBe(false);
+    }
+  });
+
+  it("keeps methodologies out of the product and service catalog", () => {
+    const ids = publicOfferings.map((offering) => offering.id);
+    expect(ids).not.toContain("harm");
+    expect(ids).not.toContain("responsibility-tools");
   });
 
   it("keeps Persian RTL and a complete reduced-motion fallback", () => {
@@ -102,21 +127,38 @@ describe("public website boundaries", () => {
     expect(css).toContain("animation-iteration-count: 1");
   });
 
-  it("includes Method, Offerings and Membership in every localized sitemap", () => {
+  it("includes the four public categories, Method and Membership in every localized sitemap", () => {
     const sitemapSource = source("src", "app", "sitemap.ts");
     expect(sitemapSource).toContain('"/method"');
-    expect(sitemapSource).toContain('"/offerings"');
+    expect(sitemapSource).toContain('"/programs"');
+    expect(sitemapSource).toContain('"/products"');
+    expect(sitemapSource).toContain('"/services"');
+    expect(sitemapSource).toContain('"/projects"');
+    expect(sitemapSource).not.toContain('"/offerings"');
     expect(sitemapSource).toContain('"/membership"');
     expect(sitemapSource).toContain("alternates");
     expect(sitemapSource).toContain("languages");
     expect(sitemapSource).toContain('"x-default"');
     expect(sitemapSource).not.toContain('"/search",');
+    expect(sitemapSource).not.toContain('"/profile"');
+    expect(sitemapSource).not.toContain('"/dashboard"');
+  });
+
+  it("keeps private Profile and Dashboard paths out of public indexing", () => {
+    const profile = source("src", "app", "[locale]", "profile", "page.tsx");
+    const robots = source("src", "app", "robots.ts");
+    expect(profile).toContain("robots: { index: false");
+    for (const locale of locales) {
+      expect(robots).toContain(`"/${locale}/profile"`);
+      expect(robots).toContain(`"/${locale}/dashboard"`);
+    }
   });
 
   it("limits search to published site content and provenance-gated collections", () => {
     const search = source("src", "lib", "search.ts");
-    expect(search).toContain('url: `/${locale}/method`');
-    expect(search).toContain('url: `/${locale}/offerings`');
+    expect(search).toContain('["programs", "products", "services"]');
+    expect(search).toContain("url: `/${locale}/${category}`");
+    expect(search).not.toContain("url: `/${locale}/offerings`");
     expect(search).toContain("getEntries(locale, collection)");
     expect(search).not.toContain("/api/publishing");
   });
