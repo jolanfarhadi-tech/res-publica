@@ -1,5 +1,22 @@
 # Module: Publishing
 
+## Incremental implementation — bounded operational workspace, 2026-07-29
+
+`GET /api/publishing/workspace?scope=...` adds a read-only internal
+operational projection without changing the accepted workflow services.
+Access requires a session-derived actor, staff MFA, and an active exact-target
+Editor, Reviewer, Translator, or Publisher grant.
+
+Editor and Publisher roles can inspect the requested scope. Reviewer and
+Translator roles receive only the drafts and workflow records assigned to
+their own Person. The API does not return identity contact data, other scopes,
+raw grants, or Governance records. Results are privately cached as `no-store`,
+correlated, and capped at 100 rows per collection.
+
+The workspace has no write path and cannot create content files, Git commits,
+pushes, deployments, or publication. All existing ADR-036 write boundaries
+remain in their current application services.
+
 ## Incremental implementation — privileged write protection, 2026-07-29
 
 `POST`/`DELETE /api/publishing/grants` and

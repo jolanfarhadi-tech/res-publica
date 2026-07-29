@@ -1,5 +1,27 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — bounded Publishing workspace
+
+**Verified 2026-07-29 on `codex/platform-phase-2` after `12e5b2c`.**
+`GET /api/publishing/workspace` now provides a private, read-only operational
+projection for one exact publication scope. The actor comes only from the
+verified session; every role requires staff MFA and an active exact-target
+Civic editorial grant. Editor and Publisher roles can inspect the bounded
+scope, while Reviewer and Translator roles receive only artifacts assigned to
+their own Person.
+
+The endpoint is dynamic, private/no-store, correlated, limited to at most 100
+rows per collection, and returns generic authorization failures. It exposes no
+universal admin bypass, cross-scope records, identity contact details, or raw
+authorization grants. Existing Publishing writes, separation of duties,
+provenance, atomic audit semantics, `commitHash: null`, and the no-auto-publish
+boundary are unchanged.
+
+Focused verification passes 2 files / 7 tests; the full suite passes 50 files /
+238 tests. Structure, lint, typecheck, `git diff --check`, `db:check`,
+`db:check:fresh` (14 migrations / 55 tables), and the 102-page Production
+build pass. No migration was created.
+
 ## Incremental update — disabled-by-default notification delivery
 
 **Verified 2026-07-29 on `codex/platform-phase-2` after `0b97138`.**

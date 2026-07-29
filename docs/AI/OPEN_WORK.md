@@ -1,5 +1,14 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-015 — Resolved locally: bounded Publishing operations read side
+
+**Status:** Exact-scope, MFA-protected, role-filtered Publishing workspace API
+is implemented and locally verified; not pushed or deployed.
+
+No operational frontend was fabricated because staff identities, Auth0 MFA,
+Publisher appointment, and Production administrator responsibility remain
+external gates. Existing write APIs remain the only mutation boundary.
+
 ### OPEN-014 — Notification provider activation remains externally gated
 
 **Status:** Delivery persistence, consent checks, idempotency, retries, and the
