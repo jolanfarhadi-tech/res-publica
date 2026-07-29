@@ -1,5 +1,20 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-016 — Public privacy notice understates deployed processing
+
+- **Evidence:** `datenschutz.md` states that no user profiles are formed and
+  describes only hosting and email contact, while the deployed architecture
+  includes Auth0 identity/session data, private membership/profile records,
+  two ConsentRecords, event registration, authorization grants, rate limiting,
+  canonical AuditLog, and Neon persistence.
+- **Impact:** the public transparency text is technically incomplete.
+- **Severity:** **High / legal publication gate**.
+- **Safe handling:** an accurate implementation-backed replacement draft,
+  processing inventory, retention matrix, and DPIA appendix exist under
+  `docs/legal/` and `docs/privacy/`. Do not publish them or claim legal
+  completeness until owner/legal review approves bases, periods, processor
+  language, rights handling, and controller details.
+
 ### WARN-015 — Drizzle snapshot history skipped migrations 0008–0011
 
 - **Evidence:** generating migration 0012 from the latest stored snapshot

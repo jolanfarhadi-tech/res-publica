@@ -10,20 +10,21 @@ Production activation.
 | Gate | Current evidence | State | Blocks |
 |---|---|---|---|
 | OIDC callback configuration | Correct Vercel project has all required OIDC variable names; Production Auth0 reports callback mismatch; management dashboard access is not authenticated | Open | Login and authenticated operations |
-| Identity invitation/provisioning ownership | No approved operational workflow found | Open | External user onboarding |
+| Identity invitation/provisioning ownership | Separation-of-duties runbook exists; accountable administrator/reviewer not appointed | Owner assignment required | External user onboarding |
 | Auth0 MFA plan | ADR requires MFA for sensitive capabilities; Production policy not verified | Open | Admin, Governance, Publishing operations |
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
-| Real DPIA | Repository DPIA explicitly identifies itself as a placeholder | Open | Approved real-person processing |
+| Real DPIA | Repository DPIA remains a placeholder; technical appendix and processing inventory draft exist | Legal/DPO approval required | Approved real-person processing |
 | Processor DPAs | Vercel, Neon and Auth0 agreements not evidenced in repository | Owner/legal evidence required | Approved real-person processing |
-| Record of processing activities | No complete approved RoPA found | Open | Privacy governance |
-| Retention schedule | No approved periods; repository forbids invention | Open | Withdrawal, erasure, operational data lifecycle |
+| Record of processing activities | Implementation-backed processing inventory draft exists | Owner/legal approval required | Privacy governance |
+| Retention schedule | Decision matrix exists without invented periods | Owner/legal approval required | Withdrawal, erasure, operational data lifecycle |
 | AuditLog pseudonymization | Engineering pattern exists; ADR-029 keeps activation legally blocked | Blocked by legal approval | Erasure workflow |
 | Consent withdrawal policy | Canonical entity supports revocation but operational ADR-035 is absent | Architecture/legal gate | Withdrawal UI/API |
 | Profile mutation policy | ADR-034 authorizes read-only self-service only | Architecture gate | Profile edits |
 | Terms/membership rules | Legal necessity and approved text not determined | Legal review required | Public service-rule publication |
-| Incident-response ownership | No verified accountable Production owner/runbook | Open | Operational launch assurance |
+| Privacy notice | Accurate replacement draft identifies current technical processing; live notice remains unchanged | Human/legal publication approval required | Accurate transparency |
+| Incident-response ownership | Technical runbook exists; named commander, deputy, privacy and communications owners absent | Owner assignment required | Operational launch assurance |
 | Production administrator responsibility | No verified named operational responsibility | Open | Privileged administration |
-| Security logging/retention | Canonical audit exists; operational security policy absent | Open | Monitoring and incident evidence |
+| Security logging/retention | Minimal request logging and incident evidence procedure exist; retention/recipients unapproved | Owner/legal approval required | Monitoring and incident evidence |
 | Browser security headers | CSP/HSTS/cross-origin policy implemented and locally tested; Production edge not yet verified | Pending deployment verification | Production security assurance |
 | Distributed rate-limit store | PostgreSQL bucket protects auth login, membership creation, and event registration; migration not applied to Production; Governance and Publishing writes remain | Partial | Abuse-resistant privileged writes |
 | Transactional email provider | No activated approved provider | Intentionally disabled | Real delivery |
@@ -33,8 +34,8 @@ Production activation.
 | External AI provider | No approved provider/DPIA/governance activation | Intentionally disabled | External AI |
 | HARM evidence/case Production operation | Secure storage and safeguarding not approved | Intentionally disabled | Sensitive case processing |
 | Programme operational approval | Staffing, dates, and approved content not established | Intentionally disabled | Public programme opening |
-| Neon restore drill | Backups/snapshots exist; no non-Production restore evidence | Open | Demonstrated recoverability |
-| Duplicate Vercel project | `res-publica-tq5l` exists but is not the custom-domain project | Owner approval required for deletion | Cleanup only; must avoid wrong deployment |
+| Neon restore drill | Isolated non-Production procedure documented; no completed drill evidence or approved RPO/RTO | Owner execution/approval required | Demonstrated recoverability |
+| Duplicate Vercel project | `res-publica-tq5l` exists but is not the custom-domain project; safe consolidation procedure documented | Owner approval required for deletion | Cleanup only; must avoid wrong deployment |
 
 ## Gate-handling rules
 

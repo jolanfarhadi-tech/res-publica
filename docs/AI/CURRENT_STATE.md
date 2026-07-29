@@ -1,5 +1,29 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — operational resilience and privacy drafts
+
+**Implemented 2026-07-29 on `codex/platform-phase-1` after `3019603`.**
+A scheduled GitHub monitor and reusable script now validate the HTTPS
+liveness/readiness status, minimal JSON body, and `no-store` contract every
+fifteen minutes without logging response payloads or secrets. Technical
+runbooks cover incident response, isolated Neon restore drills, Auth0
+invitation/provisioning with separation of duties, and safe owner-led Vercel
+project consolidation.
+
+Internal legal-review drafts now provide an implementation-backed privacy
+notice replacement, processing inventory, retention decision matrix, DPIA
+technical appendix, and service-rules needs assessment. They are explicitly
+not approved for publication. The live `datenschutz.md` remains unchanged
+pending human/legal approval because it currently understates authenticated
+profile, consent, event, identity, audit, and processor activity.
+
+Focused monitor tests pass 3/3; the full suite passes 42 files / 211 tests.
+Structure, lint, typecheck, `git diff --check`, `db:check`,
+`db:check:fresh` (13 migrations / 54 tables), and the 99-page Production
+build pass. A read-only check of `https://respublica-ev.de` also confirmed
+`/api/health/live` and `/api/health/ready` at `200`; this does not deploy the
+branch or close any legal, Auth0, restore, ownership, or retention gate.
+
 ## Incremental update — authenticated event cancellation
 
 **Verified 2026-07-29 on `codex/platform-phase-1` after `837a8dc`.**

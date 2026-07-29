@@ -24,6 +24,14 @@
   legal gate preserved in ADR-029.
 - **External blocker:** Auth0 currently rejects the configured Production
   redirect URI with `Callback URL mismatch`.
+- **Operational drafts completed:** production health monitor; incident,
+  restore, identity-provisioning and Vercel-consolidation runbooks; processing
+  inventory, retention matrix, DPIA technical appendix, privacy replacement
+  and service-rules assessment drafts.
+- **Owner/legal actions still open:** assign operational roles, perform and
+  evidence an isolated restore drill, approve RPO/RTO and retention decisions,
+  retain provider DPAs, approve the real DPIA, and review the replacement
+  privacy notice before public publication.
 
 *Only items with direct evidence of being unfinished. Aspirational ideas and reserved ADRs are listed separately (§"Reserved decisions") and are explicitly **not** active engineering tasks.*
 
