@@ -1,5 +1,15 @@
 # Module: Membership
 
+## Incremental implementation — request protection, 2026-07-29
+
+`POST /api/membership/create` now receives a server-generated request ID and
+consumes the shared PostgreSQL rate limit before actor resolution or
+persistence. The policy permits five attempts per one-hour window per
+pseudonymized client address. Rate limiting does not move or duplicate
+Membership logic: session-derived authorization, exactly two versioned profile
+consents, Membership creation, and canonical audit evidence remain atomic in
+the existing application service.
+
 ## Purpose
 
 Recurring individual/institutional support relationships — registration through the full exit/deactivation lifecycle. Evidence: `src/modules/membership/README.md` (read in full, this session).

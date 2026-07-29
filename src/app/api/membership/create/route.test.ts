@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   actor: { personId: "synthetic-member" } as null | { personId: string },
   createdTiers: [] as string[],
   createdConsents: [] as unknown[],
+  rateLimitResponse: null as Response | null,
 }));
 
 vi.mock("../../../../auth/runtime", () => ({
@@ -13,6 +14,15 @@ vi.mock("../../../../auth/runtime", () => ({
 
 vi.mock("../../../../auth/actor-resolver", () => ({
   createActorResolver: () => ({ resolve: async () => mocks.actor }),
+}));
+
+vi.mock("../../../../platform/rate-limit", () => ({
+  MEMBERSHIP_CREATE_RATE_LIMIT: {
+    scope: "membership.create",
+    limit: 5,
+    windowMs: 3_600_000,
+  },
+  rejectRateLimitedRequest: async () => mocks.rateLimitResponse,
 }));
 
 vi.mock("../../../../application/membership", async (importOriginal) => {
@@ -68,6 +78,7 @@ describe("POST /api/membership/create", () => {
     mocks.actor = { personId: "synthetic-member" };
     mocks.createdTiers = [];
     mocks.createdConsents = [];
+    mocks.rateLimitResponse = null;
   });
 
   it.each(membershipTiers)("accepts the approved %s membership type", async (tier) => {
@@ -80,6 +91,20 @@ describe("POST /api/membership/create", () => {
   it("rejects an unknown membership type before persistence", async () => {
     const response = await POST(request("invented-tier"));
     expect(response.status).toBe(400);
+    expect(mocks.createdTiers).toEqual([]);
+    expect(mocks.createdConsents).toEqual([]);
+  });
+
+  it("stops before authorization or persistence when the client is rate limited", async () => {
+    mocks.rateLimitResponse = Response.json(
+      { error: "rate_limited" },
+      { status: 429 }
+    );
+
+    const response = await POST(request("basic"));
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
     expect(mocks.createdTiers).toEqual([]);
     expect(mocks.createdConsents).toEqual([]);
   });

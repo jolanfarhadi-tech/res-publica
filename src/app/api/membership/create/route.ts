@@ -5,17 +5,28 @@ import { getAuthRuntime } from "../../../../auth/runtime";
 import { rejectUntrustedWriteRequest } from "../../../../auth/request-security";
 import { createMembership, DuplicateMembershipError } from "../../../../application/membership";
 import { profileConsentSubmissionSchema } from "../../../../domain/consent";
+import {
+  MEMBERSHIP_CREATE_RATE_LIMIT,
+  rejectRateLimitedRequest,
+} from "../../../../platform/rate-limit";
+import { withRequestContext } from "../../../../platform/request-context";
 
 const bodySchema = z.object({
   tier: z.enum(["basic", "supporter", "volunteer", "research", "institutional"]),
   profileConsents: profileConsentSubmissionSchema,
 });
 
-export async function POST(request: Request) {
+async function handleCreateMembership(request: Request) {
   const rejection = rejectUntrustedWriteRequest(request);
   if (rejection) return rejection;
   const runtime = getAuthRuntime();
   if (!runtime) return Response.json({ error: "service_not_configured" }, { status: 503 });
+  const rateLimitRejection = await rejectRateLimitedRequest(
+    runtime.db,
+    request,
+    MEMBERSHIP_CREATE_RATE_LIMIT
+  );
+  if (rateLimitRejection) return rateLimitRejection;
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
   try {
@@ -32,4 +43,8 @@ export async function POST(request: Request) {
     if (error instanceof DuplicateMembershipError) return Response.json({ error: "already_member" }, { status: 409 });
     throw error;
   }
+}
+
+export function POST(request: Request) {
+  return withRequestContext(request, () => handleCreateMembership(request));
 }

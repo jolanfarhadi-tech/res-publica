@@ -8,14 +8,25 @@ import {
   EventNotFoundError,
   registerAuthenticatedActorForEvent,
 } from "../../../../application/events";
+import {
+  EVENT_REGISTRATION_RATE_LIMIT,
+  rejectRateLimitedRequest,
+} from "../../../../platform/rate-limit";
+import { withRequestContext } from "../../../../platform/request-context";
 
 const bodySchema = z.object({ eventId: z.string().min(1) });
 
-export async function POST(request: Request) {
+async function handleRegistration(request: Request) {
   const rejection = rejectUntrustedWriteRequest(request);
   if (rejection) return rejection;
   const runtime = getAuthRuntime();
   if (!runtime) return Response.json({ error: "service_not_configured" }, { status: 503 });
+  const rateLimitRejection = await rejectRateLimitedRequest(
+    runtime.db,
+    request,
+    EVENT_REGISTRATION_RATE_LIMIT
+  );
+  if (rateLimitRejection) return rateLimitRejection;
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
   try {
@@ -28,4 +39,8 @@ export async function POST(request: Request) {
     if (error instanceof DuplicateEventRegistrationError) return Response.json({ error: "already_registered" }, { status: 409 });
     throw error;
   }
+}
+
+export function POST(request: Request) {
+  return withRequestContext(request, () => handleRegistration(request));
 }

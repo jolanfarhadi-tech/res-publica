@@ -1,5 +1,20 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — public authenticated write protection
+
+**Verified 2026-07-29 on `codex/platform-phase-1` after `8a3046a`.**
+Membership creation and event registration now use the shared PostgreSQL
+rate-limit service and shared request context before actor resolution or
+business persistence. Policies are five membership-create attempts per hour
+and twenty event-registration attempts per fifteen minutes per pseudonymized
+client address. Session-derived actors, capability authorization, atomic
+profile consent, event capacity, duplicate detection, waitlist behavior, and
+canonical audit writes remain in their existing application services.
+
+Focused tests pass 16/16; full suite 41 files / 202 tests; structure, lint,
+typecheck, `db:check`, `db:check:fresh` (13 migrations / 54 tables), and the
+99-page Production build pass. No additional migration was created.
+
 ## Incremental update — PostgreSQL-backed authentication rate limiting
 
 **Verified 2026-07-29 on `codex/platform-phase-1` after `bad0283`.**

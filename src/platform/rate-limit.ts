@@ -31,6 +31,18 @@ export const AUTH_LOGIN_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 15 * 60 * 1000,
 };
 
+export const MEMBERSHIP_CREATE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "membership.create",
+  limit: 5,
+  windowMs: 60 * 60 * 1000,
+};
+
+export const EVENT_REGISTRATION_RATE_LIMIT: RateLimitPolicy = {
+  scope: "events.registration",
+  limit: 20,
+  windowMs: 15 * 60 * 1000,
+};
+
 const RETENTION_AFTER_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function hashIdentifier(

@@ -1,5 +1,14 @@
 # Module: Events
 
+## Incremental implementation — registration request protection, 2026-07-29
+
+`POST /api/events/registration` now receives a server-generated request ID and
+consumes the shared PostgreSQL rate limit before actor resolution or event
+persistence. The policy permits twenty attempts per fifteen-minute window per
+pseudonymized client address. Existing capacity, waitlist,
+duplicate-registration, session actor, authorization, notification, and audit
+semantics remain owned by the Events application service.
+
 ## Purpose
 
 Registration, waitlist/capacity management, event-scoped logistics Q&A, and post-event outcome publishing. Evidence: `src/modules/events/README.md` (read in full, this session).
