@@ -32,7 +32,7 @@ Production activation.
 | Analytics provider/legal basis | No provider; disabled by default | Intentionally disabled | Analytics activation |
 | Object storage | No approved EU storage or malware scanner | Intentionally disabled | File uploads |
 | External AI provider | No approved provider/DPIA/governance activation | Intentionally disabled | External AI |
-| HARM evidence/case Production operation | Secure storage and safeguarding not approved | Intentionally disabled | Sensitive case processing |
+| HARM evidence/case Production operation | All Governance writes are server-disabled by default; activation requires exact `HARM_OPERATIONS_ENABLED=true`; secure storage and safeguarding remain unapproved | Intentionally disabled / owner activation required | Sensitive case processing |
 | Programme operational approval | Staffing, dates, and approved content not established | Intentionally disabled | Public programme opening |
 | Neon restore drill | Isolated non-Production procedure documented; no completed drill evidence or approved RPO/RTO | Owner execution/approval required | Demonstrated recoverability |
 | Duplicate Vercel project | `res-publica-tq5l` exists but is not the custom-domain project; safe consolidation procedure documented | Owner approval required for deletion | Cleanup only; must avoid wrong deployment |

@@ -1,5 +1,22 @@
 # Module: HARM Governance
 
+## Incremental implementation — server activation gate, 2026-07-29
+
+Every existing Governance write route shares the
+`governance.privileged-write` boundary. That boundary now returns a correlated,
+private `503 feature_not_activated` unless the server-only
+`HARM_OPERATIONS_ENABLED` value is exactly `true`.
+
+The gate runs after trusted-origin rejection and before database runtime,
+distributed rate limiting, actor resolution, authorization, persistence, or
+audit mutation. It does not weaken or replace institution-scoped capabilities,
+MFA, separation of duties, provenance, atomic state-plus-audit transactions,
+or any domain invariant when activated.
+
+Activation remains an owner-controlled Production action and requires the
+secure storage, safeguarding, privacy/legal, accountable-administrator, and
+incident-response gates recorded in `SECURITY_LEGAL_GATE_REGISTER.md`.
+
 ## Incremental implementation — privileged write protection, 2026-07-29
 
 All 12 write methods under `src/app/api/governance/` use the shared

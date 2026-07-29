@@ -1,5 +1,25 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — server-disabled HARM operations
+
+**Verified 2026-07-29 on `codex/platform-phase-2` after `1dc55e9`.**
+All twelve Governance/HARM write methods are now independently disabled unless
+the server-only `HARM_OPERATIONS_ENABLED` variable is exactly `true`. The
+default correlated `503 feature_not_activated` response is private/no-store
+and occurs after trusted-origin rejection but before database runtime,
+rate-limit storage, actor resolution, capability/MFA evaluation, persistence,
+or audit mutation.
+
+The gate is keyed only to the existing `governance.privileged-write` policy, so
+Publishing operations are unaffected. When explicitly activated, all existing
+institution-scoped capabilities, MFA, separation of duties, provenance,
+transactions, and canonical audit semantics remain unchanged.
+
+Focused verification passes 4 files / 11 tests; the full suite passes 50 files
+/ 240 tests. Structure, lint, typecheck, `git diff --check`, `db:check`,
+`db:check:fresh` (14 migrations / 55 tables), and the 102-page Production
+build pass. No migration was created and no environment was changed.
+
 ## Incremental update — bounded Publishing workspace
 
 **Verified 2026-07-29 on `codex/platform-phase-2` after `12e5b2c`.**

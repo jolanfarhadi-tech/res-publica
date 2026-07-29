@@ -10,6 +10,11 @@ export type PrivilegedWriteRuntime = NonNullable<
   ReturnType<typeof getAuthRuntime>
 >;
 
+function isPrivilegedWriteActivated(policy: RateLimitPolicy): boolean {
+  if (policy.scope !== "governance.privileged-write") return true;
+  return process.env.HARM_OPERATIONS_ENABLED === "true";
+}
+
 export function executePrivilegedWrite(
   request: Request,
   policy: RateLimitPolicy,
@@ -18,6 +23,18 @@ export function executePrivilegedWrite(
   return withRequestContext(request, async () => {
     const originRejection = rejectUntrustedWriteRequest(request);
     if (originRejection) return originRejection;
+
+    if (!isPrivilegedWriteActivated(policy)) {
+      return Response.json(
+        { error: "feature_not_activated" },
+        {
+          status: 503,
+          headers: {
+            "Cache-Control": "private, no-store, max-age=0",
+          },
+        }
+      );
+    }
 
     const runtime = getAuthRuntime();
     if (!runtime) {

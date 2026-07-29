@@ -1,5 +1,16 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-016 — HARM operations safely disabled pending activation approval
+
+**Status:** Resolved in code for default safety. All existing Governance writes
+are server-disabled unless `HARM_OPERATIONS_ENABLED=true`.
+
+Activation remains open and must not occur until secure evidence/case storage,
+safeguarding, DPIA/DPA and retention rules, named administration and incident
+ownership, Auth0 MFA, migration authorization, and operational approval are
+verified. This implementation did not set the variable or change any external
+service.
+
 ### OPEN-015 — Resolved locally: bounded Publishing operations read side
 
 **Status:** Exact-scope, MFA-protected, role-filtered Publishing workspace API

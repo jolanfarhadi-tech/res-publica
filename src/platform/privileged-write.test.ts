@@ -1,14 +1,18 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   runtime: { db: { kind: "database" } } as null | { db: object },
   originResponse: null as Response | null,
   rateLimitResponse: null as Response | null,
   rateLimitCalls: 0,
+  runtimeCalls: 0,
 }));
 
 vi.mock("../auth/runtime", () => ({
-  getAuthRuntime: () => mocks.runtime,
+  getAuthRuntime: () => {
+    mocks.runtimeCalls += 1;
+    return mocks.runtime;
+  },
 }));
 
 vi.mock("../auth/request-security", () => ({
@@ -43,6 +47,12 @@ describe("privileged write boundary", () => {
     mocks.originResponse = null;
     mocks.rateLimitResponse = null;
     mocks.rateLimitCalls = 0;
+    mocks.runtimeCalls = 0;
+    vi.stubEnv("HARM_OPERATIONS_ENABLED", "true");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("allows the existing protected operation after request protection", async () => {
@@ -128,5 +138,56 @@ describe("privileged write boundary", () => {
     expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
     expect(mocks.rateLimitCalls).toBe(0);
     expect(operation).not.toHaveBeenCalled();
+  });
+
+  it("keeps Governance operations server-disabled before runtime or persistence", async () => {
+    vi.stubEnv("HARM_OPERATIONS_ENABLED", "false");
+    const persisted: string[] = [];
+    const audit: string[] = [];
+
+    const response = await executePrivilegedWrite(
+      request(),
+      policy,
+      async () => {
+        persisted.push("record");
+        audit.push("entry");
+        return Response.json({ status: "persisted" });
+      }
+    );
+
+    expect(response.status).toBe(503);
+    expect(response.headers.get("cache-control")).toBe(
+      "private, no-store, max-age=0"
+    );
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
+    await expect(response.json()).resolves.toEqual({
+      error: "feature_not_activated",
+    });
+    expect(mocks.runtimeCalls).toBe(0);
+    expect(mocks.rateLimitCalls).toBe(0);
+    expect(persisted).toEqual([]);
+    expect(audit).toEqual([]);
+  });
+
+  it("does not apply the HARM gate to Publishing operations", async () => {
+    vi.stubEnv("HARM_OPERATIONS_ENABLED", "false");
+    const publishingPolicy = {
+      scope: "publishing.privileged-write",
+      limit: 60,
+      windowMs: 900_000,
+    };
+
+    const response = await executePrivilegedWrite(
+      new Request("https://respublica-ev.de/api/publishing/workflow", {
+        method: "POST",
+        headers: { origin: "https://respublica-ev.de" },
+      }),
+      publishingPolicy,
+      async () => Response.json({ status: "persisted" })
+    );
+
+    expect(response.status).toBe(200);
+    expect(mocks.runtimeCalls).toBe(1);
+    expect(mocks.rateLimitCalls).toBe(1);
   });
 });
