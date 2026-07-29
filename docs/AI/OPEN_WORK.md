@@ -1,5 +1,16 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-017 — Newsletter activation remains externally gated
+
+**Status:** Default-deny server activation, explicit versioned consent, trusted
+origin, and shared PostgreSQL abuse protection are implemented and locally
+verified. The public form stays hidden while disabled.
+
+Activation still requires an approved provider and DPA, legal basis and
+approved text, retention/withdrawal operations, owner responsibility,
+credentials outside Git/chat, and Production migration authorization. No
+provider or environment setting was activated.
+
 ### OPEN-016 — HARM operations safely disabled pending activation approval
 
 **Status:** Resolved in code for default safety. All existing Governance writes

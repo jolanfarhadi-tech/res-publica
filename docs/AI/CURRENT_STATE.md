@@ -1,5 +1,25 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — explicit newsletter activation and consent gate
+
+**Verified 2026-07-29 on `codex/platform-phase-2` after `4bcf857`.**
+The newsletter form and API now remain unavailable unless the server-only
+`NEWSLETTER_ENABLED` value is exactly `true`; provider variables alone cannot
+activate collection. An activated request still requires trusted origin,
+configured PostgreSQL request protection, a five-per-hour pseudonymized
+distributed rate-limit bucket, valid email syntax, and an explicit localized
+`newsletter-v1` consent bundle before an address reaches a provider.
+
+The in-memory raw-address counter was removed. The footer hides the form while
+the activation gate is closed. Provider secrets, addresses, request payloads,
+and consent text are not written to application logs or the rate-limit table.
+No provider, environment variable, or external service was activated.
+
+Focused verification passes 3 files / 30 tests; the full suite passes 51 files
+/ 244 tests. Structure, lint, typecheck, `git diff --check`, `db:check`,
+`db:check:fresh` (14 migrations / 55 tables), and the 102-page Production
+build pass. No migration was created.
+
 ## Incremental update — server-disabled HARM operations
 
 **Verified 2026-07-29 on `codex/platform-phase-2` after `1dc55e9`.**

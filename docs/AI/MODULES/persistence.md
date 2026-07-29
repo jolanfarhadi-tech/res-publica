@@ -30,6 +30,10 @@ Scope is included in the HMAC input, so one stored identifier hash cannot
 correlate a client across these policy domains. No raw IP address or
 business/person identifier is persisted.
 
+The `newsletter.subscribe` scope now replaces the former process-local
+raw-address Map. It permits five attempts per hour and remains unreachable
+while the independent newsletter activation gate is closed.
+
 Local verification applies 13 migrations and creates 54 tables. The migration
 has not been applied to Production and requires the normal snapshot,
 authorization, TLS, and post-migration permission checks.

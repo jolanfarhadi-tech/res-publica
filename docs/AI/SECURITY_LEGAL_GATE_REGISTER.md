@@ -28,7 +28,7 @@ Production activation.
 | Browser security headers | CSP/HSTS/cross-origin policy implemented and locally tested; Production edge not yet verified | Pending deployment verification | Production security assurance |
 | Distributed rate-limit store | PostgreSQL bucket protects auth login, membership creation, event registration, and all 15 Governance/Publishing writes; migration not applied to Production | Implemented locally / Production migration pending | Abuse-resistant protected writes |
 | Transactional email provider | Provider abstraction, consent gate, idempotent retry evidence and non-delivering adapter implemented; no provider, credentials, worker or approved templates configured | Intentionally disabled | Real delivery |
-| Newsletter legal basis/provider | Optional UI exists; provider unavailable | Intentionally disabled | Newsletter activation |
+| Newsletter legal basis/provider | Exact server activation gate, versioned explicit consent and PostgreSQL abuse protection implemented; provider, DPA, approved text and withdrawal/retention operations remain absent | Intentionally disabled / owner activation required | Newsletter activation |
 | Analytics provider/legal basis | No provider; disabled by default | Intentionally disabled | Analytics activation |
 | Object storage | No approved EU storage or malware scanner | Intentionally disabled | File uploads |
 | External AI provider | No approved provider/DPIA/governance activation | Intentionally disabled | External AI |

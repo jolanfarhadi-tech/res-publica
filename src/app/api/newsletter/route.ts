@@ -1,65 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-
-/**
- * Newsletter subscription API — Milestone 6.
- *
- * POST /api/newsletter  { "email": "person@example.org" }
- *
- * The provider is configured via environment variables (Vercel →
- * Project → Settings → Environment Variables):
- *
- *   NEWSLETTER_PROVIDER=buttondown
- *   BUTTONDOWN_API_KEY=…
- *
- *   or
- *
- *   NEWSLETTER_PROVIDER=mailchimp
- *   MAILCHIMP_API_KEY=…            (ends in -usXX, the datacenter)
- *   MAILCHIMP_AUDIENCE_ID=…
- *
- * If no provider is configured, the endpoint returns 503 — an
- * honest "not available" instead of a fake success. The API key
- * stays on the server; it is never exposed to the browser.
- */
+import { rejectUntrustedWriteRequest } from "../../../auth/request-security";
+import { getPersistenceRuntime } from "../../../persistence";
+import {
+  NEWSLETTER_SUBSCRIBE_RATE_LIMIT,
+  rejectRateLimitedRequest,
+} from "../../../platform/rate-limit";
+import { withRequestContext } from "../../../platform/request-context";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/**
- * Rate limiting — P0 fix (ADR-012). In-memory, per-process fixed window:
- * 5 requests/hour per IP. No external service (Upstash/Vercel KV) is
- * configured for this project yet, so this is the dependency-free
- * fallback `implementation-plan.md` names for that case, not a
- * permanent design choice.
- *
- * Known limitation: this Map is local to one running process. On a
- * single long-running Node server this enforces the limit correctly;
- * under multi-instance serverless scaling, each instance keeps its own
- * count, so the effective global limit is higher than 5/hour. Still a
- * large improvement over no rate limiting at all. Revisit with a
- * shared store (Upstash Redis, Vercel KV) once one is actually
- * provisioned for this deployment — not a P0-scope decision to make
- * speculatively.
- */
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 5;
-const requestCounts = new Map<string, { count: number; resetAt: number }>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = requestCounts.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    requestCounts.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-
-  entry.count += 1;
-  return entry.count > RATE_LIMIT_MAX_REQUESTS;
-}
-
-function clientIp(request: NextRequest): string {
-  return request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
-}
+const CONSENT_VERSION = "newsletter-v1";
+const LOCALES = new Set(["de", "en", "fa"]);
+const PRIVATE_HEADERS = {
+  "Cache-Control": "private, no-store, max-age=0",
+};
 
 type Result = { ok: true } | { ok: false; status: number };
 
@@ -76,7 +28,6 @@ async function subscribeButtondown(email: string): Promise<Result> {
     body: JSON.stringify({ email_address: email }),
   });
 
-  // 201 = created; 400 with "already subscribed" is fine for the user.
   if (response.status === 201) return { ok: true };
   if (response.status === 400) {
     const body = await response.text();
@@ -89,7 +40,9 @@ async function subscribeMailchimp(email: string): Promise<Result> {
   const apiKey = process.env.MAILCHIMP_API_KEY;
   const audienceId = process.env.MAILCHIMP_AUDIENCE_ID;
   const datacenter = apiKey?.split("-")[1];
-  if (!apiKey || !audienceId || !datacenter) return { ok: false, status: 503 };
+  if (!apiKey || !audienceId || !datacenter) {
+    return { ok: false, status: 503 };
+  }
 
   const response = await fetch(
     `https://${datacenter}.api.mailchimp.com/3.0/lists/${audienceId}/members`,
@@ -109,41 +62,86 @@ async function subscribeMailchimp(email: string): Promise<Result> {
   return { ok: false, status: 502 };
 }
 
-export async function POST(request: NextRequest) {
-  if (isRateLimited(clientIp(request))) {
-    return NextResponse.json(
-      { error: "too_many_requests" },
-      { status: 429 }
+export function POST(request: Request) {
+  return withRequestContext(request, async () => {
+    const originRejection = rejectUntrustedWriteRequest(request);
+    if (originRejection) return originRejection;
+
+    if (process.env.NEWSLETTER_ENABLED !== "true") {
+      return Response.json(
+        { error: "feature_not_activated" },
+        { status: 503, headers: PRIVATE_HEADERS }
+      );
+    }
+
+    const runtime = getPersistenceRuntime();
+    if (!runtime) {
+      return Response.json(
+        { error: "service_not_configured" },
+        { status: 503, headers: PRIVATE_HEADERS }
+      );
+    }
+    const rateLimitRejection = await rejectRateLimitedRequest(
+      runtime.db,
+      request,
+      NEWSLETTER_SUBSCRIBE_RATE_LIMIT
     );
-  }
+    if (rateLimitRejection) return rateLimitRejection;
 
-  let email = "";
-  let honeypot = "";
-  try {
-    const body = await request.json();
-    email = String(body.email ?? "").trim();
-    honeypot = String(body.website ?? "");
-  } catch {
-    return NextResponse.json({ error: "invalid" }, { status: 400 });
-  }
+    let body: Record<string, unknown>;
+    try {
+      body = (await request.json()) as Record<string, unknown>;
+    } catch {
+      return Response.json(
+        { error: "invalid" },
+        { status: 400, headers: PRIVATE_HEADERS }
+      );
+    }
 
-  // Bots fill the hidden field; pretend success and store nothing.
-  if (honeypot) return NextResponse.json({ ok: true });
+    const honeypot = String(body.website ?? "");
+    if (honeypot) {
+      return Response.json({ ok: true }, { headers: PRIVATE_HEADERS });
+    }
 
-  if (!EMAIL_PATTERN.test(email) || email.length > 254) {
-    return NextResponse.json({ error: "invalid" }, { status: 400 });
-  }
+    const email = String(body.email ?? "").trim();
+    if (!EMAIL_PATTERN.test(email) || email.length > 254) {
+      return Response.json(
+        { error: "invalid" },
+        { status: 400, headers: PRIVATE_HEADERS }
+      );
+    }
+    if (
+      body.consent !== true ||
+      body.consentVersion !== CONSENT_VERSION ||
+      typeof body.locale !== "string" ||
+      !LOCALES.has(body.locale)
+    ) {
+      return Response.json(
+        { error: "consent_required" },
+        { status: 400, headers: PRIVATE_HEADERS }
+      );
+    }
 
-  const provider = process.env.NEWSLETTER_PROVIDER;
-  let result: Result;
-  try {
-    if (provider === "buttondown") result = await subscribeButtondown(email);
-    else if (provider === "mailchimp") result = await subscribeMailchimp(email);
-    else result = { ok: false, status: 503 };
-  } catch {
-    result = { ok: false, status: 502 };
-  }
+    const provider = process.env.NEWSLETTER_PROVIDER;
+    let result: Result;
+    try {
+      if (provider === "buttondown") {
+        result = await subscribeButtondown(email);
+      } else if (provider === "mailchimp") {
+        result = await subscribeMailchimp(email);
+      } else {
+        result = { ok: false, status: 503 };
+      }
+    } catch {
+      result = { ok: false, status: 502 };
+    }
 
-  if (result.ok) return NextResponse.json({ ok: true });
-  return NextResponse.json({ error: "unavailable" }, { status: result.status });
+    if (result.ok) {
+      return Response.json({ ok: true }, { headers: PRIVATE_HEADERS });
+    }
+    return Response.json(
+      { error: "unavailable" },
+      { status: result.status, headers: PRIVATE_HEADERS }
+    );
+  });
 }

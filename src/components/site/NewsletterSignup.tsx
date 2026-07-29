@@ -36,7 +36,12 @@ export function NewsletterSignup({ locale, dict }: { locale: Locale; dict: Dicti
       const response = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({
+          email: email.trim(),
+          consent: true,
+          consentVersion: "newsletter-v1",
+          locale,
+        }),
       });
       if (response.ok) {
         setState("success");

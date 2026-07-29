@@ -143,6 +143,7 @@ function FooterGroup({
 }
 
 function isNewsletterConfigured(): boolean {
+  if (process.env.NEWSLETTER_ENABLED !== "true") return false;
   if (process.env.NEWSLETTER_PROVIDER === "buttondown") {
     return Boolean(process.env.BUTTONDOWN_API_KEY);
   }

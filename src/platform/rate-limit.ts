@@ -43,6 +43,12 @@ export const EVENT_REGISTRATION_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 15 * 60 * 1000,
 };
 
+export const NEWSLETTER_SUBSCRIBE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "newsletter.subscribe",
+  limit: 5,
+  windowMs: 60 * 60 * 1000,
+};
+
 export const GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
   scope: "governance.privileged-write",
   limit: 60,

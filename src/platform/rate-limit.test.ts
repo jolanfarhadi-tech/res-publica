@@ -11,6 +11,7 @@ import * as coreSchema from "../persistence/schema";
 import { rateLimitBuckets } from "../persistence/schema";
 import {
   GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT,
+  NEWSLETTER_SUBSCRIBE_RATE_LIMIT,
   PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT,
   consumeRateLimit,
   rejectRateLimitedRequest,
@@ -47,6 +48,11 @@ describe("shared PostgreSQL rate limiting", () => {
       scope: "publishing.privileged-write",
       limit: 60,
       windowMs: 900_000,
+    });
+    expect(NEWSLETTER_SUBSCRIBE_RATE_LIMIT).toEqual({
+      scope: "newsletter.subscribe",
+      limit: 5,
+      windowMs: 3_600_000,
     });
   });
 
