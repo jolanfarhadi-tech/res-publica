@@ -4,10 +4,11 @@ import { createSessionToken, hashSecret } from "../../../../auth/crypto";
 import { finishOidcFlow } from "../../../../auth/oidc";
 import { getAuthRuntime } from "../../../../auth/runtime";
 import { consumeAuthFlow, createAuthenticatedSession, findAuthIdentity } from "../../../../auth/store";
+import { withRequestContext } from "../../../../platform/request-context";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+async function handleCallback(request: Request) {
   const runtime = getAuthRuntime();
   if (!runtime) return Response.json({ error: "authentication_not_configured" }, { status: 503 });
   const callbackUrl = new URL(request.url);
@@ -48,4 +49,8 @@ export async function GET(request: Request) {
   } catch {
     return Response.json({ error: "authentication_callback_failed" }, { status: 400 });
   }
+}
+
+export function GET(request: Request) {
+  return withRequestContext(request, () => handleCallback(request));
 }

@@ -3,10 +3,11 @@ import { createActorResolver, SESSION_COOKIE_NAME } from "../../../../auth/actor
 import { getAuthRuntime } from "../../../../auth/runtime";
 import { rejectUntrustedWriteRequest } from "../../../../auth/request-security";
 import { revokeAuthenticatedSession } from "../../../../auth/store";
+import { withRequestContext } from "../../../../platform/request-context";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request: Request) {
+async function handleLogout(request: Request) {
   const rejection = rejectUntrustedWriteRequest(request);
   if (rejection) return rejection;
   const runtime = getAuthRuntime();
@@ -20,4 +21,8 @@ export async function POST(request: Request) {
     `${SESSION_COOKIE_NAME}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
   );
   return response;
+}
+
+export function POST(request: Request) {
+  return withRequestContext(request, () => handleLogout(request));
 }

@@ -1,5 +1,19 @@
 # Module: Identity, Authentication & Authorization
 
+## Incremental implementation — request diagnostics, 2026-07-29
+
+The four auth routes now add a server-generated `X-Request-ID` through the
+shared `src/platform/request-context.ts` boundary. Existing status codes,
+response bodies, redirects, secure cookies, PKCE/state/nonce handling, session
+resolution, and trusted-write enforcement remain unchanged. Uncaught failures
+fail closed with a stable `500`; the structured operational event records no
+exception message, query value, token, identity, or profile payload.
+
+Vercel Production contains all required OIDC variable names in the correct
+`res-publica` project. Values were not revealed. The Auth0 management session
+is not authenticated, and the live provider still reports a callback mismatch,
+so Production login remains externally blocked.
+
 ## Purpose
 
 Session/identity resolution and a shared, capability-based authorization primitive used across governance domains (publishing, HARM governance). Evidence: `architecture/adr/ADR-027-identity-authentication-authorization.md` (defines identity/session/auth boundaries); `src/auth/` directory (implementation).

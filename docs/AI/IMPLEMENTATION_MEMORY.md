@@ -1,5 +1,13 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — shared request context
+
+`src/platform/request-context.ts` owns server-generated correlation IDs and the
+minimal uncaught-route failure boundary. Auth login, callback, session, and
+logout compose through it without moving OIDC, session, actor, or authorization
+logic out of their existing owners. Callers cannot choose the logged request
+ID, and logging intentionally excludes URL query strings and exception detail.
+
 ## Incremental implementation — public module-registry restriction
 
 On branch `codex/platform-phase-1`, the internal ADR-003 manifest registry is

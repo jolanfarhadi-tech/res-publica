@@ -7,12 +7,18 @@ describe("authentication routes fail closed", () => {
   it("does not invent authentication when provider configuration is absent", async () => {
     const response = await login(new Request("https://res-publica.org/api/auth/login"));
     expect(response.status).toBe(503);
+    expect(response.headers.get("x-request-id")).toMatch(
+      /^[0-9a-f-]{36}$/
+    );
     await expect(response.json()).resolves.toEqual({ error: "authentication_not_configured" });
   });
 
   it("keeps anonymous UI operational when authentication is not configured", async () => {
     const response = await session(new Request("https://res-publica.org/api/auth/session"));
     expect(response.status).toBe(200);
+    expect(response.headers.get("x-request-id")).toMatch(
+      /^[0-9a-f-]{36}$/
+    );
     await expect(response.json()).resolves.toEqual({ authenticated: false, available: false });
   });
 
@@ -22,6 +28,9 @@ describe("authentication routes fail closed", () => {
       headers: { origin: "https://attacker.example" },
     }));
     expect(response.status).toBe(403);
+    expect(response.headers.get("x-request-id")).toMatch(
+      /^[0-9a-f-]{36}$/
+    );
   });
 
   it("rejects logout without browser same-origin evidence", async () => {

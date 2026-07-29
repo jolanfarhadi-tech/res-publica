@@ -9,7 +9,7 @@ Production activation.
 
 | Gate | Current evidence | State | Blocks |
 |---|---|---|---|
-| OIDC callback configuration | Production Auth0 currently reports callback mismatch | Open | Login and authenticated operations |
+| OIDC callback configuration | Correct Vercel project has all required OIDC variable names; Production Auth0 reports callback mismatch; management dashboard access is not authenticated | Open | Login and authenticated operations |
 | Identity invitation/provisioning ownership | No approved operational workflow found | Open | External user onboarding |
 | Auth0 MFA plan | ADR requires MFA for sensitive capabilities; Production policy not verified | Open | Admin, Governance, Publishing operations |
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
@@ -47,4 +47,3 @@ Production activation.
 6. Accepted ADRs take precedence over product-memory aspirations. Where an ADR
    explicitly excludes a mutation or disclosure, implementation stops at that
    boundary until a new accepted decision exists.
-

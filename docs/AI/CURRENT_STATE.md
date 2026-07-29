@@ -1,5 +1,26 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — authentication request diagnostics
+
+**Verified 2026-07-29 on `codex/platform-phase-1` after `7e75667`.**
+All four authentication routes now use a shared request context that generates
+its own UUID correlation ID, returns it as `X-Request-ID`, preserves the
+existing response body/status/cookies, and converts only uncaught failures to
+the stable `{error:"internal_error"}` contract. Structured failure logs contain
+timestamp, event, request ID, method, and pathname only; exception detail,
+query values, tokens, and profile data are excluded.
+
+Focused tests pass 8/8; full suite 38 files / 194 tests; structure, lint,
+typecheck, `db:check`, `db:check:fresh` (12 migrations / 53 tables), and the
+99-page Production build pass. No persistence or OIDC semantics changed.
+
+Authenticated Vercel inspection confirms the correct `res-publica` project has
+`SESSION_SECRET`, `DATABASE_URL`, `OIDC_REDIRECT_URI`, `OIDC_CLIENT_ID`,
+`OIDC_ISSUER`, `OIDC_CLIENT_SECRET`, and `NEXT_PUBLIC_SITE_URL` configured for
+Production without exposing values. Auth0 management inspection is blocked by
+an unauthenticated dashboard session, and the live callback mismatch remains
+unresolved.
+
 ## Incremental update — platform implementation programme
 
 **Verified 2026-07-29 on branch `codex/platform-phase-1` at base

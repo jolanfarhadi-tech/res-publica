@@ -2,10 +2,11 @@ import { hashSecret } from "../../../../auth/crypto";
 import { beginOidcFlow } from "../../../../auth/oidc";
 import { getAuthRuntime } from "../../../../auth/runtime";
 import { saveAuthFlow } from "../../../../auth/store";
+import { withRequestContext } from "../../../../platform/request-context";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+async function handleLogin(request: Request) {
   const runtime = getAuthRuntime();
   if (!runtime) return Response.json({ error: "authentication_not_configured" }, { status: 503 });
   const requestedReturnTo = new URL(request.url).searchParams.get("returnTo") ?? "/de";
@@ -28,4 +29,8 @@ export async function GET(request: Request) {
   } catch {
     return Response.json({ error: "authentication_provider_unavailable" }, { status: 503 });
   }
+}
+
+export function GET(request: Request) {
+  return withRequestContext(request, () => handleLogin(request));
 }
