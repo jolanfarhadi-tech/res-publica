@@ -1,5 +1,15 @@
 # Open Work — Evidence-Based Register
 
+## Safe implementation programme boundary reached
+
+Phase 1–3 work that can be completed without inventing authority, activating a
+provider, changing Production, or bypassing legal/safeguarding gates is
+implemented and locally verified. Remaining work in this register requires
+owner-side configuration, credentials, provider/DPA selection, accepted
+architecture, legal approval, named responsibility, or Production migration
+authorization. Advanced capabilities remain absent or server-disabled rather
+than represented as operational.
+
 ### OPEN-017 — Newsletter activation remains externally gated
 
 **Status:** Default-deny server activation, explicit versioned consent, trusted

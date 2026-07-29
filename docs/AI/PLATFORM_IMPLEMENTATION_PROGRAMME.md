@@ -2,7 +2,22 @@
 
 Status: Active implementation programme  
 Base commit: `6805f787e5525267496ef11db24c6db288f2b535`  
-Implementation branch: `codex/platform-phase-1`
+Current implementation branch: `codex/platform-phase-3`
+
+## Incremental programme status — 2026-07-29
+
+- Phase 1 safe engineering is complete. Remaining items are external
+  Production migration, Auth0/MFA, legal, restore, and named-owner gates.
+- Phase 2 safe backend slices are complete: protected self-Dashboard, bounded
+  Publishing workspace, governed notification-delivery foundation, and
+  confirmed default-disabled Analytics/provider behavior.
+- Phase 3 reachable-surface hardening is complete: HARM writes and newsletter
+  collection are independently server-disabled by default; external AI,
+  Knowledge Graph, Community, CRM, Analytics ingestion, media/uploads,
+  programme operations, impact operations, and unrestricted exports have no
+  HTTP activation path.
+- No Production environment, external provider, migration, deployment, or
+  legal gate was changed by this programme run.
 
 This programme converts the approved three-phase mandate into bounded,
 reviewable vertical slices. It does not replace accepted ADRs, constitutional
@@ -232,4 +247,3 @@ git diff --check
 
 Browser verification covers DE/EN/FA, Persian RTL, keyboard behavior, protected
 failure states, and the relevant Production route after deployment.
-

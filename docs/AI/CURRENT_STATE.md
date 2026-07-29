@@ -1,5 +1,25 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Phase 3 server-surface audit
+
+**Verified 2026-07-29 on `codex/platform-phase-3` after `363ce6e`.**
+The complete `src/app/api` inventory contains no routes for external AI,
+Knowledge Graph, Community, CRM, Analytics, media/uploads, programme
+applications, or impact operations. Their module manifests remain internal
+architecture metadata and do not make those capabilities operational. The AI
+Layer has only its deterministic local provider and no external fetch path.
+
+The only sensitive Phase 3 HTTP surface is Governance/HARM, whose writes are
+now server-disabled by default. Newsletter collection is independently hidden
+and server-disabled. No upload parser, object-store client, analytics ingestion
+path, unrestricted export, automated decision, public profile/directory, or
+auto-publication worker exists.
+
+Further Phase 3 activation is not safe engineering work without the specific
+provider, legal, safeguarding, retention, authority, and owner approvals in
+`SECURITY_LEGAL_GATE_REGISTER.md`. No placeholder implementation was added to
+simulate those approvals.
+
 ## Incremental update — explicit newsletter activation and consent gate
 
 **Verified 2026-07-29 on `codex/platform-phase-2` after `4bcf857`.**
