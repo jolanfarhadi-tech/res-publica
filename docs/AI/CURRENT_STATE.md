@@ -1,5 +1,26 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — disabled-by-default notification delivery
+
+**Verified 2026-07-29 on `codex/platform-phase-2` after `0b97138`.**
+The canonical Notification entity now has an internal delivery service with a
+provider interface, a non-delivering default adapter, bounded retries,
+deterministic idempotency keys, and durable attempt evidence. Event email
+templates require an active `event-pii` ConsentRecord before the recipient
+address is passed to an enabled provider. Recipient addresses are not written
+to delivery-attempt records, logs, or error codes.
+
+Migration `0013_notification-delivery-attempts.sql` adds one append-oriented
+attempt table with per-notification attempt uniqueness, provider idempotency
+uniqueness, a restrictive Notification foreign key, and conditional runtime
+permissions. No provider, background worker, public route, or real delivery is
+activated.
+
+Focused verification passes 1 file / 5 tests; the full suite passes 48 files /
+231 tests. Structure, lint, typecheck, `git diff --check`, `db:check`,
+`db:check:fresh` (14 migrations / 55 tables), and the 102-page Production
+build pass.
+
 ## Incremental update — protected member Dashboard
 
 **Verified 2026-07-29 on `codex/platform-phase-2` after `6f49ce8`.**

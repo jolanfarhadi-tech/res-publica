@@ -1,5 +1,16 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-014 — Notification provider activation remains externally gated
+
+**Status:** Delivery persistence, consent checks, idempotency, retries, and the
+non-delivering adapter are implemented and locally verified. Real delivery is
+intentionally disabled.
+
+Activation requires an approved provider and DPA, credentials supplied outside
+Git/chat, approved template content and legal basis, an operational worker
+schedule, and authorization to apply migrations 0012–0013 to Production. No
+public endpoint or provider was activated by the implementation slice.
+
 ### OPEN-013 — Resolved locally: protected self-facing Dashboard
 
 **Status:** Implemented and fully locally verified on

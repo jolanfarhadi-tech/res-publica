@@ -1,5 +1,20 @@
 # Module: Persistence
 
+## Incremental implementation — notification delivery attempts, 2026-07-29
+
+Migration `0013_notification-delivery-attempts.sql` adds one
+`notification_delivery_attempts` table beneath the canonical Notification
+entity. It records provider, deterministic idempotency key, bounded attempt
+number, state, retryability, non-sensitive error code, optional provider
+message reference, and timestamps. It does not store the recipient address or
+message body.
+
+Unique constraints prevent duplicate attempt numbers per Notification and
+duplicate idempotency keys. The Notification foreign key is restrictive, and
+the verified runtime role receives only SELECT/INSERT/UPDATE. Local
+verification applies 14 migrations and creates 55 tables. Migration 0013 has
+not been applied to Production.
+
 ## Incremental implementation — shared rate-limit buckets, 2026-07-29
 
 Migration `0012_platform-rate-limits.sql` adds the Shared Platform Services

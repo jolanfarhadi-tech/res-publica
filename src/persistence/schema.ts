@@ -90,6 +90,45 @@ export const notifications = pgTable(
   (table) => [index("notifications_recipient_idx").on(table.recipientPersonId)]
 );
 
+export const notificationDeliveryAttempts = pgTable(
+  "notification_delivery_attempts",
+  {
+    id: text("id").primaryKey(),
+    notificationId: text("notification_id")
+      .notNull()
+      .references(() => notifications.id, { onDelete: "restrict" }),
+    attemptNumber: integer("attempt_number").notNull(),
+    provider: text("provider").notNull(),
+    idempotencyKey: text("idempotency_key").notNull(),
+    status: text("status", {
+      enum: ["started", "sent", "failed"],
+    }).notNull(),
+    retryable: boolean("retryable"),
+    providerMessageId: text("provider_message_id"),
+    errorCode: text("error_code"),
+    startedAt: timestamp("started_at", {
+      withTimezone: true,
+      mode: "date",
+    }).notNull(),
+    completedAt: timestamp("completed_at", {
+      withTimezone: true,
+      mode: "date",
+    }),
+  },
+  (table) => [
+    uniqueIndex("notification_delivery_attempts_notification_number_uq").on(
+      table.notificationId,
+      table.attemptNumber
+    ),
+    uniqueIndex("notification_delivery_attempts_idempotency_uq").on(
+      table.idempotencyKey
+    ),
+    index("notification_delivery_attempts_notification_idx").on(
+      table.notificationId
+    ),
+  ]
+);
+
 export const auditLog = pgTable(
   "audit_log",
   {
@@ -199,6 +238,7 @@ export type PersistenceSchema = {
   payments: typeof payments;
   organizations: typeof organizations;
   notifications: typeof notifications;
+  notificationDeliveryAttempts: typeof notificationDeliveryAttempts;
   auditLog: typeof auditLog;
   authIdentities: typeof authIdentities;
   authSessions: typeof authSessions;
