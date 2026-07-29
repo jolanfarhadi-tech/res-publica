@@ -1,5 +1,14 @@
 # Module: Events
 
+## Incremental integration — self-facing Dashboard, 2026-07-29
+
+The protected Dashboard now consumes the authenticated actor's own event
+registration history and joined public event details as a read-only
+projection. It does not change registration, cancellation, capacity,
+waitlisting, promotion, notification, or audit behavior. Registration actions
+are shown only when the actor currently holds a valid `events.register`
+capability.
+
 ## Incremental implementation — owner cancellation, 2026-07-29
 
 `DELETE /api/events/registration` now cancels the session-derived actor's own
@@ -76,12 +85,13 @@ Integration pattern (README): `registration.ts` writes real `domain/audit-log` a
 
 **LOCALLY_VERIFIED, NOT YET PUSHED OR DEPLOYED.** Registration, cancellation,
 capacity, waitlist promotion, owner authorization, notification persistence,
-and atomic audit evidence are implemented. Dashboard/CRM/Analytics consumption
-remains separately deferred.
+and atomic audit evidence are implemented. Self-facing Dashboard consumption
+is implemented locally; CRM/Analytics consumption remains separately deferred.
 
 ## Open work
 
-Dashboard/CRM/Analytics consumption of Events data — deferred per the module's own README, not independently confirmed as still-pending or already-done this session (those three modules do exist with source and tests; whether they specifically consume Events output was not checked).
+CRM/Analytics consumption of Events data remains deferred. The protected
+Dashboard now consumes only the session actor's registration history.
 
 ## Do not redo
 

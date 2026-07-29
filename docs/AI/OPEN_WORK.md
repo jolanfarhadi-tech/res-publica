@@ -1,5 +1,17 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-013 — Resolved locally: protected self-facing Dashboard
+
+**Status:** Implemented and fully locally verified on
+`codex/platform-phase-2`; not pushed or deployed.
+
+The Dashboard composes only the authenticated actor's account assurance,
+Member Profile, consent receipts, event registrations, notifications, and
+capability-derived actions. Consent mutation remains unavailable pending
+ADR-035 and legal approval. Production activation remains subject to the OIDC,
+MFA, migration, legal, and operational gates in
+`SECURITY_LEGAL_GATE_REGISTER.md`.
+
 ## Active platform implementation programme
 
 ### OPEN-012 — Phase 1 operational foundation

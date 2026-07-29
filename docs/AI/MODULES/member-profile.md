@@ -1,5 +1,13 @@
 # Module: Member Profile
 
+## Incremental integration — protected Dashboard, 2026-07-29
+
+The protected Dashboard reuses `getSelfMemberProfile` as its membership
+projection and links to the existing localized Profile page. It does not
+change the Profile API, visibility tiers, status semantics, or read-only
+self-service boundary. The Dashboard actor is derived from the authenticated
+session and cannot select another person.
+
 ## Purpose
 
 A read-only, self-facing transparency/participation interface — "the member's personal operating system," answering only "what should I do next?" **Explicitly not a governance decision interface.** Evidence: `docs/source/projects/MEMBER_PROFILE.md` (read in full, prior session), §"Purpose", §"Member Profile Visibility" (Architectural Rule stated four times).

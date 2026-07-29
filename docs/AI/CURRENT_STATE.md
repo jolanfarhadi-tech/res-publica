@@ -1,5 +1,28 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — protected member Dashboard
+
+**Verified 2026-07-29 on `codex/platform-phase-2` after `6f49ce8`.**
+The new localized `/de|en|fa/dashboard` experience composes a private,
+self-only account projection from the authenticated session actor. It includes
+account assurance, the existing read-only Member Profile projection, the
+actor's own versioned consent receipts, event registrations, notifications,
+and capability-derived links. It never accepts a person identifier and does
+not load another person's records or internal Governance review data.
+
+`GET /api/dashboard` is dynamic, private, non-cacheable, correlated with a
+server-generated request ID, and fails closed with `401` or `503`. The
+Dashboard does not replace `src/modules/dashboard`, alter the Member Profile
+contract, expose raw authorization grants, or introduce consent mutation while
+ADR-035 remains absent. No migration was created.
+
+Focused verification passes 3 files / 7 tests; the full suite passes 47 files /
+226 tests. Structure, lint, typecheck, `git diff --check`, `db:check`,
+`db:check:fresh` (13 migrations / 54 tables), and the 102-page Production
+build pass. Production-mode browser checks confirm correct DE/EN/FA metadata,
+Persian RTL, no horizontal overflow, noindex/nofollow, and truthful unavailable
+states without a configured local protected runtime.
+
 ## Incremental update — privileged write request protection
 
 **Verified 2026-07-29 on `codex/platform-phase-1` after `a4f7dc3`.**
