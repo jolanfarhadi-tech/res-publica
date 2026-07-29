@@ -2,6 +2,10 @@ import { hashSecret } from "../../../../auth/crypto";
 import { beginOidcFlow } from "../../../../auth/oidc";
 import { getAuthRuntime } from "../../../../auth/runtime";
 import { saveAuthFlow } from "../../../../auth/store";
+import {
+  AUTH_LOGIN_RATE_LIMIT,
+  rejectRateLimitedRequest,
+} from "../../../../platform/rate-limit";
 import { withRequestContext } from "../../../../platform/request-context";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +13,12 @@ export const dynamic = "force-dynamic";
 async function handleLogin(request: Request) {
   const runtime = getAuthRuntime();
   if (!runtime) return Response.json({ error: "authentication_not_configured" }, { status: 503 });
+  const rateLimitRejection = await rejectRateLimitedRequest(
+    runtime.db,
+    request,
+    AUTH_LOGIN_RATE_LIMIT
+  );
+  if (rateLimitRejection) return rateLimitRejection;
   const requestedReturnTo = new URL(request.url).searchParams.get("returnTo") ?? "/de";
   const returnTo = requestedReturnTo.startsWith("/") && !requestedReturnTo.startsWith("//")
     ? requestedReturnTo

@@ -1,5 +1,23 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — PostgreSQL-backed authentication rate limiting
+
+**Verified 2026-07-29 on `codex/platform-phase-1` after `bad0283`.**
+Authentication initiation now consumes an atomic shared PostgreSQL rate-limit
+bucket before creating an OIDC flow. The identifier comes from Vercel's
+forwarded client address and is stored only as a scope-separated HMAC using
+`SESSION_SECRET`; raw addresses, return targets, and query strings are not
+persisted. Missing protection configuration fails closed. Limit responses are
+private/non-cacheable and include retry metadata.
+
+Migration `0012_platform-rate-limits.sql` adds only
+`rate_limit_buckets`, its expiry index, and a conditional DML grant for the
+verified `res_publica_runtime` role. Focused tests pass 9/9, including concurrent
+increments, window reset, redaction, retry behavior, and fail-closed
+configuration. Full suite: 40 files / 199 tests. Structure, lint, typecheck,
+`db:check`, `db:check:fresh` (13 migrations / 54 tables), and the 99-page
+Production build pass. The migration has not been run against Production.
+
 ## Incremental update — security response headers
 
 **Verified 2026-07-29 on `codex/platform-phase-1` after `240c164`.**

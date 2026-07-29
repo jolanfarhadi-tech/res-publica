@@ -1,6 +1,7 @@
 import {
   boolean,
   index,
+  integer,
   jsonb,
   numeric,
   pgTable,
@@ -154,6 +155,27 @@ export const authFlows = pgTable(
   (table) => [index("auth_flows_expires_idx").on(table.expiresAt)]
 );
 
+export const rateLimitBuckets = pgTable(
+  "rate_limit_buckets",
+  {
+    scope: text("scope").notNull(),
+    identifierHash: text("identifier_hash").notNull(),
+    windowStartedAt: timestamp("window_started_at", {
+      withTimezone: true,
+      mode: "date",
+    }).notNull(),
+    expiresAt: timestamp("expires_at", {
+      withTimezone: true,
+      mode: "date",
+    }).notNull(),
+    requestCount: integer("request_count").notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.scope, table.identifierHash] }),
+    index("rate_limit_buckets_expires_idx").on(table.expiresAt),
+  ]
+);
+
 export const authorizationGrants = pgTable(
   "authorization_grants",
   {
@@ -181,5 +203,6 @@ export type PersistenceSchema = {
   authIdentities: typeof authIdentities;
   authSessions: typeof authSessions;
   authFlows: typeof authFlows;
+  rateLimitBuckets: typeof rateLimitBuckets;
   authorizationGrants: typeof authorizationGrants;
 };

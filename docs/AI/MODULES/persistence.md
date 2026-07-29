@@ -1,5 +1,18 @@
 # Module: Persistence
 
+## Incremental implementation — shared rate-limit buckets, 2026-07-29
+
+Migration `0012_platform-rate-limits.sql` adds the Shared Platform Services
+table `rate_limit_buckets` with a composite `(scope, identifier_hash)` primary
+key, expiry index, atomic PostgreSQL upsert semantics, and a conditional DML
+grant for `res_publica_runtime`. It is not a canonical business entity and
+contains no raw client address. Buckets reset atomically and stale expired rows
+are removed after a bounded grace period.
+
+Local verification applies 13 migrations and creates 54 tables. The migration
+has not been applied to Production and requires the normal snapshot,
+authorization, TLS, and post-migration permission checks.
+
 ## Purpose
 
 The shared Drizzle/Postgres persistence layer underlying every domain and per-module table in the repository, plus the offline-first local-dev database strategy. Evidence: `src/persistence/` directory (grepped in full this session); `architecture/adr/ADR-010-offline-first-development.md`.

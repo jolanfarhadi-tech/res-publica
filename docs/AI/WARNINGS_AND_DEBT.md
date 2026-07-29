@@ -1,5 +1,17 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-015 — Drizzle snapshot history skipped migrations 0008–0011
+
+- **Evidence:** generating migration 0012 from the latest stored snapshot
+  initially reproduced already-applied HARM and Publishing schema changes.
+- **Impact:** unreviewed future generation can duplicate historical DDL even
+  when `db:check` passes.
+- **Severity:** **High / migration-generation hazard**.
+- **Safe handling:** inspect every generated migration against the immediately
+  preceding SQL chain. Migration 0012 was reduced to its single intended table
+  and index; no historical migration was changed. The new 0012 snapshot records
+  the current complete schema for subsequent generation.
+
 ### WARN-013 — Platform activation gates are not interchangeable with code completion
 
 - **Evidence:** `SECURITY_LEGAL_GATE_REGISTER.md`; ADR-027 requires a real

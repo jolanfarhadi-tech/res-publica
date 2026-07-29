@@ -1,5 +1,18 @@
 # Module: Identity, Authentication & Authorization
 
+## Incremental implementation — shared login rate limiting, 2026-07-29
+
+OIDC login initiation is protected by the shared PostgreSQL rate limiter before
+an authorization flow is persisted. The policy permits 10 attempts per
+15-minute window per pseudonymized Vercel client address. The database stores
+only a scope-separated HMAC, count, and window timestamps; no raw address,
+return target, token, or query string is stored. Missing `SESSION_SECRET` fails
+closed when authentication is otherwise configured.
+
+The limiter does not replace Auth0 controls, MFA, session expiry, capability
+authorization, or trusted-write checks. The live Auth0 callback configuration
+remains an external blocker.
+
 ## Incremental implementation — request diagnostics, 2026-07-29
 
 The four auth routes now add a server-generated `X-Request-ID` through the
