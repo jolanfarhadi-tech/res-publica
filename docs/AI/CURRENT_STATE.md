@@ -1,5 +1,19 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — security response headers
+
+**Verified 2026-07-29 on `codex/platform-phase-1` after `240c164`.**
+The global Next.js response policy now adds a compatibility-safe CSP
+(`object-src`, `base-uri`, `frame-ancestors`, `form-action`, and
+`upgrade-insecure-requests`), one-year host-scoped HSTS without preload or an
+unverified subdomain commitment, and cross-origin opener/resource policies.
+Existing content-type, framing, referrer, and permissions policies remain.
+
+Focused header test 1/1; full suite 39 files / 195 tests; structure, lint,
+typecheck, `db:check`, `db:check:fresh` (12 migrations / 53 tables), and the
+99-page Production build pass. Production-edge presence must be verified only
+after deployment.
+
 ## Incremental update — authentication request diagnostics
 
 **Verified 2026-07-29 on `codex/platform-phase-1` after `7e75667`.**

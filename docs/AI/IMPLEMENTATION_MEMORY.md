@@ -1,5 +1,14 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — browser security policy
+
+`next.config.ts` applies defense-in-depth headers to every route. The CSP is a
+compatible structural policy, not a claim of nonce-based strict CSP: it blocks
+plugins/objects, hostile base URLs, cross-origin framing, and cross-origin form
+submission without disabling Next.js bootstrap scripts. HSTS is host-scoped
+for one year; `preload` and `includeSubDomains` remain intentionally absent
+until their operational consequences are explicitly approved.
+
 ## Incremental implementation — shared request context
 
 `src/platform/request-context.ts` owns server-generated correlation IDs and the

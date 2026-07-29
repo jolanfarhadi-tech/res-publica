@@ -24,6 +24,7 @@ Production activation.
 | Incident-response ownership | No verified accountable Production owner/runbook | Open | Operational launch assurance |
 | Production administrator responsibility | No verified named operational responsibility | Open | Privileged administration |
 | Security logging/retention | Canonical audit exists; operational security policy absent | Open | Monitoring and incident evidence |
+| Browser security headers | CSP/HSTS/cross-origin policy implemented and locally tested; Production edge not yet verified | Pending deployment verification | Production security assurance |
 | Distributed rate-limit store | No configured shared provider; PostgreSQL option under evaluation | Open | Abuse-resistant writes |
 | Transactional email provider | No activated approved provider | Intentionally disabled | Real delivery |
 | Newsletter legal basis/provider | Optional UI exists; provider unavailable | Intentionally disabled | Newsletter activation |
