@@ -1,5 +1,20 @@
 # Module: Events
 
+## Incremental implementation — owner cancellation, 2026-07-29
+
+`DELETE /api/events/registration` now cancels the session-derived actor's own
+active registration under the existing event-targeted `events.register`
+capability. The application service locks the event and performs cancellation,
+waitlist cleanup, valid earliest-waitlist promotion, pending-notification
+persistence, and the canonical `events.registration.cancelled` audit append
+in one transaction. An actor cannot select another person or cancel an absent
+or already-cancelled registration.
+
+The existing `cancelled` registration status, waitlist table, shared
+Notification entity, and canonical AuditLog are reused; no migration or
+parallel service was introduced. Focused domain/application/route regression
+tests pass 15/15.
+
 ## Incremental implementation — registration request protection, 2026-07-29
 
 `POST /api/events/registration` now receives a server-generated request ID and
@@ -28,15 +43,24 @@ Per the README (read in full), its own stated status: *"Registration, waitlist p
 
 ## Authorization and trust boundaries
 
-Not independently verified this session — `src/application/events.ts` was not read in full. The module README documents an important non-authorization data-boundary guardrail instead (see Decisions, below).
+Registration and cancellation derive the actor from the authenticated session
+and require `{ domain: "civic", capability: "events.register", target:
+eventId }`. Cancellation selects only the active registration whose
+`personId` equals the actor. Public writes also retain trusted-origin checks,
+shared PostgreSQL rate limiting, and server-generated request IDs.
 
 ## Public interfaces
 
-`src/app/api/events/{capacity/route.ts (+route.test.ts), registration/route.ts}` (directory listing, this session; contents not individually read).
+`GET /api/events/capacity`, `POST /api/events/registration`, and
+`DELETE /api/events/registration`. Registration and cancellation share the
+same bounded route, request protection, actor resolver, and application
+service boundary.
 
 ## Verification
 
-Tests confirmed to exist: `src/modules/events/events.test.ts`, `src/app/api/events/capacity/route.test.ts`. **Not run this session.**
+Focused cancellation coverage in `src/modules/events/events.test.ts`,
+`src/application/flows.integration.test.ts`, and
+`src/app/api/events/registration/route.test.ts`: 15/15 passing.
 
 ## Decisions and rejected approaches
 
@@ -45,7 +69,10 @@ Integration pattern (README): `registration.ts` writes real `domain/audit-log` a
 
 ## Current status
 
-**REMOTE_VERIFIED**, **IMPLEMENTED_NOT_REVERIFIED**. Consumption by Dashboard/CRM/Analytics explicitly deferred per the module's own README (those modules exist in the repository with their own tests — see `INDEX.md` §"Module coverage" — but this compilation did not verify whether they actually consume Events data).
+**LOCALLY_VERIFIED, NOT YET PUSHED OR DEPLOYED.** Registration, cancellation,
+capacity, waitlist promotion, owner authorization, notification persistence,
+and atomic audit evidence are implemented. Dashboard/CRM/Analytics consumption
+remains separately deferred.
 
 ## Open work
 

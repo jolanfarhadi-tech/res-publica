@@ -1,5 +1,24 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — authenticated event cancellation
+
+**Verified 2026-07-29 on `codex/platform-phase-1` after `837a8dc`.**
+The event-registration lifecycle now exposes authenticated owner cancellation
+through `DELETE /api/events/registration`. Cancellation reuses the existing
+event-targeted `events.register` capability and never accepts a caller-supplied
+person identifier. One locked transaction changes the actor's active
+registration to `cancelled`, removes its waitlist row, promotes the earliest
+still-valid waitlisted registration when a confirmed seat opens, persists the
+pending promotion notification, and appends the canonical
+`events.registration.cancelled` audit record.
+
+No schema change was required: the existing registration status, waitlist,
+Notification, and AuditLog persistence remain authoritative. Focused
+domain/application/route tests pass 15/15; the full suite passes 41 files /
+207 tests. Structure, lint, typecheck, `db:check`, `db:check:fresh` (13
+migrations / 54 tables), `git diff --check`, and the 99-page Production build
+also pass.
+
 ## Incremental update — public authenticated write protection
 
 **Verified 2026-07-29 on `codex/platform-phase-1` after `8a3046a`.**

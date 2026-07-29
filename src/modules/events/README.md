@@ -18,4 +18,6 @@ Registration, waitlist/capacity management, event-scoped logistics Q&A, and post
 
 ## Status
 
-Registration, waitlist promotion, capacity checks, scoped Q&A, and outcome publishing implemented and tested. Dashboard/CRM/Analytics consumption deferred until those modules exist.
+Registration, owner cancellation, waitlist promotion, capacity checks, scoped
+Q&A, and outcome publishing are implemented and tested. Dashboard/CRM/Analytics
+consumption is deferred until those modules exist.

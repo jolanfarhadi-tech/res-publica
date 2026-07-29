@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   },
   rateLimitResponse: null as Response | null,
   registrations: [] as string[],
+  cancellations: [] as string[],
 }));
 
 vi.mock("../../../../auth/runtime", () => ({
@@ -39,10 +40,18 @@ vi.mock("../../../../application/events", async (importOriginal) => {
       mocks.registrations.push(eventId);
       return { status: "registered", eventId };
     },
+    cancelAuthenticatedActorEventRegistration: async (
+      _db: object,
+      _actor: object,
+      eventId: string
+    ) => {
+      mocks.cancellations.push(eventId);
+      return { status: "cancelled", eventId };
+    },
   };
 });
 
-import { POST } from "./route";
+import { DELETE, POST } from "./route";
 
 function request(eventId = "civic-dialogue-2026") {
   return new Request("https://respublica-ev.de/api/events/registration", {
@@ -61,6 +70,15 @@ describe("POST /api/events/registration", () => {
     mocks.actor = { personId: "event-participant" };
     mocks.rateLimitResponse = null;
     mocks.registrations = [];
+    mocks.cancellations = [];
+  });
+
+  it("cancels the session-derived actor's registration", async () => {
+    const response = await DELETE(request());
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
+    expect(mocks.cancellations).toEqual(["civic-dialogue-2026"]);
   });
 
   it("registers the session-derived actor through the existing application service", async () => {

@@ -41,6 +41,27 @@ export function remainingCapacity(event: Event, currentRegistrations: readonly R
   return Math.max(0, event.capacity - confirmedCount);
 }
 
+export function cancelEventRegistration(
+  registration: Registration,
+  actorPersonId: string
+): { registration: Registration; auditEntry: AuditLogEntry } {
+  if (
+    registration.personId !== actorPersonId ||
+    registration.status === "cancelled"
+  ) {
+    throw new Error("Only an active registration owner can cancel");
+  }
+
+  return {
+    registration: { ...registration, status: "cancelled" },
+    auditEntry: appendEntry({
+      actorPersonId,
+      action: "events.registration.cancelled",
+      target: registration.eventId,
+    }),
+  };
+}
+
 export function promoteFromWaitlist(
   event: Event,
   waitlist: readonly WaitlistEntry[],
@@ -49,8 +70,19 @@ export function promoteFromWaitlist(
   const eventWaitlist = waitlist.filter((w) => w.eventId === event.id).sort((a, b) => a.position - b.position);
   if (eventWaitlist.length === 0) return null;
 
-  const next = eventWaitlist[0];
-  const registration = registrations.find((r) => r.id === next.registrationId);
+  const next = eventWaitlist.find((entry) =>
+    registrations.some(
+      (registration) =>
+        registration.id === entry.registrationId &&
+        registration.status === "waitlisted"
+    )
+  );
+  if (!next) return null;
+  const registration = registrations.find(
+    (candidate) =>
+      candidate.id === next.registrationId &&
+      candidate.status === "waitlisted"
+  );
   if (!registration) return null;
 
   const promoted: Registration = { ...registration, status: "confirmed" };

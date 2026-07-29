@@ -9,10 +9,15 @@ import type { AuthenticatedActor, AuthorizationGrant } from "../auth/types";
 import type { Database } from "../persistence";
 import * as coreSchema from "../persistence/schema";
 import * as moduleSchema from "../persistence/module-schema";
-import { auditLog, consentRecords, people } from "../persistence/schema";
-import { events, members, registrations } from "../persistence/module-schema";
+import { auditLog, consentRecords, notifications, people } from "../persistence/schema";
+import { events, members, registrations, waitlistEntries } from "../persistence/module-schema";
 import { createMembership, DuplicateMembershipError } from "./membership";
-import { getEventCapacity, registerAuthenticatedActorForEvent } from "./events";
+import {
+  cancelAuthenticatedActorEventRegistration,
+  EventRegistrationNotFoundError,
+  getEventCapacity,
+  registerAuthenticatedActorForEvent,
+} from "./events";
 
 const schema = { ...coreSchema, ...moduleSchema };
 
@@ -90,6 +95,123 @@ describe("authenticated Membership and Events flows", () => {
         "membership.created",
         "events.registration",
       ]);
+    } finally {
+      await client.close();
+      await rm(directory, { recursive: true, force: true });
+    }
+  }, 30_000);
+
+  it("cancels atomically and promotes the earliest valid waitlisted registration", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "res-publica-event-cancel-"));
+    const client = new PGlite(directory);
+    const pgliteDb = drizzle({ client, schema });
+    await migrate(pgliteDb, { migrationsFolder: join(process.cwd(), "drizzle") });
+    const db = pgliteDb as unknown as Database;
+    try {
+      await db.insert(people).values([
+        {
+          id: "person-flow", name: "Confirmed", contact: { email: "confirmed@example.org" },
+          locale: "de", rtlPreference: false, createdAt: new Date(),
+        },
+        {
+          id: "person-waiting", name: "Waiting", contact: { email: "waiting@example.org" },
+          locale: "de", rtlPreference: false, createdAt: new Date(),
+        },
+      ]);
+      await db.insert(events).values({
+        id: "event-cancel", title: "Cancellation Event", location: "Frankfurt",
+        startTime: new Date("2026-08-01T10:00:00.000Z"),
+        endTime: new Date("2026-08-01T12:00:00.000Z"), capacity: 1,
+      });
+      const confirmedActor: AuthenticatedActor = {
+        personId: "person-flow", sessionId: "session-confirmed", authenticatedAt: new Date(),
+        assurance: "verified",
+        grants: [grant("events.register", "event-cancel")],
+      };
+      const waitingActor: AuthenticatedActor = {
+        personId: "person-waiting", sessionId: "session-waiting", authenticatedAt: new Date(),
+        assurance: "verified",
+        grants: [{
+          ...grant("events.register", "event-cancel"),
+          id: "grant-events-register-waiting",
+          personId: "person-waiting",
+        }],
+      };
+
+      await registerAuthenticatedActorForEvent(db, confirmedActor, "event-cancel");
+      await registerAuthenticatedActorForEvent(db, waitingActor, "event-cancel");
+      const result = await cancelAuthenticatedActorEventRegistration(
+        db,
+        confirmedActor,
+        "event-cancel"
+      );
+
+      expect(result.cancelled.status).toBe("cancelled");
+      expect(result.promoted).toMatchObject({
+        personId: "person-waiting",
+        status: "confirmed",
+      });
+      expect(await db.select().from(waitlistEntries)).toHaveLength(0);
+      expect(await db.select().from(notifications)).toEqual([
+        expect.objectContaining({
+          recipientPersonId: "person-waiting",
+          template: "waitlist-promoted",
+          status: "pending",
+        }),
+      ]);
+      expect((await db.select().from(auditLog)).map((entry) => entry.action)).toEqual([
+        "events.registration",
+        "events.registration",
+        "events.registration.cancelled",
+      ]);
+    } finally {
+      await client.close();
+      await rm(directory, { recursive: true, force: true });
+    }
+  }, 30_000);
+
+  it("cannot cancel another person's or an absent registration", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "res-publica-event-owner-"));
+    const client = new PGlite(directory);
+    const pgliteDb = drizzle({ client, schema });
+    await migrate(pgliteDb, { migrationsFolder: join(process.cwd(), "drizzle") });
+    const db = pgliteDb as unknown as Database;
+    try {
+      await db.insert(people).values([
+        {
+          id: "person-flow", name: "Owner", contact: { email: "owner@example.org" },
+          locale: "de", rtlPreference: false, createdAt: new Date(),
+        },
+        {
+          id: "person-other", name: "Other", contact: { email: "other@example.org" },
+          locale: "de", rtlPreference: false, createdAt: new Date(),
+        },
+      ]);
+      await db.insert(events).values({
+        id: "event-owner", title: "Owner Event", location: "Frankfurt",
+        startTime: new Date("2026-08-01T10:00:00.000Z"),
+        endTime: new Date("2026-08-01T12:00:00.000Z"), capacity: 1,
+      });
+      const owner: AuthenticatedActor = {
+        personId: "person-flow", sessionId: "session-owner", authenticatedAt: new Date(),
+        assurance: "verified",
+        grants: [grant("events.register", "event-owner")],
+      };
+      const other: AuthenticatedActor = {
+        personId: "person-other", sessionId: "session-other", authenticatedAt: new Date(),
+        assurance: "verified",
+        grants: [{
+          ...grant("events.register", "event-owner"),
+          id: "grant-events-register-other",
+          personId: "person-other",
+        }],
+      };
+      await registerAuthenticatedActorForEvent(db, owner, "event-owner");
+
+      await expect(
+        cancelAuthenticatedActorEventRegistration(db, other, "event-owner")
+      ).rejects.toBeInstanceOf(EventRegistrationNotFoundError);
+      expect((await db.select().from(registrations))[0].status).toBe("confirmed");
     } finally {
       await client.close();
       await rm(directory, { recursive: true, force: true });

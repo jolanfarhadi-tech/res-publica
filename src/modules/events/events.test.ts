@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { registerForEvent, remainingCapacity, promoteFromWaitlist } from "./registration";
+import {
+  cancelEventRegistration,
+  registerForEvent,
+  remainingCapacity,
+  promoteFromWaitlist,
+} from "./registration";
 import { askEventQuestion } from "./qa";
 import { publishOutcome } from "./outcomes";
 import { createLedger } from "../ai-layer/cost-governance";
@@ -40,6 +45,39 @@ describe("Registration / Waitlist / Capacity", () => {
     expect(promotion?.promoted.status).toBe("confirmed");
     expect(promotion?.promoted.personId).toBe("person-2");
     expect(promotion?.notification.template).toBe("waitlist-promoted");
+  });
+
+  it("cancels only the actor's own active registration with audit evidence", () => {
+    const event = makeEvent("evt-1", 1);
+    const registration = registerForEvent(event, "person-1", []).registration;
+
+    const cancellation = cancelEventRegistration(registration, "person-1");
+
+    expect(cancellation.registration).toMatchObject({
+      id: registration.id,
+      personId: "person-1",
+      status: "cancelled",
+    });
+    expect(cancellation.auditEntry).toMatchObject({
+      actorPersonId: "person-1",
+      action: "events.registration.cancelled",
+      target: "evt-1",
+    });
+  });
+
+  it("does not promote a cancelled waitlist registration", () => {
+    const event = makeEvent("evt-1", 1);
+    const confirmed = registerForEvent(event, "person-1", []).registration;
+    const waitlisted = registerForEvent(event, "person-2", [confirmed]);
+    const cancelled = { ...waitlisted.registration, status: "cancelled" as const };
+
+    expect(
+      promoteFromWaitlist(
+        event,
+        [waitlisted.waitlistEntry!],
+        [confirmed, cancelled]
+      )
+    ).toBeNull();
   });
 });
 

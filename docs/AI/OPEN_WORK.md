@@ -8,8 +8,14 @@
   `PLATFORM_IMPLEMENTATION_PROGRAMME.md`.
 - **Completed first slice:** anonymous `/api/platform/modules` no longer
   exposes internal or merely declarative manifest metadata.
-- **Next safe slice:** authentication configuration/provisioning verification
-  and production-safe request protection/diagnostics.
+- **Completed security slices:** authentication request diagnostics, hardened
+  response headers, and shared PostgreSQL rate limiting for login, membership
+  creation, and event registration.
+- **Completed event backend slice:** authenticated owner cancellation now
+  atomically persists cancellation, waitlist cleanup/promotion, notification,
+  and audit evidence.
+- **Still open for Events acceptance:** localized DE/EN/FA event interaction
+  states and end-to-end browser coverage against approved event content.
 - **Architecture gates:** ADR-034 permits read-only self-profile only; consent
   withdrawal/pseudonymization remains blocked by the absent ADR-035 and the
   legal gate preserved in ADR-029.
