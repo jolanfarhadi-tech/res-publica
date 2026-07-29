@@ -1,5 +1,25 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — platform implementation programme
+
+**Verified 2026-07-29 on branch `codex/platform-phase-1` at base
+`6805f787e5525267496ef11db24c6db288f2b535`.** The approved three-phase
+platform mandate is tracked in `PLATFORM_IMPLEMENTATION_PROGRAMME.md`, with
+external, architecture, security, and legal activation gates in
+`SECURITY_LEGAL_GATE_REGISTER.md`.
+
+The first Phase 1 truthfulness slice restricts anonymous
+`GET /api/platform/modules` access. ADR-003's internal build-time manifest
+registry remains unchanged, while the HTTP route now returns a private,
+non-cacheable `404` and no longer exposes declarative routes, database tables,
+dashboard contributions, AI capabilities, or internal module names.
+
+Verification: focused route test 1/1; isolated Publishing integration tests
+9/9 after a resource-contention timeout in the first parallel run; full suite
+37 files / 191 tests; structure, lint, typecheck, `db:check`,
+`db:check:fresh` (12 migrations / 53 tables), and the optimized 99-page
+Production build all pass. No migration was created.
+
 ## Incremental update — profile consent receipts
 
 **Verified 2026-07-29 on local `main` at base

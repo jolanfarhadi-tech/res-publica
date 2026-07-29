@@ -1,5 +1,21 @@
 # Open Work — Evidence-Based Register
 
+## Active platform implementation programme
+
+### OPEN-012 — Phase 1 operational foundation
+
+- **Task:** execute the bounded Phase 1 slices in
+  `PLATFORM_IMPLEMENTATION_PROGRAMME.md`.
+- **Completed first slice:** anonymous `/api/platform/modules` no longer
+  exposes internal or merely declarative manifest metadata.
+- **Next safe slice:** authentication configuration/provisioning verification
+  and production-safe request protection/diagnostics.
+- **Architecture gates:** ADR-034 permits read-only self-profile only; consent
+  withdrawal/pseudonymization remains blocked by the absent ADR-035 and the
+  legal gate preserved in ADR-029.
+- **External blocker:** Auth0 currently rejects the configured Production
+  redirect URI with `Callback URL mismatch`.
+
 *Only items with direct evidence of being unfinished. Aspirational ideas and reserved ADRs are listed separately (§"Reserved decisions") and are explicitly **not** active engineering tasks.*
 
 ---

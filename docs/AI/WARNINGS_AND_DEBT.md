@@ -1,5 +1,29 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-013 — Platform activation gates are not interchangeable with code completion
+
+- **Evidence:** `SECURITY_LEGAL_GATE_REGISTER.md`; ADR-027 requires a real
+  DPIA/security review before Production identity processing, ADR-029 keeps
+  AuditLog pseudonymization legally gated, and ADR-034 authorizes only a
+  read-only self-profile.
+- **Impact:** implementing profile mutation or consent withdrawal without an
+  accepted policy would cross explicit architecture and legal boundaries.
+- **Severity:** **High / activation and architecture gate**.
+- **Safe handling:** implement independent Phase 1 work, keep blocked
+  capabilities unavailable, and do not represent draft legal material as
+  approval.
+
+### WARN-014 — Production Auth0 callback mismatch
+
+- **Evidence:** the live `/api/auth/login` flow reaches the configured Auth0
+  application but Auth0 returns `Callback URL mismatch` for
+  `https://respublica-ev.de/api/auth/callback`.
+- **Impact:** login, protected membership/profile operations, and controlled
+  administrator verification are unavailable.
+- **Severity:** **High / external configuration blocker**.
+- **Safe handling:** correct the Allowed Callback URL in the existing Auth0
+  application; do not weaken OIDC or substitute caller-provided identity.
+
 *Only verified risks with evidence. Being "incomplete" alone is not listed here unless it carries a specific, evidenced risk — see `OPEN_WORK.md` for incompleteness that is simply unfinished work.*
 
 ---

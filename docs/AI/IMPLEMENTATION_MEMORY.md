@@ -1,5 +1,15 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — public module-registry restriction
+
+On branch `codex/platform-phase-1`, the internal ADR-003 manifest registry is
+still bootstrapped through `src/modules/bootstrap.ts`. The anonymous
+`GET /api/platform/modules` route no longer serializes that internal metadata.
+It fails closed with `404`, `{error:"not_found"}`, and
+`Cache-Control: private, no-store, max-age=0`. This preserves internal module
+composition while avoiding publication of declarative, unavailable routes and
+database ownership details.
+
 *How the code is currently shaped. Complements `ARCHITECTURE_MEMORY.md` (why); see `MODULES/*.md` for per-module detail. Source paths only — no large code blocks reproduced here.*
 
 ---
