@@ -1,5 +1,19 @@
 # Module: Publishing
 
+## Incremental implementation — privileged write protection, 2026-07-29
+
+`POST`/`DELETE /api/publishing/grants` and
+`POST /api/publishing/workflow` now use the shared privileged-write boundary
+with a distinct `publishing.privileged-write` PostgreSQL scope (60 attempts
+per fifteen minutes per pseudonymized client). Protection executes before body
+parsing, actor resolution, and application persistence; correlated `429`
+responses preserve retry metadata.
+
+Publishing application/domain services are unchanged. ADR-036 capability
+scope, MFA, role delegation, separation of duties, exact draft/version
+moderation, provenance, atomic AuditLog, human sign-off, `commitHash: null` at
+readiness, and no-auto-publish semantics remain in force.
+
 ## Purpose
 
 The back-stage editorial pipeline: intake → moderation → AI-assisted draft authoring → translation handoff → human sign-off → publish, kept strictly separate from the public site so AI assistance never bypasses a named human's approval. Evidence: `src/modules/publishing/README.md` (read in full, this session).

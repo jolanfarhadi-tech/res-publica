@@ -1,8 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ runtime: null as null | { db: object }, actor: null as null | { personId: string }, calls: [] as unknown[] }));
+const mocks = vi.hoisted(() => ({
+  runtime: null as null | { db: object },
+  actor: null as null | { personId: string },
+  calls: [] as unknown[],
+  rateLimitResponse: null as Response | null,
+}));
 vi.mock("../../../../auth/runtime", () => ({ getAuthRuntime: () => mocks.runtime }));
 vi.mock("../../../../auth/actor-resolver", () => ({ createActorResolver: () => ({ resolve: async () => mocks.actor }) }));
+vi.mock("../../../../platform/rate-limit", () => ({
+  PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT: {
+    scope: "publishing.privileged-write",
+    limit: 60,
+    windowMs: 900_000,
+  },
+  rejectRateLimitedRequest: async () => mocks.rateLimitResponse,
+}));
 vi.mock("../../../../application/publishing", async (importOriginal) => {
   const original = await importOriginal<typeof import("../../../../application/publishing")>();
   return { ...original, createSubmission: async (_db: object, actor: unknown, input: unknown) => {
@@ -20,11 +33,17 @@ function request(body: object, trusted = true) {
 }
 
 describe("POST /api/publishing/workflow", () => {
-  beforeEach(() => { mocks.runtime = { db: {} }; mocks.actor = { personId: "session-editor" }; mocks.calls = []; });
+  beforeEach(() => {
+    mocks.runtime = { db: {} };
+    mocks.actor = { personId: "session-editor" };
+    mocks.calls = [];
+    mocks.rateLimitResponse = null;
+  });
 
   it("rejects untrusted writes before resolving protected dependencies", async () => {
     const response = await POST(request({ action: "create-submission" }, false));
     expect(response.status).toBe(403);
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
     await expect(response.json()).resolves.toEqual({ error: "untrusted_origin" });
   });
 
@@ -32,6 +51,28 @@ describe("POST /api/publishing/workflow", () => {
     mocks.runtime = null;
     const response = await POST(request({ action: "create-submission" }));
     expect(response.status).toBe(503);
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
+  });
+
+  it("rejects an exceeded limit before actor resolution or persistence", async () => {
+    mocks.rateLimitResponse = Response.json(
+      { error: "rate_limited" },
+      { status: 429, headers: { "retry-after": "60" } }
+    );
+
+    const response = await POST(
+      request({
+        action: "create-submission",
+        publicationScope: "website",
+        title: "Title",
+        rawContent: "Content",
+      })
+    );
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("retry-after")).toBe("60");
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
+    expect(mocks.calls).toEqual([]);
   });
 
   it("passes only the resolved session actor to a valid workflow command", async () => {

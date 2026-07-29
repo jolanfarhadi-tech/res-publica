@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { createActorResolver } from "../../../../auth/actor-resolver";
 import { AuthorizationDeniedError } from "../../../../auth/authorize";
-import { rejectUntrustedWriteRequest } from "../../../../auth/request-security";
-import { getAuthRuntime } from "../../../../auth/runtime";
 import { assignReviewer, createDraftVersion, createSubmission, createTranslationAssignment,
   decideModeration, finalizeTranslation, PublishingError, signOffAndMarkReady } from "../../../../application/publishing";
+import { executePrivilegedWrite } from "../../../../platform/privileged-write";
+import { PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT } from "../../../../platform/rate-limit";
 
 const actionSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("create-submission"), publicationScope: z.string().min(1), title: z.string().min(1), rawContent: z.string().min(1) }),
@@ -16,28 +16,32 @@ const actionSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("mark-ready"), draftId: z.string().min(1) }),
 ]);
 
-export async function POST(request: Request) {
-  const rejection = rejectUntrustedWriteRequest(request); if (rejection) return rejection;
-  const runtime = getAuthRuntime(); if (!runtime) return Response.json({ error: "service_not_configured" }, { status: 503 });
-  const parsed = actionSchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
-  const actor = await createActorResolver(runtime.db).resolve(request);
-  try {
-    switch (parsed.data.action) {
-      case "create-submission": return Response.json(await createSubmission(runtime.db, actor, parsed.data), { status: 201 });
-      case "create-draft": return Response.json({ draft: await createDraftVersion(runtime.db, actor, parsed.data) }, { status: 201 });
-      case "assign-reviewer": return Response.json({ moderation: await assignReviewer(runtime.db, actor, parsed.data) });
-      case "decide-moderation": return Response.json({ moderation: await decideModeration(runtime.db, actor, parsed.data) });
-      case "assign-translation": return Response.json({ translation: await createTranslationAssignment(runtime.db, actor, parsed.data) }, { status: 201 });
-      case "finalize-translation": return Response.json({ translation: await finalizeTranslation(runtime.db, actor, parsed.data) });
-      case "mark-ready": return Response.json(await signOffAndMarkReady(runtime.db, actor, parsed.data.draftId), { status: 201 });
+export function POST(request: Request) {
+  return executePrivilegedWrite(
+    request,
+    PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT,
+    async (runtime) => {
+      const parsed = actionSchema.safeParse(await request.json().catch(() => null));
+      if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
+      const actor = await createActorResolver(runtime.db).resolve(request);
+      try {
+        switch (parsed.data.action) {
+          case "create-submission": return Response.json(await createSubmission(runtime.db, actor, parsed.data), { status: 201 });
+          case "create-draft": return Response.json({ draft: await createDraftVersion(runtime.db, actor, parsed.data) }, { status: 201 });
+          case "assign-reviewer": return Response.json({ moderation: await assignReviewer(runtime.db, actor, parsed.data) });
+          case "decide-moderation": return Response.json({ moderation: await decideModeration(runtime.db, actor, parsed.data) });
+          case "assign-translation": return Response.json({ translation: await createTranslationAssignment(runtime.db, actor, parsed.data) }, { status: 201 });
+          case "finalize-translation": return Response.json({ translation: await finalizeTranslation(runtime.db, actor, parsed.data) });
+          case "mark-ready": return Response.json(await signOffAndMarkReady(runtime.db, actor, parsed.data.draftId), { status: 201 });
+        }
+      } catch (error) {
+        if (error instanceof AuthorizationDeniedError) return Response.json({ error: "forbidden" }, { status: 403 });
+        if (error instanceof PublishingError) {
+          const status = error.code.endsWith("not_found") ? 404 : 409;
+          return Response.json({ error: error.code }, { status });
+        }
+        throw error;
+      }
     }
-  } catch (error) {
-    if (error instanceof AuthorizationDeniedError) return Response.json({ error: "forbidden" }, { status: 403 });
-    if (error instanceof PublishingError) {
-      const status = error.code.endsWith("not_found") ? 404 : 409;
-      return Response.json({ error: error.code }, { status });
-    }
-    throw error;
-  }
+  );
 }

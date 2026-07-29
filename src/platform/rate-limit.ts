@@ -43,6 +43,18 @@ export const EVENT_REGISTRATION_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 15 * 60 * 1000,
 };
 
+export const GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "governance.privileged-write",
+  limit: 60,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "publishing.privileged-write",
+  limit: 60,
+  windowMs: 15 * 60 * 1000,
+};
+
 const RETENTION_AFTER_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function hashIdentifier(

@@ -1,5 +1,28 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — privileged write request protection
+
+**Verified 2026-07-29 on `codex/platform-phase-1` after `a4f7dc3`.**
+All 15 privileged Governance and Publishing write methods now pass through one
+shared route boundary before body parsing, actor resolution, authorization, or
+persistence. Twelve Governance methods share the
+`governance.privileged-write` scope and three Publishing methods share
+`publishing.privileged-write`; each permits 60 requests per fifteen-minute
+window per scope-separated HMAC client key.
+
+The boundary preserves trusted-origin rejection, fails closed without the
+runtime or `SESSION_SECRET`, returns shared non-cacheable `429` metadata with a
+server-generated `X-Request-ID`, and invokes the unchanged application service
+only after protection passes. Capability tuples, MFA/assurance checks, exact
+target scopes, separation of duties, provenance, atomic persistence, canonical
+audit semantics, human sign-off, and the no-auto-publish boundary remain in
+their existing application/domain owners.
+
+Focused verification passes 11 files / 44 tests; the full suite passes 44
+files / 219 tests. Structure, lint, typecheck, `git diff --check`,
+`db:check`, `db:check:fresh` (13 migrations / 54 tables), and the 99-page
+Production build pass. No migration was created.
+
 ## Incremental update — operational resilience and privacy drafts
 
 **Implemented 2026-07-29 on `codex/platform-phase-1` after `3019603`.**

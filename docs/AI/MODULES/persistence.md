@@ -9,6 +9,12 @@ grant for `res_publica_runtime`. It is not a canonical business entity and
 contains no raw client address. Buckets reset atomically and stale expired rows
 are removed after a bounded grace period.
 
+The same table now protects distinct Governance and Publishing
+privileged-write scopes in addition to login, membership, and event writes.
+Scope is included in the HMAC input, so one stored identifier hash cannot
+correlate a client across these policy domains. No raw IP address or
+business/person identifier is persisted.
+
 Local verification applies 13 migrations and creates 54 tables. The migration
 has not been applied to Production and requires the normal snapshot,
 authorization, TLS, and post-migration permission checks.

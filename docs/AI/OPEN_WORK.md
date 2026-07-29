@@ -10,7 +10,8 @@
   exposes internal or merely declarative manifest metadata.
 - **Completed security slices:** authentication request diagnostics, hardened
   response headers, and shared PostgreSQL rate limiting for login, membership
-  creation, and event registration.
+  creation, event registration, and all Governance/Publishing privileged
+  writes.
 - **Completed event backend slice:** authenticated owner cancellation now
   atomically persists cancellation, waitlist cleanup/promotion, notification,
   and audit evidence.

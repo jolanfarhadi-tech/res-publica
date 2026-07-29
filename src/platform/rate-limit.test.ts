@@ -10,6 +10,8 @@ import type { Database } from "../persistence";
 import * as coreSchema from "../persistence/schema";
 import { rateLimitBuckets } from "../persistence/schema";
 import {
+  GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT,
+  PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT,
   consumeRateLimit,
   rejectRateLimitedRequest,
 } from "./rate-limit";
@@ -35,6 +37,19 @@ afterEach(async () => {
 });
 
 describe("shared PostgreSQL rate limiting", () => {
+  it("uses distinct stable scopes for Governance and Publishing writes", () => {
+    expect(GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT).toEqual({
+      scope: "governance.privileged-write",
+      limit: 60,
+      windowMs: 900_000,
+    });
+    expect(PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT).toEqual({
+      scope: "publishing.privileged-write",
+      limit: 60,
+      windowMs: 900_000,
+    });
+  });
+
   it("atomically limits a pseudonymized client within one window", async () => {
     const { client, db, serviceDb } = await createTemporaryDatabase();
     const input = {

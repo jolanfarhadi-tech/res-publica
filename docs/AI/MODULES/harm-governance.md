@@ -1,5 +1,19 @@
 # Module: HARM Governance
 
+## Incremental implementation — privileged write protection, 2026-07-29
+
+All 12 write methods under `src/app/api/governance/` use the shared
+`executePrivilegedWrite` boundary and
+`GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT` before parsing, actor resolution, or
+application persistence. The stable policy is 60 attempts per fifteen minutes
+per pseudonymized client and the response is correlated by `X-Request-ID`.
+
+The HARM Governance application/domain services were not changed. Their
+institution-targeted capabilities, MFA assurance, role separation, review
+invariants, atomic records, and canonical AuditLog remain authoritative.
+The executable route-inventory test fails if any of the 12 methods loses the
+shared protection.
+
 ## Purpose
 
 Implements the operational workflow (intake, review, repair, authority delegation) supporting Res Publica's HARM operating methodology. Evidence: `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` (read in full, prior session — defines the 12-stage HARM Lifecycle this module operationalizes); `src/modules/harm-governance/` (implementation).

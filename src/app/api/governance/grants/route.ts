@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { createActorResolver } from "../../../../auth/actor-resolver";
 import { AuthorizationDeniedError } from "../../../../auth/authorize";
-import { rejectUntrustedWriteRequest } from "../../../../auth/request-security";
-import { getAuthRuntime } from "../../../../auth/runtime";
 import { grantGovernanceRole, GovernanceGrantError, revokeGovernanceRole } from "../../../../application/governance-authority";
+import { executePrivilegedWrite } from "../../../../platform/privileged-write";
+import { GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT } from "../../../../platform/rate-limit";
 
 const operationalRole = z.enum([
   "intake-moderator", "validation-officer", "evidence-reviewer", "hearing-moderator",
@@ -15,35 +15,37 @@ const grantSchema = z.object({
 });
 const revokeSchema = z.object({ grantId: z.string().min(1), institutionId: z.string().min(1) });
 
-async function context(request: Request) {
-  const rejection = rejectUntrustedWriteRequest(request);
-  if (rejection) return { response: rejection } as const;
-  const runtime = getAuthRuntime();
-  if (!runtime) return { response: Response.json({ error: "service_not_configured" }, { status: 503 }) } as const;
-  return { runtime, actor: await createActorResolver(runtime.db).resolve(request) } as const;
+export function POST(request: Request) {
+  return executePrivilegedWrite(
+    request,
+    GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT,
+    async (runtime) => {
+      const parsed = grantSchema.safeParse(await request.json().catch(() => null));
+      if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
+      const actor = await createActorResolver(runtime.db).resolve(request);
+      try {
+        const grant = await grantGovernanceRole(runtime.db, actor, {
+          ...parsed.data, validUntil: parsed.data.validUntil ? new Date(parsed.data.validUntil) : null,
+        });
+        return Response.json({ grant }, { status: 201 });
+      } catch (error) { return governanceError(error); }
+    }
+  );
 }
 
-export async function POST(request: Request) {
-  const ctx = await context(request);
-  if ("response" in ctx) return ctx.response;
-  const parsed = grantSchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
-  try {
-    const grant = await grantGovernanceRole(ctx.runtime.db, ctx.actor, {
-      ...parsed.data, validUntil: parsed.data.validUntil ? new Date(parsed.data.validUntil) : null,
-    });
-    return Response.json({ grant }, { status: 201 });
-  } catch (error) { return governanceError(error); }
-}
-
-export async function DELETE(request: Request) {
-  const ctx = await context(request);
-  if ("response" in ctx) return ctx.response;
-  const parsed = revokeSchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
-  try {
-    return Response.json({ grant: await revokeGovernanceRole(ctx.runtime.db, ctx.actor, parsed.data) });
-  } catch (error) { return governanceError(error); }
+export function DELETE(request: Request) {
+  return executePrivilegedWrite(
+    request,
+    GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT,
+    async (runtime) => {
+      const parsed = revokeSchema.safeParse(await request.json().catch(() => null));
+      if (!parsed.success) return Response.json({ error: "invalid_request" }, { status: 400 });
+      const actor = await createActorResolver(runtime.db).resolve(request);
+      try {
+        return Response.json({ grant: await revokeGovernanceRole(runtime.db, actor, parsed.data) });
+      } catch (error) { return governanceError(error); }
+    }
+  );
 }
 
 function governanceError(error: unknown): Response {

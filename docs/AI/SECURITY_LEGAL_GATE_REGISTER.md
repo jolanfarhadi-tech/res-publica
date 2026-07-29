@@ -26,7 +26,7 @@ Production activation.
 | Production administrator responsibility | No verified named operational responsibility | Open | Privileged administration |
 | Security logging/retention | Minimal request logging and incident evidence procedure exist; retention/recipients unapproved | Owner/legal approval required | Monitoring and incident evidence |
 | Browser security headers | CSP/HSTS/cross-origin policy implemented and locally tested; Production edge not yet verified | Pending deployment verification | Production security assurance |
-| Distributed rate-limit store | PostgreSQL bucket protects auth login, membership creation, and event registration; migration not applied to Production; Governance and Publishing writes remain | Partial | Abuse-resistant privileged writes |
+| Distributed rate-limit store | PostgreSQL bucket protects auth login, membership creation, event registration, and all 15 Governance/Publishing writes; migration not applied to Production | Implemented locally / Production migration pending | Abuse-resistant protected writes |
 | Transactional email provider | No activated approved provider | Intentionally disabled | Real delivery |
 | Newsletter legal basis/provider | Optional UI exists; provider unavailable | Intentionally disabled | Newsletter activation |
 | Analytics provider/legal basis | No provider; disabled by default | Intentionally disabled | Analytics activation |
