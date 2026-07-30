@@ -161,10 +161,28 @@ describe("public website boundaries", () => {
 
   it("keeps the mobile menu modal, focus-contained and desktop-safe", () => {
     const header = source("src", "components", "site", "Header.tsx");
+    const mobileMenu = source(
+      "src",
+      "components",
+      "site",
+      "HeaderMobileMenu.tsx"
+    );
+    const activeLink = source(
+      "src",
+      "components",
+      "site",
+      "HeaderNavLink.tsx"
+    );
     const css = source("src", "app", "globals.css");
-    expect(header).toContain("<dialog");
-    expect(header).toContain("showModal()");
-    expect(header).toContain('className="icon-button inline-grid lg:hidden"');
+    expect(header).not.toContain('"use client"');
+    expect(header).toContain("<HeaderMobileMenu");
+    expect(mobileMenu).toContain('"use client"');
+    expect(mobileMenu).toContain("<dialog");
+    expect(mobileMenu).toContain("showModal()");
+    expect(mobileMenu).toContain(
+      'className="icon-button inline-grid lg:hidden"'
+    );
+    expect(activeLink).toContain("usePathname()");
     expect(css).not.toMatch(
       /\.icon-button\s*\{[\s\S]*?display:\s*inline-grid/
     );

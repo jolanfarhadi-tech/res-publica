@@ -1,5 +1,22 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental implementation — 2026-07-30
+
+Phase 0 P3 milestone 18 now keeps `Header.tsx` server-rendered and confines
+pathname-dependent active links and mobile-dialog behavior to
+`HeaderNavLink.tsx` and `HeaderMobileMenu.tsx`. The modal retains route-change,
+Escape, focus-return, body-scroll, and desktop-breakpoint closing behavior.
+Production-mode browser verification at 390×844 covered the interaction
+boundary in DE and FA, including focus return, scroll restoration, localized
+labels, RTL, zero horizontal overflow, and zero console warnings/errors.
+
+P3 milestone 20 remains open after direct build evidence: adding
+`generateStaticParams()` to the Open Graph image route makes the FA image
+execute during prerendering, where the bundled ImageResponse/Satori renderer
+throws `lookupType: 5 - substFormat: 3 is not yet supported`. The framework's
+documented `lang`/`dir` hints do not resolve the unsupported Persian shaping.
+The failed attempt was removed; current localized content was not replaced.
+
 ## Purpose
 
 The single App Router tree (`src/app/[locale]/`) and the trilingual (German/English/Persian) localization system serving it, including locale-detection middleware. Evidence: `README.md` (read in full, prior session); `middleware.ts` (read in full, this session and prior).

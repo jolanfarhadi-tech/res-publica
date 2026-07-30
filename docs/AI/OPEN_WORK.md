@@ -1,5 +1,21 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-019 — Phase 0 P3 Persian Open Graph prebuild needs an explicit path
+
+**Status:** P3 milestone 20 is not safely implementable as the plan's one-line
+route change on the current accepted Next 15 line. A real Production build
+with all three locales enumerated fails on `/fa/opengraph-image` with
+`lookupType: 5 - substFormat: 3 is not yet supported`; adding `lang=fa` and
+`dir=rtl` does not resolve it.
+
+The current ImageResponse/Satori renderer does not support the Persian font's
+required OpenType substitution during static rendering. Do not silently remove
+the localized Persian description, replace it with English, or commit a
+runtime-fetched font. Safe resolution requires either an approved,
+repository-owned compatible font/rendering approach with license provenance,
+or an explicit owner-approved language-neutral card design. No attempted
+source change remains in the worktree.
+
 ## Safe implementation programme boundary reached
 
 Phase 1–3 work that can be completed without inventing authority, activating a

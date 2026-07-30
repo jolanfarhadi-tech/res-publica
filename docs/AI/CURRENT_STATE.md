@@ -1,5 +1,30 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Phase 0 P3 Header hydration boundary
+
+**Verified 2026-07-30 on `codex/platform-phase-3` after `1e750e3`.**
+The site-wide Header is now a Server Component. Active-link calculation is
+isolated in `HeaderNavLink`, while modal state, focus return, Escape handling,
+body scroll locking, desktop-breakpoint closing, and route-change closing are
+isolated in `HeaderMobileMenu`. Existing Account, preferences, language, theme,
+search, and navigation behavior remains composed through the same components
+and dictionaries.
+
+Focused verification passes 21/21 frontend-boundary tests; the full serial
+suite passes 52 files / 248 tests. Structure, lint, typecheck, `db:check`,
+`db:check:fresh` (14 migrations / 55 tables), `git diff --check`, and the
+102-page Production build pass. A 390×844 Production-mode browser check
+verified menu open/close, scroll lock, Escape focus return, route-change
+closing, localized labels, FA `lang=fa`/`dir=rtl`, no horizontal overflow, and
+no console warnings or errors.
+
+P3 milestone 20 was also tested against the real Production build: enumerating
+the localized Open Graph image succeeds for DE/EN but fails while prerendering
+FA because this Next 15 ImageResponse/Satori version rejects the Persian font's
+OpenType substitution. The attempted source change was removed. Do not replace
+the Persian card with English or remove its text without an explicit content
+decision; see OPEN-019.
+
 ## Incremental update — Phase 0 P3 dependency and lint hardening
 
 **Verified 2026-07-29 on `codex/platform-phase-3` after `c844258`.**
