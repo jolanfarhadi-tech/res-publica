@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit production dependencies
+        run: npm run audit:production
+
       - name: Check project structure
         run: node scripts/check-structure.mjs
 

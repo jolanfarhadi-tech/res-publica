@@ -21,8 +21,9 @@ replace the version consumed by `minimatch@3`. ESLint 10 is not yet accepted by
 the React/import/accessibility plugins shipped with the compatible Next 15
 lint configuration. A Next 16 migration would additionally collide with
 ADR-012's explicit root-`proxy.ts` boundary. Keep `npm run audit:production`
-mandatory and re-evaluate when the compatible ESLint/plugin chain receives an
-upstream patch or an approved framework/ADR migration is available.
+mandatory—the existing CI workflow now enforces it after `npm ci`—and
+re-evaluate when the compatible ESLint/plugin chain receives an upstream patch
+or an approved framework/ADR migration is available.
 
 ### OPEN-017 — Newsletter activation remains externally gated
 

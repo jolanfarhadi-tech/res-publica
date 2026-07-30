@@ -5,9 +5,10 @@
 **Verified 2026-07-29 on `codex/platform-phase-3` after `c844258`.**
 The Production dependency tree now uses the audited Next.js 15 security floor
 (`15.5.22`) and pins patched PostCSS (`8.5.25`) and Sharp (`0.35.3`)
-transitives. `npm run audit:production` reports zero vulnerabilities. A
+transitives. `npm run audit:production` reports zero vulnerabilities and is
+enforced immediately after `npm ci` in the existing main/PR workflow. A
 regression test protects the framework floor, matching Next ESLint release
-line, patched transitive floors, and the Production audit command.
+line, patched transitive floors, and the CI Production audit command.
 
 Linting now runs the supported ESLint CLI and excludes generated output and
 the five unrelated historical `.claude/worktrees`. The accepted ADR-012

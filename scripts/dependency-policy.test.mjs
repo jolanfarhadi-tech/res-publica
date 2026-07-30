@@ -9,6 +9,10 @@ const manifest = JSON.parse(
 const lockfile = JSON.parse(
   fs.readFileSync(path.join(root, "package-lock.json"), "utf8")
 );
+const ciWorkflow = fs.readFileSync(
+  path.join(root, ".github", "workflows", "ci.yml"),
+  "utf8"
+);
 
 function versionParts(version) {
   return version.replace(/^[^\d]*/, "").split(".").map(Number);
@@ -29,6 +33,7 @@ describe("dependency security policy", () => {
     expect(manifest.scripts["audit:production"]).toBe(
       "npm audit --omit=dev --audit-level=high"
     );
+    expect(ciWorkflow).toContain("run: npm run audit:production");
   });
 
   it("keeps Next.js above the audited 15.x security floor", () => {
