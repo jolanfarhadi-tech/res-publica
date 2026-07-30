@@ -39,7 +39,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const dict = getDictionary(locale);
+  const dict = await getDictionary(locale);
   return {
     // Set NEXT_PUBLIC_SITE_URL in Vercel to the production domain.
     metadataBase: new URL(
@@ -95,7 +95,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  const dict = getDictionary(locale as Locale);
+  const dict = await getDictionary(locale as Locale);
   const dir = getDirection(locale as Locale);
 
   return (

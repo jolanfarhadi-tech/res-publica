@@ -29,7 +29,7 @@ export async function GET(
 ) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : "de";
-  const dict = getDictionary(locale);
+  const dict = await getDictionary(locale);
 
   const items = [
     ...getEntries(locale, "news"),

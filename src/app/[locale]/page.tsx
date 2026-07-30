@@ -136,7 +136,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const dict = getDictionary(locale);
+  const dict = await getDictionary(locale);
   return {
     title: dict.meta.title,
     description: dict.meta.description,
@@ -152,7 +152,7 @@ export default async function HomePage({
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
-  const dict = getDictionary(locale);
+  const dict = await getDictionary(locale);
   const copy = getExperienceCopy(locale).home;
   const siteCopy = getPublicSiteCopy(locale);
   const projects = getEntries(locale, "projects");

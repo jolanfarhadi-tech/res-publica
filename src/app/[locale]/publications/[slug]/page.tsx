@@ -48,7 +48,7 @@ export default async function Page({ params }: Props) {
     <CollectionDetail
       locale={locale as Locale}
       entry={entry}
-      dict={getDictionary(locale as Locale)}
+      dict={await getDictionary(locale as Locale)}
     />
   );
 }

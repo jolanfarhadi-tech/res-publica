@@ -15,5 +15,5 @@ export async function GET(
 ) {
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : "de";
-  return Response.json(buildSearchIndex(locale));
+  return Response.json(await buildSearchIndex(locale));
 }

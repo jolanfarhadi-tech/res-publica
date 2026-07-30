@@ -12,7 +12,7 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const dict = getDictionary(locale);
+  const dict = await getDictionary(locale);
   return {
     title: dict.search.title,
     description: dict.search.lede,
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SearchPage({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  const dict = getDictionary(locale as Locale);
+  const dict = await getDictionary(locale as Locale);
 
   return (
     <>

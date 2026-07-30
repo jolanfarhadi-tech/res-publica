@@ -13,14 +13,14 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const t = getDictionary(locale).platform.membership;
+  const t = (await getDictionary(locale)).platform.membership;
   return { title: t.title, description: t.lede, alternates: pageAlternates(locale, "/membership") };
 }
 
 export default async function MembershipPage({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  const dict = getDictionary(locale as Locale);
+  const dict = await getDictionary(locale as Locale);
   return (
     <>
       <PageHeader title={dict.platform.membership.title} lede={dict.platform.membership.lede} />

@@ -12,7 +12,7 @@ export default async function NotFound() {
   const headerList = await headers();
   const raw = headerList.get("x-locale") ?? defaultLocale;
   const locale: Locale = isLocale(raw) ? raw : defaultLocale;
-  const dict = getDictionary(locale);
+  const dict = await getDictionary(locale);
 
   return (
     <Container className="py-24 text-center">

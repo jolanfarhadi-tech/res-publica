@@ -45,15 +45,22 @@ export default async function Page({ params }: Props) {
   if (!isLocale(locale)) notFound();
   const entry = getEntry(locale as Locale, COLLECTION, slug);
   if (!entry) notFound();
+  const dict = await getDictionary(locale as Locale);
 
   return (
     <CollectionDetail
       locale={locale as Locale}
       entry={entry}
-      dict={getDictionary(locale as Locale)}
-      action={(entry.endDate ?? entry.date) >= todayIso()
-        ? <EventRegistration locale={locale as Locale} eventId={entry.slug} dict={getDictionary(locale as Locale)} />
-        : undefined}
+      dict={dict}
+      action={
+        (entry.endDate ?? entry.date) >= todayIso() ? (
+          <EventRegistration
+            locale={locale as Locale}
+            eventId={entry.slug}
+            dict={dict}
+          />
+        ) : undefined
+      }
     />
   );
 }

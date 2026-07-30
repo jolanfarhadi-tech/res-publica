@@ -2,6 +2,14 @@
 
 ## Incremental implementation — 2026-07-30
 
+Phase 0 P3 milestone 19 now loads dictionaries through locale-specific dynamic
+imports. The German JSON is imported only as a TypeScript type reference, so
+dictionary shape enforcement remains while runtime loading is deferred.
+Metadata, pages, RSS, search-index generation, not-found, membership, and Open
+Graph callers all await the same boundary. The verified Production bundle
+emits separate DE, EN, and FA server chunks; rendered DE/EN/FA checks retain
+localized headings and controls, Persian RTL, and zero console warnings/errors.
+
 Phase 0 P3 milestone 18 now keeps `Header.tsx` server-rendered and confines
 pathname-dependent active links and mobile-dialog behavior to
 `HeaderNavLink.tsx` and `HeaderMobileMenu.tsx`. The modal retains route-change,

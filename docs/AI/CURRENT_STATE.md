@@ -1,5 +1,23 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Phase 0 P3 lazy locale dictionaries
+
+**Verified 2026-07-30 on `codex/platform-phase-3` after `f689e9f`.**
+`getDictionary()` is now an async locale-keyed loader. The German reference
+dictionary remains a type-only import so DE/EN/FA shape compatibility is
+compile-time checked without eagerly loading any runtime JSON. All server
+callers await the shared boundary, including metadata, RSS, search indexing,
+collection pages, not-found, membership, and the dynamic Open Graph route.
+
+The Production build emits the three dictionaries as distinct server chunks
+(DE `8820.js`, EN `2664.js`, FA `2126.js`) and still generates 102 pages.
+Focused verification passes 22/22 frontend-boundary tests; the full serial
+suite passes 52 files / 249 tests. Structure, lint, typecheck, `db:check`,
+`db:check:fresh` (14 migrations / 55 tables), and `git diff --check` pass.
+Production-mode rendering verifies localized DE/EN/FA headings and controls,
+FA `lang=fa`/`dir=rtl`, zero horizontal overflow, and zero browser
+warnings/errors.
+
 ## Incremental update — Phase 0 P3 Header hydration boundary
 
 **Verified 2026-07-30 on `codex/platform-phase-3` after `1e750e3`.**

@@ -12,11 +12,31 @@ import { team } from "../data/team";
 import { publicSiteCopy } from "../i18n/public-site";
 import { getDirection } from "../i18n/config";
 import { publicNavigation } from "../data/public-navigation";
+import { getDictionary } from "../i18n/dictionaries";
 
 const source = (...parts: string[]) =>
   fs.readFileSync(path.join(process.cwd(), ...parts), "utf8");
 
 describe("public website boundaries", () => {
+  it("lazy-loads one locale dictionary through the shared async boundary", async () => {
+    const dictionarySource = source("src", "i18n", "dictionaries.ts");
+    expect(dictionarySource).not.toMatch(
+      /import\s+\w+\s+from\s+["'].+dictionaries\/(de|en|fa)\.json["']/
+    );
+    for (const locale of locales) {
+      expect(dictionarySource).toContain(
+        `import("./dictionaries/${locale}.json")`
+      );
+    }
+
+    const dictionaries = await Promise.all(locales.map(getDictionary));
+    const referenceKeys = Object.keys(dictionaries[0]);
+    for (const dictionary of dictionaries) {
+      expect(Object.keys(dictionary)).toEqual(referenceKeys);
+      expect(dictionary.meta.title).toBeTruthy();
+    }
+  });
+
   it("does not market internal infrastructure as a product", () => {
     const ids = publicOfferings.map((offering) => offering.id);
     expect(ids).not.toContain("ai-layer");

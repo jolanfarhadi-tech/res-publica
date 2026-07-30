@@ -15,7 +15,7 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const dict = getDictionary(locale);
+  const dict = await getDictionary(locale);
   return {
     title: dict.pages.team.title,
     description: dict.pages.team.lede,
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function TeamPage({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  const dict = getDictionary(locale as Locale);
+  const dict = await getDictionary(locale as Locale);
 
   return (
     <>

@@ -44,8 +44,10 @@ export function normalizeForSearch(input: string): string {
     .trim();
 }
 
-export function buildSearchIndex(locale: Locale): SearchDocument[] {
-  const dictionary = getDictionary(locale);
+export async function buildSearchIndex(
+  locale: Locale
+): Promise<SearchDocument[]> {
+  const dictionary = await getDictionary(locale);
   const publicCopy = getPublicSiteCopy(locale);
   const pages = [
     {

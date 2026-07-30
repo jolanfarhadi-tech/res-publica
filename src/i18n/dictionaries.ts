@@ -1,7 +1,5 @@
 import type { Locale } from "./config";
-import de from "./dictionaries/de.json";
-import en from "./dictionaries/en.json";
-import fa from "./dictionaries/fa.json";
+import type de from "./dictionaries/de.json";
 
 /**
  * The German dictionary is the reference: all other languages must
@@ -9,8 +7,12 @@ import fa from "./dictionaries/fa.json";
  */
 export type Dictionary = typeof de;
 
-const dictionaries: Record<Locale, Dictionary> = { de, en, fa };
+const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
+  de: () => import("./dictionaries/de.json").then((module) => module.default),
+  en: () => import("./dictionaries/en.json").then((module) => module.default),
+  fa: () => import("./dictionaries/fa.json").then((module) => module.default),
+};
 
-export function getDictionary(locale: Locale): Dictionary {
-  return dictionaries[locale];
+export function getDictionary(locale: Locale): Promise<Dictionary> {
+  return dictionaries[locale]();
 }

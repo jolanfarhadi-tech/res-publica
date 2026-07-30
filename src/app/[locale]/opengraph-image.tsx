@@ -18,7 +18,9 @@ export default async function OgImage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const dict = getDictionary(isLocale(locale) ? (locale as Locale) : "de");
+  const dict = await getDictionary(
+    isLocale(locale) ? (locale as Locale) : "de"
+  );
 
   return new ImageResponse(
     (

@@ -15,7 +15,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const section = getDictionary(locale).collections[COLLECTION];
+  const section = (await getDictionary(locale)).collections[COLLECTION];
   return {
     title: section.title,
     description: section.lede,
@@ -32,7 +32,7 @@ export default async function Page({ params, searchParams }: Props) {
     <CollectionIndex
       locale={locale as Locale}
       collection={COLLECTION}
-      dict={getDictionary(locale as Locale)}
+      dict={await getDictionary(locale as Locale)}
       tag={tag}
       page={Number(page) || 1}
     />
