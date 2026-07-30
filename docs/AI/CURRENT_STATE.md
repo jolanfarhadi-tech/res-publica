@@ -1,5 +1,25 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Phase 0 P3 dependency and lint hardening
+
+**Verified 2026-07-29 on `codex/platform-phase-3` after `c844258`.**
+The Production dependency tree now uses the audited Next.js 15 security floor
+(`15.5.22`) and pins patched PostCSS (`8.5.25`) and Sharp (`0.35.3`)
+transitives. `npm run audit:production` reports zero vulnerabilities. A
+regression test protects the framework floor, matching Next ESLint release
+line, patched transitive floors, and the Production audit command.
+
+Linting now runs the supported ESLint CLI and excludes generated output and
+the five unrelated historical `.claude/worktrees`. The accepted ADR-012
+middleware boundary is unchanged; a proposed Next 16 `proxy.ts` migration was
+rejected during the slice because the repository structure guard and ADR
+explicitly reserve that filename as a removed P0 defect.
+
+Focused verification passes 3 files / 8 tests; the full serial suite passes
+52 files / 248 tests. Structure, lint, typecheck, `db:check`,
+`db:check:fresh` (14 migrations / 55 tables), `git diff --check`, and the
+102-page Production build pass.
+
 ## Incremental update — Phase 3 server-surface audit
 
 **Verified 2026-07-29 on `codex/platform-phase-3` after `363ce6e`.**

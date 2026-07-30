@@ -10,6 +10,20 @@ architecture, legal approval, named responsibility, or Production migration
 authorization. Advanced capabilities remain absent or server-disabled rather
 than represented as operational.
 
+### OPEN-018 — Development-only dependency advisory awaits compatible upstream
+
+**Status:** Production dependencies are audit-clean. The remaining full-tree
+`npm audit` finding is the current `brace-expansion` denial-of-service advisory
+propagated through nine ESLint-related development nodes.
+
+The patched `brace-expansion` major changes its CommonJS API and cannot safely
+replace the version consumed by `minimatch@3`. ESLint 10 is not yet accepted by
+the React/import/accessibility plugins shipped with the compatible Next 15
+lint configuration. A Next 16 migration would additionally collide with
+ADR-012's explicit root-`proxy.ts` boundary. Keep `npm run audit:production`
+mandatory and re-evaluate when the compatible ESLint/plugin chain receives an
+upstream patch or an approved framework/ADR migration is available.
+
 ### OPEN-017 — Newsletter activation remains externally gated
 
 **Status:** Default-deny server activation, explicit versioned consent, trusted

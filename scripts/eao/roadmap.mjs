@@ -15,8 +15,6 @@ import { pathToFileURL } from "node:url";
 import { computeProjectHealth } from "./project-health.mjs";
 import { CATEGORIES } from "./lib/registry.mjs";
 
-const GOVERNANCE_DOCS = ["ETHICS_CHARTER.md", "DPIA.md", "AI_POLICY.md", "DATA_POLICY.md"];
-
 export function computeRoadmap(root = process.cwd()) {
   const health = computeProjectHealth(root);
 

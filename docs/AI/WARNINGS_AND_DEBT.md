@@ -1,5 +1,20 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-017 — Development lint chain retains an upstream advisory
+
+- **Evidence:** after the Phase 0 P3 dependency patch,
+  `npm run audit:production` reports zero vulnerabilities; full `npm audit`
+  reports the `brace-expansion` resource-exhaustion advisory through nine
+  ESLint-related development nodes.
+- **Impact:** no affected package is installed in the Production dependency
+  tree. The residual risk is limited to repository tooling processing
+  developer-controlled glob patterns.
+- **Severity:** **Low operational / upstream development debt**.
+- **Safe handling:** retain the Production audit gate, do not run lint against
+  untrusted repository content, and do not force `brace-expansion@5` into
+  `minimatch@3` or ESLint 10 into plugins whose peer ranges stop at ESLint 9.
+  Recheck on each dependency update.
+
 ### WARN-016 — Public privacy notice understates deployed processing
 
 - **Evidence:** `datenschutz.md` states that no user profiles are formed and
