@@ -3,6 +3,7 @@ import { Figtree, Source_Serif_4, Vazirmatn } from "next/font/google";
 import { notFound } from "next/navigation";
 import { getDirection, isLocale, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { getOpenGraphPresentation } from "@/i18n/open-graph";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { PreferenceProvider } from "@/components/privacy/PreferenceProvider";
@@ -39,28 +40,37 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  const dict = await getDictionary(locale);
+  const presentation = await getOpenGraphPresentation(locale);
   return {
     // Set NEXT_PUBLIC_SITE_URL in Vercel to the production domain.
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
     ),
     title: {
-      default: dict.meta.title,
-      template: `%s · ${dict.meta.title}`,
+      default: presentation.title,
+      template: `%s · ${presentation.title}`,
     },
-    description: dict.meta.description,
+    description: presentation.description,
     openGraph: {
       type: "website",
-      siteName: dict.meta.title,
-      title: dict.meta.title,
-      description: dict.meta.description,
+      siteName: presentation.title,
+      title: presentation.title,
+      description: presentation.description,
       locale,
+      images: [
+        {
+          url: presentation.imagePath,
+          width: 1200,
+          height: 630,
+          alt: "Res Publica",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
-      title: dict.meta.title,
-      description: dict.meta.description,
+      title: presentation.title,
+      description: presentation.description,
+      images: [presentation.imagePath],
     },
   };
 }

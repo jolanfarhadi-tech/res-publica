@@ -1,5 +1,21 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Phase 0 P3 Persian Open Graph fallback
+
+**Verified 2026-07-30 on `codex/platform-phase-3` after `cc21280`.**
+OPEN-019 has the owner-approved temporary resolution: DE and EN prebuild their
+localized Open Graph cards, while FA prebuilds a language-neutral Res Publica
+identity card without passing Persian text through ImageResponse/Satori.
+Localized FA title and description remain in HTML metadata, and Persian
+`lang=fa`/`dir=rtl` behavior is unchanged.
+
+Focused regression verification passes 26/26 tests. The Production build
+generates 105 pages, including static `/de/opengraph-image`,
+`/en/opengraph-image`, and `/fa/opengraph-image` routes without the prior
+OpenType substitution failure. Production-mode local checks confirm localized
+DE/EN/FA metadata, no FA horizontal overflow, and `200 image/png` for every
+locale image URL.
+
 ## Incremental update — Phase 0 P3 lazy locale dictionaries
 
 **Verified 2026-07-30 on `codex/platform-phase-3` after `f689e9f`.**
@@ -36,12 +52,9 @@ verified menu open/close, scroll lock, Escape focus return, route-change
 closing, localized labels, FA `lang=fa`/`dir=rtl`, no horizontal overflow, and
 no console warnings or errors.
 
-P3 milestone 20 was also tested against the real Production build: enumerating
-the localized Open Graph image succeeds for DE/EN but fails while prerendering
-FA because this Next 15 ImageResponse/Satori version rejects the Persian font's
-OpenType substitution. The attempted source change was removed. Do not replace
-the Persian card with English or remove its text without an explicit content
-decision; see OPEN-019.
+P3 milestone 20's original Persian-text rendering path was rejected by the
+current ImageResponse/Satori OpenType support. It is now resolved by the
+explicit owner-approved neutral FA card described above; see OPEN-019.
 
 ## Incremental update — Phase 0 P3 dependency and lint hardening
 

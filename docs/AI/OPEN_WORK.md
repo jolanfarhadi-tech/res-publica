@@ -1,20 +1,21 @@
 # Open Work — Evidence-Based Register
 
-### OPEN-019 — Phase 0 P3 Persian Open Graph prebuild needs an explicit path
+### OPEN-019 — Phase 0 P3 Persian Open Graph prebuild uses an approved neutral fallback
 
-**Status:** P3 milestone 20 is not safely implementable as the plan's one-line
-route change on the current accepted Next 15 line. A real Production build
-with all three locales enumerated fails on `/fa/opengraph-image` with
-`lookupType: 5 - substFormat: 3 is not yet supported`; adding `lang=fa` and
-`dir=rtl` does not resolve it.
+**Status:** Resolved temporarily by explicit owner decision on 2026-07-30.
+DE and EN retain localized generated cards. FA keeps its localized HTML title
+and description but resolves to a prebuilt, language-neutral Res Publica card
+containing only the approved visual identity, Latin brand name, and neutral
+graphics. No Persian text is passed to ImageResponse/Satori.
 
-The current ImageResponse/Satori renderer does not support the Persian font's
-required OpenType substitution during static rendering. Do not silently remove
-the localized Persian description, replace it with English, or commit a
-runtime-fetched font. Safe resolution requires either an approved,
-repository-owned compatible font/rendering approach with license provenance,
-or an explicit owner-approved language-neutral card design. No attempted
-source change remains in the worktree.
+This is the accepted deployment-safe resolution for P3 milestone 20 on the
+current Next 15 line. Tests cover all three locale metadata boundaries and
+non-empty image URLs; the Production build prebuilds all three image routes,
+and local HTTP verification returns `200 image/png` for each. Revisit only
+when a repository-owned Persian-capable renderer/font path with verified
+license provenance is available. Until then, localized Persian HTML metadata
+must remain in place and the neutral FA image must not be replaced by English
+marketing copy.
 
 ## Safe implementation programme boundary reached
 

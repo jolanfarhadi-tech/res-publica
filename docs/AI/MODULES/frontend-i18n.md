@@ -2,6 +2,14 @@
 
 ## Incremental implementation — 2026-07-30
 
+OPEN-019 and Phase 0 P3 milestone 20 now use an explicit owner-approved
+fallback. DE and EN prebuild localized Open Graph cards. FA prebuilds a
+language-neutral Res Publica identity card, so Persian text is never sent
+through the current ImageResponse/Satori renderer. The localized Persian title
+and description remain in HTML metadata, and the route keeps its locale URL.
+Focused tests cover all locale presentations and image URLs; the verified
+Production build emits 105 pages and statically generates all three OG routes.
+
 Phase 0 P3 milestone 19 now loads dictionaries through locale-specific dynamic
 imports. The German JSON is imported only as a TypeScript type reference, so
 dictionary shape enforcement remains while runtime loading is deferred.
@@ -18,12 +26,9 @@ Production-mode browser verification at 390×844 covered the interaction
 boundary in DE and FA, including focus return, scroll restoration, localized
 labels, RTL, zero horizontal overflow, and zero console warnings/errors.
 
-P3 milestone 20 remains open after direct build evidence: adding
-`generateStaticParams()` to the Open Graph image route makes the FA image
-execute during prerendering, where the bundled ImageResponse/Satori renderer
-throws `lookupType: 5 - substFormat: 3 is not yet supported`. The framework's
-documented `lang`/`dir` hints do not resolve the unsupported Persian shaping.
-The failed attempt was removed; current localized content was not replaced.
+The earlier milestone 20 attempt established that Persian text cannot be
+prebuilt safely with the bundled renderer. That evidence remains the reason
+for the neutral FA card; no Persian metadata support was removed.
 
 ## Purpose
 

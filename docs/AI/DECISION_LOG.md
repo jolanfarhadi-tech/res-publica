@@ -154,6 +154,15 @@
 **Related ADR:** ADR-029, ADR-036.
 **Rejected alternative:** assigning submission timestamps/authors or a latest draft as migration defaults, because those values are not recoverable historical facts.
 
+## D-19: Persian Open Graph uses a language-neutral static fallback
+
+**Decision:** on the accepted Next 15 line, DE and EN retain localized generated Open Graph cards, while FA uses a prebuilt language-neutral Res Publica identity card. Persian title and description remain localized in HTML metadata; Persian text is not passed to ImageResponse/Satori.
+**Rationale:** the bundled renderer fails on the Persian font's required OpenType substitution during static generation. A neutral identity card preserves a valid locale-specific image URL and Production prebuild without replacing Persian content with English or weakening Persian metadata support.
+**Evidence:** `src/app/[locale]/opengraph-image.tsx`; `src/app/[locale]/layout.tsx`; `src/i18n/open-graph.ts`; `src/i18n/open-graph.test.ts`; successful 105-page Production build and local `200 image/png` checks on 2026-07-30.
+**Related commit:** the atomic OPEN-019 resolution commit containing this entry.
+**Related ADR:** none — this is a deployment-safe Experience/Localization implementation decision, not an architectural domain decision.
+**Rejected alternatives:** rendering Persian through the unsupported Satori path; substituting English copy on the FA card; runtime-fetching an unproven font; removing localized Persian metadata.
+
 ---
 
 ## Decisions with rejected alternatives not otherwise itemized above
