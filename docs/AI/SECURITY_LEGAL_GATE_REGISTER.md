@@ -32,6 +32,7 @@ Production activation.
 | Analytics provider/legal basis | No provider; disabled by default | Intentionally disabled | Analytics activation |
 | Object storage | No approved EU storage or malware scanner | Intentionally disabled | File uploads |
 | External AI provider | No approved provider/DPIA/governance activation | Intentionally disabled | External AI |
+| Research real-data activation | BBS issuance, project proof, isolated verifier and anonymous intake are implemented and synthetic-tested; external DPIA, cryptographic/reidentification audit, operators and project approval are absent | Closed: `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` remains unset/false | Real ZK credentials and real research contributions |
 | HARM evidence/case Production operation | All Governance writes are server-disabled by default; activation requires exact `HARM_OPERATIONS_ENABLED=true`; secure storage and safeguarding remain unapproved | Intentionally disabled / owner activation required | Sensitive case processing |
 | Programme operational approval | Staffing, dates, and approved content not established | Intentionally disabled | Public programme opening |
 | Neon restore drill | Isolated non-Production procedure documented; no completed drill evidence or approved RPO/RTO | Owner execution/approval required | Demonstrated recoverability |

@@ -1,5 +1,15 @@
 # Module: Persistence
 
+## Incremental migrations 0014–0016 — 2026-08-04 (uncommitted)
+
+Three additive migrations add membership applications/document
+acknowledgements, independent research preference/consent/eligibility records,
+OIDC flow intent, and pseudonymous wallet metadata. They do not update, delete,
+backfill, or infer decisions for existing rows. `db:check` passes and the fresh
+chain applies 17 migrations and creates 63 tables. Recovery and pre-application
+checks are documented in `docs/persistence/MIGRATIONS_0014_0016_RECOVERY.md`.
+No Production migration is authorized or applied.
+
 ## Production migration verification — 2026-07-30
 
 The canonical Neon Production branch now contains all 14 repository migrations
@@ -129,3 +139,14 @@ Do not re-create any of the ~50 tables enumerated above — all exist. Do not cr
 - `.github/workflows/ci.yml` (full read this session)
 - tests: `persistence.integration.test.ts`, `schema.test.ts`
 - command: `grep "pgTable" src/persistence/schema.ts src/persistence/module-schema.ts`, this session
+
+## Incremental research persistence — 2026-08-04
+
+Additive main migrations 0014–0018 introduce Membership Applications,
+acknowledgements, research readiness/consent/eligibility, wallet metadata,
+temporary issuance/recovery challenges and recovery evidence. Nullable public-key
+columns preserve legacy/offered rows. A separate `drizzle-research` chain creates
+six tables in `research_anonymous` with no Person/Member/Auth0/wallet/credential/
+consent foreign key and no PUBLIC privilege. Verified fresh state: 19 main
+migrations / 66 tables; one verifier migration / six tables. Production has not
+been migrated by this slice.

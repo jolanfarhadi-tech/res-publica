@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { dashboardCopy } from "@/i18n/dashboard";
 import type { Locale } from "@/i18n/config";
 import { membershipStatusLabels } from "@/i18n/member-profile";
+import { membershipApplicationCopy } from "@/i18n/membership-application";
 import {
   dashboardStateFromResponse,
   type DashboardViewState,
 } from "./dashboard-state";
+import { ResearchWalletPanel } from "./ResearchWalletPanel";
 
 function formatDate(value: Date | string, locale: Locale): string {
   const dateLocale =
@@ -50,6 +52,7 @@ function StateMessage({
 export function DashboardClient({ locale }: { locale: Locale }) {
   const [state, setState] = useState<DashboardViewState>({ kind: "loading" });
   const copy = dashboardCopy[locale];
+  const applicationCopy = membershipApplicationCopy[locale];
 
   useEffect(() => {
     let active = true;
@@ -134,6 +137,11 @@ export function DashboardClient({ locale }: { locale: Locale }) {
                 dashboard.membership.membership.currentStatus
               ]
             }
+          </p>
+        )}
+        {!dashboard.membership.enrolled && dashboard.membershipApplication && (
+          <p className="mt-4 font-semibold text-accent">
+            {applicationCopy.statuses[dashboard.membershipApplication.status]}
           </p>
         )}
       </section>
@@ -246,6 +254,10 @@ export function DashboardClient({ locale }: { locale: Locale }) {
           )}
         </div>
       </section>
+
+      {dashboard.researchWallet && (
+        <ResearchWalletPanel locale={locale} wallet={dashboard.researchWallet} />
+      )}
 
       <section className="glass-panel rounded-3xl p-7 sm:p-9 lg:col-span-2" aria-labelledby="dashboard-notifications">
         <h2 id="dashboard-notifications" className="text-3xl">{copy.notificationsTitle}</h2>

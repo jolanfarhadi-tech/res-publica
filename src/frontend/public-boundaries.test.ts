@@ -232,8 +232,11 @@ describe("public website boundaries", () => {
     );
     expect(footer).toContain("dict.footer.imprint");
     expect(footer).toContain("dict.footer.privacy");
-    for (const form of [membership, event, newsletter]) {
+    expect(membership).toContain("copy.privacyLink");
+    for (const form of [event, newsletter]) {
       expect(form).toContain("dict.footer.privacy");
+    }
+    for (const form of [membership, event, newsletter]) {
       expect(form).toContain("/datenschutz");
     }
     const homepage = source("src", "app", "[locale]", "page.tsx");
@@ -293,24 +296,27 @@ describe("public website boundaries", () => {
     ).toBe(true);
   });
 
-  it("requires two separate, default-off profile confirmations before membership submission", () => {
+  it("requires separate default-off application acknowledgements before submission", () => {
     const membership = source(
       "src",
       "components",
       "platform",
       "MembershipForm.tsx"
     );
-    expect(membership).toContain("dataProtectionConsent");
-    expect(membership).toContain("programmeParticipationConsent");
+    expect(membership).toContain("const [statutes, setStatutes] = useState(false)");
+    expect(membership).toContain("const [protocol, setProtocol] = useState(false)");
+    expect(membership).toContain("const [privacy, setPrivacy] = useState(false)");
     expect(membership).toContain(
-      "!dataProtectionConsent || !programmeParticipationConsent"
+      "const ready = statutes && protocol && privacy"
     );
     expect(membership).toContain('href={`/${locale}/datenschutz`}');
-    const dataProtectionLabel = membership.match(
-      /<label[\s\S]*?htmlFor="data-protection-consent"[\s\S]*?<\/label>/
+    const privacyConfirmation = membership.match(
+      /<Confirmation id="privacy-ack"[\s\S]*?<\/Confirmation>/
     )?.[0];
-    expect(dataProtectionLabel).toBeTruthy();
-    expect(dataProtectionLabel).not.toContain("<Link");
+    expect(privacyConfirmation).toBeTruthy();
+    expect(privacyConfirmation).toContain("<Link");
+    expect(membership).toContain("researchReadiness");
+    expect(membership).not.toContain("!researchReadiness");
 
     const expectedCopy = {
       de: {
@@ -348,16 +354,18 @@ describe("public website boundaries", () => {
     }
   });
 
-  it("requires explicit privacy consent in every data-entry form", () => {
+  it("requires explicit privacy acknowledgement or consent in every data-entry form", () => {
     const formFiles = [
       source("src", "components", "platform", "MembershipForm.tsx"),
       source("src", "components", "platform", "EventRegistration.tsx"),
       source("src", "components", "site", "NewsletterSignup.tsx"),
     ];
-    for (const form of formFiles) {
+    for (const form of formFiles.slice(1)) {
       expect(form).toContain('type="checkbox"');
       expect(form).toContain("consent");
     }
+    expect(formFiles[0]).toContain('type="checkbox"');
+    expect(formFiles[0]).toContain("privacyNotice");
     for (const locale of locales) {
       const dictionary = JSON.parse(
         source("src", "i18n", "dictionaries", `${locale}.json`)

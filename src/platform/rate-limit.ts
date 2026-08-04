@@ -37,6 +37,36 @@ export const MEMBERSHIP_CREATE_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 60 * 60 * 1000,
 };
 
+export const MEMBERSHIP_APPLICATION_RATE_LIMIT: RateLimitPolicy = {
+  scope: "membership.application.submit",
+  limit: 5,
+  windowMs: 60 * 60 * 1000,
+};
+
+export const MEMBERSHIP_DECISION_RATE_LIMIT: RateLimitPolicy = {
+  scope: "membership.application.decide",
+  limit: 30,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const RESEARCH_WALLET_ACTIVATION_RATE_LIMIT: RateLimitPolicy = {
+  scope: "research.wallet.activate",
+  limit: 10,
+  windowMs: 60 * 60 * 1000,
+};
+
+export const RESEARCH_CREDENTIAL_ISSUANCE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "research.wallet.credential-issuance",
+  limit: 20,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const RESEARCH_WALLET_RECOVERY_RATE_LIMIT: RateLimitPolicy = {
+  scope: "research.wallet.recovery",
+  limit: 5,
+  windowMs: 60 * 60 * 1000,
+};
+
 export const EVENT_REGISTRATION_RATE_LIMIT: RateLimitPolicy = {
   scope: "events.registration",
   limit: 20,

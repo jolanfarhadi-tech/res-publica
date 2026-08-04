@@ -1,5 +1,20 @@
 # Module: Membership
 
+## Incremental application protocol — 2026-08-04 (uncommitted)
+
+`src/application/membership-applications.ts` and
+`/api/membership/applications` implement the proposed ADR-037 boundary. New
+applicants are not inserted into `members`; board approval requires MFA,
+`civic/membership.application.decide`, the exact application target, and a
+reviewer other than the applicant. The former `/api/membership/create` path now
+returns `410 membership_application_required`, preventing immediate-membership
+bypass while preserving an explicit compatibility response.
+
+Research readiness is optional. Project-specific consent and eligibility use
+separate records and withdrawal does not mutate Membership. Approval offers—but
+does not activate—a pseudonymous research wallet. ADR-037/038 and public legal
+wording require approval before Production activation.
+
 ## Incremental implementation — request protection, 2026-07-29
 
 `POST /api/membership/create` now receives a server-generated request ID and
@@ -73,3 +88,14 @@ Do not re-implement the exit/deactivation lifecycle, pledge/renewal handling, in
 - commits `2194b7e`, `a9fac9c`
 - `architecture/adr/ADR-027-identity-authentication-authorization.md` (for the drift finding)
 - test: `membership.test.ts`
+
+## Incremental membership-application boundary — 2026-08-04
+
+New applicants now have a separate verified Auth0 account and Membership
+Application. Email verification never grants membership. The MFA-protected board
+decision uses an exact application capability and different actor; approval,
+verified Membership, wallet offer, member grants, notification and canonical
+audit evidence commit atomically. Versioned Satzung, technical-protocol and
+privacy acknowledgements are separate. General research readiness is optional
+and never gates membership. ADR-037 remains Proposed pending architecture/legal
+approval; existing legacy members are not reclassified.

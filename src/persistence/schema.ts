@@ -187,6 +187,7 @@ export const authFlows = pgTable(
     codeVerifier: text("code_verifier").notNull(),
     nonce: text("nonce").notNull(),
     returnTo: text("return_to").notNull(),
+    intent: text("intent", { enum: ["login", "signup"] }).notNull().default("login"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
     expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
     consumedAt: timestamp("consumed_at", { withTimezone: true, mode: "date" }),

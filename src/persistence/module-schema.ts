@@ -32,6 +32,222 @@ export const members = pgTable(
   (table) => [uniqueIndex("members_person_uq").on(table.personId)]
 );
 
+export const membershipApplications = pgTable(
+  "membership_applications",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    requestedTier: text("requested_tier", {
+      enum: ["basic", "supporter", "volunteer", "research", "institutional"],
+    }).notNull(),
+    status: text("status", {
+      enum: ["application_pending", "approved", "rejected", "withdrawn"],
+    }).notNull(),
+    givenName: text("given_name").notNull(),
+    familyName: text("family_name").notNull(),
+    email: text("email").notNull(),
+    address: jsonb("address").$type<{
+      line1: string;
+      line2: string | null;
+      postalCode: string;
+      city: string;
+      countryCode: string;
+    }>().notNull(),
+    submittedAt: timestamp("submitted_at", { withTimezone: true, mode: "date" }).notNull(),
+    decidedAt: timestamp("decided_at", { withTimezone: true, mode: "date" }),
+    decidedByPersonId: text("decided_by_person_id").references(() => people.id, { onDelete: "restrict" }),
+    decisionAuditId: text("decision_audit_id"),
+    decisionAuditTimestamp: timestamp("decision_audit_timestamp", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("membership_applications_person_uq").on(table.personId),
+    index("membership_applications_status_idx").on(table.status),
+  ]
+);
+
+export const documentAcknowledgements = pgTable(
+  "document_acknowledgements",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    contextType: text("context_type", { enum: ["membership-application"] }).notNull(),
+    contextId: text("context_id").notNull().references(() => membershipApplications.id, { onDelete: "restrict" }),
+    documentType: text("document_type", {
+      enum: ["statutes", "technical-protocol", "privacy-notice"],
+    }).notNull(),
+    documentVersion: text("document_version").notNull(),
+    acknowledgedAt: timestamp("acknowledged_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("document_acknowledgements_context_document_uq").on(
+      table.contextType,
+      table.contextId,
+      table.documentType
+    ),
+    index("document_acknowledgements_person_idx").on(table.personId),
+  ]
+);
+
+export const researchParticipationPreferences = pgTable(
+  "research_participation_preferences",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    status: text("status", { enum: ["willing", "declined", "withdrawn"] }).notNull(),
+    statementVersion: text("statement_version").notNull(),
+    recordedAt: timestamp("recorded_at", { withTimezone: true, mode: "date" }).notNull(),
+    withdrawnAt: timestamp("withdrawn_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [uniqueIndex("research_participation_preferences_person_uq").on(table.personId)]
+);
+
+export const projectResearchConsents = pgTable(
+  "project_research_consents",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    projectRef: text("project_ref").notNull(),
+    purposeVersion: text("purpose_version").notNull(),
+    purpose: text("purpose").notNull(),
+    dataCategories: jsonb("data_categories").$type<string[]>().notNull(),
+    pseudonymization: text("pseudonymization").notNull(),
+    recipients: jsonb("recipients").$type<string[]>().notNull(),
+    retentionRule: text("retention_rule").notNull(),
+    status: text("status", { enum: ["granted", "withdrawn"] }).notNull(),
+    grantedAt: timestamp("granted_at", { withTimezone: true, mode: "date" }).notNull(),
+    withdrawnAt: timestamp("withdrawn_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("project_research_consents_person_project_purpose_uq").on(
+      table.personId,
+      table.projectRef,
+      table.purposeVersion
+    ),
+    index("project_research_consents_project_idx").on(table.projectRef),
+  ]
+);
+
+export const projectEligibilityRecords = pgTable(
+  "project_eligibility_records",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    projectRef: text("project_ref").notNull(),
+    status: text("status", { enum: ["pending", "eligible", "ineligible", "excluded"] }).notNull(),
+    basis: text("basis", {
+      enum: [
+        "no-consent-required",
+        "fully-anonymized",
+        "general-research-readiness",
+        "project-specific-consent",
+        "other-reviewed-lawful-basis",
+      ],
+    }).notNull(),
+    projectConsentId: text("project_consent_id").references(() => projectResearchConsents.id, { onDelete: "restrict" }),
+    reasonCode: text("reason_code").notNull(),
+    assessedAt: timestamp("assessed_at", { withTimezone: true, mode: "date" }).notNull(),
+    assessedByPersonId: text("assessed_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  },
+  (table) => [
+    uniqueIndex("project_eligibility_records_person_project_uq").on(table.personId, table.projectRef),
+    index("project_eligibility_records_project_idx").on(table.projectRef),
+  ]
+);
+
+export const researchWallets = pgTable(
+  "research_wallets",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    status: text("status", { enum: ["offered", "active", "suspended", "revoked"] }).notNull(),
+    protocolProfile: text("protocol_profile", {
+      enum: ["anoncreds-v1-experimental", "w3c-vc-bbs-2023-v1"],
+    }).notNull(),
+    recoveryPublicKey: jsonb("recovery_public_key").$type<JsonWebKey>(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+    activatedAt: timestamp("activated_at", { withTimezone: true, mode: "date" }),
+    suspendedAt: timestamp("suspended_at", { withTimezone: true, mode: "date" }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [uniqueIndex("research_wallets_person_uq").on(table.personId)]
+);
+
+export const researchWalletDeviceBindings = pgTable(
+  "research_wallet_device_bindings",
+  {
+    id: text("id").primaryKey(),
+    walletId: text("wallet_id").notNull().references(() => researchWallets.id, { onDelete: "restrict" }),
+    holderKeyThumbprint: text("holder_key_thumbprint").notNull(),
+    holderPublicKey: jsonb("holder_public_key").$type<JsonWebKey>(),
+    boundAt: timestamp("bound_at", { withTimezone: true, mode: "date" }).notNull(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("research_wallet_device_bindings_thumbprint_uq").on(table.holderKeyThumbprint),
+    index("research_wallet_device_bindings_wallet_idx").on(table.walletId),
+  ]
+);
+
+export const researchCredentialIssuanceChallenges = pgTable(
+  "research_credential_issuance_challenges",
+  {
+    challengeHash: text("challenge_hash").primaryKey(),
+    walletId: text("wallet_id").notNull().references(() => researchWallets.id, { onDelete: "restrict" }),
+    deviceBindingId: text("device_binding_id").notNull()
+      .references(() => researchWalletDeviceBindings.id, { onDelete: "restrict" }),
+    projectRef: text("project_ref").notNull(),
+    projectDigest: text("project_digest").notNull(),
+    audienceHash: text("audience_hash").notNull(),
+    projectPublicKey: jsonb("project_public_key").$type<JsonWebKey>().notNull(),
+    consentDigest: text("consent_digest").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("research_credential_challenges_expires_idx").on(table.expiresAt)]
+);
+
+export const researchWalletRecoveryEvents = pgTable(
+  "research_wallet_recovery_events",
+  {
+    id: text("id").primaryKey(),
+    walletId: text("wallet_id").notNull().references(() => researchWallets.id, { onDelete: "restrict" }),
+    eventType: text("event_type", {
+      enum: ["credential-loss-reported", "device-rotated", "wallet-revoked"],
+    }).notNull(),
+    previousDeviceBindingId: text("previous_device_binding_id")
+      .references(() => researchWalletDeviceBindings.id, { onDelete: "restrict" }),
+    newDeviceBindingId: text("new_device_binding_id")
+      .references(() => researchWalletDeviceBindings.id, { onDelete: "restrict" }),
+    performedByPersonId: text("performed_by_person_id").notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    occurredAt: timestamp("occurred_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("research_wallet_recovery_events_wallet_idx").on(table.walletId)]
+);
+
+export const researchWalletRecoveryChallenges = pgTable(
+  "research_wallet_recovery_challenges",
+  {
+    challengeHash: text("challenge_hash").primaryKey(),
+    walletId: text("wallet_id").notNull().references(() => researchWallets.id, { onDelete: "restrict" }),
+    audienceHash: text("audience_hash").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("research_wallet_recovery_challenges_expires_idx").on(table.expiresAt)]
+);
+
+export const researchWalletActivationRecords = pgTable(
+  "research_wallet_activation_records",
+  {
+    id: text("id").primaryKey(),
+    walletId: text("wallet_id").notNull().references(() => researchWallets.id, { onDelete: "restrict" }),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    consentVersion: text("consent_version").notNull(),
+    grantedAt: timestamp("granted_at", { withTimezone: true, mode: "date" }).notNull(),
+    withdrawnAt: timestamp("withdrawn_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [index("research_wallet_activation_records_wallet_idx").on(table.walletId)]
+);
+
 export const membershipStatusChanges = pgTable(
   "status_changes",
   {

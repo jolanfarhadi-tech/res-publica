@@ -1,5 +1,18 @@
 # Module: Identity, Authentication & Authorization
 
+## Incremental verified-signup boundary — 2026-08-04 (uncommitted)
+
+OIDC flows now persist `login` versus `signup` intent. Signup uses the provider's
+hosted credential UI; the application still stores no password. An unknown OIDC
+identity is self-provisioned only for signup intent with stable issuer/subject
+and `email_verified=true`. Existing-email ambiguity fails closed for human
+identity review instead of auto-linking. The minimal Person, AuthIdentity, two
+self-service grants, and audit evidence commit atomically.
+
+A regression test exposed and fixed the existing callback's immutable Fetch
+redirect-header bug: successful callbacks now construct a mutable 303 response
+with the secure session cookie rather than appending to `Response.redirect()`.
+
 ## Production verification — 2026-07-30
 
 The configured Production login route returns an Auth0 Authorization Code

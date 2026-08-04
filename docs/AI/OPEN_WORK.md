@@ -1,5 +1,27 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-020 — Membership application architecture and public wording approval
+- **Implemented locally:** proposed ADR-037, verified-signup intent, application
+  persistence, versioned acknowledgements, MFA/exact-scope board decision,
+  status UI, and additive migrations.
+- **External blockers:** ADR acceptance; approved privacy/retention wording; a
+  confirmed versioned membership/contribution regulation if one is to be
+  required; board reviewer/grant administration; Auth0 verification-email
+  policy; and an approved email-delivery provider for decision notifications.
+- **Boundary:** the signed Satzung exists and is hash-versioned. No separate
+  membership regulation was found, so none was invented or required.
+
+### OPEN-021 — Research wallet cryptographic activation
+- **Implemented locally:** proposed ADR-038, wallet offer/metadata, explicit
+  activation evidence, local project-pseudonym derivation, strict private-key
+  rejection, threat model, and four-part fail-closed feature gate.
+- **Blockers:** ADR acceptance; protocol/method selection; audited Node/browser
+  implementation; issuer-key custody; holder recovery/device-change design;
+  revocation/status privacy; interoperability and penetration tests; DPIA/legal,
+  security, incident-response, and operational-owner approval.
+- **Boundary:** no ZK credential is issued or verified and no anonymity claim is
+  made. Production activation remains unavailable.
+
 ### OPEN-019 — Phase 0 P3 Persian Open Graph prebuild uses an approved neutral fallback
 
 **Status:** Resolved temporarily by explicit owner decision on 2026-07-30.
@@ -249,6 +271,20 @@ MFA, migration, legal, and operational gates in
 Per `brain/ROADMAP.md` (read in full, prior session): Fellowship System, Academy, Speech Academy, Writing Academy, News Analysis Lab, Research Lab, Store, full Admin Portal (V2 tier), Public API (V3 tier) — explicitly deferred, no build-ready blueprint exists for any of these. **These are not active tasks** and should not be started without a scoping/blueprint pass first, per the roadmap's own explicit sequencing.
 
 ## CLA / contribution process
+
+### OPEN-020 — External approval for real research credentials and contributions
+- **Implemented:** local wallet custody/recovery, BBS issuance and selective
+  disclosure, project holder proof, separate verifier persistence, anonymous
+  intake, duplicate prevention, redaction and synthetic smoke.
+- **Closed runtime gate:** `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` must remain
+  absent/false.
+- **External blockers:** ADR-037/038 acceptance; independent cryptographic,
+  penetration and reidentification reviews; DPO/legal DPIA; lawful basis,
+  transparency, retention/erasure and DPAs; issuer/verifier/key-custody,
+  incident-response and per-project protocol owners; explicit decision on the
+  bounded 15-minute revocation window.
+- **Safe work completed:** internal DPIA/security drafts and external audit
+  package. Do not infer approval from their existence.
 
 ### OPEN-009 — CLA text not yet published
 - **Evidence:** `CONTRIBUTING.md` (read in full): "The canonical CLA text will be published separately... contributions are accepted only by prior arrangement."

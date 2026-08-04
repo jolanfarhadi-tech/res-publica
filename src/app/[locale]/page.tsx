@@ -405,16 +405,8 @@ export default async function HomePage({
       </section>
 
       <section className="section-shell bg-bg">
-        <Container className="grid gap-14 lg:grid-cols-2">
-          <FadeIn className="rounded-2xl bg-night p-7 text-paper sm:p-10">
-            <SectionLead {...copy.membership} dark />
-            <div className="mt-8">
-              <ActionLink href={`/${locale}/membership`} inverse>
-                {copy.membership.action}
-              </ActionLink>
-            </div>
-          </FadeIn>
-          <FadeIn delay={0.08} className="rounded-2xl border border-border bg-surface p-7 sm:p-10">
+        <Container>
+          <FadeIn className="max-w-4xl rounded-2xl border border-border bg-surface p-7 sm:p-10">
             <SectionLead {...copy.partners} />
             <div className="mt-8">
               <ActionLink href={`/${locale}/partners`}>

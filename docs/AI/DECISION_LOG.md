@@ -163,6 +163,24 @@
 **Related ADR:** none — this is a deployment-safe Experience/Localization implementation decision, not an architectural domain decision.
 **Rejected alternatives:** rendering Persian through the unsupported Satori path; substituting English copy on the FA card; runtime-fetching an unproven font; removing localized Persian metadata.
 
+## D-20: Review implementation uses W3C VC 2.0 with BBS derived proofs
+
+**Decision:** the gated research-wallet implementation uses W3C Verifiable
+Credentials Data Model 2.0 plus `bbs-2023`, with a new project P-256 holder key
+per project, randomized selective-disclosure presentations and a separate
+identity-free verifier database.
+**Rationale:** the selected Digital Bazaar implementation supports both required
+Node and browser runtimes. The evaluated AnonCreds JavaScript binding did not
+support the required browser holder runtime; SD-JWT selective disclosure alone
+does not meet the cross-presentation unlinkability objective.
+**Evidence:** ADR-038 (still Proposed), BBS/local-wallet/issuer/verifier source
+and synthetic integration tests; internal security review.
+**Related commit:** none — implementation is currently unstaged.
+**Related ADR:** proposed ADR-038; accepted ADR-027 and ADR-029 boundaries remain
+unchanged.
+**Rejected alternatives:** AnonCreds for the current browser runtime; SD-JWT as
+the proof core; an issuer callback from verifier for every status check.
+
 ---
 
 ## Decisions with rejected alternatives not otherwise itemized above

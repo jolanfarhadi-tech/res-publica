@@ -1,5 +1,22 @@
 # Current State — Live Repository Snapshot
 
+## Incremental state — membership application and research boundary (2026-08-04)
+
+Uncommitted, locally verified work replaces the public immediate-membership
+write path with an application protocol: verified Auth0 signup, a separate
+`application_pending` record, versioned Satzung/protocol/privacy
+acknowledgements, and an MFA/exact-scope/separation-of-duties board decision.
+Approval atomically creates verified Membership, status history, notification,
+wallet offer metadata, a scoped activation grant, and canonical audit evidence.
+
+General research readiness is optional and independent from Membership.
+Project-specific consent, eligibility, withdrawal, and exclusion are separate
+records. The research wallet stores metadata only, is described as
+pseudonymous rather than anonymous, and remains fail-closed behind four explicit
+approval flags. ADR-037 and ADR-038 remain **Proposed**, not accepted. Local
+fresh verification applies 17 migrations and creates 63 tables; no Production
+migration was applied.
+
 ## Incremental update — completed safe slices deployed, 2026-08-04
 
 Functional release commit `f2c59e1f1e7f4ebc7cb0a334d3b85c42117548cf`
@@ -636,3 +653,20 @@ passed.
 That configuration/deployment step is complete. Current external actions are
 listed in `OPEN_WORK.md` and `SECURITY_LEGAL_GATE_REGISTER.md`; `tsconfig.json`
 and `tatus` remain unrelated and excluded.
+
+## Incremental state — Membership and gated research wallet, 2026-08-04
+
+The current unstaged implementation adds the account/application/board decision
+boundary, optional research readiness, project consent/eligibility, local BBS
+wallet, holder-controlled recovery, separate research verifier and anonymous
+intake. Main migrations now run through 0018 (19 migrations, 66 tables). The
+isolated verifier has one migration and six tables. Focused serial verification
+passed 12 files / 30 tests. The complete serial suite passed 72 files / 294
+tests. Structure, lint, typecheck, both migration checks, the zero-vulnerability
+Production dependency audit and the 119-page Production build all passed.
+
+Real credentials and real research contributions remain fail-closed under the
+exact final gate `RESEARCH_REAL_DATA_ACTIVATION_APPROVED`. Synthetic cryptographic
+smoke creates no persistent records. ADR-037/038 remain Proposed and require the
+external approvals listed in the gate register. No Production migration or
+real-data activation was performed.

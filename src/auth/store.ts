@@ -5,7 +5,7 @@ import type { AssuranceLevel, AuthenticatedActor, AuthorizationGrant } from "./t
 
 export async function saveAuthFlow(db: Database, flow: {
   stateHash: string; codeVerifier: string; nonce: string; returnTo: string;
-  createdAt: Date; expiresAt: Date;
+  intent: "login" | "signup"; createdAt: Date; expiresAt: Date;
 }) {
   await db.insert(authFlows).values({ ...flow, consumedAt: null });
 }

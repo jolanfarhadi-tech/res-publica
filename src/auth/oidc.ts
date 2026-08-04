@@ -20,7 +20,10 @@ function configuration(environment: OidcEnvironment): Promise<oidc.Configuration
   return cachedConfiguration;
 }
 
-export async function beginOidcFlow(environment: OidcEnvironment): Promise<OidcFlow> {
+export async function beginOidcFlow(
+  environment: OidcEnvironment,
+  intent: "login" | "signup" = "login"
+): Promise<OidcFlow> {
   const config = await configuration(environment);
   const codeVerifier = oidc.randomPKCECodeVerifier();
   const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
@@ -34,6 +37,7 @@ export async function beginOidcFlow(environment: OidcEnvironment): Promise<OidcF
     code_challenge_method: "S256",
     state,
     nonce,
+    ...(intent === "signup" ? { screen_hint: "signup" } : {}),
   });
   return { authorizationUrl, state, nonce, codeVerifier };
 }
@@ -57,6 +61,9 @@ export async function finishOidcFlow(
   return {
     issuer: claims.iss,
     subject: claims.sub,
+    email: typeof claims.email === "string" ? claims.email : null,
+    emailVerified: claims.email_verified === true,
+    displayName: typeof claims.name === "string" ? claims.name : null,
     authenticatedAt: claims.auth_time ? new Date(claims.auth_time * 1000) : new Date(),
     assurance: assuranceFromClaims(claims as Record<string, unknown>),
   };

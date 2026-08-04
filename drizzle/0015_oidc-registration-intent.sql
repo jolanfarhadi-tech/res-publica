@@ -1,0 +1,1 @@
+ALTER TABLE "auth_flows" ADD COLUMN "intent" text DEFAULT 'login' NOT NULL;

@@ -22,6 +22,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
     "db:check:fresh": "node scripts/check-fresh-migrations.mjs",
+    "db:check:research:fresh": "node scripts/check-fresh-research-migrations.mjs",
     "predev": "node scripts/check-structure.mjs",
     "prebuild": "node scripts/check-structure.mjs",
     "dev": "next dev",
@@ -32,6 +33,12 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@digitalbazaar/bbs-2023-cryptosuite": "^2.0.1",
+    "@digitalbazaar/bls12-381-multikey": "^2.1.0",
+    "@digitalbazaar/data-integrity": "^2.2.0",
+    "@digitalbazaar/multikey-context": "^2.0.1",
+    "@digitalbazaar/vc": "^7.3.0",
+    "did-context": "^3.1.1",
     "drizzle-orm": "^0.45.2",
     "framer-motion": "^11.15.0",
     "gray-matter": "^4.0.3",

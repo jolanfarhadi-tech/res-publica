@@ -99,6 +99,41 @@
       "when": 1785357382898,
       "tag": "0013_notification-delivery-attempts",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1785855049890,
+      "tag": "0014_membership-application-research-boundaries",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1785855363756,
+      "tag": "0015_oidc-registration-intent",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1785855872697,
+      "tag": "0016_pseudonymous-research-wallet-metadata",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1785863285699,
+      "tag": "0017_zk-research-credential-runtime",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1785864926931,
+      "tag": "0018_holder-controlled-wallet-recovery",
+      "breakpoints": true
     }
   ]
 }

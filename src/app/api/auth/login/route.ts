@@ -20,18 +20,22 @@ async function handleLogin(request: Request) {
   );
   if (rateLimitRejection) return rateLimitRejection;
   const requestedReturnTo = new URL(request.url).searchParams.get("returnTo") ?? "/de";
+  const intent = new URL(request.url).searchParams.get("mode") === "signup"
+    ? "signup" as const
+    : "login" as const;
   const returnTo = requestedReturnTo.startsWith("/") && !requestedReturnTo.startsWith("//")
     ? requestedReturnTo
     : "/de";
 
   try {
-    const flow = await beginOidcFlow(runtime.oidc);
+    const flow = await beginOidcFlow(runtime.oidc, intent);
     const now = new Date();
     await saveAuthFlow(runtime.db, {
       stateHash: hashSecret(flow.state),
       codeVerifier: flow.codeVerifier,
       nonce: flow.nonce,
       returnTo,
+      intent,
       createdAt: now,
       expiresAt: new Date(now.getTime() + 10 * 60 * 1000),
     });

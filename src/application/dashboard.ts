@@ -1,10 +1,16 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { isAuthorized } from "../auth/authorize";
 import type { AuthenticatedActor } from "../auth/types";
 import type { Database } from "../persistence";
 import { consentRecords, notifications, payments } from "../persistence/schema";
-import { events, registrations } from "../persistence/module-schema";
+import {
+  events,
+  registrations,
+  researchWalletDeviceBindings,
+  researchWallets,
+} from "../persistence/module-schema";
 import { getSelfMemberProfile } from "./member-profile";
+import { getSelfMembershipApplication } from "./membership-applications";
 
 export async function getSelfDashboard(
   db: Database,
@@ -15,6 +21,7 @@ export async function getSelfDashboard(
 
   const [
     membership,
+    membershipApplication,
     consents,
     selfPayments,
     eventRegistrations,
@@ -22,6 +29,7 @@ export async function getSelfDashboard(
   ] =
     await Promise.all([
       getSelfMemberProfile(db, actor),
+      getSelfMembershipApplication(db, actor),
       db
         .select({
           id: consentRecords.id,
@@ -86,6 +94,18 @@ export async function getSelfDashboard(
       })
   );
 
+  const [wallet] = await db.select({
+    id: researchWallets.id,
+    status: researchWallets.status,
+    protocolProfile: researchWallets.protocolProfile,
+  }).from(researchWallets).where(eq(researchWallets.personId, actor.personId)).limit(1);
+  const [activeDevice] = wallet ? await db.select({
+    id: researchWalletDeviceBindings.id,
+  }).from(researchWalletDeviceBindings).where(and(
+    eq(researchWalletDeviceBindings.walletId, wallet.id),
+    isNull(researchWalletDeviceBindings.revokedAt)
+  )).limit(1) : [];
+
   return {
     account: {
       status: "authenticated" as const,
@@ -93,13 +113,18 @@ export async function getSelfDashboard(
       authenticatedAt: actor.authenticatedAt,
     },
     membership,
+    membershipApplication,
     consents,
     payments: selfPayments,
     eventRegistrations,
     notifications: recipientNotifications,
+    researchWallet: wallet ? {
+      ...wallet,
+      activeDeviceBindingId: activeDevice?.id ?? null,
+    } : null,
     permittedActions: {
       viewProfile: true,
-      applyForMembership: !membership.enrolled,
+      applyForMembership: !membership.enrolled && !membershipApplication,
       registerForEvents,
       // ADR-034 and the absent ADR-035 keep consent mutation unavailable.
       manageConsent: false,

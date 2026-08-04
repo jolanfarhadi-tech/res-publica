@@ -1,5 +1,18 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-018 — Proposed membership/wallet architecture is not Production approval
+
+- **Evidence:** ADR-037 and ADR-038 are `Proposed`; the public privacy notice is
+  already incomplete under WARN-016; AnonCreds v1.0 remains Draft and W3C BBS
+  remains Candidate Recommendation Draft.
+- **Impact:** deploying migrations does not authorize public self-registration,
+  legal wording, research processing, recovery, proof issuance, or wallet
+  verification.
+- **Severity:** **High / architecture, legal, and security activation gate**.
+- **Safe handling:** retain the wallet's four independent fail-closed flags;
+  keep proof issuance/verification absent; obtain the approvals and operational
+  ownership listed in OPEN-020/021 before Production activation.
+
 ### WARN-017 — Development lint chain retains an upstream advisory
 
 - **Evidence:** after the Phase 0 P3 dependency patch,
@@ -163,6 +176,19 @@
 ---
 
 ## Not included here (evidence insufficient to call these verified risks)
+
+### WARN-017 — Research wallet is reviewable but not approved for real data
+- **Evidence:** actual BBS proof and verifier tests pass with synthetic data;
+  ADR-038, the threat model, internal DPIA and security review identify absent
+  independent review and residual timing/cohort risks.
+- **Impact:** activating real issuance/intake could expose members to
+  reidentification or unreviewed cryptographic/operational risk.
+- **Severity:** **High while the final gate is closed; prohibited if bypassed.**
+- **Safe handling:** deploy code only with
+  `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` unset/false; use synthetic smoke only;
+  never describe the system as anonymous.
+- **Resolution:** all OPEN-020 evidence is approved and recorded by accountable
+  owners, followed by an explicit activation change.
 
 - **GitHub integration / permissions blockers** — no evidence found either way this session; not listed as a risk without evidence.
 - **Deprecated terminology still in active use** — the only confirmed terminology retirement (`Validation Framework` → retired, per commit `83cde16`) appears fully applied per that commit's own message ("synchronize repository architecture"); no residual usage was found this session, so this is not listed as an active risk. If a future search finds lingering references, add them here with citations.
