@@ -1,5 +1,23 @@
 # Module: Persistence
 
+## Production migration verification — 2026-07-30
+
+The canonical Neon Production branch now contains all 14 repository migrations
+and 55 public tables. Only `0012_platform-rate-limits` and
+`0013_notification-delivery-attempts` were pending; both were verified
+additive and backward-compatible before forward application. TLS 1.3,
+certificate validation, the protected branch, seven-day history retention, a
+pre-migration recovery timestamp, journal hashes, and post-migration table and
+grant state were verified.
+
+The dedicated migration role owns the Drizzle journal but does not retain
+CREATE on `public`. A temporary CREATE grant was applied for the two migrations
+and revoked afterward. The runtime role has the intended DML on
+`rate_limit_buckets`, SELECT/INSERT/UPDATE but no DELETE on
+`notification_delivery_attempts`, and no membership in migration or owner
+roles. Vercel Production now uses a pooled `res_publica_runtime` connection
+with certificate-verifying TLS; no connection value was recorded.
+
 ## Incremental implementation — notification delivery attempts, 2026-07-29
 
 Migration `0013_notification-delivery-attempts.sql` adds one
@@ -11,9 +29,8 @@ message body.
 
 Unique constraints prevent duplicate attempt numbers per Notification and
 duplicate idempotency keys. The Notification foreign key is restrictive, and
-the verified runtime role receives only SELECT/INSERT/UPDATE. Local
-verification applies 14 migrations and creates 55 tables. Migration 0013 has
-not been applied to Production.
+the verified runtime role receives only SELECT/INSERT/UPDATE. Local and
+Production verification apply 14 migrations and create 55 tables.
 
 ## Incremental implementation — shared rate-limit buckets, 2026-07-29
 

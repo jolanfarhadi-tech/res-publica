@@ -50,8 +50,8 @@ verified. The public form stays hidden while disabled.
 
 Activation still requires an approved provider and DPA, legal basis and
 approved text, retention/withdrawal operations, owner responsibility,
-credentials outside Git/chat, and Production migration authorization. No
-provider or environment setting was activated.
+and credentials outside Git/chat. Migration 0012 is applied in Production;
+no provider or newsletter activation setting was enabled.
 
 ### OPEN-016 — HARM operations safely disabled pending activation approval
 
@@ -60,14 +60,16 @@ are server-disabled unless `HARM_OPERATIONS_ENABLED=true`.
 
 Activation remains open and must not occur until secure evidence/case storage,
 safeguarding, DPIA/DPA and retention rules, named administration and incident
-ownership, Auth0 MFA, migration authorization, and operational approval are
+ownership, Auth0 MFA, and operational approval are
 verified. This implementation did not set the variable or change any external
 service.
 
-### OPEN-015 — Resolved locally: bounded Publishing operations read side
+### OPEN-015 — Resolved and deployed: bounded Publishing operations read side
 
 **Status:** Exact-scope, MFA-protected, role-filtered Publishing workspace API
-is implemented and locally verified; not pushed or deployed.
+is implemented, verified, and deployed. Anonymous Production writes fail
+closed; authenticated operation remains blocked by the Auth0 callback and
+staff-appointment gates.
 
 No operational frontend was fabricated because staff identities, Auth0 MFA,
 Publisher appointment, and Production administrator responsibility remain
@@ -81,13 +83,14 @@ intentionally disabled.
 
 Activation requires an approved provider and DPA, credentials supplied outside
 Git/chat, approved template content and legal basis, an operational worker
-schedule, and authorization to apply migrations 0012–0013 to Production. No
-public endpoint or provider was activated by the implementation slice.
+schedule. Migration 0013 is applied in Production; no public delivery endpoint
+or provider was activated.
 
-### OPEN-013 — Resolved locally: protected self-facing Dashboard
+### OPEN-013 — Resolved and deployed: protected self-facing Dashboard
 
-**Status:** Implemented and fully locally verified on
-`codex/platform-phase-2`; not pushed or deployed.
+**Status:** Implemented, verified, and deployed. The public page renders its
+anonymous state while `/api/dashboard` and `/api/membership/profile` return
+private `401` responses without a valid session.
 
 The Dashboard composes only the authenticated actor's account assurance,
 Member Profile, consent receipts, event registrations, notifications, and
@@ -160,20 +163,17 @@ MFA, migration, legal, and operational gates in
   verified receiving workflow, collection purpose, retention path, or consent
   record exists.
 
-### OPEN-011 — Production runtime configuration blocks deployment
-- **Task:** configure the existing Vercel project `res-publica` for database
-  readiness and protected OIDC authentication.
-- **Evidence:** production has only `NEXT_PUBLIC_SITE_URL`;
-  `https://respublica-ev.de/api/health/ready` returns 503 with
-  `{"status":"not_ready","dependency":"database","configured":false}`.
-- **Required values:** `DATABASE_URL`, `OIDC_ISSUER`, `OIDC_CLIENT_ID`, and
-  `OIDC_REDIRECT_URI`; add `OIDC_CLIENT_SECRET` when the selected provider
-  requires a confidential client.
-- **Safe next action:** add verified values with
-  `npx.cmd --yes vercel@latest env add <NAME> production --project res-publica`,
-  then recheck readiness/auth before deploying the exact pushed commit.
-- **Blocker:** production owner credentials and provider values; values must not
-  be invented.
+### OPEN-011 — Production runtime deployed; Auth0 callback remains open
+- **Resolved:** the canonical Vercel project `res-publica` has its verified
+  Production database and OIDC variable names. The exact committed release is
+  deployed, database readiness returns `200`, and Production has 14 migrations
+  and 55 tables.
+- **Remaining blocker:** Auth0 application
+  `LrqxClLMZw9JXNy6oU3JGywNfyFEq8Iy` rejects the configured redirect.
+- **Exact owner action:** add
+  `https://respublica-ev.de/api/auth/callback` to the application's Allowed
+  Callback URLs without removing existing entries. Auth0 management access was
+  not authenticated during verification.
 
 ## Documentation gaps
 

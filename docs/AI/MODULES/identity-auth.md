@@ -1,5 +1,20 @@
 # Module: Identity, Authentication & Authorization
 
+## Production verification — 2026-07-30
+
+The configured Production login route returns an Auth0 Authorization Code
+Flow redirect with PKCE, state, nonce, the expected client ID, and exact
+`redirect_uri=https://respublica-ev.de/api/auth/callback`. Anonymous session
+inspection reports authentication available, and callback requests without a
+valid state fail closed.
+
+Auth0 still returns `Callback URL mismatch` because the exact redirect URI is
+not present in the application's Allowed Callback URLs. Auth0 management access
+was not authenticated, so no external setting was changed. Dashboard and
+Member Profile APIs remain private and return `401` anonymously. This is the
+only observed blocker to completing an authenticated Production flow; MFA,
+identity provisioning, and operational ownership gates remain unchanged.
+
 ## Incremental implementation — shared login rate limiting, 2026-07-29
 
 OIDC login initiation is protected by the shared PostgreSQL rate limiter before
@@ -23,9 +38,8 @@ fail closed with a stable `500`; the structured operational event records no
 exception message, query value, token, identity, or profile payload.
 
 Vercel Production contains all required OIDC variable names in the correct
-`res-publica` project. Values were not revealed. The Auth0 management session
-is not authenticated, and the live provider still reports a callback mismatch,
-so Production login remains externally blocked.
+`res-publica` project. Values were not revealed. The live provider behavior is
+recorded in the Production verification section above.
 
 ## Purpose
 

@@ -1,5 +1,32 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Production deployment, 2026-07-30
+
+Commit `fc09d8d003106e32bd6af2431043055171566c2d` is deployed from
+`main` through the canonical Vercel project `res-publica`. Production
+deployment `dpl_29PZCkF2WzgWtqiLB9sURaRksXvw` serves
+`https://respublica-ev.de`; build logs confirm the exact commit and 105-page
+build.
+
+The protected Neon `production` branch is in `aws-eu-central-1` with seven-day
+history retention. TLS 1.3 and certificate validation were verified before
+migration. Repository migrations `0012_platform-rate-limits` and
+`0013_notification-delivery-attempts` were the only pending migrations and
+were applied forward-only from a recorded pre-migration recovery timestamp.
+Production now has 14 journaled migrations and 55 public tables, with no
+pending or content-drifted migration. The temporary schema CREATE grant was
+revoked, and runtime permissions match the migration boundary.
+
+Production health and readiness return `200`; all DE/EN/FA public routes,
+canonical metadata, hreflang/x-default, RSS, sitemap, robots, localized Open
+Graph images, Persian RTL, mobile navigation, private Dashboard/Profile
+protection, event authorization, and Governance/Publishing activation or
+authorization boundaries were verified. Browser and final Vercel error-log
+checks are clean. Auth0 still rejects the correct application redirect
+`https://respublica-ev.de/api/auth/callback` because that value is absent from
+the application's Allowed Callback URLs; authenticated operations remain
+externally blocked until the Auth0 owner corrects that setting.
+
 ## Incremental update — Phase 0 P3 Persian Open Graph fallback
 
 **Verified 2026-07-30 on `codex/platform-phase-3` after `cc21280`.**

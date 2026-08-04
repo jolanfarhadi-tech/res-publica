@@ -9,7 +9,7 @@ Production activation.
 
 | Gate | Current evidence | State | Blocks |
 |---|---|---|---|
-| OIDC callback configuration | Correct Vercel project has all required OIDC variable names; Production Auth0 reports callback mismatch; management dashboard access is not authenticated | Open | Login and authenticated operations |
+| OIDC callback configuration | Production sends `https://respublica-ev.de/api/auth/callback` with PKCE/state/nonce; Auth0 rejects it because the exact URL is absent from Allowed Callback URLs; management dashboard access is not authenticated | Owner-side Auth0 change required | Login and authenticated operations |
 | Identity invitation/provisioning ownership | Separation-of-duties runbook exists; accountable administrator/reviewer not appointed | Owner assignment required | External user onboarding |
 | Auth0 MFA plan | ADR requires MFA for sensitive capabilities; Production policy not verified | Open | Admin, Governance, Publishing operations |
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
@@ -25,8 +25,8 @@ Production activation.
 | Incident-response ownership | Technical runbook exists; named commander, deputy, privacy and communications owners absent | Owner assignment required | Operational launch assurance |
 | Production administrator responsibility | No verified named operational responsibility | Open | Privileged administration |
 | Security logging/retention | Minimal request logging and incident evidence procedure exist; retention/recipients unapproved | Owner/legal approval required | Monitoring and incident evidence |
-| Browser security headers | CSP/HSTS/cross-origin policy implemented and locally tested; Production edge not yet verified | Pending deployment verification | Production security assurance |
-| Distributed rate-limit store | PostgreSQL bucket protects auth login, membership creation, event registration, and all 15 Governance/Publishing writes; migration not applied to Production | Implemented locally / Production migration pending | Abuse-resistant protected writes |
+| Browser security headers | CSP/HSTS/cross-origin policy implemented and verified at the Production edge; browser console and Vercel error-log checks are clean | Verified 2026-07-30 | — |
+| Distributed rate-limit store | Migration 0012 is applied in Production; PostgreSQL buckets protect auth login, membership creation, event registration, and all 15 Governance/Publishing writes without raw client addresses | Verified 2026-07-30 | — |
 | Transactional email provider | Provider abstraction, consent gate, idempotent retry evidence and non-delivering adapter implemented; no provider, credentials, worker or approved templates configured | Intentionally disabled | Real delivery |
 | Newsletter legal basis/provider | Exact server activation gate, versioned explicit consent and PostgreSQL abuse protection implemented; provider, DPA, approved text and withdrawal/retention operations remain absent | Intentionally disabled / owner activation required | Newsletter activation |
 | Analytics provider/legal basis | No provider; disabled by default | Intentionally disabled | Analytics activation |
