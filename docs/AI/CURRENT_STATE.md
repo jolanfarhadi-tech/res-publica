@@ -1,5 +1,27 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — completed safe slices deployed, 2026-08-04
+
+Functional release commit `f2c59e1f1e7f4ebc7cb0a334d3b85c42117548cf`
+is deployed from `main` through canonical Vercel project `res-publica` as
+`dpl_EoKd5CFUZEb4hjHn5Tf7puMA9gH9`. Build logs prove branch `main`, commit
+`f2c59e1`, Next.js 15.5.22, and 105 generated pages. The custom Production
+domain aliases this Ready deployment.
+
+This release adds the self-only Payment history to the protected Dashboard,
+fixes the Knowledge Graph domain-filter precedence defect, records the exact
+absence/boundary of its declarative HTTP routes, and reconciles stale
+repository memory. It introduces no migration or provider activation.
+Repository health checks return live/ready `200`; DE/EN/FA, Membership,
+Dashboard/Profile anonymous pages, sitemap, robots, and all three Open Graph
+images return `200`. Login initiation returns the expected `302`, anonymous
+session inspection `200`, and private Dashboard/Profile APIs `401`.
+
+Auth0 management access still redirects to the provider's own dashboard login,
+so the exact Allowed Callback URL cannot be changed by the current authorized
+session. The owner-side action in OPEN-011/WARN-014 remains the only observed
+technical blocker to authenticated Production verification.
+
 ## Incremental update — Knowledge Graph domain-filter correction, 2026-08-04
 
 `searchEntities` now applies its optional Civic/Governance domain predicate to

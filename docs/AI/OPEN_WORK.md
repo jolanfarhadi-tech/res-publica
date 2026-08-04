@@ -93,8 +93,9 @@ anonymous state while `/api/dashboard` and `/api/membership/profile` return
 private `401` responses without a valid session.
 
 The Dashboard composes only the authenticated actor's account assurance,
-Member Profile, consent receipts, event registrations, notifications, and
-capability-derived actions. Consent mutation remains unavailable pending
+Member Profile, consent receipts, self-only allowlisted payments, event
+registrations, notifications, and capability-derived actions. Consent
+mutation remains unavailable pending
 ADR-035 and legal approval. Production activation remains subject to the OIDC,
 MFA, migration, legal, and operational gates in
 `SECURITY_LEGAL_GATE_REGISTER.md`.
@@ -198,7 +199,7 @@ MFA, migration, legal, and operational gates in
   Membership/profile creation is implemented and locally verified. This does
   not complete or authorize the distinct Codex Potential/Hearing Candidate
   disclosure workflow or its Governance-sensitive consent.
-- **Incremental status 2026-08-04:** the existing protected Dashboard now
+- **Incremental status 2026-08-04:** the deployed protected Dashboard now
   completes the Payments/Notifications view with a self-only, allowlisted
   Payment projection. Provider references and other people's records are
   excluded at the query/projection boundary; no provider or mutation was

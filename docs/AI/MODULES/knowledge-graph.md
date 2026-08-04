@@ -56,7 +56,7 @@ Deterministic, non-AI extraction is the core rejected-alternative-avoidance deci
 
 ## Current status
 
-**LOCALLY_VERIFIED, PARTIALLY IMPLEMENTED** — deterministic build,
+**PRODUCTION_DEPLOYED, PARTIALLY IMPLEMENTED** — deterministic build,
 extraction, in-process queries, both tables, and domain filtering exist. The
 manifest-declared external HTTP interface is confirmed unbuilt and remains
 future wiring rather than an operational API.

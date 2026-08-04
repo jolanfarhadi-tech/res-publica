@@ -81,9 +81,10 @@ local protected runtime is absent.
 
 ## Current status
 
-**LOCALLY_VERIFIED, NOT YET PUSHED OR DEPLOYED** for the payment increment. No
-migration was introduced. The existing Dashboard is deployed; authenticated
-Production verification remains blocked by the Auth0 callback mismatch.
+**PRODUCTION_DEPLOYED** for the payment increment in functional release
+`f2c59e1`. No migration was introduced. Authenticated Production verification
+remains blocked by the Auth0 callback mismatch; anonymous API access still
+fails closed with `401`.
 
 ## Do not redo
 

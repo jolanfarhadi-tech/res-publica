@@ -2,7 +2,7 @@
 
 ## Incremental integration — Payments and Notifications view, 2026-08-04
 
-The protected Dashboard now completes the spec's existing Payments and
+The protected Dashboard now completes and deploys the spec's existing Payments and
 Notifications view over the canonical entities. Notifications were already
 present; Payments are now queried only for the session actor and projected
 without provider references or payer identifiers. The localized view is
