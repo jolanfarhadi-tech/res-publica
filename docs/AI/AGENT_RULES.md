@@ -38,7 +38,7 @@ A module marked "implemented" or "tested" in `docs/AI/MODULES/*.md` should not b
 
 ## 9. Watch for and flag documentation drift
 
-A module's own README or a memory file can go stale within hours of being written, if the surrounding implementation changes afterward. A confirmed example exists in this repository: `src/modules/membership/README.md` states "ADR-027 remains unresolved," written at commit `9f9ec5f` (2026-07-07) — but ADR-027 was formally Accepted and `src/auth/` was implemented on 2026-07-19, twelve commits later, without that README being updated. When a memory file or module README makes a claim about another module's state, verify it against that other module's actual current code before trusting it.
+A module's own README or a memory file can go stale within hours of being written, if the surrounding implementation changes afterward. A confirmed historical example in this repository was `src/modules/membership/README.md` stating "ADR-027 remains unresolved" after ADR-027 had been accepted and `src/auth/` implemented; that README was corrected on 2026-08-04. When a memory file or module README makes a claim about another module's state, verify it against that other module's actual current code before trusting it.
 
 ## 10. Record important architectural decisions
 

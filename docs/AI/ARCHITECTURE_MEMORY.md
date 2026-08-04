@@ -58,24 +58,36 @@ Implementation: **PARTIALLY IMPLEMENTED**. Evidence, direct quote from `src/modu
 ## Persistence architecture
 
 Status: **ACCEPTED** implicitly via ADR-002 (domain model) and ADR-010 (offline-first); no single "persistence architecture" ADR exists separately.
-Implementation: **IMPLEMENTED**. Evidence: Drizzle ORM over Postgres (`pg`) in production, `@electric-sql/pglite` for offline-first local dev (`package.json` dependencies, ADR-010: `architecture/adr/ADR-010-offline-first-development.md`); two schema files (`src/persistence/schema.ts` — core domain, 10 tables; `src/persistence/module-schema.ts` — per-module, ~40 tables, both directly grepped this session); 12 migrations `drizzle/0000_m1-canonical-domain.sql` through `drizzle/0011_publishing-authority.sql` (the last **uncommitted** — see `CURRENT_STATE.md`, `OPEN_WORK.md`).
+Implementation: **IMPLEMENTED**. Evidence: Drizzle ORM over Postgres (`pg`) in production, `@electric-sql/pglite` for offline-first local dev (`package.json` dependencies, ADR-010: `architecture/adr/ADR-010-offline-first-development.md`); two schema files (`src/persistence/schema.ts` and `src/persistence/module-schema.ts`); 14 committed migrations through `0013_notification-delivery-attempts`, all applied in Production, creating 55 public tables.
 
 ## Project ownership and cross-domain collaboration
 
 Status: **ACCEPTED** — `architecture/adr/ADR-031-project-ownership-and-cross-domain-collaboration.md`.
-Implementation: **UNVERIFIED**. This compilation found no `Project` entity in either persistence schema file and no dedicated cross-domain-collaboration code path distinct from the module-manifest/registry system already described above. Not confirmed implemented or unimplemented — flagged as a gap in this compilation's verification, not a claim that it's missing from the codebase entirely.
+Implementation: **CONFIRMED UNIMPLEMENTED**. Targeted schema, service, module,
+route, and identifier searches found no Civic `Project` aggregate or Governance
+reference contract. ADR-031 settles ownership but does not define the fields,
+lifecycle, capabilities, persistence, or APIs required for implementation; see
+`OPEN_WORK.md` OPEN-007.
 
 ## Delegation of authority
 
 Status: **ACCEPTED** — `architecture/adr/ADR-033-delegation-of-authority.md` (Governance operational roles, powers, appointment, scope, revocation) and `architecture/adr/ADR-036-civic-editorial-delegation-of-authority.md` (scoped Civic editorial roles, separation of duties, human-only sign-off, no-auto-publish).
 Implementation: **PARTIALLY IMPLEMENTED**, split by ADR:
 - ADR-033 (governance authority generally): **IMPLEMENTED**. Evidence: `authorizationGrants` table, `src/application/governance-authority.ts`, `src/modules/harm-governance/authority.ts`.
-- ADR-036 (civic editorial specifically): **IMPLEMENTED IN UNCOMMITTED WORKTREE ONLY.** The ADR document itself is accepted and committed (`5212636`, "docs: accept civic editorial authority model"), but the code realizing it (`src/modules/publishing/authority.ts`, `src/application/publishing-authority.ts`, `src/application/publishing.ts`, `src/app/api/publishing/{grants,workflow}/route.ts`) exists **only in the current uncommitted working tree** as of this compilation — not yet part of committed Git history on any branch. See `CURRENT_STATE.md` §Publishing and `MODULES/publishing.md`.
+- ADR-036 (civic editorial specifically): **IMPLEMENTED AND COMMITTED** at
+  `09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`. Later bounded workspace and
+  shared rate-limit slices preserve exact scope, MFA, separation of duties,
+  atomic audit, `commitHash: null` readiness, and no-auto-publish.
 
 ## Member Profile visibility and self-service authorization
 
 Status: **ACCEPTED** — `architecture/adr/ADR-034-member-profile-visibility-and-self-service-authorization.md`.
-Implementation: **PARTIALLY IMPLEMENTED** — by the spec document's own accounting. Evidence: `docs/source/projects/MEMBER_PROFILE.md` §"MVP Status" (read in full): *"Current Requirement: the protected, read-only Membership profile slice is implemented according to ADR-034... Identity details beyond the session actor, Community participation, applications, payments, notifications, contributions, recommendations, and Governance-approved disclosures remain outside the implemented slice."* Code: `src/app/[locale]/profile/page.tsx`, `src/app/api/membership/profile/route.ts` (+ `route.test.ts`), `src/i18n/member-profile.ts`, `src/application/member-profile.ts` (+ `.integration.test.ts`), `src/components/platform/MemberProfileDashboard.test.ts`.
+Implementation: **PARTIALLY IMPLEMENTED** — protected Membership journey,
+profile-creation consent receipts, private Dashboard, and self-only
+Payments/Notifications views exist. Remaining Identity, Community,
+application, contribution, recommendation, and Governance-disclosure slices
+remain subject to the accepted projection and architecture gates. Evidence:
+`docs/source/projects/MEMBER_PROFILE.md`, `src/application/{member-profile,dashboard}.ts`.
 
 ## Executive AI Office (EAO)
 

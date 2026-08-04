@@ -506,15 +506,16 @@ OIDC issuer/client/redirect configuration is required for the protected
 authentication and Member Profile path. No guessed values were supplied and no
 production deployment was attempted.
 
-## Current branch
+## Historical branch at the 2026-07-24 compilation
 
 **Verified.** `integration/publishing-reconciliation` (`git branch --show-current`).
 
-## Latest commit
+## Historical latest commit at that compilation
 
 **Verified.** `afa2207` — "feat: transform public narrative experience".
 
-Local `main` remains one commit ahead of `origin/main`: `5212636` only.
+At that time, local `main` was one commit ahead of `origin/main`: `5212636`.
+This was later resolved; see the current Production update at the top.
 
 ## Prior pre-commit git status (historical; superseded by the incremental update above)
 
@@ -598,20 +599,18 @@ passed 12/12. The complete deterministic suite
 `NEXT_PUBLIC_SITE_URL=https://respublica-ev.de`, and `git diff --check` all
 passed.
 
-## Known problems
+## Historical known problems from the 2026-07-24 compilation
 
 **Verified:**
-1. The frontend release candidate is pushed at `afa2207`, but production
-   deployment is blocked by missing database and OIDC configuration
-   (WARN-012).
-2. `src/modules/membership/README.md` contains a stale claim that ADR-027 "remains unresolved" — ADR-027 is Accepted and `src/auth/` has committed source (WARN-004).
+1. Production database/OIDC variables were then missing; this is resolved
+   except for the separate Auth0 callback blocker (WARN-014).
+2. The Membership README's stale ADR-027 claim is now corrected (WARN-004).
 3. `tsconfig.json` has an unrelated final-newline-only working-tree change; exclude it from the Publishing commit boundary.
 4. Five `worktree-agent-*` branches are stale (zero unique commits, verified) — harmless but unswept.
 5. An untracked stray file `tatus` exists at repo root — left untouched and excluded.
 
-## Next recommended development step
+## Historical next recommended step from that compilation
 
-**Verified next step:** configure the existing Vercel project's production
-database and OIDC values, confirm `/api/health/ready` returns 200 and auth is
-operational, then deploy the exact pushed revision through the existing
-project. `tsconfig.json` and `tatus` remain unrelated and excluded.
+That configuration/deployment step is complete. Current external actions are
+listed in `OPEN_WORK.md` and `SECURITY_LEGAL_GATE_REGISTER.md`; `tsconfig.json`
+and `tatus` remain unrelated and excluded.

@@ -82,10 +82,10 @@
 
 **Decision:** four editorial roles (`editor`, `reviewer`, `translator`, `publisher`), session-derived authority, strict separation of duties (author ≠ reviewer ≠ publisher, no self-assignment), human-only sign-off, no automatic publish action.
 **Rationale:** directly evidenced in the implementing code's own logic (not a separately-read rationale document): `src/application/publishing.ts` (read in full) enforces `author_review_forbidden`, `publisher_separation_required`, and forbids self-assignment to translation/review at the function level, consistent with a deliberate anti-collusion/accountability design.
-**Evidence:** `architecture/adr/ADR-036-civic-editorial-delegation-of-authority.md`; `src/modules/publishing/authority.ts`, `src/application/publishing.ts`, `src/application/publishing-authority.ts` (all read in full, all **currently uncommitted**).
-**Related commit:** the ADR document itself is committed as `5212636`; the implementing code has **no commit**. The branch-only commit `890f97f` contains repository-memory and communication documentation, not the Publishing implementation.
+**Evidence:** `architecture/adr/ADR-036-civic-editorial-delegation-of-authority.md`; `src/modules/publishing/authority.ts`, `src/application/publishing.ts`, `src/application/publishing-authority.ts` (implemented, tested, and committed).
+**Related commit:** ADR document `5212636`; complete backend implementation `09c160bb7e56a7bd9e5b9039e2f12de49ae727bf`.
 **Related ADR:** ADR-036.
-**Status caveat:** this is the one decision in this log whose governing document is committed but whose implementation is not — see `docs/AI/MODULES/publishing.md` for full detail.
+**Status caveat:** later workspace and rate-limit slices preserve the committed ADR-036 boundary; no-auto-publish remains in force.
 
 ## D-11: Member Profile — read-only, tri-tier visibility, "not a governance decision interface"
 

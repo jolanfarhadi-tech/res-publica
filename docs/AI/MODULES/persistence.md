@@ -81,7 +81,10 @@ its TypeScript allowlist introduces no table, column, constraint, or migration.
 
 **Per-module schema** (`src/persistence/module-schema.ts`, grepped this session, ~40 tables): Membership (`members`, `membershipStatusChanges`, `recurringPledges`, `institutionalSupporterProfiles`, `membershipBenefitGrants`), Events (`events`, `registrations`, `waitlistEntries`, `eventQaLog`, `outcomePublications`), Publishing (`submissions`, `moderationQueue`, `drafts`, `translationHandoffs`, `signOffRecords`, `publishCommits`), Community (`communityMembers`, `ladderStageTransitions`, `evangelismInvitations`), Knowledge Graph (`kgEntities`, `kgRelationships`), AI Layer (`aiQueryLog`, `aiCostLedger`), HARM Governance (`harmCases`, `harmEvidenceItems`, `basicValidationDecisions`, `structuredHearings`, `evidenceQualityAssessments`, `documentationQualityReviews`, `hearingQualityReviews`, `scientificReviews`, `repairPlans`), Dashboard (`dashboardModuleManifestEntries`, `userPreferences`, `impactEvidenceRecords`), CRM (`donorRecords`, `institutionalPartners`, `grantFunders`, `conflictOfInterestDisclosures`, `fundingSourcePublicationRecords`, `partnershipStatusLogs`), Analytics (`metricSnapshots`, `funnelStageEvents`).
 
-**Migrations** (`drizzle/`, directory listing this session): `0000_m1-canonical-domain.sql` → `0011_publishing-authority.sql` (12 total). The last, `0011`, is **UNCOMMITTED_WORKTREE** (untracked file; matching `_journal.json` entry unstaged) — see `MODULES/publishing.md`. All others (`0000`–`0010`) are `REMOTE_VERIFIED` (on `origin/main`).
+**Migrations:** 14 committed, journaled migrations from
+`0000_m1-canonical-domain.sql` through
+`0013_notification-delivery-attempts.sql`. All are applied in Production and a
+fresh database creates 55 tables.
 
 ## Authorization and trust boundaries
 
@@ -106,11 +109,12 @@ Offline-first (`@electric-sql/pglite` for local dev vs. `pg` for production) is 
 
 ## Current status
 
-**REMOTE_VERIFIED** for migrations `0000`–`0010`. **UNCOMMITTED_WORKTREE, LOCALLY_VERIFIED 2026-07-24** for migration `0011` and its corresponding schema/journal changes.
+**PRODUCTION_VERIFIED** for migrations `0000`–`0013`; no migration is pending.
 
 ## Open work
 
-Migration verification is complete. Remaining work is the human-approved Publishing-only commit decision; see `OPEN_WORK.md` OPEN-001.
+Migration verification is complete. Future generation must retain WARN-015's
+snapshot-history review discipline.
 
 ## Do not redo
 

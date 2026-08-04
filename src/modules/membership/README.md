@@ -16,7 +16,11 @@ Recurring individual/institutional support relationships — registration throug
 
 ## Authentication/Identity boundary (`ADR-027`)
 
-`auth-extension-point.ts` defines `AuthenticatedActor`/`ActorResolver` — interfaces only. This module does not define, implement, or own Authentication; `ADR-027` remains unresolved. A future API/session layer would implement `ActorResolver` to produce the `personId` every function here already accepts.
+`auth-extension-point.ts` preserves the Membership-facing actor contract, while
+the shared implementation lives in `src/auth/`. ADR-027 is accepted and the
+OIDC/session layer produces the session-derived `personId` consumed by
+Membership application services. Membership does not define or own
+Authentication and must not accept a caller-selected actor instead.
 
 ## Lifecycle and tier taxonomy
 
