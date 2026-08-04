@@ -1,5 +1,21 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — self-facing payment history, 2026-08-04
+
+The protected Dashboard now includes the remaining member-facing Payment view
+from `MEMBER_PROFILE.md`. The query is constrained by the session-derived
+`actor.personId` and returns an explicit allowlist of amount, currency, purpose,
+status, and timestamps. Provider references, payer identifiers, other people's
+records, and all internal or Governance data never enter the projection.
+
+The existing Notification view remains unchanged. DE/EN/FA copy covers all
+four canonical payment states and locale-aware amount/date formatting. No API
+mutation, authorization change, migration, provider activation, or new domain
+model was introduced. Focused verification passes 3 files / 7 tests; the full
+serial suite passes 53 files / 253 tests. Structure, lint, typecheck,
+`db:check`, fresh 14-migration/55-table verification, the 105-page Production
+build, and `git diff --check` pass.
+
 ## Incremental update — Production deployment, 2026-07-30
 
 Commit `fc09d8d003106e32bd6af2431043055171566c2d` is deployed from

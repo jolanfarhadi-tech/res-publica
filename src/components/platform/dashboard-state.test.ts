@@ -7,6 +7,7 @@ describe("Dashboard response mapping", () => {
       account: { status: "authenticated", assurance: "verified" },
       membership: { enrolled: false },
       consents: [],
+      payments: [],
       eventRegistrations: [],
       notifications: [],
       permittedActions: { viewProfile: true },

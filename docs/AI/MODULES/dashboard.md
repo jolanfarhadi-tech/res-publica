@@ -1,5 +1,19 @@
 # Module: Dashboard
 
+## Incremental implementation — self-facing payments, 2026-08-04
+
+The private Dashboard now reads the canonical `Payment` table through an
+allowlisted query constrained by the session actor's `personId`. It presents
+only amount, currency, purpose, status, creation time, and settlement time.
+Provider references and payer identifiers are excluded at the data-access
+boundary; records belonging to another person are covered by regression tests
+and do not enter the response.
+
+The DE/EN/FA interface renders all four canonical payment states with
+locale-aware currency and date formatting. This completes the existing
+Payments/Notifications view item without changing Payment ownership, creating
+a mutation path, activating a provider, or adding a migration.
+
 ## Purpose
 
 Provide one protected, self-facing account overview without flattening module
@@ -35,7 +49,7 @@ consumer and does not duplicate that domain package.
 
 The application accepts no person identifier. It derives the actor from the
 verified session, calls the existing Member Profile self-service, and filters
-ConsentRecord, Registration, and Notification queries by
+ConsentRecord, Payment, Registration, and Notification queries by
 `actor.personId`. Event details are joined only for those registrations.
 Internal review records, Governance data, other people's data, and raw
 authorization grants are not returned.
@@ -54,10 +68,11 @@ Consent receipts are read-only; no withdrawal UI or endpoint is inferred.
 ## Verification
 
 Focused application, route, and response-state tests pass 3 files / 7 tests.
-The PGlite test proves another person's consent, registrations, events, and
-notifications do not enter the response. The full suite passes 47 files / 226
+The PGlite test proves another person's consent, payments, registrations,
+events, and notifications do not enter the response, and proves payment
+provider references are excluded. The full serial suite passes 53 files / 253
 tests. Structure, lint, typecheck, `git diff --check`, `db:check`,
-`db:check:fresh` (13 migrations / 54 tables), and the 102-page Production
+`db:check:fresh` (14 migrations / 55 tables), and the 105-page Production
 build pass.
 
 Production-mode browser checks cover DE/EN/FA page metadata, Persian RTL,
@@ -66,10 +81,9 @@ local protected runtime is absent.
 
 ## Current status
 
-**LOCALLY_VERIFIED, NOT YET PUSHED OR DEPLOYED.** No migration was introduced.
-Production activation remains gated by verified Auth0 callback/MFA,
-authorization to apply migration 0012, and the applicable legal/operational
-approvals.
+**LOCALLY_VERIFIED, NOT YET PUSHED OR DEPLOYED** for the payment increment. No
+migration was introduced. The existing Dashboard is deployed; authenticated
+Production verification remains blocked by the Auth0 callback mismatch.
 
 ## Do not redo
 

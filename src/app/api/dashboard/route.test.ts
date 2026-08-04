@@ -28,6 +28,7 @@ vi.mock("../../../application/dashboard", async (importOriginal) => {
         account: { status: "authenticated" },
         membership: { enrolled: false },
         consents: [],
+        payments: [],
         eventRegistrations: [],
         notifications: [],
         permittedActions: { viewProfile: true },

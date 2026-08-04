@@ -2,7 +2,7 @@ import { desc, eq } from "drizzle-orm";
 import { isAuthorized } from "../auth/authorize";
 import type { AuthenticatedActor } from "../auth/types";
 import type { Database } from "../persistence";
-import { consentRecords, notifications } from "../persistence/schema";
+import { consentRecords, notifications, payments } from "../persistence/schema";
 import { events, registrations } from "../persistence/module-schema";
 import { getSelfMemberProfile } from "./member-profile";
 
@@ -13,7 +13,13 @@ export async function getSelfDashboard(
 ) {
   if (!actor) throw new DashboardAuthenticationError();
 
-  const [membership, consents, eventRegistrations, recipientNotifications] =
+  const [
+    membership,
+    consents,
+    selfPayments,
+    eventRegistrations,
+    recipientNotifications,
+  ] =
     await Promise.all([
       getSelfMemberProfile(db, actor),
       db
@@ -26,6 +32,19 @@ export async function getSelfDashboard(
         .from(consentRecords)
         .where(eq(consentRecords.personId, actor.personId))
         .orderBy(desc(consentRecords.grantedAt)),
+      db
+        .select({
+          id: payments.id,
+          amount: payments.amount,
+          currency: payments.currency,
+          purpose: payments.purpose,
+          status: payments.status,
+          createdAt: payments.createdAt,
+          settledAt: payments.settledAt,
+        })
+        .from(payments)
+        .where(eq(payments.payerId, actor.personId))
+        .orderBy(desc(payments.createdAt)),
       db
         .select({
           id: registrations.id,
@@ -75,6 +94,7 @@ export async function getSelfDashboard(
     },
     membership,
     consents,
+    payments: selfPayments,
     eventRegistrations,
     notifications: recipientNotifications,
     permittedActions: {

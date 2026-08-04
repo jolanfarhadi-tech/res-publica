@@ -1,5 +1,14 @@
 # Module: Member Profile
 
+## Incremental integration — Payments and Notifications view, 2026-08-04
+
+The protected Dashboard now completes the spec's existing Payments and
+Notifications view over the canonical entities. Notifications were already
+present; Payments are now queried only for the session actor and projected
+without provider references or payer identifiers. The localized view is
+read-only and introduces no provider, mutation, migration, or new profile-owned
+table.
+
 ## Incremental integration — protected Dashboard, 2026-07-29
 
 The protected Dashboard reuses `getSelfMemberProfile` as its membership
@@ -77,9 +86,9 @@ Tests confirmed to exist: `src/app/api/membership/profile/route.test.ts`, `src/a
 
 **PARTIAL** / **REMOTE_VERIFIED** for the implemented first slice. Per the spec's own TODO checklist (`MEMBER_PROFILE.md`, verbatim, read in full):
 
-Done: self-service ownership + tier separation at query/projection boundary (ADR-034 first slice); protected read-only Membership profile API + DE/EN/FA interface; Membership exit/deactivation lifecycle defined; purpose-scoped consent receipts for initial Membership/profile creation.
+Done: self-service ownership + tier separation at query/projection boundary (ADR-034 first slice); protected read-only Membership profile API + DE/EN/FA interface; Membership exit/deactivation lifecycle defined; purpose-scoped consent receipts for initial Membership/profile creation; Payments/Notifications view over the canonical entities.
 
-Not done: Codex Potential/Hearing Candidate approval workflow and its separate Governance-disclosure consent; integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6; "Next Recommended Steps" generation logic; remaining Identity view; Community Participation/Systems views; Application History view; Payments/Notifications views; six unratified Community Systems items (each needs its own future ADR); Civic Contribution Framework integration (blocked on a framework that doesn't exist yet).
+Not done: Codex Potential/Hearing Candidate approval workflow and its separate Governance-disclosure consent; integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6; "Next Recommended Steps" generation logic; remaining Identity view; Community Participation/Systems views; Application History view; six unratified Community Systems items (each needs its own future ADR); Civic Contribution Framework integration (blocked on a framework that doesn't exist yet).
 
 ## Open work
 

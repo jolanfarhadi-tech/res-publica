@@ -19,6 +19,15 @@ function formatDate(value: Date | string, locale: Locale): string {
   }).format(new Date(value));
 }
 
+function formatAmount(amount: number, currency: string, locale: Locale): string {
+  const numberLocale =
+    locale === "de" ? "de-DE" : locale === "fa" ? "fa-IR" : "en-GB";
+  return new Intl.NumberFormat(numberLocale, {
+    style: "currency",
+    currency,
+  }).format(amount);
+}
+
 function StateMessage({
   title,
   text,
@@ -180,6 +189,40 @@ export function DashboardClient({ locale }: { locale: Locale }) {
           </ul>
         ) : (
           <p className="mt-4 text-muted">{copy.eventsEmpty}</p>
+        )}
+      </section>
+
+      <section className="glass-panel rounded-3xl p-7 sm:p-9" aria-labelledby="dashboard-payments">
+        <h2 id="dashboard-payments" className="text-3xl">{copy.paymentsTitle}</h2>
+        {dashboard.payments.length ? (
+          <ul className="mt-5 space-y-3">
+            {dashboard.payments.map((payment) => {
+              const status =
+                payment.status === "pending"
+                  ? copy.paymentPending
+                  : payment.status === "settled"
+                    ? copy.paymentSettled
+                    : payment.status === "refunded"
+                      ? copy.paymentRefunded
+                      : copy.paymentFailed;
+              return (
+                <li key={payment.id} className="rounded-2xl bg-bg/70 p-4">
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <p className="font-semibold">
+                      {formatAmount(payment.amount, payment.currency, locale)}
+                    </p>
+                    <p className="text-sm text-muted">{status}</p>
+                  </div>
+                  <p className="mt-2 text-sm text-muted">
+                    {copy.paymentPurposeLabel}: {payment.purpose} ·{" "}
+                    {formatDate(payment.settledAt ?? payment.createdAt, locale)}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="mt-4 text-muted">{copy.paymentsEmpty}</p>
         )}
       </section>
 

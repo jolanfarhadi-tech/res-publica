@@ -12,6 +12,7 @@ import * as moduleSchema from "../persistence/module-schema";
 import {
   consentRecords,
   notifications,
+  payments,
   people,
 } from "../persistence/schema";
 import {
@@ -27,7 +28,7 @@ import {
 const schema = { ...coreSchema, ...moduleSchema };
 
 describe("self-facing Dashboard projection", () => {
-  it("composes only the session actor's membership, consent, events and notifications", async () => {
+  it("composes only the session actor's membership, consent, payments, events and notifications", async () => {
     const directory = await mkdtemp(join(tmpdir(), "res-publica-dashboard-"));
     const client = new PGlite(directory);
     const pgliteDb = drizzle({ client, schema });
@@ -57,6 +58,18 @@ describe("self-facing Dashboard projection", () => {
         {
           id: "consent-other", personId: "person-other",
           purpose: "profile-data-protection-v1-en", grantedAt: now, revokedAt: null,
+        },
+      ]);
+      await db.insert(payments).values([
+        {
+          id: "payment-self", payerId: "person-self", amount: 25,
+          currency: "EUR", purpose: "membership", providerReference: "private-self-ref",
+          status: "settled", createdAt: now, settledAt: now,
+        },
+        {
+          id: "payment-other", payerId: "person-other", amount: 50,
+          currency: "EUR", purpose: "donation", providerReference: "private-other-ref",
+          status: "settled", createdAt: now, settledAt: now,
         },
       ]);
       await db.insert(events).values([
@@ -123,6 +136,17 @@ describe("self-facing Dashboard projection", () => {
       expect(dashboard.consents).toEqual([
         expect.objectContaining({ id: "consent-self" }),
       ]);
+      expect(dashboard.payments).toEqual([
+        {
+          id: "payment-self",
+          amount: 25,
+          currency: "EUR",
+          purpose: "membership",
+          status: "settled",
+          createdAt: now,
+          settledAt: now,
+        },
+      ]);
       expect(dashboard.eventRegistrations).toEqual([
         expect.objectContaining({
           id: "registration-self",
@@ -141,6 +165,9 @@ describe("self-facing Dashboard projection", () => {
       });
       expect(JSON.stringify(dashboard)).not.toContain("person-other");
       expect(JSON.stringify(dashboard)).not.toContain("Other Event");
+      expect(JSON.stringify(dashboard)).not.toContain("providerReference");
+      expect(JSON.stringify(dashboard)).not.toContain("private-self-ref");
+      expect(JSON.stringify(dashboard)).not.toContain("private-other-ref");
     } finally {
       await client.close();
       await rm(directory, { recursive: true, force: true });

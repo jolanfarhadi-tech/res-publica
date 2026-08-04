@@ -198,9 +198,16 @@ MFA, migration, legal, and operational gates in
   Membership/profile creation is implemented and locally verified. This does
   not complete or authorize the distinct Codex Potential/Hearing Candidate
   disclosure workflow or its Governance-sensitive consent.
+- **Incremental status 2026-08-04:** the existing protected Dashboard now
+  completes the Payments/Notifications view with a self-only, allowlisted
+  Payment projection. Provider references and other people's records are
+  excluded at the query/projection boundary; no provider or mutation was
+  activated.
 - **Prerequisite:** the first slice (ADR-034) is checked done in the same document — this is additive work, not a fix.
 - **Blocker:** one item is explicitly blocked in the source document itself: *"Blocking on the future Civic Contribution Framework (CCF), not on this document"* — CCF does not yet exist / is not yet ratified.
-- **Safe next action:** pick the next unchecked item that is *not* CCF-blocked (e.g., Payments/Notifications views over the already-implemented `Payment`/`Notification` entities) if this becomes the task focus.
+- **Safe next action:** before another slice, map the remaining Identity or
+  Application History fields to existing implemented sources; do not invent
+  absent Community/Academy/Fellowship status models.
 - **Non-goals:** defining a new Contribution Record Lifecycle, Membership taxonomy, or any of the six explicitly-unratified "Community Systems" wishlist items (AI Mentor, Skill Graph, etc.) — the source document explicitly forbids treating those as buildable without their own future ADR.
 
 ### OPEN-005 — AI Layer external provider not started
