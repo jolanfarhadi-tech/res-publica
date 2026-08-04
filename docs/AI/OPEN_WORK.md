@@ -222,13 +222,20 @@ MFA, migration, legal, and operational gates in
 - **Evidence:** ADR-029 was read in full on 2026-07-24 and explicitly states “No event bus in M1.” The implemented canonical append-only audit repository is the accepted M1 boundary.
 - **Resolution:** absence of an event-bus dependency or implementation is conformant, not unfinished work. Do not build one as part of M1 Publishing.
 
-### OPEN-007 — ADR-031 (Project ownership / cross-domain collaboration) implementation not confirmed
-- **Task:** none active — verification gap, not a confirmed missing feature.
-- **Evidence:** no `Project`-named entity found in `src/persistence/schema.ts` or `module-schema.ts` (both grepped for `pgTable` this session); no dedicated cross-domain-collaboration code path found distinct from the module manifest/registry system.
-- **Prerequisite:** targeted search for "project ownership" concepts before concluding anything is missing.
-- **Blocker:** none identified.
-- **Safe next action:** if this becomes a task focus, search specifically for how ADR-031's concepts map to existing code before assuming greenfield work is needed.
-- **Non-goals:** building new project-ownership infrastructure without first confirming none exists.
+### OPEN-007 — ADR-031 Project lifecycle is confirmed unimplemented and not build-ready
+- **Evidence:** targeted source, schema, route, module, and identifier searches
+  found no `Project` aggregate, Project table, Civic lifecycle service, or
+  Governance reference contract. Existing public project pages are
+  provenance-gated content collections, not the ADR-031 domain aggregate.
+- **Architecture state:** ADR-031 settles ownership and cross-domain rules but
+  deliberately adds no fields to the locked Core Domain Model. No accepted
+  implementation blueprint defines Project attributes, lifecycle states,
+  authorization capabilities, persistence, or APIs.
+- **Blocker:** a concrete Civic-owned Project aggregate/application blueprint
+  and its accepted authority/persistence contract are required before code can
+  be written without inventing architecture.
+- **Safe next action:** owner/architecture scoping of that implementation
+  contract; do not infer it from the public `/projects` content collection.
 
 ## Reserved decisions requiring a new ADR (explicitly not active engineering tasks)
 

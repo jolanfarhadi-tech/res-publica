@@ -1,5 +1,20 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Knowledge Graph domain-filter correction, 2026-08-04
+
+`searchEntities` now applies its optional Civic/Governance domain predicate to
+canonical-name, alias, and entity-type matches as one grouped condition. The
+previous operator precedence allowed alias and type matches from the peer
+domain to bypass the requested boundary. A regression fixture proves both
+directions and the focused Knowledge Graph suite passes 10/10.
+
+The manifest-declared `/api/knowledge-graph/{lookup,related,search}` routes are
+confirmed absent, not merely missed by an earlier listing. Current consumers
+import the deterministic query functions in-process. The manifest explicitly
+describes its routes as declarative future wiring; no public HTTP contract was
+invented because an access policy and route implementation milestone are not
+accepted in the current programme.
+
 ## Incremental update — self-facing payment history, 2026-08-04
 
 The protected Dashboard now includes the remaining member-facing Payment view
@@ -564,7 +579,7 @@ Staged: none. Publishing-scope changes are unstaged/untracked. `tsconfig.json` r
   implementation is committed at `09c160b`.
 - **AI Layer — external provider**: not started (module's own README, direct quote: "Real external provider... not started").
 - **Member Profile**: multiple TODO items unchecked in `docs/source/projects/MEMBER_PROFILE.md`'s own checklist (see `docs/AI/OPEN_WORK.md` OPEN-004).
-- **Knowledge Graph HTTP routes** (`/api/knowledge-graph/{lookup,related,search}`): declared in the module's manifest, not found under `src/app/api/` in this session's listing — status genuinely undetermined (may be in-process-only, may be unbuilt).
+- **Knowledge Graph HTTP routes** (`/api/knowledge-graph/{lookup,related,search}`): confirmed unbuilt. The deterministic query API is consumed in-process; the manifest calls the route list declarative future wiring. No accepted public-route/access-policy milestone currently authorizes exposing it.
 
 ## Pending migrations
 

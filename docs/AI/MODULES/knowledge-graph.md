@@ -1,5 +1,20 @@
 # Module: Knowledge Graph
 
+## Incremental verification and correction — 2026-08-04
+
+The optional domain predicate in `searchEntities` is now grouped across all
+canonical-name, alias, and type matching. Previously, JavaScript operator
+precedence allowed alias/type matches from the peer domain to bypass a Civic or
+Governance filter. A cross-domain regression fixture proves the corrected
+boundary; the focused module suite passes 10/10.
+
+The three manifest-declared HTTP paths are now confirmed absent. Existing
+consumers (`dashboard/digest.ts`, the local AI provider, Events, Publishing,
+and tests) import the deterministic functions and graph types in-process. This
+matches the manifest's explicit statement that its route metadata is
+declarative future wiring, while confirming that no literal public HTTP API is
+currently implemented.
+
 ## Purpose
 
 Deterministic entity/relationship extraction from Git-committed MDX content, providing a queryable graph other modules (AI Layer, Events Q&A) consume — never AI-invented. Evidence: `architecture/adr/ADR-007-knowledge-graph.md`; `src/modules/knowledge-graph/manifest.ts` (read in full, this session).
@@ -13,7 +28,7 @@ Deterministic entity/relationship extraction from Git-committed MDX content, pro
 ## Current implementation
 
 `src/modules/knowledge-graph/{build.ts, api.ts, types.ts, manifest.ts, graph-rebuild-cli-entry.ts, knowledge-graph.test.ts, extractors/frontmatter-extractor.ts}` (directory listing this session; `manifest.ts` read in full). Committed via `9f9ec5f` (Foundation Build Order Steps 1-5), ≤ `origin/main` tip `7025e6f`.
-`manifest.ts`'s own inline comment (read in full): *"Knowledge Graph's Plugin Architecture manifest (ADR-003). Declarative only — no table or route is created or wired by this file; Backend/API Architecture implementation will act on this metadata later."* **This refers only to the manifest file itself** — the actual tables it lists (`kg_entities`, `kg_relationships`) are separately implemented in `module-schema.ts` (confirmed by direct grep this session), and API route paths it lists (`/api/knowledge-graph/{lookup,related,search}`) were **not found** under `src/app/api/` in this session's directory listing of that tree — **their implementation status is UNKNOWN**, not confirmed either way.
+`manifest.ts`'s own inline comment states that its table and route metadata is declarative and requires later Backend/API wiring. The actual tables it lists (`kg_entities`, `kg_relationships`) are implemented in `module-schema.ts`. The three listed HTTP paths are confirmed absent; current module consumption is in-process.
 
 ## Data and persistence
 
@@ -21,15 +36,19 @@ Deterministic entity/relationship extraction from Git-committed MDX content, pro
 
 ## Authorization and trust boundaries
 
-Not assessed this session — no authority/authorization file found under `src/modules/knowledge-graph/` (unlike `publishing`/`harm-governance`, which each have their own `authority.ts`). This may mean the Knowledge Graph has no dedicated authorization layer of its own (read-only, publicly-derivable data) or that authorization is enforced elsewhere — **not confirmed either way this session.**
+The in-process query API accepts an optional `BusinessDomain` and now enforces
+that predicate uniformly for canonical names, aliases, and types. There is no
+dedicated HTTP authorization layer because no Knowledge Graph HTTP route is
+implemented. Any future public or staff route still needs an accepted access
+policy; do not infer one from declarative manifest metadata.
 
 ## Public interfaces
 
-`manifest.ts` declares intended routes `/api/knowledge-graph/{lookup,related,search}`, but **these routes were not found in `src/app/api/`'s directory listing this session** (only `auth`, `events`, `governance`, `health`, `membership`, `newsletter`, `platform`, `publishing` top-level directories were observed under `src/app/api/`). `graph-rebuild-cli-entry.ts` suggests a CLI-invoked rebuild path (likely via `scripts/cli.mjs`, ADR-005) rather than an HTTP API — not confirmed this session.
+`manifest.ts` declares intended routes `/api/knowledge-graph/{lookup,related,search}`, but they are not implemented under `src/app/api`. The implemented public interface is currently an in-process TypeScript API; graph rebuild also has a CLI entry point.
 
 ## Verification
 
-Test confirmed to exist: `src/modules/knowledge-graph/knowledge-graph.test.ts`. **Not run this session.**
+`src/modules/knowledge-graph/knowledge-graph.test.ts` passes 10/10, including cross-domain alias and type matches that previously bypassed the requested domain.
 
 ## Decisions and rejected approaches
 
@@ -37,11 +56,17 @@ Deterministic, non-AI extraction is the core rejected-alternative-avoidance deci
 
 ## Current status
 
-**REMOTE_VERIFIED**, **PARTIALLY IMPLEMENTED** — core build/API/extraction logic and both declared tables exist and are committed; the three manifest-declared HTTP API routes were **not found**, so the module's *internal* logic is REMOTE_VERIFIED while its *external HTTP* interface is **UNKNOWN/likely not implemented as literal `/api/knowledge-graph/*` routes** (it may be consumed only in-process by other modules, e.g., Events' `qa.ts` and AI Layer's local provider, both of which reference "the Knowledge Graph" without necessarily going through an HTTP route — not confirmed either way this session).
+**LOCALLY_VERIFIED, PARTIALLY IMPLEMENTED** — deterministic build,
+extraction, in-process queries, both tables, and domain filtering exist. The
+manifest-declared external HTTP interface is confirmed unbuilt and remains
+future wiring rather than an operational API.
 
 ## Open work
 
-Confirm whether `/api/knowledge-graph/{lookup,related,search}` are (a) implemented under a path this session's directory listing missed, (b) intentionally not implemented as HTTP routes because consumption is in-process only, or (c) genuinely unbuilt. This compilation could not distinguish between these three possibilities and does not guess. ADR-035 (reserved, not written) is **not** an active task — see `OPEN_WORK.md` OPEN-008.
+Before implementing `/api/knowledge-graph/{lookup,related,search}`, define and
+approve its public/staff access policy and a concrete backend milestone. ADR-035
+(reserved, not written) is **not** an active task — see `OPEN_WORK.md`
+OPEN-008.
 
 ## Do not redo
 

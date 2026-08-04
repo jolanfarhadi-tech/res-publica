@@ -24,8 +24,8 @@ export function searchEntities(graph: KnowledgeGraph, query: string, domain?: Bu
   return [...graph.entities.values()].filter(
     (e) =>
       (domain === undefined || e.domain === domain) &&
-      e.canonicalName.toLowerCase().includes(lower) ||
-      e.aliases.some((a) => a.name.toLowerCase().includes(lower)) ||
-      e.type.toLowerCase().includes(lower)
+      (e.canonicalName.toLowerCase().includes(lower) ||
+        e.aliases.some((a) => a.name.toLowerCase().includes(lower)) ||
+        e.type.toLowerCase().includes(lower))
   );
 }

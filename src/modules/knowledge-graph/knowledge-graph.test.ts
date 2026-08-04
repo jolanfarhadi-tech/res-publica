@@ -91,6 +91,14 @@ describe("Knowledge Graph API", () => {
       entities: new Map([
         ["e1", { id: "e1", domain: "civic", type: "person", canonicalName: "Jane Doe", aliases: [], sources: [] }],
         ["e2", { id: "e2", domain: "civic", type: "topic", canonicalName: "Participation", aliases: [], sources: [] }],
+        ["e3", {
+          id: "e3",
+          domain: "governance",
+          type: "topic",
+          canonicalName: "Institutional Answerability",
+          aliases: [{ locale: "en", name: "Participation review" }],
+          sources: [],
+        }],
       ]),
       relationships: [{ domain: "civic", fromEntityId: "e1", toEntityId: "e2", type: "co-occurs", source: { file: "x", locale: "de" } }],
     };
@@ -113,7 +121,8 @@ describe("Knowledge Graph API", () => {
   });
 
   it("can constrain queries to the owning domain", () => {
-    expect(searchEntities(sampleGraph(), "participation", "governance")).toEqual([]);
-    expect(searchEntities(sampleGraph(), "participation", "civic")).toHaveLength(1);
+    expect(searchEntities(sampleGraph(), "participation", "governance").map((entity) => entity.id)).toEqual(["e3"]);
+    expect(searchEntities(sampleGraph(), "participation", "civic").map((entity) => entity.id)).toEqual(["e2"]);
+    expect(searchEntities(sampleGraph(), "topic", "civic").map((entity) => entity.id)).toEqual(["e2"]);
   });
 });
