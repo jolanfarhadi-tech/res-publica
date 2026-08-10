@@ -41,6 +41,8 @@ export async function provisionSelfRegisteredIdentity(
   const academyEnrollmentGrantId = createId();
   const academyProgressGrantId = createId();
   const academyAssessmentGrantId = createId();
+  const fellowshipApplicationGrantId = createId();
+  const fellowshipDashboardGrantId = createId();
   const person = {
     id: personId,
     name: cleanDisplayName(claims.displayName, email),
@@ -121,6 +123,30 @@ export async function provisionSelfRegisteredIdentity(
         grantedByPersonId: personId,
         revokedAt: null,
       },
+      {
+        id: fellowshipApplicationGrantId,
+        personId,
+        domain: "civic",
+        capability: "fellowship.application.self",
+        target: null,
+        assuranceRequired: "verified",
+        validFrom: now,
+        validUntil: null,
+        grantedByPersonId: personId,
+        revokedAt: null,
+      },
+      {
+        id: fellowshipDashboardGrantId,
+        personId,
+        domain: "civic",
+        capability: "fellowship.dashboard.self",
+        target: null,
+        assuranceRequired: "verified",
+        validFrom: now,
+        validUntil: null,
+        grantedByPersonId: personId,
+        revokedAt: null,
+      },
     ]);
     await transaction.insert(auditLog).values([
       {
@@ -138,7 +164,13 @@ export async function provisionSelfRegisteredIdentity(
         action: "authorization.self-service-grant-created", target: preferenceGrantId,
         timestamp: now, pseudonymized: false,
       },
-      ...[academyEnrollmentGrantId, academyProgressGrantId, academyAssessmentGrantId].map((grantId) => ({
+      ...[
+        academyEnrollmentGrantId,
+        academyProgressGrantId,
+        academyAssessmentGrantId,
+        fellowshipApplicationGrantId,
+        fellowshipDashboardGrantId,
+      ].map((grantId) => ({
         id: createId(), actorPersonId: personId,
         action: "authorization.self-service-grant-created", target: grantId,
         timestamp: now, pseudonymized: false,

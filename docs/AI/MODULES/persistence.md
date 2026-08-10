@@ -1,5 +1,20 @@
 # Module: Persistence
 
+## Incremental implementation — Fellowship persistence, 2026-08-10
+
+Additive migration `0020_fellowship-system.sql` introduces nine Civic-domain
+tables for governed role scopes, candidacies, qualitative evidence references,
+review assignments, conflict declarations, human reviews, Fellowship records,
+status history and bounded attribution records. Every identity-bearing record
+references canonical `people`; canonical authorization and AuditLog remain
+shared.
+
+The fresh repository chain now applies 21 migrations and creates 95 tables;
+the processing inventory covers all 95 across 20 activities. Migration 0020 is
+local and additive only. Production remains at 19 migrations / 66 tables until
+the standard backup, TLS, journal, permission, authorization and
+post-migration checks are completed.
+
 ## Incremental implementation — Academy persistence, 2026-08-10
 
 Additive migration `0019_academy-platform.sql` introduces 20 Civic-domain

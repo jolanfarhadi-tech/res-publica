@@ -1,5 +1,18 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-021 — Fellowship code completion is not candidacy activation
+
+- **Evidence:** Release B adds migration 0020, nine Fellowship tables and
+  complete nomination/application/review/decision code, while the processing
+  inventory keeps legal basis, retention and erasure null and real data false.
+- **Impact:** enabling real candidacy processing without transparency,
+  retention, named accountable operators and approved role scopes would cross
+  the documented privacy and governance boundary.
+- **Severity:** **High / privacy and institutional activation gate**.
+- **Safe handling:** keep `FELLOWSHIP_APPLICATIONS_ENABLED` absent/false,
+  deploy no public roster, seed no real candidates or Fellows, and complete
+  OPEN-023 before activation.
+
 ### WARN-020 — Academy code completion is not learner-data activation
 
 - **Evidence:** Release A adds migration 0019, 20 Academy tables and complete

@@ -1,5 +1,20 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Release B Fellowship System
+
+The Civic platform now registers a `fellowship` module through the existing
+manifest registry. Its application service owns source-grounded role scopes,
+nomination/self-application, qualitative evidence, reviewer assignment,
+conflict declaration/recusal, human review, independent final decision,
+private Fellowship records and explicit status transitions.
+
+Privileged writes reuse same-origin validation, shared PostgreSQL rate
+limiting, session-derived actors, exact-target capabilities, MFA and canonical
+atomic AuditLog evidence. Candidate, nominator, reviewer and final-decider
+separation is enforced in the application transaction. No automated decision,
+numeric score, rank or public roster exists. Real applications additionally
+fail closed unless `FELLOWSHIP_APPLICATIONS_ENABLED=true`.
+
 ## Incremental implementation — Release A Academy platform
 
 The Civic platform now registers an `academy` module and composes it through

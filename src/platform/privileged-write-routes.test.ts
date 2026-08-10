@@ -33,6 +33,17 @@ const academyRoutes = [
   ["academy/operations/enrollments/[enrollmentId]/certificate", 2],
 ] as const;
 
+const fellowshipRoutes = [
+  ["fellowship/operations/role-scopes", 1],
+  ["fellowship/operations/role-scopes/[roleScopeId]/approve", 1],
+  ["fellowship/operations/candidacies", 1],
+  ["fellowship/operations/candidacies/[candidacyId]/assign", 1],
+  ["fellowship/operations/assignments/[assignmentId]/conflict", 1],
+  ["fellowship/operations/assignments/[assignmentId]/review", 1],
+  ["fellowship/operations/candidacies/[candidacyId]/decision", 1],
+  ["fellowship/operations/records/[fellowshipId]/status", 1],
+] as const;
+
 function source(domain: "governance" | "publishing", route: string) {
   return readFileSync(
     join(process.cwd(), "src", "app", "api", domain, route, "route.ts"),
@@ -85,6 +96,18 @@ describe("privileged write route inventory", () => {
       );
       expect(routeSource, route).toContain("executePrivilegedWrite");
       expect(routeSource, route).toContain("ACADEMY_PRIVILEGED_WRITE_RATE_LIMIT");
+      expect(writeMethodCount(routeSource), route).toBe(expectedMethods);
+    }
+  });
+
+  it("protects every Fellowship staff write with the shared distributed limiter", () => {
+    for (const [route, expectedMethods] of fellowshipRoutes) {
+      const routeSource = readFileSync(
+        join(process.cwd(), "src", "app", "api", route, "route.ts"),
+        "utf8"
+      );
+      expect(routeSource, route).toContain("executePrivilegedWrite");
+      expect(routeSource, route).toContain("FELLOWSHIP_PRIVILEGED_WRITE_RATE_LIMIT");
       expect(writeMethodCount(routeSource), route).toBe(expectedMethods);
     }
   });

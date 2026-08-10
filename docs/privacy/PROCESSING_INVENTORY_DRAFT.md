@@ -202,6 +202,21 @@ conclusions.
 - **Unresolved:** approved learner privacy notice, legal basis,
   retention/erasure and named Academy operators before real enrollment.
 
+<!-- inventory:fellowship-candidacy-and-recognition -->
+### Fellowship candidacy and recognition
+
+- **Technical status:** the human-gated nomination/application, conflict,
+  review, independent decision and private record workflow is implemented;
+  self-applications remain server-gated by
+  `FELLOWSHIP_APPLICATIONS_ENABLED`.
+- **Potential data:** qualitative rationale, factual evidence references,
+  reviewer conflict declaration, human review/decision, bounded role and
+  status history.
+- **Boundary:** no scoring, ranking, automated threshold, public member roster
+  or public candidate detail; staff operations require exact-scope MFA.
+- **Unresolved:** approved candidate transparency/legal basis,
+  retention/erasure, named operators and real programme approval.
+
 <!-- inventory:community-and-participation-models -->
 ### Community and participation models
 
@@ -235,7 +250,7 @@ conclusions.
 
 ## Schema coverage and exclusions
 
-The machine inventory currently covers all **86** PostgreSQL tables parsed from
+The machine inventory currently covers all **95** PostgreSQL tables parsed from
 `src/persistence/schema.ts` and `src/persistence/module-schema.ts`. Shared tables
 may support more than one activity, but every current table must appear at
 least once. A schema addition therefore fails the inventory drift check until

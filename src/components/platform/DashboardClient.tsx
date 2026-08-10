@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { dashboardCopy } from "@/i18n/dashboard";
 import { academyCopy } from "@/i18n/academy";
+import { fellowshipCopy } from "@/i18n/fellowship";
 import type { Locale } from "@/i18n/config";
 import { membershipStatusLabels } from "@/i18n/member-profile";
 import { membershipApplicationCopy } from "@/i18n/membership-application";
@@ -55,6 +56,7 @@ export function DashboardClient({ locale }: { locale: Locale }) {
   const copy = dashboardCopy[locale];
   const applicationCopy = membershipApplicationCopy[locale];
   const academy = academyCopy[locale];
+  const fellowship = fellowshipCopy[locale];
 
   useEffect(() => {
     let active = true;
@@ -241,6 +243,9 @@ export function DashboardClient({ locale }: { locale: Locale }) {
         <div className="mt-6 flex flex-wrap gap-3">
           <Button href={`/${locale}/dashboard/academy`} variant="secondary">
             {academy.dashboardAction}
+          </Button>
+          <Button href={`/${locale}/dashboard/fellowship`} variant="secondary">
+            {fellowship.dashboardAction}
           </Button>
           {dashboard.permittedActions.viewProfile && (
             <Button href={`/${locale}/profile`} variant="secondary">

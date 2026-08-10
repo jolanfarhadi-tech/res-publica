@@ -1,5 +1,25 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-023 — Fellowship operational and real-data activation
+
+- **Implemented locally:** additive migration 0020; governed role scopes;
+  staff nomination and voluntary self-application; qualitative evidence;
+  exact reviewer assignment; conflict declaration and recusal; human review;
+  independent decision; private status/record views; DE/EN/FA public,
+  dashboard and Operations surfaces; canonical audit and shared rate limits.
+- **Deliberately absent:** scores, ranks, badges, leaderboards, automatic
+  thresholds, public candidate/Fellow directories, invented Fellows, cohorts,
+  dates, role assignments or programme claims.
+- **External activation blockers:** approved candidate transparency and legal
+  basis; retention/erasure and access rules; named nominators, reviewers,
+  deciders and sponsors; approved real role scopes/source rights; Production
+  migration authorization and backup verification; and explicit approval to
+  set `FELLOWSHIP_APPLICATIONS_ENABLED=true`.
+- **Operational follow-up:** existing accounts need an approved, audited
+  backfill/provisioning path for the new self-service grants before activation.
+- **Boundary:** code and truthful generic programme information may be
+  deployed while all real candidacy writes remain closed.
+
 ### OPEN-022 — Academy enrollment activation and approved content
 
 - **Implemented locally:** additive Academy persistence and migration 0019;
@@ -264,14 +284,15 @@ MFA, migration, legal, and operational gates in
   now represented in the protected Profile as a self-only history containing
   requested tier, status and submission/decision timestamps. Contact/address,
   decision actor, audit references and board deliberation are excluded. This
-  completes only the implemented Membership Application source; no absent
-  Fellowship, Volunteer, Project or Academy application model was invented.
+  completed only the implemented Membership Application source at that time.
+  Academy and Fellowship now have separately owned, governed application
+  models; Volunteer and Project applications remain absent.
 - **Prerequisite:** the first slice (ADR-034) is checked done in the same document — this is additive work, not a fix.
 - **Blocker:** one item is explicitly blocked in the source document itself: *"Blocking on the future Civic Contribution Framework (CCF), not on this document"* — CCF does not yet exist / is not yet ratified.
 - **Safe next action:** map remaining Identity fields to implemented and
-  ADR-permitted sources, or wait for a ratified source model for the other
-  Application History categories; do not invent absent Community, Academy,
-  Fellowship, Volunteer or Project application/status models.
+  ADR-permitted sources. Academy and Fellowship history must be projected from
+  their owning modules; do not invent absent Community, Volunteer or Project
+  application/status models.
 - **Non-goals:** defining a new Contribution Record Lifecycle, Membership taxonomy, or any of the six explicitly-unratified "Community Systems" wishlist items (AI Mentor, Skill Graph, etc.) — the source document explicitly forbids treating those as buildable without their own future ADR.
 
 ### OPEN-005 — AI Layer external provider not started
@@ -309,7 +330,12 @@ MFA, migration, legal, and operational gates in
 
 ## Roadmap items not yet at build-ready depth (aspirational — not tasks)
 
-Per `brain/ROADMAP.md` (read in full, prior session): Fellowship System, Academy, Speech Academy, Writing Academy, News Analysis Lab, Research Lab, Store, full Admin Portal (V2 tier), Public API (V3 tier) — explicitly deferred, no build-ready blueprint exists for any of these. **These are not active tasks** and should not be started without a scoping/blueprint pass first, per the roadmap's own explicit sequencing.
+Per `brain/ROADMAP.md` (read in full, prior session): Speech Academy, Writing
+Academy, News Analysis Lab, Research Lab, Store, full Admin Portal (V2 tier)
+and Public API (V3 tier) remain deferred in that roadmap. Academy and
+Fellowship were subsequently scoped and implemented under owner-approved
+Releases A and B; this historical roadmap paragraph no longer describes those
+two modules as absent.
 
 ## CLA / contribution process
 

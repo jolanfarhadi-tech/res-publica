@@ -103,6 +103,18 @@ export const ACADEMY_SELF_SERVICE_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 15 * 60 * 1000,
 };
 
+export const FELLOWSHIP_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "fellowship.privileged-write",
+  limit: 60,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const FELLOWSHIP_SELF_SERVICE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "fellowship.self-service",
+  limit: 10,
+  windowMs: 60 * 60 * 1000,
+};
+
 const RETENTION_AFTER_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function hashIdentifier(

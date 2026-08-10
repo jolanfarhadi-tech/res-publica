@@ -11,6 +11,7 @@ import { membershipManifest } from "../modules/membership/manifest";
 import { publishingManifest } from "../modules/publishing/manifest";
 import { harmGovernanceManifest } from "../modules/harm-governance/manifest";
 import { academyManifest } from "../modules/academy/manifest";
+import { fellowshipManifest } from "../modules/fellowship/manifest";
 import * as moduleSchema from "./module-schema";
 
 const manifests = [
@@ -25,6 +26,7 @@ const manifests = [
   analyticsManifest,
   harmGovernanceManifest,
   academyManifest,
+  fellowshipManifest,
 ];
 
 describe("M1 module persistence coverage", () => {

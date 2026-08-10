@@ -1,5 +1,40 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Release B Fellowship System, 2026-08-10
+
+The Civic-domain Fellowship System is implemented as a human-gated,
+non-gamified recognition workflow. One candidacy model supports staff
+nomination and voluntary self-application, qualitative evidence references,
+exact reviewer assignment, mandatory conflict declaration, fail-closed
+recusal, human recommendation, independent final decision, private Fellowship
+records and explicit status history. It references canonical Person and
+AuditLog and creates no parallel identity, session, authorization, consent,
+rate-limit or audit mechanism.
+
+Candidates and nominators cannot review or decide their own case; reviewers
+cannot make the final decision; a conflicted reviewer cannot submit a review;
+and approval requires a completed human approval recommendation. Every staff
+write uses same-origin protection, the shared PostgreSQL limiter, an exact
+Civic capability/target and MFA. Accepted state changes and canonical audit
+evidence commit atomically. No field or projection implements a score, rank,
+badge, leaderboard or automated threshold, and no public member/Fellow roster
+exists.
+
+Localized public, self-dashboard and Operations routes exist at
+`/[locale]/fellowship`, `/[locale]/dashboard/fellowship` and
+`/[locale]/operations/fellowship`. DE/EN/FA copy is complete and Persian uses
+the existing RTL layout. Public programme copy remains `documented`, not
+operational; no Fellow, cohort, role assignment or institutional claim is
+seeded.
+
+Migration `0020_fellowship-system` is additive. A fresh database applies 21
+journaled migrations and creates 95 tables. The processing inventory covers
+20 activities and all 95 tables. Real self-application and candidacy
+processing remain fail-closed unless `FELLOWSHIP_APPLICATIONS_ENABLED=true`;
+that Production setting is not added or activated. Local Release-B
+verification passes 89 test files / 367 tests, lint, typecheck, structure,
+Drizzle checks and both fresh-database boundaries.
+
 ## Incremental update — Release A Academy platform, 2026-08-10
 
 The Civic-domain Academy is implemented as a governed multilingual learning

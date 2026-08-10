@@ -277,6 +277,23 @@
       "decisionGates": ["ACADEMY_ENROLLMENT_ENABLED", "approved learner privacy notice", "retention and erasure policy", "named Academy operators"]
     },
     {
+      "id": "fellowship-candidacy-and-recognition",
+      "operationalStatus": "implemented-application-gated",
+      "dataSubjects": ["Fellowship candidates", "nominators", "reviewers", "deciders and sponsors"],
+      "dataCategories": ["qualitative candidacy rationale", "factual evidence references", "conflict declaration", "human review and decision", "bounded Fellowship role and status"],
+      "purposeEvidence": "Support human-gated, non-gamified recognition of bounded civic responsibility without automated scoring or a public member directory.",
+      "systems": ["Neon PostgreSQL", "Vercel runtime"],
+      "stores": ["postgres:fellowship_role_scopes", "postgres:fellowship_candidacies", "postgres:fellowship_evidence_refs", "postgres:fellowship_review_assignments", "postgres:fellowship_conflict_declarations", "postgres:fellowship_reviews", "postgres:fellowship_records", "postgres:fellowship_status_changes", "postgres:fellowship_attributions"],
+      "accessBoundary": "Session-derived self view; exact-scope MFA staff operations; conflict recusal and independent final decision; no public roster or candidate detail.",
+      "sourceEvidence": ["src/application/fellowship.ts", "src/modules/fellowship/manifest.ts"],
+      "externalDependencies": ["Neon", "Vercel"],
+      "realDataPermitted": false,
+      "legalBasis": null,
+      "retentionPeriod": null,
+      "erasureRule": null,
+      "decisionGates": ["FELLOWSHIP_APPLICATIONS_ENABLED", "approved candidate transparency", "retention and erasure policy", "named Fellowship operators"]
+    },
+    {
       "id": "community-and-participation-models",
       "operationalStatus": "implemented-internal-only",
       "dataSubjects": ["no public operational cohort"],
@@ -336,6 +353,7 @@
     "Production file-upload service",
     "activated analytics provider",
     "activated external AI provider",
-    "real research credential issuance or contribution intake"
+    "real research credential issuance or contribution intake",
+    "real Fellowship candidacy or recognition processing"
   ]
 }

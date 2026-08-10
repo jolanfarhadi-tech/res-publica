@@ -18,6 +18,7 @@ const STATIC_PATHS = [
   "/programs",
   "/academy",
   "/academy/courses",
+  "/fellowship",
   "/products",
   "/services",
   "/projects",

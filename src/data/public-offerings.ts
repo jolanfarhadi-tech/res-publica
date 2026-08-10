@@ -128,6 +128,7 @@ export const publicOfferings: readonly PublicOffering[] = [
     id: "fellowship",
     category: "programs",
     maturity: "documented",
+    href: "/fellowship",
     operational: false,
     title: {
       de: "Civic Fellowship",

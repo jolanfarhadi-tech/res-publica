@@ -168,3 +168,15 @@ synthetic regression coverage. This note does not retroactively alter the
 pre-remediation evidence in this report and does not claim Production
 activation: migration 0019 is not applied to Production and real learner
 writes remain closed by `ACADEMY_ENROLLMENT_ENABLED` plus OPEN-022/WARN-020.
+
+## Post-audit remediation note — Release B Fellowship
+
+The Fellowship contradiction recorded above has been remediated in the local
+Release-B worktree. The repository now contains a bounded Fellowship module,
+additive migration 0020, nomination and voluntary application, qualitative
+evidence, conflict declaration/recusal, human review, independent decision,
+private records, exact-scope MFA APIs and DE/EN/FA surfaces. This does not
+rewrite the original audit evidence or claim Production activation: migration
+0020 is not applied to Production, no public roster exists, and real
+candidacies remain closed by `FELLOWSHIP_APPLICATIONS_ENABLED` plus
+OPEN-023/WARN-021.

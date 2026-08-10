@@ -1064,3 +1064,136 @@ export const academyCertificates = pgTable(
     uniqueIndex("academy_certificates_verification_uq").on(table.verificationId),
   ]
 );
+
+export const fellowshipRoleScopes = pgTable(
+  "fellowship_role_scopes",
+  {
+    id: text("id").primaryKey(),
+    slug: text("slug").notNull(),
+    labels: jsonb("labels").$type<Record<"de" | "en" | "fa", string>>().notNull(),
+    responsibilities: jsonb("responsibilities").$type<string[]>().notNull(),
+    sourceRefs: jsonb("source_refs").$type<string[]>().notNull(),
+    state: text("state", { enum: ["draft", "approved", "retired"] }).notNull(),
+    createdByPersonId: text("created_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    approvedByPersonId: text("approved_by_person_id").references(() => people.id, { onDelete: "restrict" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+    approvedAt: timestamp("approved_at", { withTimezone: true, mode: "date" }),
+    retiredAt: timestamp("retired_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [uniqueIndex("fellowship_role_scopes_slug_uq").on(table.slug)]
+);
+
+export const fellowshipCandidacies = pgTable(
+  "fellowship_candidacies",
+  {
+    id: text("id").primaryKey(),
+    candidatePersonId: text("candidate_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    sourceType: text("source_type", { enum: ["nomination", "application"] }).notNull(),
+    submittedByPersonId: text("submitted_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    roleScopeId: text("role_scope_id").notNull().references(() => fellowshipRoleScopes.id, { onDelete: "restrict" }),
+    rationale: text("rationale").notNull(),
+    status: text("status", { enum: ["submitted", "under-review", "more-information-required", "approved", "rejected", "withdrawn"] }).notNull(),
+    submittedAt: timestamp("submitted_at", { withTimezone: true, mode: "date" }).notNull(),
+    enteredReviewAt: timestamp("entered_review_at", { withTimezone: true, mode: "date" }),
+    decidedAt: timestamp("decided_at", { withTimezone: true, mode: "date" }),
+    decidedByPersonId: text("decided_by_person_id").references(() => people.id, { onDelete: "restrict" }),
+    decisionReason: text("decision_reason"),
+    memberFacingReason: text("member_facing_reason"),
+  },
+  (table) => [
+    index("fellowship_candidacies_candidate_idx").on(table.candidatePersonId),
+    index("fellowship_candidacies_status_idx").on(table.status),
+  ]
+);
+
+export const fellowshipEvidenceRefs = pgTable("fellowship_evidence_refs", {
+  id: text("id").primaryKey(),
+  candidacyId: text("candidacy_id").notNull().references(() => fellowshipCandidacies.id, { onDelete: "restrict" }),
+  kind: text("kind", { enum: ["contribution", "role-history", "reference"] }).notNull(),
+  sourceRef: text("source_ref").notNull(),
+  description: text("description").notNull(),
+  addedByPersonId: text("added_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const fellowshipReviewAssignments = pgTable(
+  "fellowship_review_assignments",
+  {
+    id: text("id").primaryKey(),
+    candidacyId: text("candidacy_id").notNull().references(() => fellowshipCandidacies.id, { onDelete: "restrict" }),
+    reviewerPersonId: text("reviewer_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    assignedByPersonId: text("assigned_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    status: text("status", { enum: ["assigned", "recused", "completed"] }).notNull(),
+    assignedAt: timestamp("assigned_at", { withTimezone: true, mode: "date" }).notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("fellowship_review_assignments_candidacy_reviewer_uq").on(table.candidacyId, table.reviewerPersonId),
+    index("fellowship_review_assignments_candidacy_idx").on(table.candidacyId),
+  ]
+);
+
+export const fellowshipConflictDeclarations = pgTable(
+  "fellowship_conflict_declarations",
+  {
+    id: text("id").primaryKey(),
+    assignmentId: text("assignment_id").notNull().references(() => fellowshipReviewAssignments.id, { onDelete: "restrict" }),
+    reviewerPersonId: text("reviewer_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    hasConflict: boolean("has_conflict").notNull(),
+    declarationText: text("declaration_text").notNull(),
+    declaredAt: timestamp("declared_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [uniqueIndex("fellowship_conflict_declarations_assignment_uq").on(table.assignmentId)]
+);
+
+export const fellowshipReviews = pgTable(
+  "fellowship_reviews",
+  {
+    id: text("id").primaryKey(),
+    assignmentId: text("assignment_id").notNull().references(() => fellowshipReviewAssignments.id, { onDelete: "restrict" }),
+    reviewerPersonId: text("reviewer_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    recommendation: text("recommendation", { enum: ["approve", "reject", "more-information"] }).notNull(),
+    rationale: text("rationale").notNull(),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [uniqueIndex("fellowship_reviews_assignment_uq").on(table.assignmentId)]
+);
+
+export const fellowshipRecords = pgTable(
+  "fellowship_records",
+  {
+    id: text("id").primaryKey(),
+    personId: text("person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    roleScopeId: text("role_scope_id").notNull().references(() => fellowshipRoleScopes.id, { onDelete: "restrict" }),
+    candidacyId: text("candidacy_id").notNull().references(() => fellowshipCandidacies.id, { onDelete: "restrict" }),
+    sponsorPersonId: text("sponsor_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    status: text("status", { enum: ["active", "suspended", "ended"] }).notNull(),
+    startsAt: timestamp("starts_at", { withTimezone: true, mode: "date" }).notNull(),
+    reviewDueAt: timestamp("review_due_at", { withTimezone: true, mode: "date" }),
+    endedAt: timestamp("ended_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("fellowship_records_candidacy_uq").on(table.candidacyId),
+    index("fellowship_records_person_idx").on(table.personId),
+  ]
+);
+
+export const fellowshipStatusChanges = pgTable("fellowship_status_changes", {
+  id: text("id").primaryKey(),
+  fellowshipId: text("fellowship_id").notNull().references(() => fellowshipRecords.id, { onDelete: "restrict" }),
+  fromStatus: text("from_status", { enum: ["active", "suspended", "ended"] }).notNull(),
+  toStatus: text("to_status", { enum: ["active", "suspended", "ended"] }).notNull(),
+  reason: text("reason").notNull(),
+  changedByPersonId: text("changed_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  changedAt: timestamp("changed_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const fellowshipAttributions = pgTable("fellowship_attributions", {
+  id: text("id").primaryKey(),
+  fellowshipId: text("fellowship_id").notNull().references(() => fellowshipRecords.id, { onDelete: "restrict" }),
+  publicationReference: text("publication_reference").notNull(),
+  creditText: text("credit_text").notNull(),
+  publicDisplayApproved: boolean("public_display_approved").notNull(),
+  approvedByPersonId: text("approved_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+});

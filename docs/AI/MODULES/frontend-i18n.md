@@ -1,5 +1,17 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental implementation — Fellowship surfaces, 2026-08-10
+
+The localized App Router includes a source-grounded Fellowship information
+page, a self-only status dashboard and an MFA-authorized Operations overview.
+All copy exists in DE/EN/FA, uses the established Persian RTL boundary and
+states that application is not approval, promotion or a trust score.
+
+The existing Programmes matrix links to the information page while retaining
+`documented` / non-operational status. Self-application controls and the API
+remain server-gated by `FELLOWSHIP_APPLICATIONS_ENABLED`; no public candidate,
+member or Fellow directory is introduced.
+
 ## Incremental implementation — Academy surfaces, 2026-08-10
 
 The existing localized App Router now includes public Academy catalogue,

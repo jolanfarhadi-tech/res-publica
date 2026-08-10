@@ -75,11 +75,15 @@ describe("verified OIDC self-registration", () => {
         "academy.assessment.submit",
         "academy.enrollment.self",
         "academy.progress.self",
+        "fellowship.application.self",
+        "fellowship.dashboard.self",
         "membership.application.submit",
         "research.preference.manage",
       ]);
       expect((await db.select().from(auditLog)).map((row) => row.action)).toEqual([
         "auth.identity-self-registered",
+        "authorization.self-service-grant-created",
+        "authorization.self-service-grant-created",
         "authorization.self-service-grant-created",
         "authorization.self-service-grant-created",
         "authorization.self-service-grant-created",

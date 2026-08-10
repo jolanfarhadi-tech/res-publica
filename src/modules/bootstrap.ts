@@ -12,6 +12,7 @@ import { crmManifest } from "./crm/manifest";
 import { analyticsManifest } from "./analytics/manifest";
 import { harmGovernanceManifest } from "./harm-governance/manifest";
 import { academyManifest } from "./academy/manifest";
+import { fellowshipManifest } from "./fellowship/manifest";
 
 /**
  * Bootstrap — registers every implemented module's manifest with the
@@ -32,6 +33,7 @@ const implementedManifests: readonly ModuleManifest[] = [
   analyticsManifest,
   harmGovernanceManifest,
   academyManifest,
+  fellowshipManifest,
 ];
 
 export function bootstrapModules(): readonly ModuleManifest[] {
