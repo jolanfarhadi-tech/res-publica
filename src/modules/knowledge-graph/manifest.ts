@@ -8,8 +8,21 @@ import type { ModuleManifest } from "../manifest";
 export const knowledgeGraphManifest: ModuleManifest = {
   moduleName: "knowledge-graph",
   entities: [],
-  databaseTables: ["kg_entities", "kg_relationships"],
-  apiRoutes: ["/api/knowledge-graph/lookup", "/api/knowledge-graph/related", "/api/knowledge-graph/search"],
+  databaseTables: [
+    "kg_entities",
+    "kg_relationships",
+    "kg_graph_builds",
+    "kg_candidates",
+    "kg_provenance",
+  ],
+  apiRoutes: [
+    "/api/knowledge-graph/lookup",
+    "/api/knowledge-graph/related",
+    "/api/knowledge-graph/search",
+    "/api/knowledge-graph/operations",
+    "/api/knowledge-graph/operations/rebuilds",
+    "/api/knowledge-graph/operations/candidates/{candidateId}",
+  ],
   dashboardContribution: null,
   aiLayerCapabilities: [],
 };

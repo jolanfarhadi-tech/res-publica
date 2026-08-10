@@ -1,5 +1,21 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-024 — Knowledge Graph Production migration and operational retention
+
+- **Implemented locally:** additive migration 0021; deterministic rebuild and
+  content digest; candidate/human-review separation; exact-scope MFA; domain
+  boundaries; atomic graph/provenance/audit persistence; bounded public APIs;
+  DE/EN/FA search enrichment and Operations UI.
+- **Production status:** migration 0021 is not applied; Production remains at
+  19 migrations / 66 tables and no Release-C code is deployed by this slice.
+- **External/operational follow-up:** authorize Production migration after the
+  standard backup/recovery verification; grant named independent operators the
+  exact rebuild/read/candidate capabilities; approve retention/access rules for
+  build, candidate and provenance ledgers; maintain editorial source-eligibility
+  review.
+- **Boundary:** no external AI provider is required or activated. ADR-035's
+  reserved HARM graph lifecycle/deletion rules remain unavailable.
+
 ### OPEN-023 — Fellowship operational and real-data activation
 
 - **Implemented locally:** additive migration 0020; governed role scopes;

@@ -16,7 +16,7 @@ Production activation.
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
 | Real DPIA | Repository DPIA remains a placeholder; technical appendix and processing inventory draft exist | Legal/DPO approval required | Approved real-person processing |
 | Processor DPAs | Vercel, Neon and Auth0 agreements not evidenced in repository | Owner/legal evidence required | Approved real-person processing |
-| Record of processing activities | Machine/human technical inventory covers 20 activities and all 95 repository-schema tables, including local Academy and Fellowship migrations; CI detects schema/source/legal-field drift | Owner/legal approval required | Privacy governance |
+| Record of processing activities | Machine/human technical inventory covers 20 activities and all 98 repository-schema tables, including local Academy, Fellowship and Knowledge Graph migrations; CI detects schema/source/legal-field drift | Owner/legal approval required | Privacy governance |
 | Retention schedule | Decision matrix exists without invented periods | Owner/legal approval required | Withdrawal, erasure, operational data lifecycle |
 | AuditLog pseudonymization | Engineering pattern exists; ADR-029 keeps activation legally blocked | Blocked by legal approval | Erasure workflow |
 | Consent withdrawal policy | Canonical entity supports revocation but operational ADR-035 is absent | Architecture/legal gate | Withdrawal UI/API |

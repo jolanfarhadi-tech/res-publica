@@ -15,6 +15,10 @@ export type EntitySourceReference = {
   /** Path relative to the repository root. */
   file: string;
   locale: string;
+  /** Canonical editorial source declared by the reviewed content record. */
+  canonicalSource: string | null;
+  /** Only reviewed, source-grounded, explicitly public content may project publicly. */
+  publicEligible: boolean;
 };
 
 /** German/English/Persian name variants that resolve to one canonical entity. */

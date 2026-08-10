@@ -1,5 +1,18 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental implementation — Knowledge Graph and search surfaces, 2026-08-10
+
+The existing DE/EN/FA search index now includes explicit entity IDs and labels
+from reviewed, source-grounded public MDX declarations. Search remains static,
+fast and usable without a database or external provider; no semantic/AI claim
+is introduced.
+
+`/[locale]/operations/knowledge-graph` provides a private MFA-authorized build
+ledger and human candidate-review interface. Copy is complete in DE/EN/FA,
+Persian uses the existing RTL document boundary, and empty/denied/unavailable
+states remain truthful. Rebuild and approval are presented as separate actions;
+the UI never implies automatic graph publication.
+
 ## Incremental implementation — Fellowship surfaces, 2026-08-10
 
 The localized App Router includes a source-grounded Fellowship information

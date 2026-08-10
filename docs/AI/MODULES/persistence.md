@@ -1,5 +1,21 @@
 # Module: Persistence
 
+## Incremental implementation — Knowledge Graph governance persistence, 2026-08-10
+
+Additive migration `0021_knowledge-graph-governance.sql` introduces
+`kg_graph_builds`, `kg_candidates` and `kg_provenance`. It retains the existing
+`kg_entities` and `kg_relationships` tables and contains no destructive DDL.
+Build identity/digest, candidate decision timestamps and approvers, exact
+source eligibility, commit/extractor provenance and human approval are stored
+with restrictive foreign keys to canonical people/candidates.
+
+Candidate approval writes canonical graph state, provenance and `audit_log` in
+one transaction; rejected or failed reviews cannot partially persist. The
+fresh chain applies 22 migrations and creates 98 tables, all covered by the
+20-activity processing inventory. Migration 0021 is local only; Production
+remains 19 migrations / 66 tables pending the normal backup, authorization and
+deployment process.
+
 ## Incremental implementation — Fellowship persistence, 2026-08-10
 
 Additive migration `0020_fellowship-system.sql` introduces nine Civic-domain

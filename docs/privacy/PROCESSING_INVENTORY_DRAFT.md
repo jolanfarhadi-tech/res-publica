@@ -229,13 +229,17 @@ conclusions.
 <!-- inventory:knowledge-graph-and-ai-ledger -->
 ### Knowledge Graph and AI ledger
 
-- **Technical status:** internal implementation only; no external AI provider or
-  public semantic API is active.
-- **Potential data:** entity names/aliases, repository-source relationships and
-  AI query/cost ledger fields.
-- **Boundary:** internal repository retrieval and deterministic cost controls.
-- **Unresolved:** approved provider/use case, source review, DPIA and AI
-  governance activation.
+- **Technical status:** deterministic build, candidate ledger, independent
+  human review, provenance and bounded public graph projection are implemented;
+  no external AI provider is active.
+- **Potential data:** entity names/aliases, deterministic relationships,
+  source eligibility, build digest, human decisions and AI query/cost fields.
+- **Boundary:** rebuild never publishes automatically; exact-scope MFA and
+  separation of duties protect approval; public reads expose only allowlisted
+  fields backed by currently public-eligible approved provenance.
+- **Unresolved:** retention for build/candidate/provenance records and ongoing
+  source-eligibility governance. External AI still requires an approved
+  provider/use case, DPIA and AI-governance activation.
 
 <!-- inventory:funding-impact-and-partnerships -->
 ### Funding, impact and partnership models
@@ -250,7 +254,7 @@ conclusions.
 
 ## Schema coverage and exclusions
 
-The machine inventory currently covers all **95** PostgreSQL tables parsed from
+The machine inventory currently covers all **98** PostgreSQL tables parsed from
 `src/persistence/schema.ts` and `src/persistence/module-schema.ts`. Shared tables
 may support more than one activity, but every current table must appear at
 least once. A schema addition therefore fails the inventory drift check until

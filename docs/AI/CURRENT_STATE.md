@@ -1,5 +1,41 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Release C Knowledge Graph and Search, 2026-08-10
+
+The accepted generic Knowledge Graph boundary is implemented without creating
+a second graph or enabling AI-inferred publication. Civic-owned entity and
+`co-occurs` types are registered explicitly; committed MDX is read in stable
+order; multilingual sources produce deterministic entity/relationship
+candidates and one reproducible SHA-256 content digest. A rebuild records a
+candidate ledger only and never changes the authoritative graph.
+
+Independent human approval requires a session-derived actor, exact Civic
+candidate scope and MFA. The rebuild initiator cannot review their own
+candidates. Relationship approval fails until both endpoints are verified in
+the same domain, and Civic candidates cannot mutate Governance-owned records.
+Approved graph state, source provenance and canonical AuditLog evidence commit
+atomically. Rejection and every failed authorization/state/domain check leave
+graph, provenance and audit state unchanged.
+
+The three manifest-declared public read routes now exist and expose only
+allowlisted fields backed by currently public-eligible, human-approved
+provenance. Public/staff reads and staff writes reuse the shared PostgreSQL
+limiter; no raw IP address is stored. The site search index is deterministically
+enriched by explicit public MDX entity declarations. The verified HARM project
+declares two source-grounded entities in DE/EN/FA; no invented content or AI
+relationship was added. The MFA Operations page exists in all three locales at
+`/[locale]/operations/knowledge-graph`, with Persian RTL inherited from the
+existing layout.
+
+Migration `0021_knowledge-graph-governance` is additive and introduces three
+ledger/provenance tables while retaining the existing `kg_entities` and
+`kg_relationships` stores. A fresh database applies 22 migrations and creates
+98 tables; the processing inventory covers 20 activities and all 98 tables.
+Production remains at 19 migrations / 66 tables and has not been changed.
+Verification passes focused Release-C tests, the full serial suite (92 files /
+386 tests), lint, typecheck, structure, schema/fresh migration checks, the
+processing inventory and a 162-page Production build.
+
 ## Incremental update — Release B Fellowship System, 2026-08-10
 
 The Civic-domain Fellowship System is implemented as a human-gated,

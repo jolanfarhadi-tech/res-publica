@@ -115,6 +115,24 @@ export const FELLOWSHIP_SELF_SERVICE_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 60 * 60 * 1000,
 };
 
+export const KNOWLEDGE_GRAPH_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "knowledge-graph.privileged-write",
+  limit: 30,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const KNOWLEDGE_GRAPH_PUBLIC_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "knowledge-graph.public-read",
+  limit: 120,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const KNOWLEDGE_GRAPH_OPERATIONS_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "knowledge-graph.operations-read",
+  limit: 120,
+  windowMs: 15 * 60 * 1000,
+};
+
 const RETENTION_AFTER_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function hashIdentifier(

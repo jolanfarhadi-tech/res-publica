@@ -440,7 +440,12 @@ export const kgEntities = pgTable("kg_entities", {
   type: text("type", { enum: ["person", "organization", "topic", "legislation", "dialogue", "finding"] }).notNull(),
   canonicalName: text("canonical_name").notNull(),
   aliases: jsonb("aliases").$type<Array<{ locale: string; name: string }>>().notNull(),
-  sources: jsonb("sources").$type<Array<{ file: string; locale: string }>>().notNull(),
+  sources: jsonb("sources").$type<Array<{
+    file: string;
+    locale: string;
+    canonicalSource: string | null;
+    publicEligible: boolean;
+  }>>().notNull(),
 });
 
 export const kgRelationships = pgTable(
@@ -450,7 +455,12 @@ export const kgRelationships = pgTable(
     fromEntityId: text("from_entity_id").notNull().references(() => kgEntities.id, { onDelete: "restrict" }),
     toEntityId: text("to_entity_id").notNull().references(() => kgEntities.id, { onDelete: "restrict" }),
     type: text("type", { enum: ["co-occurs"] }).notNull(),
-    source: jsonb("source").$type<{ file: string; locale: string }>().notNull(),
+    source: jsonb("source").$type<{
+      file: string;
+      locale: string;
+      canonicalSource: string | null;
+      publicEligible: boolean;
+    }>().notNull(),
   },
   (table) => [primaryKey({ columns: [table.fromEntityId, table.toEntityId, table.type] })]
 );
@@ -698,6 +708,96 @@ export const academyPrograms = pgTable(
     version: integer("version").notNull(),
   },
   (table) => [uniqueIndex("academy_programs_slug_uq").on(table.slug)]
+);
+
+export const kgGraphBuilds = pgTable(
+  "kg_graph_builds",
+  {
+    id: text("id").primaryKey(),
+    domain: text("domain", { enum: ["civic", "governance"] }).notNull(),
+    commitSha: text("commit_sha").notNull(),
+    extractorName: text("extractor_name").notNull(),
+    contentDigest: text("content_digest").notNull(),
+    status: text("status", { enum: ["completed", "failed"] }).notNull(),
+    candidateCount: integer("candidate_count").notNull(),
+    initiatedByPersonId: text("initiated_by_person_id").notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("kg_graph_builds_reproducible_uq").on(
+      table.domain,
+      table.commitSha,
+      table.extractorName,
+      table.contentDigest
+    ),
+    index("kg_graph_builds_domain_created_idx").on(table.domain, table.createdAt),
+  ]
+);
+
+export const kgCandidates = pgTable(
+  "kg_candidates",
+  {
+    id: text("id").primaryKey(),
+    buildId: text("build_id").notNull()
+      .references(() => kgGraphBuilds.id, { onDelete: "restrict" }),
+    domain: text("domain", { enum: ["civic", "governance"] }).notNull(),
+    kind: text("kind", { enum: ["entity", "relationship"] }).notNull(),
+    candidateKey: text("candidate_key").notNull(),
+    fingerprint: text("fingerprint").notNull(),
+    payload: jsonb("payload").$type<Record<string, unknown>>().notNull(),
+    sources: jsonb("sources").$type<Array<{
+      file: string;
+      locale: string;
+      canonicalSource: string | null;
+      publicEligible: boolean;
+    }>>().notNull(),
+    status: text("status", { enum: ["pending", "approved", "rejected"] }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+    decidedAt: timestamp("decided_at", { withTimezone: true, mode: "date" }),
+    decidedByPersonId: text("decided_by_person_id")
+      .references(() => people.id, { onDelete: "restrict" }),
+    decisionReason: text("decision_reason"),
+  },
+  (table) => [
+    uniqueIndex("kg_candidates_build_fingerprint_uq").on(table.buildId, table.fingerprint),
+    index("kg_candidates_domain_status_idx").on(table.domain, table.status),
+  ]
+);
+
+export const kgProvenance = pgTable(
+  "kg_provenance",
+  {
+    id: text("id").primaryKey(),
+    candidateId: text("candidate_id").notNull()
+      .references(() => kgCandidates.id, { onDelete: "restrict" }),
+    domain: text("domain", { enum: ["civic", "governance"] }).notNull(),
+    targetKind: text("target_kind", { enum: ["entity", "relationship"] }).notNull(),
+    targetKey: text("target_key").notNull(),
+    sourceFile: text("source_file").notNull(),
+    sourceLocale: text("source_locale").notNull(),
+    canonicalSource: text("canonical_source"),
+    sourceDigest: text("source_digest").notNull(),
+    publicEligible: boolean("public_eligible").notNull(),
+    commitSha: text("commit_sha").notNull(),
+    extractorName: text("extractor_name").notNull(),
+    approvedByPersonId: text("approved_by_person_id").notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    approvedAt: timestamp("approved_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("kg_provenance_candidate_source_uq").on(
+      table.candidateId,
+      table.sourceFile,
+      table.sourceLocale
+    ),
+    index("kg_provenance_public_target_idx").on(
+      table.publicEligible,
+      table.targetKind,
+      table.targetKey
+    ),
+  ]
 );
 
 export const academyProgramTranslations = pgTable(

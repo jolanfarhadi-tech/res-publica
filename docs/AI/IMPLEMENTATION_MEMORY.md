@@ -1,5 +1,20 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Release C Knowledge Graph and Search
+
+The existing shared graph mechanism now has an application boundary and
+additive persistence for deterministic build ledgers, review candidates and
+source provenance. Domain vocabulary remains owned by the contributing domain;
+only the accepted Civic/content types are registered. Rebuild and publication
+are separate, human review is independent and MFA/exact-scope protected, and
+canonical graph/provenance/audit changes are atomic.
+
+Public graph reads use allowlisted DTOs and current public-source eligibility;
+internal aliases/source paths do not project. Site search is enriched at build
+time by explicit entity declarations, not by AI. All graph HTTP reads and
+writes use the shared privacy-preserving PostgreSQL limiter. Migration 0021
+makes the local chain 22 migrations / 98 tables; Production remains 19 / 66.
+
 ## Incremental implementation — Release B Fellowship System
 
 The Civic platform now registers a `fellowship` module through the existing

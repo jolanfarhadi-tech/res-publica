@@ -44,6 +44,11 @@ const fellowshipRoutes = [
   ["fellowship/operations/records/[fellowshipId]/status", 1],
 ] as const;
 
+const knowledgeGraphRoutes = [
+  ["knowledge-graph/operations/rebuilds", 1],
+  ["knowledge-graph/operations/candidates/[candidateId]", 1],
+] as const;
+
 function source(domain: "governance" | "publishing", route: string) {
   return readFileSync(
     join(process.cwd(), "src", "app", "api", domain, route, "route.ts"),
@@ -108,6 +113,18 @@ describe("privileged write route inventory", () => {
       );
       expect(routeSource, route).toContain("executePrivilegedWrite");
       expect(routeSource, route).toContain("FELLOWSHIP_PRIVILEGED_WRITE_RATE_LIMIT");
+      expect(writeMethodCount(routeSource), route).toBe(expectedMethods);
+    }
+  });
+
+  it("protects every Knowledge Graph staff write with the shared distributed limiter", () => {
+    for (const [route, expectedMethods] of knowledgeGraphRoutes) {
+      const routeSource = readFileSync(
+        join(process.cwd(), "src", "app", "api", route, "route.ts"),
+        "utf8"
+      );
+      expect(routeSource, route).toContain("executePrivilegedWrite");
+      expect(routeSource, route).toContain("KNOWLEDGE_GRAPH_PRIVILEGED_WRITE_RATE_LIMIT");
       expect(writeMethodCount(routeSource), route).toBe(expectedMethods);
     }
   });

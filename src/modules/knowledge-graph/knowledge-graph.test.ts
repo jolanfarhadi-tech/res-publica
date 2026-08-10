@@ -5,6 +5,8 @@ import { describe, it, expect, afterEach } from "vitest";
 import { frontmatterEntityExtractor } from "./extractors/frontmatter-extractor";
 import { buildKnowledgeGraph } from "./build";
 import { lookupEntity, relatedEntities, searchEntities } from "./api";
+import { createGraphCandidateDrafts, graphContentDigest } from "./candidates";
+import { ownsGraphType } from "./schema-registry";
 import type { KnowledgeGraph } from "./types";
 
 describe("frontmatterEntityExtractor", () => {
@@ -70,6 +72,52 @@ describe("buildKnowledgeGraph", () => {
     expect(graph.relationships[0]).toMatchObject({ fromEntityId: "e1", toEntityId: "e2", type: "co-occurs" });
   });
 
+  it("is byte-for-byte deterministic and records public projection eligibility", () => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "kg-test-"));
+    fs.mkdirSync(path.join(tmpDir, "de", "projects"), { recursive: true });
+    const frontmatter = [
+      "---",
+      "title: Public source",
+      "description: Public source",
+      "date: 2026-08-10",
+      "visibility: public",
+      "reviewed: true",
+      "source: docs/source/foundation/01_HARM_OPERATING_SYSTEM.md",
+      "entities:",
+      "  - id: topic:harm",
+      "    type: topic",
+      "    name: HARM",
+      "  - id: organization:res-publica",
+      "    type: organization",
+      "    name: Res Publica e.V.",
+      "---",
+      "Grounded body.",
+    ].join("\n");
+    fs.writeFileSync(path.join(tmpDir, "de", "projects", "harm.mdx"), frontmatter);
+
+    const first = buildKnowledgeGraph(tmpDir, tmpDir);
+    const second = buildKnowledgeGraph(tmpDir, tmpDir);
+
+    expect([...first.entities.entries()]).toEqual([...second.entities.entries()]);
+    expect(first.relationships).toEqual(second.relationships);
+    expect(first.entities.get("topic:harm")?.sources[0]).toMatchObject({
+      locale: "de",
+      publicEligible: true,
+      canonicalSource: "docs/source/foundation/01_HARM_OPERATING_SYSTEM.md",
+    });
+    expect(first.relationships[0].source.publicEligible).toBe(true);
+  });
+
+  it("keeps unreviewed or ungrounded source declarations out of public projection", () => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "kg-test-"));
+    fs.writeFileSync(
+      path.join(tmpDir, "internal.mdx"),
+      "---\ntitle: Internal\ndescription: Internal\nvisibility: public\nreviewed: false\nentities:\n  - id: e1\n    type: topic\n    name: Internal topic\n---\nBody."
+    );
+    const graph = buildKnowledgeGraph(tmpDir, tmpDir);
+    expect(graph.entities.get("e1")?.sources[0].publicEligible).toBe(false);
+  });
+
   it("merges the same entity id declared across multiple files, tracking every source and alias", () => {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "kg-test-"));
     const page1 = "---\ntitle: A\ndescription: A\nentities:\n  - id: e1\n    type: person\n    name: Jane Doe\n---\nA.";
@@ -100,7 +148,13 @@ describe("Knowledge Graph API", () => {
           sources: [],
         }],
       ]),
-      relationships: [{ domain: "civic", fromEntityId: "e1", toEntityId: "e2", type: "co-occurs", source: { file: "x", locale: "de" } }],
+      relationships: [{
+        domain: "civic",
+        fromEntityId: "e1",
+        toEntityId: "e2",
+        type: "co-occurs",
+        source: { file: "x", locale: "de", canonicalSource: "source.md", publicEligible: true },
+      }],
     };
   }
 
@@ -124,5 +178,38 @@ describe("Knowledge Graph API", () => {
     expect(searchEntities(sampleGraph(), "participation", "governance").map((entity) => entity.id)).toEqual(["e3"]);
     expect(searchEntities(sampleGraph(), "participation", "civic").map((entity) => entity.id)).toEqual(["e2"]);
     expect(searchEntities(sampleGraph(), "topic", "civic").map((entity) => entity.id)).toEqual(["e2"]);
+  });
+});
+
+describe("governed graph candidates", () => {
+  it("aggregates multilingual relationship provenance into one deterministic candidate", () => {
+    const source = (file: string, locale: string) => ({
+      file,
+      locale,
+      canonicalSource: "canonical.md",
+      publicEligible: true,
+    });
+    const graph: KnowledgeGraph = {
+      entities: new Map([
+        ["a", { id: "a", domain: "civic", type: "topic", canonicalName: "A", aliases: [], sources: [source("de/a.mdx", "de")] }],
+        ["b", { id: "b", domain: "civic", type: "topic", canonicalName: "B", aliases: [], sources: [source("de/b.mdx", "de")] }],
+      ]),
+      relationships: [
+        { domain: "civic", fromEntityId: "a", toEntityId: "b", type: "co-occurs", source: source("de/a.mdx", "de") },
+        { domain: "civic", fromEntityId: "a", toEntityId: "b", type: "co-occurs", source: source("fa/a.mdx", "fa") },
+      ],
+    };
+    const first = createGraphCandidateDrafts(graph);
+    const second = createGraphCandidateDrafts(graph);
+    const relationship = first.find((candidate) => candidate.kind === "relationship");
+    expect(relationship?.sources).toHaveLength(2);
+    expect(first).toEqual(second);
+    expect(graphContentDigest(first)).toBe(graphContentDigest(second));
+  });
+
+  it("keeps schema meaning with the owning domain", () => {
+    expect(ownsGraphType("civic", "entity", "topic")).toBe(true);
+    expect(ownsGraphType("governance", "entity", "topic")).toBe(false);
+    expect(ownsGraphType("governance", "relationship", "co-occurs")).toBe(false);
   });
 });

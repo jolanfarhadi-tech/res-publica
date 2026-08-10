@@ -16,7 +16,7 @@ function graphWithEntity(): KnowledgeGraph {
           type: "topic",
           canonicalName: "Participation Impact",
           aliases: [],
-          sources: [{ file: "src/content/de/pages/research.mdx", locale: "de" }],
+          sources: [{ file: "src/content/de/pages/research.mdx", locale: "de", canonicalSource: "test-source", publicEligible: true }],
         },
       ],
     ]),

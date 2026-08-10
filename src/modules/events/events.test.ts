@@ -93,7 +93,7 @@ describe("Event Q&A — cross-event isolation guardrail", () => {
             type: "topic",
             canonicalName: "Berlin Conference Hall",
             aliases: [],
-            sources: [{ file: "src/content/de/pages/evt-a-details.mdx", locale: "de" }],
+            sources: [{ file: "src/content/de/pages/evt-a-details.mdx", locale: "de", canonicalSource: "test-source", publicEligible: true }],
           },
         ],
         [
@@ -104,7 +104,7 @@ describe("Event Q&A — cross-event isolation guardrail", () => {
             type: "topic",
             canonicalName: "Munich Town Hall",
             aliases: [],
-            sources: [{ file: "src/content/de/pages/evt-b-details.mdx", locale: "de" }],
+            sources: [{ file: "src/content/de/pages/evt-b-details.mdx", locale: "de", canonicalSource: "test-source", publicEligible: true }],
           },
         ],
       ]),

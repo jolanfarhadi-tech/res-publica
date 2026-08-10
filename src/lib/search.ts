@@ -1,9 +1,10 @@
-import type { Locale } from "@/i18n/config";
-import { collections, getEntries } from "@/lib/collections";
-import { getPage } from "@/lib/content";
-import { getDictionary } from "@/i18n/dictionaries";
-import { getPublicSiteCopy } from "@/i18n/public-site";
-import { offeringsForCategory } from "@/data/public-offerings";
+import type { Locale } from "../i18n/config";
+import { getDictionary } from "../i18n/dictionaries";
+import { getPublicSiteCopy } from "../i18n/public-site";
+import { offeringsForCategory } from "../data/public-offerings";
+import { buildRepositoryKnowledgeGraph } from "../modules/knowledge-graph/repository-build";
+import { collections, getEntries } from "./collections";
+import { getPage } from "./content";
 
 /**
  * Full-text search — Milestone 6.
@@ -22,6 +23,8 @@ export type SearchDocument = {
   section: string;
   date: string;
   tags: string[];
+  /** Human-review candidates are separate; these IDs come only from deterministic public MDX declarations. */
+  knowledgeGraphEntityIds: string[];
   /** Lower-cased, normalized text used for matching. */
   text: string;
 };
@@ -49,6 +52,7 @@ export async function buildSearchIndex(
 ): Promise<SearchDocument[]> {
   const dictionary = await getDictionary(locale);
   const publicCopy = getPublicSiteCopy(locale);
+  const graphEntitiesByUrl = publicGraphEntitiesByUrl();
   const pages = [
     {
       url: `/${locale}`,
@@ -88,8 +92,9 @@ export async function buildSearchIndex(
     section: dictionary.meta.title,
     date: "2026-07-24",
     tags: [],
+    knowledgeGraphEntityIds: graphEntitiesByUrl.get(page.url)?.ids ?? [],
     text: normalizeForSearch(
-      [page.title, page.description, page.body].join(" ")
+      [page.title, page.description, page.body, ...(graphEntitiesByUrl.get(page.url)?.terms ?? [])].join(" ")
     ),
   }));
 
@@ -102,14 +107,46 @@ export async function buildSearchIndex(
       section: dictionary.collections[collection].title,
       date: entry.date,
       tags: entry.tags,
+      knowledgeGraphEntityIds:
+        graphEntitiesByUrl.get(`/${locale}/${collection}/${entry.slug}`)?.ids ?? [],
       text: normalizeForSearch(
-        [entry.title, entry.description, entry.tags.join(" "), entry.body].join(
+        [
+          entry.title,
+          entry.description,
+          entry.tags.join(" "),
+          entry.body,
+          ...(graphEntitiesByUrl.get(`/${locale}/${collection}/${entry.slug}`)?.terms ?? []),
+        ].join(
           " "
         )
       ),
     }))
   );
   return [...pages, ...entries];
+}
+
+function publicGraphEntitiesByUrl() {
+  const graph = buildRepositoryKnowledgeGraph();
+  const byUrl = new Map<string, { ids: string[]; terms: string[] }>();
+  for (const entity of graph.entities.values()) {
+    for (const source of entity.sources) {
+      if (!source.publicEligible) continue;
+      const normalized = source.file.replaceAll("\\", "/");
+      const match = normalized.match(/(?:^|\/)content\/(de|en|fa)\/(news|projects|research|publications|events|pages)\/([a-z0-9-]+)\.mdx$/);
+      if (!match) continue;
+      const [, sourceLocale, section, slug] = match;
+      const url = section === "pages" ? `/${sourceLocale}/${slug}` : `/${sourceLocale}/${section}/${slug}`;
+      const current = byUrl.get(url) ?? { ids: [], terms: [] };
+      if (!current.ids.includes(entity.id)) current.ids.push(entity.id);
+      for (const term of [entity.canonicalName, ...entity.aliases.map((alias) => alias.name)]) {
+        if (!current.terms.includes(term)) current.terms.push(term);
+      }
+      current.ids.sort((left, right) => left.localeCompare(right, "en"));
+      current.terms.sort((left, right) => left.localeCompare(right, "en"));
+      byUrl.set(url, current);
+    }
+  }
+  return byUrl;
 }
 
 function pageForSearch(locale: Locale, slug: "mission" | "about") {

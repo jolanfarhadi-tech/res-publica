@@ -180,3 +180,15 @@ rewrite the original audit evidence or claim Production activation: migration
 0020 is not applied to Production, no public roster exists, and real
 candidacies remain closed by `FELLOWSHIP_APPLICATIONS_ENABLED` plus
 OPEN-023/WARN-021.
+
+## Post-audit remediation note — Release C Knowledge Graph and Search
+
+The Knowledge Graph contradiction recorded above has been remediated in the
+local Release-C worktree. The existing graph mechanism now has deterministic
+build/candidate ledgers, independent exact-scope MFA review, domain-boundary
+enforcement, atomic provenance/audit persistence, the three declared public
+read routes, bounded staff APIs, DE/EN/FA search enrichment and Operations UI.
+This note does not rewrite the original audit evidence or claim Production
+activation: migration 0021 is not applied to Production, public data is limited
+to current reviewed/source-grounded MDX provenance, and no external AI provider
+or ADR-035-reserved HARM graph rule is enabled.

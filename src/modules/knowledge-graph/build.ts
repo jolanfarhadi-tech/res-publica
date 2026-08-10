@@ -16,7 +16,20 @@ function findMdxFiles(dir: string): string[] {
       results.push(full);
     }
   }
-  return results;
+  return results.sort((left, right) => left.localeCompare(right, "en"));
+}
+
+function sourceReference(data: Record<string, unknown>, file: string, locale: string) {
+  const canonicalSource = typeof data.source === "string" && data.source.trim()
+    ? data.source.trim()
+    : null;
+  return {
+    file,
+    locale,
+    canonicalSource,
+    publicEligible:
+      data.visibility === "public" && data.reviewed === true && canonicalSource !== null,
+  };
 }
 
 /**
@@ -38,17 +51,25 @@ export function buildKnowledgeGraph(
   for (const file of findMdxFiles(contentDir)) {
     const raw = fs.readFileSync(file, "utf8");
     const { data, content } = matter(raw);
-    const declared = extractor.extract({ frontmatter: data, body: content });
+    const declared = extractor
+      .extract({ frontmatter: data, body: content })
+      .sort((left, right) =>
+        left.id.localeCompare(right.id, "en") || left.name.localeCompare(right.name, "en")
+      );
     if (declared.length === 0) continue;
 
     const relative = path.relative(root, file);
-    const locale = relative.split(path.sep)[0];
+    const locale = path.relative(contentDir, file).split(path.sep)[0];
+    const source = sourceReference(data, relative, locale);
 
     for (const d of declared) {
       const existing = entities.get(d.id);
       const alias: EntityAlias = { locale, name: d.name };
       if (existing) {
-        existing.sources.push({ file: relative, locale });
+        if (!existing.sources.some((candidate) => candidate.file === source.file && candidate.locale === source.locale)) {
+          existing.sources.push(source);
+          existing.sources.sort((left, right) => left.file.localeCompare(right.file, "en"));
+        }
         if (!existing.aliases.some((a) => a.locale === alias.locale && a.name === alias.name)) {
           existing.aliases.push(alias);
         }
@@ -59,7 +80,7 @@ export function buildKnowledgeGraph(
           type: d.type,
           canonicalName: d.name,
           aliases: [alias],
-          sources: [{ file: relative, locale }],
+          sources: [source],
         });
       }
     }
@@ -72,11 +93,17 @@ export function buildKnowledgeGraph(
           fromEntityId: ids[i],
           toEntityId: ids[j],
           type: "co-occurs",
-          source: { file: relative, locale },
+          source,
         });
       }
     }
   }
 
+  relationships.sort((left, right) =>
+    `${left.fromEntityId}\0${left.toEntityId}\0${left.source.file}`.localeCompare(
+      `${right.fromEntityId}\0${right.toEntityId}\0${right.source.file}`,
+      "en"
+    )
+  );
   return { entities, relationships };
 }

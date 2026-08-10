@@ -11,7 +11,7 @@ function clone(value) {
 
 describe("implementation-backed processing inventory", () => {
   it("covers every current PostgreSQL table and synchronized human activity", () => {
-    expect(checkProcessingInventory()).toEqual({ activities: 20, tables: 95 });
+    expect(checkProcessingInventory()).toEqual({ activities: 20, tables: 98 });
   });
 
   it("rejects invented legal conclusions and retention periods", () => {

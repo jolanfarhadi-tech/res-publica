@@ -295,7 +295,7 @@
     },
     {
       "id": "community-and-participation-models",
-      "operationalStatus": "implemented-internal-only",
+      "operationalStatus": "implemented-human-reviewed-public-projection",
       "dataSubjects": ["no public operational cohort"],
       "dataCategories": ["community stage", "touchpoint transition", "invitation mechanism"],
       "purposeEvidence": "Represent internal community participation models without a public operational interface.",
@@ -314,18 +314,18 @@
       "id": "knowledge-graph-and-ai-ledger",
       "operationalStatus": "implemented-internal-only",
       "dataSubjects": ["repository content subjects where represented"],
-      "dataCategories": ["entity names and aliases", "relationships and source references", "AI query/cost ledger fields"],
-      "purposeEvidence": "Support internal repository knowledge retrieval and deterministic cost governance without an activated external AI provider.",
+      "dataCategories": ["entity names and aliases", "deterministic candidate relationships", "source eligibility and approval provenance", "build commit and content digest", "AI query/cost ledger fields"],
+      "purposeEvidence": "Support deterministic repository knowledge retrieval and a human-approved public content projection while keeping external AI inactive.",
       "systems": ["Neon PostgreSQL", "repository runtime"],
-      "stores": ["postgres:kg_entities", "postgres:kg_relationships", "postgres:ai_query_log", "postgres:ai_cost_ledger"],
-      "accessBoundary": "Internal code only; no external AI provider or public semantic API is active.",
-      "sourceEvidence": ["src/modules/knowledge-graph/api.ts", "src/modules/ai-layer/types.ts"],
+      "stores": ["postgres:kg_entities", "postgres:kg_relationships", "postgres:kg_graph_builds", "postgres:kg_candidates", "postgres:kg_provenance", "postgres:ai_query_log", "postgres:ai_cost_ledger"],
+      "accessBoundary": "Public graph reads expose allowlisted fields only from current public-eligible, human-approved provenance; build and review operations require exact MFA capabilities and separation of duties; no external AI provider is active.",
+      "sourceEvidence": ["src/application/knowledge-graph.ts", "src/modules/knowledge-graph/README.md", "src/modules/ai-layer/types.ts"],
       "externalDependencies": ["none active"],
       "realDataPermitted": false,
       "legalBasis": null,
       "retentionPeriod": null,
       "erasureRule": null,
-      "decisionGates": ["approved AI provider/use case", "DPIA and AI governance", "data-source review"]
+      "decisionGates": ["continued editorial source eligibility review", "retention approval for build/candidate/provenance ledgers", "approved AI provider/use case before external AI", "DPIA and AI governance before external AI"]
     },
     {
       "id": "funding-impact-and-partnerships",

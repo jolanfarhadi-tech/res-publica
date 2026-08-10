@@ -1,5 +1,20 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-022 — Knowledge Graph code completion is not Production activation
+
+- **Evidence:** Release C adds additive migration 0021 and complete deterministic
+  candidate/review/public-projection code, while Production remains 19
+  migrations / 66 tables and ledger retention/operational grants are not
+  approved.
+- **Impact:** applying the migration or granting graph authority without named
+  independent operators, retention/access rules and backup verification would
+  cross the documented operational boundary.
+- **Severity:** **Medium / operational and provenance governance gate**.
+- **Safe handling:** deploy only through the verified migration process; keep
+  rebuild and approval roles separate; expose only current public-eligible
+  approved provenance; do not implement ADR-035-reserved deletion/lifecycle
+  rules or activate an external AI provider here.
+
 ### WARN-021 — Fellowship code completion is not candidacy activation
 
 - **Evidence:** Release B adds migration 0020, nine Fellowship tables and

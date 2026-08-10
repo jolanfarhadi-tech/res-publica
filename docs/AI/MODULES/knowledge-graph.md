@@ -1,5 +1,36 @@
 # Module: Knowledge Graph
 
+## Incremental implementation — Release C, 2026-08-10
+
+The previously declarative HTTP paths are now implemented under
+`src/app/api/knowledge-graph/`. Public lookup, related and search responses are
+read-only allowlisted DTOs over currently public-eligible, human-approved
+provenance. Staff operations provide deterministic rebuild and exact-candidate
+review behind shared PostgreSQL limits, session-derived actors, exact Civic
+capabilities and MFA.
+
+`src/modules/knowledge-graph/{repository-build,candidates,schema-registry}.ts`
+make rebuild ordering, schema ownership, fingerprints and the aggregate content
+digest deterministic. A rebuild persists candidates only. A different human
+must approve; peer-domain mutation is rejected; a relationship cannot publish
+before both same-domain endpoints; accepted graph/provenance/AuditLog writes are
+one transaction. No model, embedding provider or generative relation path is
+present.
+
+Migration `0021_knowledge-graph-governance` adds `kg_graph_builds`,
+`kg_candidates` and `kg_provenance`; it does not duplicate the existing entity
+or relationship tables. Explicit HARM project frontmatter supplies two verified
+Civic/content entities across DE/EN/FA, producing three aggregate candidates
+from three locale-specific edges. Public projection strips non-public aliases
+and source paths. Search index enrichment and the localized MFA Operations UI
+are implemented. Full verification passes 92 files / 386 tests; fresh schema is
+22 migrations / 98 tables; Production is unchanged at 19 / 66.
+
+The older “routes absent / future wiring” notes below are retained as historical
+evidence and are superseded by this Release-C update. ADR-035 remains reserved:
+no Innovation 6/7 or new HARM graph lifecycle, retention, withdrawal or deletion
+rule was implemented.
+
 ## Incremental verification and correction — 2026-08-04
 
 The optional domain predicate in `searchEntities` is now grouped across all
