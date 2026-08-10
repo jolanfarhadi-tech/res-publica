@@ -19,6 +19,7 @@ import {
   events,
   members,
   registrations,
+  researchWallets,
 } from "../persistence/module-schema";
 import {
   DashboardAuthenticationError,
@@ -49,6 +50,17 @@ describe("self-facing Dashboard projection", () => {
       await db.insert(members).values({
         id: "member-self", personId: "person-self", tier: "basic",
         status: "active", createdAt: now,
+      });
+      await db.insert(researchWallets).values({
+        id: "wallet-self",
+        personId: "person-self",
+        status: "offered",
+        protocolProfile: "w3c-vc-bbs-2023-v1",
+        recoveryPublicKey: null,
+        createdAt: now,
+        activatedAt: null,
+        suspendedAt: null,
+        revokedAt: null,
       });
       await db.insert(consentRecords).values([
         {
@@ -122,7 +134,7 @@ describe("self-facing Dashboard projection", () => {
         }],
       };
 
-      const dashboard = await getSelfDashboard(db, actor, now);
+      const dashboard = await getSelfDashboard(db, actor, now, {});
 
       expect(dashboard.account).toEqual({
         status: "authenticated",
@@ -157,6 +169,20 @@ describe("self-facing Dashboard projection", () => {
       expect(dashboard.notifications).toEqual([
         expect.objectContaining({ id: "notification-self" }),
       ]);
+      expect(dashboard.researchWallet).toEqual({
+        id: "wallet-self",
+        status: "offered",
+        protocolProfile: "w3c-vc-bbs-2023-v1",
+        activeDeviceBindingId: null,
+        activationAvailable: false,
+      });
+      const approvedDashboard = await getSelfDashboard(db, actor, now, {
+        RESEARCH_WALLET_ENABLED: "true",
+        RESEARCH_WALLET_ARCHITECTURE_APPROVED: "true",
+        RESEARCH_WALLET_SECURITY_APPROVED: "true",
+        RESEARCH_WALLET_PRIVACY_APPROVED: "true",
+      });
+      expect(approvedDashboard.researchWallet?.activationAvailable).toBe(true);
       expect(dashboard.permittedActions).toEqual({
         viewProfile: true,
         applyForMembership: false,

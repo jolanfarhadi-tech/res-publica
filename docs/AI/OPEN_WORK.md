@@ -239,11 +239,18 @@ MFA, migration, legal, and operational gates in
   Payment projection. Provider references and other people's records are
   excluded at the query/projection boundary; no provider or mutation was
   activated.
+- **Incremental status 2026-08-10:** the existing Membership Application is
+  now represented in the protected Profile as a self-only history containing
+  requested tier, status and submission/decision timestamps. Contact/address,
+  decision actor, audit references and board deliberation are excluded. This
+  completes only the implemented Membership Application source; no absent
+  Fellowship, Volunteer, Project or Academy application model was invented.
 - **Prerequisite:** the first slice (ADR-034) is checked done in the same document — this is additive work, not a fix.
 - **Blocker:** one item is explicitly blocked in the source document itself: *"Blocking on the future Civic Contribution Framework (CCF), not on this document"* — CCF does not yet exist / is not yet ratified.
-- **Safe next action:** before another slice, map the remaining Identity or
-  Application History fields to existing implemented sources; do not invent
-  absent Community/Academy/Fellowship status models.
+- **Safe next action:** map remaining Identity fields to implemented and
+  ADR-permitted sources, or wait for a ratified source model for the other
+  Application History categories; do not invent absent Community, Academy,
+  Fellowship, Volunteer or Project application/status models.
 - **Non-goals:** defining a new Contribution Record Lifecycle, Membership taxonomy, or any of the six explicitly-unratified "Community Systems" wishlist items (AI Mentor, Skill Graph, etc.) — the source document explicitly forbids treating those as buildable without their own future ADR.
 
 ### OPEN-005 — AI Layer external provider not started

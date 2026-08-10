@@ -8,8 +8,10 @@ import {
   type MemberProfileLocale,
 } from "@/i18n/member-profile";
 import { Button } from "@/components/ui/Button";
+import { membershipApplicationCopy } from "@/i18n/membership-application";
 import {
   memberProfileStateFromResponse,
+  type ProfilePayload,
   type MemberProfileViewState,
 } from "./member-profile-state";
 
@@ -27,6 +29,31 @@ function MessageCard({ title, text, action }: { title: string; text: string; act
       <h2 id="profile-message-title" className="mt-4 max-w-2xl text-3xl">{title}</h2>
       <p className="mt-3 max-w-2xl leading-relaxed text-muted">{text}</p>
       {action && <div className="mt-5">{action}</div>}
+    </section>
+  );
+}
+
+function ApplicationHistoryCard({
+  locale,
+  application,
+}: {
+  locale: MemberProfileLocale;
+  application: NonNullable<ProfilePayload["membershipApplication"]>;
+}) {
+  const copy = memberProfileCopy[locale];
+  const status = membershipApplicationCopy[locale].statuses[application.status];
+  return (
+    <section className="glass-panel rounded-3xl p-7 sm:p-9 lg:col-span-2" aria-labelledby="membership-application-history">
+      <p className="civic-label">{copy.applicationStatusLabel}</p>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+        <h2 id="membership-application-history" className="text-3xl">{copy.applicationHistoryTitle}</h2>
+        <span className="rounded-full border border-accent/25 bg-accent/5 px-4 py-2 text-sm font-semibold text-accent">{status}</span>
+      </div>
+      <dl className="mt-6 grid gap-5 sm:grid-cols-2">
+        <div className="rounded-2xl bg-bg/70 p-4"><dt className="text-sm text-muted">{copy.applicationSubmittedAtLabel}</dt><dd className="mt-1 font-semibold">{formatDate(application.submittedAt, locale)}</dd></div>
+        <div className="rounded-2xl bg-bg/70 p-4"><dt className="text-sm text-muted">{copy.applicationDecidedAtLabel}</dt><dd className="mt-1 font-semibold">{formatDate(application.decidedAt, locale)}</dd></div>
+      </dl>
+      <p className="mt-6 border-t border-border pt-5 text-sm leading-relaxed text-muted">{copy.applicationStatusText}</p>
     </section>
   );
 }
@@ -64,6 +91,18 @@ export function MemberProfileDashboard({ locale }: { locale: MemberProfileLocale
     return <MessageCard title={copy.errorTitle} text={copy.errorText} />;
   }
   if (!state.profile.enrolled) {
+    if (state.profile.membershipApplication) {
+      return (
+        <div className="grid gap-6">
+          <MessageCard
+            title={membershipApplicationCopy[locale].statuses[state.profile.membershipApplication.status]}
+            text={copy.applicationStatusText}
+            action={<Button href={`/${locale}/dashboard`}>{copy.dashboardAction}</Button>}
+          />
+          <ApplicationHistoryCard locale={locale} application={state.profile.membershipApplication} />
+        </div>
+      );
+    }
     return <MessageCard title={copy.notEnrolledTitle} text={copy.notEnrolledText} action={<Button href={`/${locale}/membership`}>{copy.membershipAction}</Button>} />;
   }
 
@@ -103,6 +142,9 @@ export function MemberProfileDashboard({ locale }: { locale: MemberProfileLocale
         ) : <p className="mt-3 text-muted">{copy.noNextStatuses}</p>}
         <p className="mt-6 border-t border-border pt-5 text-sm leading-relaxed text-muted">{copy.privacyNotice}</p>
       </section>
+      {state.profile.membershipApplication && (
+        <ApplicationHistoryCard locale={locale} application={state.profile.membershipApplication} />
+      )}
     </div>
   );
 }

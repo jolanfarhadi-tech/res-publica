@@ -1,5 +1,22 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — truthful member application and wallet states, 2026-08-10
+
+The protected Member Profile now includes the session actor's own allowlisted
+Membership Application history: requested tier, status, submission timestamp
+and decision timestamp only. Applicant contact/address data, decision actor,
+audit references and board deliberation remain excluded at the query projection.
+Pending and decided applicants no longer receive the misleading generic
+"no membership" action or an invitation to create a duplicate application.
+The view remains read-only and localized in DE/EN/FA with Persian RTL.
+
+The Dashboard now derives research-wallet activation availability on the server
+from the existing independent wallet approval flags. When that gate is closed,
+the Wallet panel is explicitly read-only: it does not inspect browser wallet
+storage and renders no activation, recovery, upload or revocation control. The
+real-data gate remains closed; no credential issuance, research intake,
+migration, provider or legal approval is activated by this display correction.
+
 ## Incremental update — processing-inventory drift gate, 2026-08-10
 
 `docs/privacy/PROCESSING_INVENTORY.json` is now the machine-readable technical

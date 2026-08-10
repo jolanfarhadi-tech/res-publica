@@ -189,6 +189,10 @@
 - **Evidence:** actual BBS proof and verifier tests pass with synthetic data;
   ADR-038, the threat model, internal DPIA and security review identify absent
   independent review and residual timing/cohort risks.
+- **UI containment 2026-08-10:** the protected Dashboard derives Wallet
+  activation availability from the existing server-side approval gate. While
+  closed, no activation, recovery, upload or revocation control is rendered and
+  no browser wallet storage is inspected.
 - **Impact:** activating real issuance/intake could expose members to
   reidentification or unreviewed cryptographic/operational risk.
 - **Severity:** **High while the final gate is closed; prohibited if bypassed.**

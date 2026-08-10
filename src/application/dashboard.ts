@@ -12,11 +12,13 @@ import {
 import { getSelfMemberProfile } from "./member-profile";
 import { getSelfMembershipApplication } from "./membership-applications";
 import { canAccessOperations } from "./operations-console";
+import { readResearchWalletFeatureGate } from "./research-wallet-gate";
 
 export async function getSelfDashboard(
   db: Database,
   actor: AuthenticatedActor | null,
-  now = new Date()
+  now = new Date(),
+  environment: Record<string, string | undefined> = process.env
 ) {
   if (!actor) throw new DashboardAuthenticationError();
 
@@ -122,6 +124,7 @@ export async function getSelfDashboard(
     researchWallet: wallet ? {
       ...wallet,
       activeDeviceBindingId: activeDevice?.id ?? null,
+      activationAvailable: readResearchWalletFeatureGate(environment).enabled,
     } : null,
     permittedActions: {
       viewProfile: true,

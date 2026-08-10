@@ -4,8 +4,11 @@ import { toMembershipJourneyView } from "../modules/membership/view";
 import type { Member, StatusChange } from "../modules/membership/types";
 import type { Database } from "../persistence";
 import { members, membershipStatusChanges } from "../persistence/module-schema";
+import { getSelfMembershipApplication } from "./membership-applications";
 
-export type SelfMemberProfile =
+type SelfMembershipApplication = Awaited<ReturnType<typeof getSelfMembershipApplication>>;
+
+export type SelfMemberProfile = { membershipApplication: SelfMembershipApplication } & (
   | { enrolled: false }
   | {
       enrolled: true;
@@ -19,13 +22,16 @@ export type SelfMemberProfile =
         triggeringActivity: string | null;
         nextAvailableStatuses: Member["status"][];
       };
-    };
+    }
+);
 
 export async function getSelfMemberProfile(
   db: Database,
   actor: AuthenticatedActor | null
 ): Promise<SelfMemberProfile> {
   if (!actor) throw new MemberProfileAuthenticationError();
+
+  const membershipApplication = await getSelfMembershipApplication(db, actor);
 
   // ADR-034: ownership is constrained in the database query itself. There is
   // no arbitrary member/person identifier accepted by this application service.
@@ -41,7 +47,7 @@ export async function getSelfMemberProfile(
     .where(eq(members.personId, actor.personId))
     .limit(1);
 
-  if (!member) return { enrolled: false };
+  if (!member) return { enrolled: false, membershipApplication };
 
   const [latestChange] = await db
     .select({
@@ -66,6 +72,7 @@ export async function getSelfMemberProfile(
   // Evidence, and Governance records never enter this response object.
   return {
     enrolled: true,
+    membershipApplication,
     membership: {
       memberId: journey.memberId,
       tier: member.tier,

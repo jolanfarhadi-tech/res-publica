@@ -11,12 +11,14 @@ import {
 } from "@/domain/research-wallet/browser-vault";
 import { generateLocalDeviceMaterial, type WalletRecoveryPackage } from "@/domain/research-wallet/local-wallet";
 import { signProjectChallenge, type ProjectChallenge } from "@/domain/research-wallet/local-wallet";
+import { researchWalletPanelState } from "./research-wallet-panel-state";
 
 type Wallet = {
   id: string;
   status: "offered" | "active" | "suspended" | "revoked";
   protocolProfile: string;
   activeDeviceBindingId: string | null;
+  activationAvailable: boolean;
 };
 
 const copy = {
@@ -75,8 +77,19 @@ export function ResearchWalletPanel({ locale, wallet }: { locale: Locale; wallet
   const importedPackage = useRef<WalletRecoveryPackage | null>(null);
 
   useEffect(() => {
+    if (!wallet.activationAvailable) {
+      setLocal(false);
+      return;
+    }
     loadBrowserWallet(wallet.id).then((record) => setLocal(Boolean(record))).catch(() => setLocal(false));
-  }, [wallet.id]);
+  }, [wallet.activationAvailable, wallet.id]);
+
+  const panelState = researchWalletPanelState({
+    status: wallet.status,
+    activationAvailable: wallet.activationAvailable,
+    hasLocalWallet: Boolean(local),
+    hasActiveDevice: Boolean(wallet.activeDeviceBindingId),
+  });
 
   async function activate() {
     setBusy(true); setMessage(null);
@@ -159,8 +172,10 @@ export function ResearchWalletPanel({ locale, wallet }: { locale: Locale; wallet
       <p className="civic-label">{t.label}</p>
       <h2 id="research-wallet-title" className="mt-4 text-3xl">{t.title}</h2>
       <p className="mt-3 text-muted">{wallet.status === "active" ? t.active : t.offered}</p>
-      <p className="mt-2 text-sm text-muted">{local ? t.local : t.absent}</p>
-      {wallet.status === "offered" && (
+      {panelState.canReadLocalWallet && (
+        <p className="mt-2 text-sm text-muted">{local ? t.local : t.absent}</p>
+      )}
+      {panelState.canActivate && (
         <div className="mt-6 rounded-2xl border border-border bg-bg/70 p-5">
           <label className="flex items-start gap-3">
             <input type="checkbox" checked={accepted} onChange={(event) => setAccepted(event.target.checked)} className="mt-1" />
@@ -171,14 +186,14 @@ export function ResearchWalletPanel({ locale, wallet }: { locale: Locale; wallet
           </button>
         </div>
       )}
-      {recoveryPackage && recoveryCode && (
+      {wallet.activationAvailable && recoveryPackage && recoveryCode && (
         <div className="mt-6 rounded-2xl border border-accent/30 bg-accent/5 p-5" role="status">
           <h3 className="text-xl">{t.recoveryTitle}</h3><p className="mt-2 text-sm text-muted">{t.recoveryText}</p>
           <p className="mt-4 break-all font-mono text-sm"><strong>{t.code}:</strong> {recoveryCode}</p>
           <button type="button" onClick={downloadRecovery} className="mt-4 underline underline-offset-4">{t.download}</button>
         </div>
       )}
-      {wallet.status === "active" && !local && wallet.activeDeviceBindingId && (
+      {panelState.canRecover && (
         <div className="mt-6 grid gap-4 rounded-2xl border border-border bg-bg/70 p-5">
           <h3 className="text-xl">{t.recoveryTitle}</h3>
           <label>{t.recoveryFile}<input className="mt-2 block w-full" type="file" accept="application/json" onChange={async (event) => {
@@ -189,7 +204,7 @@ export function ResearchWalletPanel({ locale, wallet }: { locale: Locale; wallet
           <button type="button" disabled={busy || !recoveryCode} onClick={recover} className="w-fit rounded-full bg-accent px-5 py-3 font-semibold text-white disabled:opacity-50">{t.recover}</button>
         </div>
       )}
-      {wallet.status === "active" && (
+      {panelState.canRevoke && (
         <button type="button" disabled={busy} onClick={revoke} className="mt-6 text-sm font-semibold text-red-700 underline underline-offset-4">{t.revoke}</button>
       )}
       <p className="mt-6 border-t border-border pt-4 text-sm leading-relaxed text-muted">{t.blocked}</p>

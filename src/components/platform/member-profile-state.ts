@@ -1,6 +1,14 @@
 import type { MembershipStatus, MembershipTier } from "@/modules/membership/types";
 
-export type ProfilePayload =
+type MembershipApplicationSummary = {
+  id: string;
+  requestedTier: MembershipTier;
+  status: "application_pending" | "approved" | "rejected" | "withdrawn";
+  submittedAt: string;
+  decidedAt: string | null;
+};
+
+export type ProfilePayload = { membershipApplication: MembershipApplicationSummary | null } & (
   | { enrolled: false }
   | {
       enrolled: true;
@@ -14,7 +22,8 @@ export type ProfilePayload =
         triggeringActivity: string | null;
         nextAvailableStatuses: MembershipStatus[];
       };
-    };
+    }
+);
 
 export type MemberProfileViewState =
   | { kind: "loading" }

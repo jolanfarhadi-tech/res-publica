@@ -1,5 +1,20 @@
 # Module: Member Profile
 
+## Incremental integration — Application History and truthful wallet gate, 2026-08-10
+
+The protected Profile now consumes the existing self-only Membership
+Application projection and displays only requested tier, status, submission
+time and decision time. It excludes names, email, address, decision actor,
+audit references, board notes and governance reasoning. Applicants with an
+open or decided application are directed to their private Dashboard rather
+than being told no application exists or offered a duplicate application.
+
+The Dashboard's research-wallet panel now receives a server-derived activation
+availability flag from the existing approval gate. A closed gate produces a
+truthful read-only state and no activation, recovery, file-upload or revocation
+control; browser wallet storage is not inspected. This changes no Wallet API,
+credential, verifier or real-data semantics and introduces no migration.
+
 ## Incremental integration — Payments and Notifications view, 2026-08-04
 
 The protected Dashboard now completes and deploys the spec's existing Payments and
@@ -86,9 +101,9 @@ Tests confirmed to exist: `src/app/api/membership/profile/route.test.ts`, `src/a
 
 **PARTIAL** / **REMOTE_VERIFIED** for the implemented first slice. Per the spec's own TODO checklist (`MEMBER_PROFILE.md`, verbatim, read in full):
 
-Done: self-service ownership + tier separation at query/projection boundary (ADR-034 first slice); protected read-only Membership profile API + DE/EN/FA interface; Membership exit/deactivation lifecycle defined; purpose-scoped consent receipts for initial Membership/profile creation; Payments/Notifications view over the canonical entities.
+Done: self-service ownership + tier separation at query/projection boundary (ADR-034 first slice); protected read-only Membership profile API + DE/EN/FA interface; Membership exit/deactivation lifecycle defined; purpose-scoped consent receipts for initial Membership/profile creation; Payments/Notifications view over the canonical entities; the existing Membership Application History projection (requested tier, status and timestamps only); truthful read-only Wallet presentation while its approval gate is closed.
 
-Not done: Codex Potential/Hearing Candidate approval workflow and its separate Governance-disclosure consent; integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6; "Next Recommended Steps" generation logic; remaining Identity view; Community Participation/Systems views; Application History view; six unratified Community Systems items (each needs its own future ADR); Civic Contribution Framework integration (blocked on a framework that doesn't exist yet).
+Not done: Codex Potential/Hearing Candidate approval workflow and its separate Governance-disclosure consent; integration with `RESPONSIBILITY_EVIDENCE_MODEL.md` §6; "Next Recommended Steps" generation logic; remaining Identity view; Community Participation/Systems views; application types for which no implemented source exists; six unratified Community Systems items (each needs its own future ADR); Civic Contribution Framework integration (blocked on a framework that doesn't exist yet).
 
 ## Open work
 
