@@ -1,5 +1,21 @@
 # Module: Membership
 
+## Incremental implementation — protected board workspace, 2026-08-10
+
+The bounded Operations Console adds a read side for assigned Membership
+Applications without changing the application or decision services. Queue and
+detail access require the existing `civic/membership.application.decide`
+capability, the exact application target and MFA. Self-review is rejected;
+research-readiness preferences are excluded from the board projection.
+
+The detail presents the versioned Satzung, technical-protocol and privacy
+acknowledgements, assignment validity, decision actor/timestamps and canonical
+decision-audit references. Approve/reject calls the existing protected route,
+so separation of duties, wallet-offer boundary, notification, verified-member
+creation and AuditLog persistence remain one atomic transaction. No new
+membership state, clarification workflow, suspension path or migration was
+invented.
+
 ## Production update — 2026-08-10
 
 The application protocol is committed in `326229f`, deployed in Production

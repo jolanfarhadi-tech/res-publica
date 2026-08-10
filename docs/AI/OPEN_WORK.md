@@ -5,6 +5,10 @@
   application persistence, versioned acknowledgements, MFA/exact-scope board
   decision, status UI, and additive migrations 0014–0018. Production contains
   19 migrations and 66 tables.
+- **Implemented in the bounded-administration slice:** a protected Membership
+  queue/detail interface displays only exact-target assignments, keeps
+  research readiness outside board review, and reuses the existing atomic
+  approve/reject service. It creates no broad administrator authority.
 - **External blockers:** ADR acceptance; approved privacy/retention wording; a
   confirmed versioned membership/contribution regulation if one is to be
   required; board reviewer/grant administration; Auth0 verification-email

@@ -161,6 +161,7 @@ describe("self-facing Dashboard projection", () => {
         viewProfile: true,
         applyForMembership: false,
         registerForEvents: true,
+        viewOperations: false,
         manageConsent: false,
       });
       expect(JSON.stringify(dashboard)).not.toContain("person-other");

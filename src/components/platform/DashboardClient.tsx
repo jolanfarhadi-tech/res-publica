@@ -252,6 +252,11 @@ export function DashboardClient({ locale }: { locale: Locale }) {
               {copy.eventsAction}
             </Button>
           )}
+          {dashboard.permittedActions.viewOperations && (
+            <Button href={`/${locale}/operations`} variant="secondary">
+              {copy.operationsAction}
+            </Button>
+          )}
         </div>
       </section>
 

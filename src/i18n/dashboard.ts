@@ -54,6 +54,7 @@ const de = {
   notificationSent: "Gesendet",
   notificationFailed: "Fehlgeschlagen",
   actionsTitle: "Verfügbare Aktionen",
+  operationsAction: "Geschützter Arbeitsbereich",
   privacyNotice: "Alle Daten in dieser Ansicht sind auf das angemeldete Konto begrenzt. Interne Prüf-, Governance- und fremde Personendaten werden nicht geladen.",
 } as const;
 
@@ -113,6 +114,7 @@ const en: DashboardCopy = {
   notificationSent: "Sent",
   notificationFailed: "Failed",
   actionsTitle: "Available actions",
+  operationsAction: "Protected workspace",
   privacyNotice: "All data in this view is limited to the signed-in account. Internal review, Governance and other people's data are not loaded.",
 };
 
@@ -170,6 +172,7 @@ const fa: DashboardCopy = {
   notificationSent: "ارسال‌شده",
   notificationFailed: "ناموفق",
   actionsTitle: "اقدام‌های در دسترس",
+  operationsAction: "محیط کاری حفاظت‌شده",
   privacyNotice: "تمام داده‌های این نما به حساب واردشده محدود است. اطلاعات بررسی داخلی، حکمرانی و اشخاص دیگر بارگذاری نمی‌شود.",
 };
 

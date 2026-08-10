@@ -1,5 +1,18 @@
 # Module: Publishing
 
+## Incremental implementation — Operations Console consumer, 2026-08-10
+
+The bounded Operations Console discovers publication scopes solely from the
+current actor's active exact-target MFA editorial grants and consumes the
+existing `GET /api/publishing/workspace` projection. It displays scoped queue
+counts, submissions, moderation assignments and readiness evidence; Reviewer
+and Translator filtering remains owned by the existing application service.
+
+No Publishing write service was duplicated or changed. The console cannot
+publish, write public content, create Git commits, bypass human sign-off or
+cross a publication scope. `commitHash: null` and the no-auto-publish boundary
+remain unchanged.
+
 ## Incremental implementation — bounded operational workspace, 2026-07-29
 
 `GET /api/publishing/workspace?scope=...` adds a read-only internal

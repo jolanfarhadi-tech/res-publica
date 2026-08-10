@@ -1,5 +1,30 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — bounded Operations Console, 2026-08-10
+
+The existing programme milestone **Bounded administration** now has a narrow
+Membership and Publishing operator surface. `GET /api/operations` derives its
+queue only from the signed-in actor's active, exact-target Civic grants and
+requires MFA before loading operational data. Membership details require the
+same exact application grant and exclude research-readiness data. Applicant
+contact/address data, versioned document acknowledgements, assignment time,
+decision actor/timestamps and canonical decision-audit references are loaded
+only in that protected detail projection.
+
+The localized `/[locale]/operations` route reuses the existing atomic
+Membership decision endpoint and the existing scope-filtered Publishing
+workspace. It introduces no super-admin role, no clarification or lifecycle
+transition unsupported by the accepted implementation, and no new Publishing
+write path. Membership approve/reject still requires an explicit confirmation;
+the application service continues to enforce MFA, exact target, separation of
+duties, atomic persistence, notification and audit semantics. Publishing
+readiness remains non-publishing and writes no content or Git commit.
+
+The Dashboard exposes the workspace link only when the current MFA assurance
+satisfies at least one active exact operational grant. DE/EN/FA, Persian RTL,
+private no-store responses, correlated failures and a 375px no-overflow state
+are verified. No migration or external provider activation is introduced.
+
 ## Verified Production baseline and operational hardening — 2026-08-10
 
 **Verified baseline immediately before this slice:** local branch

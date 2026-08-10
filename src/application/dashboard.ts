@@ -11,6 +11,7 @@ import {
 } from "../persistence/module-schema";
 import { getSelfMemberProfile } from "./member-profile";
 import { getSelfMembershipApplication } from "./membership-applications";
+import { canAccessOperations } from "./operations-console";
 
 export async function getSelfDashboard(
   db: Database,
@@ -126,6 +127,7 @@ export async function getSelfDashboard(
       viewProfile: true,
       applyForMembership: !membership.enrolled && !membershipApplication,
       registerForEvents,
+      viewOperations: canAccessOperations(actor, now),
       // ADR-034 and the absent ADR-035 keep consent mutation unavailable.
       manageConsent: false,
     },

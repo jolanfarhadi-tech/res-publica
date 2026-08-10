@@ -1,5 +1,14 @@
 # Module: Dashboard
 
+## Incremental implementation — bounded operations entry point, 2026-08-10
+
+The self-facing Dashboard now exposes a localized Operations link only when
+the current session's MFA assurance satisfies an active exact-target
+Membership-decision or Publishing-role grant. It returns only the boolean
+permitted action; grant identifiers, other people and operational records do
+not enter the Dashboard projection. Verified or unscoped sessions receive no
+operator link.
+
 ## Incremental implementation — self-facing payments, 2026-08-04
 
 The private Dashboard now reads the canonical `Payment` table through an
