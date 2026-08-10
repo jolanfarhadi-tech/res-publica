@@ -1,5 +1,14 @@
 # Module: Persistence
 
+## Incremental implementation — processing-inventory schema coverage, 2026-08-10
+
+The machine-readable processing inventory now parses both authoritative
+PostgreSQL schema files and requires every current table to belong to at least
+one source-evidenced technical activity. The verified baseline is 66 tables
+across 18 activities. Unknown inventory stores, unclassified schema additions,
+missing human-document markers and invented legal/retention/erasure values fail
+the check. This adds no migration or lifecycle job.
+
 ## Production and recovery update — 2026-08-10
 
 Production now contains all main migrations through 0018: 19 journal entries

@@ -45,6 +45,10 @@
   `docs/legal/` and `docs/privacy/`. Do not publish them or claim legal
   completeness until owner/legal review approves bases, periods, processor
   language, rights handling, and controller details.
+- **Incremental control:** the machine-readable inventory and CI drift check
+  now cover all 66 current PostgreSQL tables and require source evidence while
+  rejecting non-null legal-basis, retention, or erasure conclusions. This
+  improves technical completeness but does not resolve the publication gate.
 
 ### WARN-015 — Drizzle snapshot history skipped migrations 0008–0011
 

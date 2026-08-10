@@ -8,6 +8,7 @@
   "scripts": {
     "audit:production": "npm audit --omit=dev --audit-level=high",
     "check-structure": "node scripts/check-structure.mjs",
+    "privacy:inventory:check": "node scripts/check-processing-inventory.mjs",
     "ops:health": "node scripts/check-deployment-health.mjs",
     "ops:membership-e2e": "node scripts/check-membership-production-e2e.mjs",
     "ops:restore-drill": "node scripts/verify-neon-restore-drill.mjs",

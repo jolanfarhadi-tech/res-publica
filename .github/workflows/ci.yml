@@ -27,6 +27,9 @@ jobs:
       - name: Check project structure
         run: node scripts/check-structure.mjs
 
+      - name: Check processing inventory drift
+        run: npm run privacy:inventory:check
+
       - name: Lint
         run: npm run lint
 

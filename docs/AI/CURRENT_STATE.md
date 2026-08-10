@@ -1,5 +1,20 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — processing-inventory drift gate, 2026-08-10
+
+`docs/privacy/PROCESSING_INVENTORY.json` is now the machine-readable technical
+inventory synchronized with the human review draft. Eighteen implementation
+activities cover all 66 tables parsed from the two current PostgreSQL schema
+files and classify active, provider-inactive, internal-only, server-disabled
+and synthetic-only boundaries separately.
+
+`npm run privacy:inventory:check` and its regression test fail on an
+unclassified table, missing source evidence, human-document drift, an invented
+legal basis/retention/erasure value, or an opened Research/HARM real-data
+boundary. CI runs the check before lint/typecheck/tests. This is engineering
+evidence only: all legal-basis, retention-period and erasure-rule fields remain
+`null`, and no legal/DPA/DPIA gate is closed by this work.
+
 ## Incremental update — bounded Operations Console, 2026-08-10
 
 The existing programme milestone **Bounded administration** now has a narrow
