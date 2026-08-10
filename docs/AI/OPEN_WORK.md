@@ -97,16 +97,17 @@ ownership, Auth0 MFA, and operational approval are
 verified. This implementation did not set the variable or change any external
 service.
 
-### OPEN-015 — Resolved and deployed: bounded Publishing operations read side
+### OPEN-015 — Resolved in code: governed Publishing operations workflow
 
-**Status:** Exact-scope, MFA-protected, role-filtered Publishing workspace API
-is implemented, verified, and deployed. Anonymous Production writes fail
-closed; authenticated operation remains blocked by the Auth0 callback and
-staff-appointment gates.
+**Status:** The exact-scope, MFA-protected, role-filtered workspace now has a
+localized internal client for all seven accepted ADR-036 workflow actions.
+The client reuses the existing protected route and does not change its
+authorization, persistence, audit, provenance or separation-of-duties rules.
 
-No operational frontend was fabricated because staff identities, Auth0 MFA,
-Publisher appointment, and Production administrator responsibility remain
-external gates. Existing write APIs remain the only mutation boundary.
+The lifecycle ends at `ready` with `commitHash: null`. There is deliberately no
+UI or unattended worker for public files, Git, deployment, `published` or
+`archived`; those remain separate explicit repository/release actions.
+Operational use still requires real staff appointments, exact grants and MFA.
 
 ### OPEN-014 — Notification provider activation remains externally gated
 

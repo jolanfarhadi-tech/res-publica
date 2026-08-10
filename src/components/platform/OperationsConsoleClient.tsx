@@ -10,6 +10,7 @@ import {
   type OperationsViewState,
   type PublishingWorkspacePayload,
 } from "./operations-state";
+import { PublishingWorkflowControls } from "./PublishingWorkflowControls";
 
 type Decision = "approved" | "rejected";
 type DetailState =
@@ -227,9 +228,11 @@ function MembershipDetail({
 function PublishingWorkspace({
   locale,
   state,
+  onChanged,
 }: {
   locale: Locale;
   state: PublishingState;
+  onChanged: () => Promise<void>;
 }) {
   const copy = operationsCopy[locale];
   if (state.kind === "idle" || state.kind === "loading") {
@@ -258,6 +261,8 @@ function PublishingWorkspace({
           </div>
         ))}
       </dl>
+
+      <PublishingWorkflowControls locale={locale} workspace={workspace} onChanged={onChanged} />
 
       <section aria-labelledby="publishing-submissions">
         <h3 id="publishing-submissions" className="text-xl">{copy.submissions}</h3>
@@ -350,6 +355,16 @@ export function OperationsConsoleClient({ locale }: { locale: Locale }) {
       kind: "ready",
       detail: (await response.json()) as OperationsMembershipDetail,
     });
+  };
+
+  const reloadPublishing = async () => {
+    if (!selectedScope) return;
+    setPublishingState({ kind: "loading" });
+    const response = await fetch(`/api/publishing/workspace?scope=${encodeURIComponent(selectedScope)}`, {
+      cache: "no-store", credentials: "same-origin",
+    }).catch(() => null);
+    if (!response?.ok) { setPublishingState({ kind: "error" }); return; }
+    setPublishingState({ kind: "ready", workspace: (await response.json()) as PublishingWorkspacePayload });
   };
 
   useEffect(() => {
@@ -479,7 +494,7 @@ export function OperationsConsoleClient({ locale }: { locale: Locale }) {
                 {copy.roles}: {overview.publishingScopes.find((item) => item.scope === selectedScope)?.roles.map((role) => copy.rolesMap[role]).join(", ")}
               </p>
             </div>
-            <PublishingWorkspace locale={locale} state={publishingState} />
+            <PublishingWorkspace locale={locale} state={publishingState} onChanged={reloadPublishing} />
           </>
         ) : <p className="mt-5 text-muted">{copy.publishingEmpty}</p>}
       </section>

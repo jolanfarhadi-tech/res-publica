@@ -1,5 +1,24 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — governed Content Operations client, 2026-08-10
+
+The protected Operations Console now exposes the seven already-implemented
+ADR-036 workflow actions only to independently authorized roles in the current
+exact publication scope: intake, human draft versioning, reviewer assignment,
+moderation decision, translation assignment, human translation finalization
+and Publisher sign-off/readiness. The client derives artifact identifiers from
+the bounded workspace, requires at least one source reference for a new draft,
+requires reasons for moderation, and requires explicit human confirmation
+before readiness.
+
+All mutations continue through the existing `/api/publishing/workflow` route;
+no application service, API contract, schema or migration was duplicated or
+changed. The server remains authoritative for MFA, exact grants, latest-draft
+checks, separation of duties, provenance and atomic AuditLog writes. The UI has
+no publish, archive, file, Git, push or deployment action. `ready` retains
+`commitHash: null`; actual public-file publication and archival remain outside
+this interface and require the existing explicit repository/release boundary.
+
 ## Incremental update — truthful member application and wallet states, 2026-08-10
 
 The protected Member Profile now includes the session actor's own allowlisted

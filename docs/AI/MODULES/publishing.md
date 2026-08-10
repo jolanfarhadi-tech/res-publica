@@ -1,5 +1,22 @@
 # Module: Publishing
 
+## Incremental implementation — governed Content Operations client, 2026-08-10
+
+The localized Operations Console now consumes all seven existing protected
+workflow actions without adding a second Publishing service. Available actions
+are derived from the independently held Editor, Reviewer, Translator and
+Publisher grants returned by the exact-scope workspace. Intake is bound to that
+scope; draft creation is human-authored and source-required in this UI; review
+and translation targets are selected from bounded workspace records; moderation
+requires a reason; readiness requires an explicit human confirmation.
+
+Every write still goes through `POST /api/publishing/workflow`, where session
+actor, MFA, exact capability, latest-draft binding, separation of duties,
+transactional persistence and canonical audit evidence remain authoritative.
+The client cannot represent a role from request data and has no action for
+public files, Git, deployment, `published` or `archived`. Publisher authority
+still ends at append-only `ready` with `commitHash: null`.
+
 ## Incremental implementation — Operations Console consumer, 2026-08-10
 
 The bounded Operations Console discovers publication scopes solely from the
@@ -116,6 +133,9 @@ ADR-036's full “Alternatives Considered” section was read on 2026-07-24. It 
 - Layer A and Layer B: **COMMITTED, PRODUCTION_DEPLOYED**. The backend baseline
   is `09c160b`; bounded workspace and shared rate-limit protections are also
   committed and deployed in Production commit `fc09d8d`.
+- The governed Operations client covers the accepted persisted lifecycle
+  through `ready`. Public-file publication and archival intentionally remain a
+  separate explicit repository/release action, not an unattended CMS worker.
 
 ## Open work
 
