@@ -9,7 +9,8 @@ Production activation.
 
 | Gate | Current evidence | State | Blocks |
 |---|---|---|---|
-| OIDC callback configuration | Production sends `https://respublica-ev.de/api/auth/callback` with PKCE/state/nonce; Auth0 rejects it because the exact URL is absent from Allowed Callback URLs; management dashboard access is not authenticated | Owner-side Auth0 change required | Login and authenticated operations |
+| OIDC callback configuration | Production Auth0 discovery and login initiation use the approved EU tenant, exact `https://respublica-ev.de/api/auth/callback`, PKCE, state and nonce; the former callback mismatch is resolved | Verified 2026-08-10 | — |
+| Controlled Membership authentication E2E | Repeatable check verifies anonymous/OIDC and read-only private boundaries without bypass; no approved synthetic session is stored | Controlled Auth0 session and genuine MFA verification required | Evidence for authenticated application and board operation |
 | Identity invitation/provisioning ownership | Separation-of-duties runbook exists; accountable administrator/reviewer not appointed | Owner assignment required | External user onboarding |
 | Auth0 MFA plan | ADR requires MFA for sensitive capabilities; Production policy not verified | Open | Admin, Governance, Publishing operations |
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
@@ -27,6 +28,7 @@ Production activation.
 | Security logging/retention | Minimal request logging and incident evidence procedure exist; retention/recipients unapproved | Owner/legal approval required | Monitoring and incident evidence |
 | Browser security headers | CSP/HSTS/cross-origin policy implemented and verified at the Production edge; browser console and Vercel error-log checks are clean | Verified 2026-07-30 | — |
 | Distributed rate-limit store | Migration 0012 is applied in Production; PostgreSQL buckets protect auth login, membership creation, event registration, and all 15 Governance/Publishing writes without raw client addresses | Verified 2026-07-30 | — |
+| Production migration state | Protected EU Neon branch contains all migrations through 0018: 19 journal entries and 66 public tables | Verified 2026-08-10 | — |
 | Transactional email provider | Provider abstraction, consent gate, idempotent retry evidence and non-delivering adapter implemented; no provider, credentials, worker or approved templates configured | Intentionally disabled | Real delivery |
 | Newsletter legal basis/provider | Exact server activation gate, versioned explicit consent and PostgreSQL abuse protection implemented; provider, DPA, approved text and withdrawal/retention operations remain absent | Intentionally disabled / owner activation required | Newsletter activation |
 | Analytics provider/legal basis | No provider; disabled by default | Intentionally disabled | Analytics activation |
@@ -35,7 +37,7 @@ Production activation.
 | Research real-data activation | BBS issuance, project proof, isolated verifier and anonymous intake are implemented and synthetic-tested; external DPIA, cryptographic/reidentification audit, operators and project approval are absent | Closed: `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` remains unset/false | Real ZK credentials and real research contributions |
 | HARM evidence/case Production operation | All Governance writes are server-disabled by default; activation requires exact `HARM_OPERATIONS_ENABLED=true`; secure storage and safeguarding remain unapproved | Intentionally disabled / owner activation required | Sensitive case processing |
 | Programme operational approval | Staffing, dates, and approved content not established | Intentionally disabled | Public programme opening |
-| Neon restore drill | Isolated non-Production procedure documented; no completed drill evidence or approved RPO/RTO | Owner execution/approval required | Demonstrated recoverability |
+| Neon restore drill | Current Production snapshot restored without finalize to an isolated branch; TLS 1.3/certificate, 19 migrations, 66 tables, constraints and readiness verified; temporary branches removed | Technical drill verified 2026-08-10; RPO/RTO still require owner approval | Organizational recovery objectives and destructive Production restore authority |
 | Duplicate Vercel project | `res-publica-tq5l` exists but is not the custom-domain project; safe consolidation procedure documented | Owner approval required for deletion | Cleanup only; must avoid wrong deployment |
 
 ## Gate-handling rules

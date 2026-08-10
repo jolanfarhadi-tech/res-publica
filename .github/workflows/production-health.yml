@@ -18,10 +18,11 @@ jobs:
     timeout-minutes: 3
     env:
       HEALTHCHECK_BASE_URL: https://respublica-ev.de
+      HEALTHCHECK_OIDC_ISSUER: https://dev-z4e38ypuvs0ctrsf.eu.auth0.com/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Verify liveness and readiness contracts
+      - name: Verify health, identity discovery, and protected boundaries
         run: node scripts/check-deployment-health.mjs

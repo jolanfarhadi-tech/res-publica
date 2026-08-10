@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  logOperationalFailure,
   REQUEST_ID_HEADER,
   withRequestContext,
 } from "./request-context";
@@ -62,5 +63,39 @@ describe("request context", () => {
     expect(logEntry).toContain('"path":"/api/example"');
     expect(logEntry).not.toContain("secret failure detail");
     expect(logEntry).not.toContain("must-not-be-logged");
+  });
+
+  it("logs only the allowlisted operational failure fields", () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    logOperationalFailure({
+      event: "notification.delivery_failed",
+      dependency: "notification-provider",
+      status: 503,
+      attemptNumber: 2,
+      retryable: true,
+      errorCode: "provider_unavailable",
+    });
+
+    const entry = JSON.parse(String(errorSpy.mock.calls[0]?.[0]));
+    expect(entry).toMatchObject({
+      level: "error",
+      event: "notification.delivery_failed",
+      dependency: "notification-provider",
+      status: 503,
+      attemptNumber: 2,
+      retryable: true,
+      errorCode: "provider_unavailable",
+    });
+    expect(Object.keys(entry).sort()).toEqual([
+      "attemptNumber",
+      "dependency",
+      "errorCode",
+      "event",
+      "level",
+      "retryable",
+      "status",
+      "timestamp",
+    ]);
   });
 });

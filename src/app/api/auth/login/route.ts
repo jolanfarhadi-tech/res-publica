@@ -6,11 +6,15 @@ import {
   AUTH_LOGIN_RATE_LIMIT,
   rejectRateLimitedRequest,
 } from "../../../../platform/rate-limit";
-import { withRequestContext } from "../../../../platform/request-context";
+import {
+  logOperationalFailure,
+  type RequestContext,
+  withRequestContext,
+} from "../../../../platform/request-context";
 
 export const dynamic = "force-dynamic";
 
-async function handleLogin(request: Request) {
+async function handleLogin(request: Request, context: RequestContext) {
   const runtime = getAuthRuntime();
   if (!runtime) return Response.json({ error: "authentication_not_configured" }, { status: 503 });
   const rateLimitRejection = await rejectRateLimitedRequest(
@@ -39,12 +43,30 @@ async function handleLogin(request: Request) {
       createdAt: now,
       expiresAt: new Date(now.getTime() + 10 * 60 * 1000),
     });
-    return Response.redirect(flow.authorizationUrl, 302);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: flow.authorizationUrl.href,
+        "Cache-Control": "private, no-store, max-age=0",
+      },
+    });
   } catch {
-    return Response.json({ error: "authentication_provider_unavailable" }, { status: 503 });
+    logOperationalFailure({
+      event: "auth.provider_unavailable",
+      dependency: "oidc",
+      requestId: context.requestId,
+      status: 503,
+    });
+    return Response.json(
+      { error: "authentication_provider_unavailable" },
+      {
+        status: 503,
+        headers: { "Cache-Control": "private, no-store, max-age=0" },
+      }
+    );
   }
 }
 
 export function GET(request: Request) {
-  return withRequestContext(request, () => handleLogin(request));
+  return withRequestContext(request, (context) => handleLogin(request, context));
 }

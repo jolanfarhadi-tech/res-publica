@@ -23,9 +23,19 @@ to remain available while login and protected writes fail closed.
 `.github/workflows/production-health.yml` runs the repository's
 `scripts/check-deployment-health.mjs` every fifteen minutes and on manual
 dispatch. It requires HTTPS and verifies the `200` status, expected minimal
-JSON status, and `no-store` contract for both endpoints. It logs only endpoint
-paths and HTTP status codes. GitHub workflow failure notification ownership
-must still be assigned before launch.
+JSON status, and `no-store` contract for both endpoints. It also checks the
+approved Auth0 issuer's discovery contract directly and verifies that the
+anonymous Session, Dashboard, Profile, Membership Application and Publishing
+workspace boundaries remain private and fail closed. These are read-only
+checks: the schedule does not initiate an OIDC flow or mutate business data or
+rate-limit buckets. It logs only endpoint paths and HTTP status codes. GitHub
+workflow failure-notification ownership must still be assigned before launch.
+
+Handled database-readiness failures, Auth0 discovery/login failures,
+unhandled route failures and notification-delivery failures emit structured,
+allowlisted operational events. They include correlation/status or bounded
+delivery fields only and exclude query strings, exception details, identities,
+recipient addresses, message content and business-record identifiers.
 
 ## Intended use
 

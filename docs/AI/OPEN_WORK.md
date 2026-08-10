@@ -1,26 +1,33 @@
 # Open Work — Evidence-Based Register
 
 ### OPEN-020 — Membership application architecture and public wording approval
-- **Implemented locally:** proposed ADR-037, verified-signup intent, application
-  persistence, versioned acknowledgements, MFA/exact-scope board decision,
-  status UI, and additive migrations.
+- **Implemented and deployed:** proposed ADR-037, verified-signup intent,
+  application persistence, versioned acknowledgements, MFA/exact-scope board
+  decision, status UI, and additive migrations 0014–0018. Production contains
+  19 migrations and 66 tables.
 - **External blockers:** ADR acceptance; approved privacy/retention wording; a
   confirmed versioned membership/contribution regulation if one is to be
   required; board reviewer/grant administration; Auth0 verification-email
-  policy; and an approved email-delivery provider for decision notifications.
+  policy; an approved email-delivery provider for decision notifications; and
+  a controlled authenticated Production E2E using genuine Auth0 email
+  verification plus board MFA.
 - **Boundary:** the signed Satzung exists and is hash-versioned. No separate
   membership regulation was found, so none was invented or required.
 
 ### OPEN-021 — Research wallet cryptographic activation
-- **Implemented locally:** proposed ADR-038, wallet offer/metadata, explicit
-  activation evidence, local project-pseudonym derivation, strict private-key
-  rejection, threat model, and four-part fail-closed feature gate.
-- **Blockers:** ADR acceptance; protocol/method selection; audited Node/browser
-  implementation; issuer-key custody; holder recovery/device-change design;
-  revocation/status privacy; interoperability and penetration tests; DPIA/legal,
-  security, incident-response, and operational-owner approval.
-- **Boundary:** no ZK credential is issued or verified and no anonymity claim is
-  made. Production activation remains unavailable.
+- **Implemented and deployed behind a closed gate:** local wallet custody and
+  recovery, BBS issuance/selective disclosure, per-project holder proofs,
+  revocation, a separate verifier, anonymous intake, duplicate prevention,
+  redaction and synthetic smoke. This is reviewable implementation evidence,
+  not acceptance or real-data approval.
+- **Blockers:** ADR-037/038 acceptance; independent cryptographic, penetration
+  and reidentification reviews; DPO/legal DPIA; lawful basis, transparency,
+  retention/erasure and DPAs; issuer/verifier/key-custody, incident-response
+  and per-project protocol owners; and explicit acceptance of the bounded
+  15-minute revocation window.
+- **Boundary:** `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` remains absent/false.
+  No real credential or real research contribution may be processed and no
+  complete-anonymity claim is made.
 
 ### OPEN-019 — Phase 0 P3 Persian Open Graph prebuild uses an approved neutral fallback
 
@@ -186,17 +193,19 @@ MFA, migration, legal, and operational gates in
   verified receiving workflow, collection purpose, retention path, or consent
   record exists.
 
-### OPEN-011 — Production runtime deployed; Auth0 callback remains open
+### OPEN-011 — Production runtime deployed; authenticated operational E2E remains open
 - **Resolved:** the canonical Vercel project `res-publica` has its verified
   Production database and OIDC variable names. The exact committed release is
-  deployed, database readiness returns `200`, and Production has 14 migrations
-  and 55 tables.
-- **Remaining blocker:** Auth0 application
-  `LrqxClLMZw9JXNy6oU3JGywNfyFEq8Iy` rejects the configured redirect.
-- **Exact owner action:** add
-  `https://respublica-ev.de/api/auth/callback` to the application's Allowed
-  Callback URLs without removing existing entries. Auth0 management access was
-  not authenticated during verification.
+  deployed, database readiness returns `200`, and Production has 19 migrations
+  and 66 tables. Auth0 discovery and login initiation use the approved EU
+  tenant, exact callback, PKCE, state and nonce; the prior callback mismatch is
+  resolved.
+- **Remaining blocker:** complete the read-only controlled Membership E2E with
+  an owner-approved synthetic Auth0 session and complete a separate genuine-MFA
+  board boundary check. No session cookie or test identity is stored in Git.
+- **Safe next action:** use
+  `docs/operations/MEMBERSHIP_PRODUCTION_E2E.md`; never introduce an auth or MFA
+  bypass for automation.
 
 ## Documentation gaps
 
@@ -272,7 +281,7 @@ Per `brain/ROADMAP.md` (read in full, prior session): Fellowship System, Academy
 
 ## CLA / contribution process
 
-### OPEN-020 — External approval for real research credentials and contributions
+### Additional evidence for OPEN-021 — External approval for real research credentials and contributions
 - **Implemented:** local wallet custody/recovery, BBS issuance and selective
   disclosure, project holder proof, separate verifier persistence, anonymous
   intake, duplicate prevention, redaction and synthetic smoke.

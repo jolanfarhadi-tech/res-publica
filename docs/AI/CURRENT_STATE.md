@@ -1,21 +1,46 @@
 # Current State — Live Repository Snapshot
 
-## Incremental state — membership application and research boundary (2026-08-04)
+## Verified Production baseline and operational hardening — 2026-08-10
 
-Uncommitted, locally verified work replaces the public immediate-membership
-write path with an application protocol: verified Auth0 signup, a separate
-`application_pending` record, versioned Satzung/protocol/privacy
-acknowledgements, and an MFA/exact-scope/separation-of-duties board decision.
-Approval atomically creates verified Membership, status history, notification,
-wallet offer metadata, a scoped activation grant, and canonical audit evidence.
+**Verified baseline immediately before this slice:** local branch
+`codex/platform-phase-3`, local HEAD, `origin/codex/platform-phase-3`,
+`origin/main`, and the active Vercel Production deployment all contained commit
+`7d2bb07ed7f41244cb067a34eee63c15f1b2b98d`. Deployment
+`dpl_Hcik4d48y5SykE4ZPaDj6bxpqez5` in the canonical Vercel project
+`res-publica` serves `https://respublica-ev.de`. Production has the required
+database/session/OIDC variable names and no `RESEARCH_*` activation variable.
+No value was recorded in repository memory.
 
-General research readiness is optional and independent from Membership.
-Project-specific consent, eligibility, withdrawal, and exclusion are separate
-records. The research wallet stores metadata only, is described as
-pseudonymous rather than anonymous, and remains fail-closed behind four explicit
-approval flags. ADR-037 and ADR-038 remain **Proposed**, not accepted. Local
-fresh verification applies 17 migrations and creates 63 tables; no Production
-migration was applied.
+**Verified:** the protected Neon Production branch in `aws-eu-central-1`
+contains all 19 repository migrations and 66 public tables. Migrations
+0014–0018 are applied. A 2026-08-10 isolated, non-finalized restore from a new
+manual snapshot reproduced 19 migrations, 66 tables, zero unvalidated
+constraints and a successful readiness query over certificate-authorized TLS
+1.3. Production was not targeted; temporary drill branches were removed after
+evidence was retained. RPO/RTO remain unapproved owner decisions.
+
+**Verified:** the current Membership/Auth implementation separates Auth0
+signup and verified account activation from the Membership Application and
+MFA/exact-scope/separation-of-duties board decision. The gated research path
+contains actual local BBS credential issuance, selective disclosure, recovery,
+revocation and an isolated verifier tested only with synthetic data. ADR-037
+and ADR-038 remain **Proposed**. `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` remains
+absent/false, so real credentials and real research contributions fail closed.
+
+Auth0 discovery and Production login initiation now resolve to the approved EU
+tenant with the exact callback, PKCE, state and nonce. The old callback-mismatch
+finding is resolved. A repeatable, non-mutating Membership Production E2E check
+now verifies the anonymous/OIDC boundary and can validate private reads plus
+genuine MFA when an owner-controlled synthetic session is supplied. No such
+session is stored in the repository, so authenticated application/board E2E is
+still an explicit operational verification item rather than a claimed result.
+
+This operational-hardening slice adds private no-store session
+responses, correlation for the Profile boundary, structured privacy-safe logs
+for database/OIDC/critical request/notification failures, direct Auth0
+discovery monitoring, read-only protected-boundary monitoring, and the
+repeatable restore checker. `tsconfig.json` and `tatus` remain unrelated and
+excluded.
 
 ## Incremental update — completed safe slices deployed, 2026-08-04
 
@@ -654,12 +679,15 @@ That configuration/deployment step is complete. Current external actions are
 listed in `OPEN_WORK.md` and `SECURITY_LEGAL_GATE_REGISTER.md`; `tsconfig.json`
 and `tatus` remain unrelated and excluded.
 
-## Incremental state — Membership and gated research wallet, 2026-08-04
+## Historical implementation verification — Membership and gated research wallet, 2026-08-04
 
-The current unstaged implementation adds the account/application/board decision
+This section records the pre-commit verification that preceded feature commit
+`326229ff7a01574c474622737bf18315db9416ed`; the Production state at the top of
+this file supersedes its deployment claims. The then-unstaged implementation
+added the account/application/board decision
 boundary, optional research readiness, project consent/eligibility, local BBS
 wallet, holder-controlled recovery, separate research verifier and anonymous
-intake. Main migrations now run through 0018 (19 migrations, 66 tables). The
+intake. Main migrations ran through 0018 (19 migrations, 66 tables). The
 isolated verifier has one migration and six tables. Focused serial verification
 passed 12 files / 30 tests. The complete serial suite passed 72 files / 294
 tests. Structure, lint, typecheck, both migration checks, the zero-vulnerability
@@ -668,5 +696,6 @@ Production dependency audit and the 119-page Production build all passed.
 Real credentials and real research contributions remain fail-closed under the
 exact final gate `RESEARCH_REAL_DATA_ACTIVATION_APPROVED`. Synthetic cryptographic
 smoke creates no persistent records. ADR-037/038 remain Proposed and require the
-external approvals listed in the gate register. No Production migration or
-real-data activation was performed.
+external approvals listed in the gate register. At the time of this historical
+verification no Production migration had been performed; migrations 0014–0018
+were subsequently applied as recorded in the current section above.

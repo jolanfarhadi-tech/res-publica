@@ -9,9 +9,12 @@
   legal wording, research processing, recovery, proof issuance, or wallet
   verification.
 - **Severity:** **High / architecture, legal, and security activation gate**.
-- **Safe handling:** retain the wallet's four independent fail-closed flags;
-  keep proof issuance/verification absent; obtain the approvals and operational
-  ownership listed in OPEN-020/021 before Production activation.
+- **Safe handling:** actual BBS issuance, selective disclosure, recovery,
+  revocation and isolated verification now exist and are synthetic-tested.
+  Retain every fail-closed flag, keep
+  `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` absent/false, and obtain the
+  approvals and operational ownership listed in OPEN-020/021 before any real
+  credential or contribution is processed.
 
 ### WARN-017 — Development lint chain retains an upstream advisory
 
@@ -68,16 +71,16 @@
   capabilities unavailable, and do not represent draft legal material as
   approval.
 
-### WARN-014 — Production Auth0 callback mismatch
+### WARN-014 — Resolved: Production Auth0 callback configuration
 
-- **Evidence:** the live `/api/auth/login` flow reaches the configured Auth0
-  application but Auth0 returns `Callback URL mismatch` for
-  `https://respublica-ev.de/api/auth/callback`.
-- **Impact:** login, protected membership/profile operations, and controlled
-  administrator verification are unavailable.
-- **Severity:** **High / external configuration blocker**.
-- **Safe handling:** correct the Allowed Callback URL in the existing Auth0
-  application; do not weaken OIDC or substitute caller-provided identity.
+- **Evidence:** live Auth0 discovery and login initiation now resolve through
+  the approved EU tenant and exact
+  `https://respublica-ev.de/api/auth/callback` with PKCE, state and nonce. The
+  former `Callback URL mismatch` no longer occurs.
+- **Remaining handling:** callback configuration is not proof of complete
+  account/application/board operation. Use only the controlled synthetic E2E
+  runbook and genuine MFA; never weaken OIDC or substitute caller-provided
+  identity.
 
 *Only verified risks with evidence. Being "incomplete" alone is not listed here unless it carries a specific, evidenced risk — see `OPEN_WORK.md` for incompleteness that is simply unfinished work.*
 
@@ -104,12 +107,13 @@
   remains suppressed.
 
 ### WARN-012 — Resolved: Production database and OIDC variables configured
-- **Evidence:** canonical Vercel project `res-publica` serves commit `fc09d8d`;
-  `/api/health/ready` returns `200`; Neon has 14 migrations and 55 tables; the
-  required OIDC variable names are present without values being recorded.
-- **Remaining handling:** Auth0's Allowed Callback URLs remains a separate
-  external blocker under WARN-014. Do not conflate configured application
-  variables with successful provider-side callback approval.
+- **Evidence:** canonical Vercel project `res-publica` serves commit `7d2bb07`;
+  `/api/health/ready` returns `200`; Neon has 19 migrations and 66 tables; the
+  required OIDC variable names are present without values being recorded; and
+  the callback mismatch is resolved.
+- **Remaining handling:** configured variables and valid initiation do not
+  prove authenticated Membership or MFA board E2E. Do not record values or
+  claim that unperformed operational verification passed.
 
 ### WARN-002 — Five stale worktree-agent branches
 - **Evidence:** `git branch -a` lists `worktree-agent-{a41b2f98bb4889568,ac265ef0dcfbd1d11,aca5f3876aea4f4e9,adee0af9fffa74fc8,afb36aeffa2f75bec}`, all physically backed by `.claude/worktrees/agent-*/` directories (`git worktree list`, prior session). **Directly verified this session:** all five are at commit `af64931` with zero commits ahead of `main` (`git log main..<branch>` empty for each).
@@ -177,7 +181,7 @@
 
 ## Not included here (evidence insufficient to call these verified risks)
 
-### WARN-017 — Research wallet is reviewable but not approved for real data
+### WARN-019 — Research wallet is reviewable but not approved for real data
 - **Evidence:** actual BBS proof and verifier tests pass with synthetic data;
   ADR-038, the threat model, internal DPIA and security review identify absent
   independent review and residual timing/cohort risks.

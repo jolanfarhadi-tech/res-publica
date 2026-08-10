@@ -1,5 +1,15 @@
 # Module: Notifications
 
+## Operational observability update — 2026-08-10
+
+When an explicitly enabled provider later returns a retryable or final failure,
+the delivery service emits a structured operational event only after the
+transaction completes. The event contains provider-dependency status, bounded
+attempt number, retryability and an allowlisted error code. It excludes the
+Notification ID, Person, recipient address, template, content and exception
+detail. The provider remains disabled and no delivery worker or credential was
+activated.
+
 ## Purpose
 
 Provide the one canonical cross-module delivery record required by ADR-002,

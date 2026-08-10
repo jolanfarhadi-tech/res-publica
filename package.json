@@ -9,6 +9,8 @@
     "audit:production": "npm audit --omit=dev --audit-level=high",
     "check-structure": "node scripts/check-structure.mjs",
     "ops:health": "node scripts/check-deployment-health.mjs",
+    "ops:membership-e2e": "node scripts/check-membership-production-e2e.mjs",
+    "ops:restore-drill": "node scripts/verify-neon-restore-drill.mjs",
     "eao:repo-health": "node scripts/eao/repository-health.mjs",
     "eao:broken-links": "node scripts/eao/broken-links.mjs",
     "eao:terminology-drift": "node scripts/eao/terminology-drift.mjs",

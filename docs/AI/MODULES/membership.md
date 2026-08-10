@@ -1,6 +1,19 @@
 # Module: Membership
 
-## Incremental application protocol — 2026-08-04 (uncommitted)
+## Production update — 2026-08-10
+
+The application protocol is committed in `326229f`, deployed in Production
+commit `7d2bb07`, and persisted by the complete 19-migration/66-table chain.
+Email verification activates only the account. Membership still requires the
+separate application and an exact-scope, genuine-MFA, different-actor board
+decision. The old immediate-create route remains a non-bypassing `410`.
+
+The repeatable Production check validates Auth0 signup initiation and private
+self-service reads without mutating Membership. It stops explicitly when a
+controlled synthetic session or genuine MFA is unavailable; it introduces no
+authentication bypass and does not claim an unperformed board E2E.
+
+## Incremental application protocol — 2026-08-04 (subsequently committed and deployed)
 
 `src/application/membership-applications.ts` and
 `/api/membership/applications` implement the proposed ADR-037 boundary. New

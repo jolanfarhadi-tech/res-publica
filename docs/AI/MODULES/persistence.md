@@ -1,6 +1,19 @@
 # Module: Persistence
 
-## Incremental migrations 0014–0016 — 2026-08-04 (uncommitted)
+## Production and recovery update — 2026-08-10
+
+Production now contains all main migrations through 0018: 19 journal entries
+and 66 public tables. The separate anonymous-verifier migration remains
+unconfigured in Production because the real-data gate is closed.
+
+A new manual Production snapshot was restored without finalize into an
+isolated non-Production branch. Certificate-authorized TLS 1.3, all 19
+migrations, all 66 tables, zero unvalidated constraints and the readiness query
+passed. Production was never targeted and both temporary drill branches were
+removed after evidence was retained. This proves technical schema recovery at
+the named point; organizational RPO/RTO remain unapproved.
+
+## Incremental migrations 0014–0016 — 2026-08-04 (subsequently committed and applied)
 
 Three additive migrations add membership applications/document
 acknowledgements, independent research preference/consent/eligibility records,
@@ -8,7 +21,8 @@ OIDC flow intent, and pseudonymous wallet metadata. They do not update, delete,
 backfill, or infer decisions for existing rows. `db:check` passes and the fresh
 chain applies 17 migrations and creates 63 tables. Recovery and pre-application
 checks are documented in `docs/persistence/MIGRATIONS_0014_0016_RECOVERY.md`.
-No Production migration is authorized or applied.
+At that time no Production migration was applied. Migrations 0014–0018 were
+subsequently applied and verified as recorded above.
 
 ## Production migration verification — 2026-07-30
 

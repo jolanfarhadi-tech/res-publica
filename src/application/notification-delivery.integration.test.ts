@@ -173,6 +173,7 @@ describe("transactional notification delivery", () => {
 
   it("retries a transient failure and records each bounded attempt", async () => {
     await withDatabase(async (db) => {
+      const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
       await seedEventNotification(db);
       const deliveryProvider = provider([
         { status: "failed", retryable: true, code: "temporary_unavailable" },
@@ -206,6 +207,13 @@ describe("transactional notification delivery", () => {
           errorCode: null,
         }),
       ]);
+
+      const operationalLog = String(errorSpy.mock.calls[0]?.[0]);
+      expect(operationalLog).toContain('"event":"notification.delivery_failed"');
+      expect(operationalLog).toContain('"errorCode":"temporary_unavailable"');
+      expect(operationalLog).not.toContain("recipient@example.org");
+      expect(operationalLog).not.toContain("notification-1");
+      errorSpy.mockRestore();
     });
   }, 30_000);
 

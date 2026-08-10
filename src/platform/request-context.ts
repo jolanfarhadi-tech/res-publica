@@ -4,6 +4,22 @@ export type RequestContext = {
   requestId: string;
 };
 
+type OperationalFailureEvent = {
+  event:
+    | "auth.provider_unavailable"
+    | "health.database_unavailable"
+    | "notification.delivery_failed"
+    | "request.unhandled_error";
+  requestId?: string;
+  method?: string;
+  path?: string;
+  dependency?: "database" | "oidc" | "notification-provider";
+  status?: number;
+  attemptNumber?: number;
+  retryable?: boolean;
+  errorCode?: string;
+};
+
 type RequestHandler = (
   context: RequestContext
 ) => Response | Promise<Response>;
@@ -18,18 +34,25 @@ function withRequestId(response: Response, requestId: string): Response {
   });
 }
 
-function logUnhandledError(request: Request, requestId: string): void {
-  const url = new URL(request.url);
+export function logOperationalFailure(event: OperationalFailureEvent): void {
   console.error(
     JSON.stringify({
       timestamp: new Date().toISOString(),
       level: "error",
-      event: "request.unhandled_error",
-      requestId,
-      method: request.method,
-      path: url.pathname,
+      ...event,
     })
   );
+}
+
+function logUnhandledError(request: Request, requestId: string): void {
+  const url = new URL(request.url);
+  logOperationalFailure({
+    event: "request.unhandled_error",
+    requestId,
+    method: request.method,
+    path: url.pathname,
+    status: 500,
+  });
 }
 
 export async function withRequestContext(

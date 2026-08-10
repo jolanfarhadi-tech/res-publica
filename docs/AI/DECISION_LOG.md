@@ -183,6 +183,28 @@ the proof core; an issuer callback from verifier for every status check.
 
 ---
 
+## D-21: Scheduled identity monitoring is read-only
+
+**Decision:** the fifteen-minute Production monitor checks the approved Auth0
+issuer's discovery document and anonymous protected read boundaries; it does
+not call `/api/auth/login` or any privileged write endpoint.
+**Rationale:** login initiation creates an expiring OIDC flow and consumes a
+PostgreSQL rate-limit bucket. Repeating that action for availability monitoring
+would manufacture operational state. Direct discovery plus private fail-closed
+reads verifies the critical dependency and authorization boundary without
+business or rate-limit mutation.
+**Evidence:** `scripts/check-deployment-health.mjs`, its regression tests,
+`.github/workflows/production-health.yml`, and
+`docs/operations/HEALTH_CHECKS.md`.
+**Related commit:** the operational-hardening commit containing this entry.
+**Related ADR:** ADR-027 and ADR-029 boundaries are preserved; no architectural
+decision is changed.
+**Rejected alternative:** scheduled calls to the login or protected-write
+routes, because they would create OIDC-flow/rate-limit evidence or risk a
+business mutation.
+
+---
+
 ## Decisions with rejected alternatives not otherwise itemized above
 
 **Verified**, `docs/source/DECISION_LOG.md` (read in full), additional items not already covered by D-01–D-16:

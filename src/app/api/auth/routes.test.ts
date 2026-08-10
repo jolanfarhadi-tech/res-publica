@@ -19,6 +19,8 @@ describe("authentication routes fail closed", () => {
     expect(response.headers.get("x-request-id")).toMatch(
       /^[0-9a-f-]{36}$/
     );
+    expect(response.headers.get("cache-control")).toContain("no-store");
+    expect(response.headers.get("vary")).toBe("Cookie");
     await expect(response.json()).resolves.toEqual({ authenticated: false, available: false });
   });
 

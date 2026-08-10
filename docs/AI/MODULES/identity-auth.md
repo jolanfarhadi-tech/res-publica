@@ -1,6 +1,21 @@
 # Module: Identity, Authentication & Authorization
 
-## Incremental verified-signup boundary — 2026-08-04 (uncommitted)
+## Production and observability update — 2026-08-10
+
+The verified-signup implementation is committed in `326229f`, deployed in
+Production commit `7d2bb07`, and backed by migrations through 0018. Live Auth0
+discovery and login initiation now use the approved EU tenant, exact Production
+callback, PKCE, state and nonce; the former callback mismatch is resolved.
+
+Session responses are explicitly `private, no-store` with `Vary: Cookie`.
+Handled OIDC-provider failures emit a structured event containing only a
+server request ID, dependency and status. The scheduled monitor checks Auth0
+discovery directly rather than creating recurring OIDC flows. A controlled E2E
+script can validate a real synthetic session and genuine MFA but stores and
+prints no session cookie. Authenticated Membership/board E2E remains unclaimed
+until such an owner-controlled session is supplied.
+
+## Incremental verified-signup boundary — 2026-08-04 (subsequently committed and deployed)
 
 OIDC flows now persist `login` versus `signup` intent. Signup uses the provider's
 hosted credential UI; the application still stores no password. An unknown OIDC

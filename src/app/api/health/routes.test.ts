@@ -11,7 +11,9 @@ describe("operational health routes", () => {
   });
 
   it("fails readiness closed when the database is not configured", async () => {
-    const response = await ready();
+    const response = await ready(
+      new Request("https://respublica-ev.de/api/health/ready")
+    );
     expect(response.status).toBe(503);
     expect(response.headers.get("cache-control")).toBe("no-store");
     await expect(response.json()).resolves.toEqual({

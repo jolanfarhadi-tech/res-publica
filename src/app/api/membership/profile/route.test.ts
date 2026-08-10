@@ -47,6 +47,7 @@ describe("GET /api/membership/profile", () => {
     const response = await GET(new Request("https://res-publica-ev.de/api/membership/profile"));
     expect(response.status).toBe(401);
     await expect(response.json()).resolves.toEqual({ error: "authentication_required" });
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
   });
 
   it("returns the private allowlisted self-service projection", async () => {

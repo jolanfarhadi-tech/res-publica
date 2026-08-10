@@ -33,7 +33,7 @@ database ownership details.
 
 ## Runtime stack
 
-Next.js 15.3 (App Router), React 19, TypeScript 5.6, Tailwind CSS v4, Framer Motion, `next-mdx-remote` v6 + `gray-matter` (MDX content), Drizzle ORM 0.45 + `pg` (Postgres, production) + `@electric-sql/pglite` (offline-first local dev), `openid-client` v6 (OIDC), `zod` (validation), `vitest` (test runner).
+Next.js 15.5.22 (App Router), React 19, TypeScript 5.6, Tailwind CSS v4, Framer Motion, `next-mdx-remote` v6 + `gray-matter` (MDX content), Drizzle ORM 0.45 + `pg` (Postgres, production) + `@electric-sql/pglite` (offline-first local dev), `openid-client` v6 (OIDC), `zod` (validation), `vitest` (test runner).
 Evidence: `package.json` (read in full this session).
 
 ## Next.js structure
@@ -68,7 +68,10 @@ Shared registration: `src/modules/manifest.ts` (the `ModuleManifest` type), `src
 
 Two schema files: `src/persistence/schema.ts` (core domain entities — `people`, `consentRecords`, `payments`, `organizations`, `notifications`, `auditLog`, `authIdentities`, `authSessions`, `authFlows`, `authorizationGrants` — 10 tables, directly grepped) and `src/persistence/module-schema.ts` (per-module tables — ~40 tables spanning membership, events, publishing, community, knowledge-graph, ai-layer, harm-governance, dashboard, crm, analytics, directly grepped this session). Supporting files: `database.ts`, `index.ts`, `repositories.ts`, `runtime.ts`, and tests `persistence.integration.test.ts`, `schema.test.ts`.
 Migrations: `drizzle/0000_m1-canonical-domain.sql` through
-`drizzle/0011_publishing-authority.sql` (12 total, all committed).
+`drizzle/0018_holder-controlled-wallet-recovery.sql` (19 total, all committed
+and applied in Production, creating 66 public tables). The separate
+`drizzle-research/0000_anonymous-research-verifier.sql` remains inactive while
+the real-data gate is closed.
 Scripts: `db:generate`/`db:migrate`/`db:check`/`db:check:fresh` (`package.json`), `scripts/check-fresh-migrations.mjs`.
 
 ## Authentication / session implementation

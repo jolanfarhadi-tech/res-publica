@@ -89,6 +89,17 @@ application, contribution, recommendation, and Governance-disclosure slices
 remain subject to the accepted projection and architecture gates. Evidence:
 `docs/source/projects/MEMBER_PROFILE.md`, `src/application/{member-profile,dashboard}.ts`.
 
+## Membership application and research wallet proposals
+
+Status: **PROPOSED, NOT ACCEPTED** — ADR-037 and ADR-038. Implementation is
+committed and deployed as reviewable evidence: verified Auth0 signup remains
+separate from Membership; board decisions require exact scope, genuine MFA and
+separation of duties; the BBS wallet/verifier path is synthetic-tested. This
+does not change the ADR status. Real issuance and research intake remain
+fail-closed while `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` is absent/false.
+Production main persistence is verified at 19 migrations/66 tables; the
+separate anonymous-verifier runtime is not configured in Production.
+
 ## Executive AI Office (EAO)
 
 Status: **ACCEPTED** — `architecture/adr/ADR-024-executive-ai-office.md`, amended/superseded in scope by `architecture/adr/ADR-025-eao-generation-2-constitutional-architecture-adoption.md` ("EAO Generation 2").

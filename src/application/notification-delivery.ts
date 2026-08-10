@@ -1,6 +1,7 @@
 import { and, desc, eq, isNull, lte } from "drizzle-orm";
 import { createId } from "../domain/shared";
 import type { Database } from "../persistence";
+import { logOperationalFailure } from "../platform/request-context";
 import {
   consentRecords,
   notificationDeliveryAttempts,
@@ -69,7 +70,7 @@ export async function deliverNotification(
   const now = options.now ?? new Date();
   const maxAttempts = options.maxAttempts ?? MAX_DELIVERY_ATTEMPTS;
 
-  return db.transaction(async (transaction) => {
+  const outcome = await db.transaction(async (transaction) => {
     const [row] = await transaction
       .select({
         notification: notifications,
@@ -206,4 +207,23 @@ export async function deliverNotification(
       errorCode,
     };
   });
+
+  if (
+    outcome.status === "retry_pending" ||
+    outcome.status === "failed" ||
+    outcome.status === "attempts_exhausted"
+  ) {
+    logOperationalFailure({
+      event: "notification.delivery_failed",
+      dependency: "notification-provider",
+      status: outcome.status === "retry_pending" ? 503 : 500,
+      attemptNumber:
+        "attemptNumber" in outcome ? outcome.attemptNumber : maxAttempts,
+      retryable: outcome.status === "retry_pending",
+      errorCode:
+        "errorCode" in outcome ? outcome.errorCode : "attempts_exhausted",
+    });
+  }
+
+  return outcome;
 }
