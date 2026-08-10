@@ -38,6 +38,9 @@ export async function provisionSelfRegisteredIdentity(
   const identityId = createId();
   const submitGrantId = createId();
   const preferenceGrantId = createId();
+  const academyEnrollmentGrantId = createId();
+  const academyProgressGrantId = createId();
+  const academyAssessmentGrantId = createId();
   const person = {
     id: personId,
     name: cleanDisplayName(claims.displayName, email),
@@ -82,6 +85,42 @@ export async function provisionSelfRegisteredIdentity(
         grantedByPersonId: personId,
         revokedAt: null,
       },
+      {
+        id: academyEnrollmentGrantId,
+        personId,
+        domain: "civic",
+        capability: "academy.enrollment.self",
+        target: null,
+        assuranceRequired: "verified",
+        validFrom: now,
+        validUntil: null,
+        grantedByPersonId: personId,
+        revokedAt: null,
+      },
+      {
+        id: academyProgressGrantId,
+        personId,
+        domain: "civic",
+        capability: "academy.progress.self",
+        target: null,
+        assuranceRequired: "verified",
+        validFrom: now,
+        validUntil: null,
+        grantedByPersonId: personId,
+        revokedAt: null,
+      },
+      {
+        id: academyAssessmentGrantId,
+        personId,
+        domain: "civic",
+        capability: "academy.assessment.submit",
+        target: null,
+        assuranceRequired: "verified",
+        validFrom: now,
+        validUntil: null,
+        grantedByPersonId: personId,
+        revokedAt: null,
+      },
     ]);
     await transaction.insert(auditLog).values([
       {
@@ -99,6 +138,11 @@ export async function provisionSelfRegisteredIdentity(
         action: "authorization.self-service-grant-created", target: preferenceGrantId,
         timestamp: now, pseudonymized: false,
       },
+      ...[academyEnrollmentGrantId, academyProgressGrantId, academyAssessmentGrantId].map((grantId) => ({
+        id: createId(), actorPersonId: personId,
+        action: "authorization.self-service-grant-created", target: grantId,
+        timestamp: now, pseudonymized: false,
+      })),
     ]);
   });
 

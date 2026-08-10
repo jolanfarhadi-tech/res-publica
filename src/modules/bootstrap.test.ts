@@ -15,6 +15,7 @@ describe("Module bootstrap", () => {
     expect(getModule("crm")).toBeDefined();
     expect(getModule("analytics")).toBeDefined();
     expect(getModule("harm-governance")).toBeDefined();
+    expect(getModule("academy")).toBeDefined();
   });
 
   it("is idempotent across repeated server invocations", () => {
@@ -22,6 +23,6 @@ describe("Module bootstrap", () => {
     const second = bootstrapModules();
 
     expect(second).toEqual(first);
-    expect(second).toHaveLength(10);
+    expect(second).toHaveLength(11);
   });
 });

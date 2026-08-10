@@ -1,5 +1,20 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental implementation — Academy surfaces, 2026-08-10
+
+The existing localized App Router now includes public Academy catalogue,
+course, and programme routes plus private learner-dashboard and Operations
+routes. All Academy interface copy is complete in DE/EN/FA and reuses the
+existing locale validation and Persian RTL boundary. No offering, cohort,
+instructor, accreditation, or completion claim is seeded: empty states remain
+truthful until governed published records exist.
+
+Learner mutation controls are server-gated by
+`ACADEMY_ENROLLMENT_ENABLED`; hiding a control is not treated as authority.
+Public completion verification discloses the course and completion state but
+no learner identifier or contact data, and its copy explicitly disclaims
+external or state accreditation.
+
 ## Incremental implementation — 2026-07-30
 
 OPEN-019 and Phase 0 P3 milestone 20 now use an explicit owner-approved

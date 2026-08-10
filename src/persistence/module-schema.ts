@@ -672,3 +672,395 @@ export const funnelStageEvents = pgTable("funnel_stage_events", {
   stage: text("stage").notNull(),
   count: integer("count").notNull(),
 });
+
+export const academyPrograms = pgTable(
+  "academy_programs",
+  {
+    id: text("id").primaryKey(),
+    slug: text("slug").notNull(),
+    state: text("state", {
+      enum: ["draft", "review", "approved", "published", "archived"],
+    }).notNull(),
+    createdByPersonId: text("created_by_person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+    submittedForReviewAt: timestamp("submitted_for_review_at", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    approvedByPersonId: text("approved_by_person_id").references(() => people.id, {
+      onDelete: "restrict",
+    }),
+    approvedAt: timestamp("approved_at", { withTimezone: true, mode: "date" }),
+    publishedAt: timestamp("published_at", { withTimezone: true, mode: "date" }),
+    archivedAt: timestamp("archived_at", { withTimezone: true, mode: "date" }),
+    version: integer("version").notNull(),
+  },
+  (table) => [uniqueIndex("academy_programs_slug_uq").on(table.slug)]
+);
+
+export const academyProgramTranslations = pgTable(
+  "academy_program_translations",
+  {
+    programId: text("program_id")
+      .notNull()
+      .references(() => academyPrograms.id, { onDelete: "restrict" }),
+    locale: text("locale", { enum: ["de", "en", "fa"] }).notNull(),
+    title: text("title").notNull(),
+    summary: text("summary").notNull(),
+    body: text("body").notNull(),
+    sourceRefs: jsonb("source_refs").$type<string[]>().notNull(),
+    version: integer("version").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.programId, table.locale] })]
+);
+
+export const academyCourses = pgTable(
+  "academy_courses",
+  {
+    id: text("id").primaryKey(),
+    programId: text("program_id").references(() => academyPrograms.id, {
+      onDelete: "restrict",
+    }),
+    slug: text("slug").notNull(),
+    state: text("state", {
+      enum: ["draft", "review", "approved", "published", "archived"],
+    }).notNull(),
+    enrollmentPolicy: text("enrollment_policy", {
+      enum: ["public", "member-only", "invitation", "application"],
+    }).notNull(),
+    createdByPersonId: text("created_by_person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+    submittedForReviewAt: timestamp("submitted_for_review_at", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    reviewedByPersonId: text("reviewed_by_person_id").references(() => people.id, {
+      onDelete: "restrict",
+    }),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true, mode: "date" }),
+    approvedByPersonId: text("approved_by_person_id").references(() => people.id, {
+      onDelete: "restrict",
+    }),
+    approvedAt: timestamp("approved_at", { withTimezone: true, mode: "date" }),
+    publishedAt: timestamp("published_at", { withTimezone: true, mode: "date" }),
+    archivedAt: timestamp("archived_at", { withTimezone: true, mode: "date" }),
+    version: integer("version").notNull(),
+  },
+  (table) => [
+    uniqueIndex("academy_courses_slug_uq").on(table.slug),
+    index("academy_courses_state_idx").on(table.state),
+    index("academy_courses_program_idx").on(table.programId),
+  ]
+);
+
+export const academyCourseTranslations = pgTable(
+  "academy_course_translations",
+  {
+    courseId: text("course_id")
+      .notNull()
+      .references(() => academyCourses.id, { onDelete: "restrict" }),
+    locale: text("locale", { enum: ["de", "en", "fa"] }).notNull(),
+    title: text("title").notNull(),
+    summary: text("summary").notNull(),
+    description: text("description").notNull(),
+    learningOutcomes: jsonb("learning_outcomes").$type<string[]>().notNull(),
+    sourceRefs: jsonb("source_refs").$type<string[]>().notNull(),
+    version: integer("version").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.courseId, table.locale] })]
+);
+
+export const academyModules = pgTable(
+  "academy_modules",
+  {
+    id: text("id").primaryKey(),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => academyCourses.id, { onDelete: "restrict" }),
+    position: integer("position").notNull(),
+    required: boolean("required").notNull(),
+  },
+  (table) => [
+    uniqueIndex("academy_modules_course_position_uq").on(table.courseId, table.position),
+  ]
+);
+
+export const academyModuleTranslations = pgTable(
+  "academy_module_translations",
+  {
+    moduleId: text("module_id")
+      .notNull()
+      .references(() => academyModules.id, { onDelete: "restrict" }),
+    locale: text("locale", { enum: ["de", "en", "fa"] }).notNull(),
+    title: text("title").notNull(),
+    summary: text("summary").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.moduleId, table.locale] })]
+);
+
+export const academyLessons = pgTable(
+  "academy_lessons",
+  {
+    id: text("id").primaryKey(),
+    moduleId: text("module_id")
+      .notNull()
+      .references(() => academyModules.id, { onDelete: "restrict" }),
+    position: integer("position").notNull(),
+    required: boolean("required").notNull(),
+  },
+  (table) => [
+    uniqueIndex("academy_lessons_module_position_uq").on(table.moduleId, table.position),
+  ]
+);
+
+export const academyLessonTranslations = pgTable(
+  "academy_lesson_translations",
+  {
+    lessonId: text("lesson_id")
+      .notNull()
+      .references(() => academyLessons.id, { onDelete: "restrict" }),
+    locale: text("locale", { enum: ["de", "en", "fa"] }).notNull(),
+    title: text("title").notNull(),
+    content: text("content").notNull(),
+    sourceRefs: jsonb("source_refs").$type<string[]>().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.lessonId, table.locale] })]
+);
+
+export const academyResources = pgTable(
+  "academy_resources",
+  {
+    id: text("id").primaryKey(),
+    lessonId: text("lesson_id")
+      .notNull()
+      .references(() => academyLessons.id, { onDelete: "restrict" }),
+    kind: text("kind", { enum: ["document", "link", "audio", "video"] }).notNull(),
+    uri: text("uri").notNull(),
+    locale: text("locale", { enum: ["de", "en", "fa"] }).notNull(),
+    label: text("label").notNull(),
+    accessibilityLabel: text("accessibility_label").notNull(),
+    position: integer("position").notNull(),
+  },
+  (table) => [
+    uniqueIndex("academy_resources_lesson_position_uq").on(table.lessonId, table.position),
+  ]
+);
+
+export const academyInstructors = pgTable("academy_instructors", {
+  personId: text("person_id")
+    .primaryKey()
+    .references(() => people.id, { onDelete: "restrict" }),
+  publicBiographyApproved: boolean("public_biography_approved").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const academyCourseInstructors = pgTable(
+  "academy_course_instructors",
+  {
+    courseId: text("course_id")
+      .notNull()
+      .references(() => academyCourses.id, { onDelete: "restrict" }),
+    instructorPersonId: text("instructor_person_id")
+      .notNull()
+      .references(() => academyInstructors.personId, { onDelete: "restrict" }),
+    role: text("role", { enum: ["lead", "facilitator", "reviewer"] }).notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.courseId, table.instructorPersonId] })]
+);
+
+export const academyCohorts = pgTable(
+  "academy_cohorts",
+  {
+    id: text("id").primaryKey(),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => academyCourses.id, { onDelete: "restrict" }),
+    startsAt: timestamp("starts_at", { withTimezone: true, mode: "date" }).notNull(),
+    endsAt: timestamp("ends_at", { withTimezone: true, mode: "date" }).notNull(),
+    enrollmentOpensAt: timestamp("enrollment_opens_at", {
+      withTimezone: true,
+      mode: "date",
+    }).notNull(),
+    enrollmentClosesAt: timestamp("enrollment_closes_at", {
+      withTimezone: true,
+      mode: "date",
+    }).notNull(),
+    capacity: integer("capacity").notNull(),
+    status: text("status", { enum: ["scheduled", "active", "completed", "cancelled"] }).notNull(),
+  },
+  (table) => [index("academy_cohorts_course_idx").on(table.courseId)]
+);
+
+export const academyEnrollmentApplications = pgTable(
+  "academy_enrollment_applications",
+  {
+    id: text("id").primaryKey(),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => academyCourses.id, { onDelete: "restrict" }),
+    cohortId: text("cohort_id")
+      .notNull()
+      .references(() => academyCohorts.id, { onDelete: "restrict" }),
+    personId: text("person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    statement: text("statement").notNull(),
+    status: text("status", { enum: ["pending", "approved", "rejected", "withdrawn"] }).notNull(),
+    submittedAt: timestamp("submitted_at", { withTimezone: true, mode: "date" }).notNull(),
+    decidedAt: timestamp("decided_at", { withTimezone: true, mode: "date" }),
+    decidedByPersonId: text("decided_by_person_id").references(() => people.id, {
+      onDelete: "restrict",
+    }),
+  },
+  (table) => [
+    uniqueIndex("academy_enrollment_applications_person_cohort_uq").on(
+      table.personId,
+      table.cohortId
+    ),
+    index("academy_enrollment_applications_status_idx").on(table.status),
+  ]
+);
+
+export const academyInvitations = pgTable(
+  "academy_invitations",
+  {
+    id: text("id").primaryKey(),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => academyCourses.id, { onDelete: "restrict" }),
+    cohortId: text("cohort_id")
+      .notNull()
+      .references(() => academyCohorts.id, { onDelete: "restrict" }),
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+    redeemedByPersonId: text("redeemed_by_person_id").references(() => people.id, {
+      onDelete: "restrict",
+    }),
+    redeemedAt: timestamp("redeemed_at", { withTimezone: true, mode: "date" }),
+    createdByPersonId: text("created_by_person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("academy_invitations_token_hash_uq").on(table.tokenHash),
+    index("academy_invitations_cohort_idx").on(table.cohortId),
+  ]
+);
+
+export const academyEnrollments = pgTable(
+  "academy_enrollments",
+  {
+    id: text("id").primaryKey(),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => academyCourses.id, { onDelete: "restrict" }),
+    cohortId: text("cohort_id")
+      .notNull()
+      .references(() => academyCohorts.id, { onDelete: "restrict" }),
+    personId: text("person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    status: text("status", { enum: ["enrolled", "in-progress", "completed", "withdrawn"] }).notNull(),
+    enrolledAt: timestamp("enrolled_at", { withTimezone: true, mode: "date" }).notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("academy_enrollments_person_cohort_uq").on(table.personId, table.cohortId),
+    index("academy_enrollments_course_idx").on(table.courseId),
+  ]
+);
+
+export const academyLessonProgress = pgTable(
+  "academy_lesson_progress",
+  {
+    enrollmentId: text("enrollment_id")
+      .notNull()
+      .references(() => academyEnrollments.id, { onDelete: "restrict" }),
+    lessonId: text("lesson_id")
+      .notNull()
+      .references(() => academyLessons.id, { onDelete: "restrict" }),
+    status: text("status", { enum: ["not-started", "in-progress", "completed"] }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.enrollmentId, table.lessonId] })]
+);
+
+export const academyAssessments = pgTable("academy_assessments", {
+  id: text("id").primaryKey(),
+  courseId: text("course_id")
+    .notNull()
+    .references(() => academyCourses.id, { onDelete: "restrict" }),
+  moduleId: text("module_id").references(() => academyModules.id, { onDelete: "restrict" }),
+  required: boolean("required").notNull(),
+  reviewCriteria: jsonb("review_criteria").$type<string[]>().notNull(),
+  createdByPersonId: text("created_by_person_id")
+    .notNull()
+    .references(() => people.id, { onDelete: "restrict" }),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
+});
+
+export const academyAssessmentTranslations = pgTable(
+  "academy_assessment_translations",
+  {
+    assessmentId: text("assessment_id")
+      .notNull()
+      .references(() => academyAssessments.id, { onDelete: "restrict" }),
+    locale: text("locale", { enum: ["de", "en", "fa"] }).notNull(),
+    title: text("title").notNull(),
+    prompt: text("prompt").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.assessmentId, table.locale] })]
+);
+
+export const academyAssessmentSubmissions = pgTable(
+  "academy_assessment_submissions",
+  {
+    id: text("id").primaryKey(),
+    assessmentId: text("assessment_id")
+      .notNull()
+      .references(() => academyAssessments.id, { onDelete: "restrict" }),
+    enrollmentId: text("enrollment_id")
+      .notNull()
+      .references(() => academyEnrollments.id, { onDelete: "restrict" }),
+    response: text("response").notNull(),
+    status: text("status", { enum: ["submitted", "revision-required", "passed"] }).notNull(),
+    submittedAt: timestamp("submitted_at", { withTimezone: true, mode: "date" }).notNull(),
+    reviewedByPersonId: text("reviewed_by_person_id").references(() => people.id, {
+      onDelete: "restrict",
+    }),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true, mode: "date" }),
+    feedback: text("feedback"),
+  },
+  (table) => [
+    uniqueIndex("academy_assessment_submissions_enrollment_assessment_uq").on(
+      table.enrollmentId,
+      table.assessmentId
+    ),
+  ]
+);
+
+export const academyCertificates = pgTable(
+  "academy_certificates",
+  {
+    id: text("id").primaryKey(),
+    enrollmentId: text("enrollment_id")
+      .notNull()
+      .references(() => academyEnrollments.id, { onDelete: "restrict" }),
+    verificationId: text("verification_id").notNull(),
+    statementVersion: text("statement_version").notNull(),
+    issuedByPersonId: text("issued_by_person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "restrict" }),
+    issuedAt: timestamp("issued_at", { withTimezone: true, mode: "date" }).notNull(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true, mode: "date" }),
+  },
+  (table) => [
+    uniqueIndex("academy_certificates_enrollment_uq").on(table.enrollmentId),
+    uniqueIndex("academy_certificates_verification_uq").on(table.verificationId),
+  ]
+);

@@ -134,6 +134,13 @@
       "when": 1785864926931,
       "tag": "0018_holder-controlled-wallet-recovery",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1786365201718,
+      "tag": "0019_academy-platform",
+      "breakpoints": true
     }
   ]
 }

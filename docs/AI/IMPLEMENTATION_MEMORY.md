@@ -1,5 +1,21 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Release A Academy platform
+
+The Civic platform now registers an `academy` module and composes it through
+the existing manifest registry. Its application service owns governed
+programme/course lifecycle, curriculum, enrollment policies, progress,
+human-reviewed assessment, and completion issue/revocation. It reuses the
+canonical Person, AuthorizationGrant, AuditLog, request-security, request
+context, and PostgreSQL rate-limit boundaries.
+
+Every privileged Academy write uses exact-target capability authorization and
+MFA before persistence; publication, assessment, application, and completion
+workflows retain explicit human decisions and separation of duties. Learner
+writes additionally fail closed unless `ACADEMY_ENROLLMENT_ENABLED=true`.
+Migration 0019 is additive and local only. Public catalogue projection is
+limited to governed published records and creates no synthetic content.
+
 ## Incremental implementation — browser security policy
 
 `next.config.ts` applies defense-in-depth headers to every route. The CSP is a

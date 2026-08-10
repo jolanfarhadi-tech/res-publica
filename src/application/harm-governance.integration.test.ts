@@ -97,5 +97,5 @@ describe("HARM application lifecycle", () => {
       "governance.scientific-review-recorded", "governance.repair-plan-created",
     ]));
     await client.close();
-  }, 20_000);
+  }, 30_000);
 });

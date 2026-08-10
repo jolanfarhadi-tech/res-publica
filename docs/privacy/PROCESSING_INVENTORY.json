@@ -260,6 +260,23 @@
       "decisionGates": ["HARM_OPERATIONS_ENABLED", "DPIA/DPA", "safeguarding", "secure storage", "named operators"]
     },
     {
+      "id": "academy-learning-and-certification",
+      "operationalStatus": "implemented-enrollment-gated",
+      "dataSubjects": ["prospective learners", "enrolled learners", "instructors and human reviewers"],
+      "dataCategories": ["program and course content", "enrollment policy and cohort", "application statement", "lesson progress", "assessment response and human review", "completion record"],
+      "purposeEvidence": "Provide governed multilingual civic learning with human-reviewed completion records and no accreditation claim.",
+      "systems": ["Neon PostgreSQL", "Vercel runtime"],
+      "stores": ["postgres:academy_programs", "postgres:academy_program_translations", "postgres:academy_courses", "postgres:academy_course_translations", "postgres:academy_modules", "postgres:academy_module_translations", "postgres:academy_lessons", "postgres:academy_lesson_translations", "postgres:academy_resources", "postgres:academy_instructors", "postgres:academy_course_instructors", "postgres:academy_cohorts", "postgres:academy_enrollment_applications", "postgres:academy_invitations", "postgres:academy_enrollments", "postgres:academy_lesson_progress", "postgres:academy_assessments", "postgres:academy_assessment_translations", "postgres:academy_assessment_submissions", "postgres:academy_certificates"],
+      "accessBoundary": "Public approved catalog; session-derived self-service; exact-scope MFA staff review and publication; public certificate verification excludes person data.",
+      "sourceEvidence": ["src/application/academy.ts", "src/modules/academy/manifest.ts"],
+      "externalDependencies": ["Neon", "Vercel"],
+      "realDataPermitted": false,
+      "legalBasis": null,
+      "retentionPeriod": null,
+      "erasureRule": null,
+      "decisionGates": ["ACADEMY_ENROLLMENT_ENABLED", "approved learner privacy notice", "retention and erasure policy", "named Academy operators"]
+    },
+    {
       "id": "community-and-participation-models",
       "operationalStatus": "implemented-internal-only",
       "dataSubjects": ["no public operational cohort"],

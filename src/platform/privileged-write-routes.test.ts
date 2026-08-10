@@ -20,6 +20,19 @@ const publishingRoutes = [
   ["workflow", 1],
 ] as const;
 
+const academyRoutes = [
+  ["academy/operations/courses", 1],
+  ["academy/operations/courses/[courseId]", 1],
+  ["academy/operations/courses/[courseId]/workflow", 1],
+  ["academy/operations/programs", 1],
+  ["academy/operations/programs/[programId]/workflow", 1],
+  ["academy/operations/invitations", 1],
+  ["academy/operations/instructors", 1],
+  ["academy/operations/enrollment-applications/[applicationId]", 1],
+  ["academy/operations/assessments/[submissionId]/review", 1],
+  ["academy/operations/enrollments/[enrollmentId]/certificate", 2],
+] as const;
+
 function source(domain: "governance" | "publishing", route: string) {
   return readFileSync(
     join(process.cwd(), "src", "app", "api", domain, route, "route.ts"),
@@ -62,5 +75,17 @@ describe("privileged write route inventory", () => {
       total += expectedMethods;
     }
     expect(total).toBe(3);
+  });
+
+  it("protects every Academy staff write with the shared distributed limiter", () => {
+    for (const [route, expectedMethods] of academyRoutes) {
+      const routeSource = readFileSync(
+        join(process.cwd(), "src", "app", "api", route, "route.ts"),
+        "utf8"
+      );
+      expect(routeSource, route).toContain("executePrivilegedWrite");
+      expect(routeSource, route).toContain("ACADEMY_PRIVILEGED_WRITE_RATE_LIMIT");
+      expect(writeMethodCount(routeSource), route).toBe(expectedMethods);
+    }
   });
 });

@@ -16,7 +16,7 @@ Production activation.
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
 | Real DPIA | Repository DPIA remains a placeholder; technical appendix and processing inventory draft exist | Legal/DPO approval required | Approved real-person processing |
 | Processor DPAs | Vercel, Neon and Auth0 agreements not evidenced in repository | Owner/legal evidence required | Approved real-person processing |
-| Record of processing activities | Machine/human technical inventory covers 18 activities and all 66 current PostgreSQL tables; CI detects schema/source/legal-field drift | Owner/legal approval required | Privacy governance |
+| Record of processing activities | Machine/human technical inventory covers 19 activities and all 86 repository-schema tables, including the local Academy migration; CI detects schema/source/legal-field drift | Owner/legal approval required | Privacy governance |
 | Retention schedule | Decision matrix exists without invented periods | Owner/legal approval required | Withdrawal, erasure, operational data lifecycle |
 | AuditLog pseudonymization | Engineering pattern exists; ADR-029 keeps activation legally blocked | Blocked by legal approval | Erasure workflow |
 | Consent withdrawal policy | Canonical entity supports revocation but operational ADR-035 is absent | Architecture/legal gate | Withdrawal UI/API |
@@ -37,6 +37,7 @@ Production activation.
 | Research real-data activation | BBS issuance, project proof, isolated verifier and anonymous intake are implemented and synthetic-tested; external DPIA, cryptographic/reidentification audit, operators and project approval are absent | Closed: `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` remains unset/false | Real ZK credentials and real research contributions |
 | HARM evidence/case Production operation | All Governance writes are server-disabled by default; activation requires exact `HARM_OPERATIONS_ENABLED=true`; secure storage and safeguarding remain unapproved | Intentionally disabled / owner activation required | Sensitive case processing |
 | Programme operational approval | Staffing, dates, and approved content not established | Intentionally disabled | Public programme opening |
+| Academy enrollment activation | Additive migration 0019 and public/member/staff code are implemented and synthetic-tested; learner legal basis, transparency, retention/erasure, approved curricula, named operators, Production migration authorization and real enrollment approval are absent | Closed: `ACADEMY_ENROLLMENT_ENABLED` remains unset/false | Real learner enrollment, progress, assessment and completion processing |
 | Neon restore drill | Current Production snapshot restored without finalize to an isolated branch; TLS 1.3/certificate, 19 migrations, 66 tables, constraints and readiness verified; temporary branches removed | Technical drill verified 2026-08-10; RPO/RTO still require owner approval | Organizational recovery objectives and destructive Production restore authority |
 | Duplicate Vercel project | `res-publica-tq5l` exists but is not the custom-domain project; safe consolidation procedure documented | Owner approval required for deletion | Cleanup only; must avoid wrong deployment |
 

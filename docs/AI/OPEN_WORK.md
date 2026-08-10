@@ -1,5 +1,25 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-022 — Academy enrollment activation and approved content
+
+- **Implemented locally:** additive Academy persistence and migration 0019;
+  governed programme/course publication; public/member/staff APIs and
+  DE/EN/FA routes; public/member/invitation/application enrollment policies;
+  progress; human assessment review; completion issue/revocation/verification;
+  canonical audit; exact-scope MFA staff authority; and distributed abuse
+  protection.
+- **Deliberately absent:** invented courses, dates, cohorts, instructors,
+  accreditation, credentials or completion claims. Public catalogue output is
+  sourced only from records that complete the governed publication lifecycle.
+- **External activation blockers:** approved learner privacy notice and legal
+  basis; retention/erasure decisions; named Academy editor/reviewer/publisher
+  and enrollment operators; approved actual curricula and source rights;
+  Production migration authorization/backup verification; and an explicit
+  owner decision to set `ACADEMY_ENROLLMENT_ENABLED=true`.
+- **Boundary:** public catalogue and internal code may be deployed while
+  learner writes remain closed. Do not activate enrollment or seed real learner
+  data merely because migration 0019 and the UI exist.
+
 ### OPEN-020 — Membership application architecture and public wording approval
 - **Implemented and deployed:** proposed ADR-037, verified-signup intent,
   application persistence, versioned acknowledgements, MFA/exact-scope board

@@ -16,6 +16,8 @@ const STATIC_PATHS = [
   "/method",
   "/lab",
   "/programs",
+  "/academy",
+  "/academy/courses",
   "/products",
   "/services",
   "/projects",

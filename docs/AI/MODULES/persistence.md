@@ -1,5 +1,21 @@
 # Module: Persistence
 
+## Incremental implementation — Academy persistence, 2026-08-10
+
+Additive migration `0019_academy-platform.sql` introduces 20 Civic-domain
+Academy tables for programmes, courses, translations, curriculum, approved
+instructor assignments, cohorts, enrollment policies and decisions, progress,
+human-reviewed assessments, and completion records. Identity-bearing records
+reference canonical `people`; the implementation does not introduce a second
+person, session, authorization, audit, consent, or rate-limit store.
+
+The fresh repository chain now applies 20 journaled migrations and creates 86
+tables. The machine-readable processing inventory covers all 86 tables across
+19 activities. Migration 0019 is local and additive; it has not been applied
+to Production. Production remains at migrations 0000–0018 and 66 tables until
+the normal backup, authorization, TLS, journal, permission, and post-migration
+checks are completed.
+
 ## Incremental implementation — processing-inventory schema coverage, 2026-08-10
 
 The machine-readable processing inventory now parses both authoritative

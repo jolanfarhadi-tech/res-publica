@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { dashboardCopy } from "@/i18n/dashboard";
+import { academyCopy } from "@/i18n/academy";
 import type { Locale } from "@/i18n/config";
 import { membershipStatusLabels } from "@/i18n/member-profile";
 import { membershipApplicationCopy } from "@/i18n/membership-application";
@@ -53,6 +54,7 @@ export function DashboardClient({ locale }: { locale: Locale }) {
   const [state, setState] = useState<DashboardViewState>({ kind: "loading" });
   const copy = dashboardCopy[locale];
   const applicationCopy = membershipApplicationCopy[locale];
+  const academy = academyCopy[locale];
 
   useEffect(() => {
     let active = true;
@@ -237,6 +239,9 @@ export function DashboardClient({ locale }: { locale: Locale }) {
       <section className="glass-panel rounded-3xl p-7 sm:p-9 lg:col-span-2" aria-labelledby="dashboard-actions">
         <h2 id="dashboard-actions" className="text-3xl">{copy.actionsTitle}</h2>
         <div className="mt-6 flex flex-wrap gap-3">
+          <Button href={`/${locale}/dashboard/academy`} variant="secondary">
+            {academy.dashboardAction}
+          </Button>
           {dashboard.permittedActions.viewProfile && (
             <Button href={`/${locale}/profile`} variant="secondary">
               {copy.profileAction}

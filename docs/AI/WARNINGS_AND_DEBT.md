@@ -1,5 +1,19 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-020 — Academy code completion is not learner-data activation
+
+- **Evidence:** Release A adds migration 0019, 20 Academy tables and complete
+  public/member/staff code, while `docs/privacy/PROCESSING_INVENTORY.json`
+  leaves legal basis, retention and erasure null and declares real Academy
+  learner data impermissible before `ACADEMY_ENROLLMENT_ENABLED` approval.
+- **Impact:** enabling the flag or entering real learner/assessment data before
+  transparency, retention and named operational ownership are approved would
+  cross the documented privacy gate.
+- **Severity:** **High / privacy and operational activation gate**.
+- **Safe handling:** deploy the code with the flag absent/false, publish only
+  reviewed source-grounded catalogue records, and complete OPEN-022 before
+  enabling enrollment.
+
 ### WARN-018 — Proposed membership/wallet architecture is not Production approval
 
 - **Evidence:** ADR-037 and ADR-038 are `Proposed`; the public privacy notice is
@@ -46,7 +60,7 @@
   completeness until owner/legal review approves bases, periods, processor
   language, rights handling, and controller details.
 - **Incremental control:** the machine-readable inventory and CI drift check
-  now cover all 66 current PostgreSQL tables and require source evidence while
+  now cover all 86 current PostgreSQL tables and require source evidence while
   rejecting non-null legal-basis, retention, or erasure conclusions. This
   improves technical completeness but does not resolve the publication gate.
 

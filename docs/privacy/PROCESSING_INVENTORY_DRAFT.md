@@ -189,6 +189,19 @@ conclusions.
 - **Unresolved:** secure storage, safeguarding, DPIA/DPA, retention and named
   operational/incident owners.
 
+<!-- inventory:academy-learning-and-certification -->
+### Academy learning and completion records
+
+- **Technical status:** multilingual catalog and governed learning workflow are
+  implemented; learner writes remain server-gated by
+  `ACADEMY_ENROLLMENT_ENABLED`.
+- **Potential data:** enrollment/application state, cohort, progress,
+  assessment response, human review and completion record.
+- **Boundary:** session-derived self access, exact-scope MFA staff authority,
+  separation of duties and public certificate verification without person data.
+- **Unresolved:** approved learner privacy notice, legal basis,
+  retention/erasure and named Academy operators before real enrollment.
+
 <!-- inventory:community-and-participation-models -->
 ### Community and participation models
 
@@ -222,7 +235,7 @@ conclusions.
 
 ## Schema coverage and exclusions
 
-The machine inventory currently covers all **66** PostgreSQL tables parsed from
+The machine inventory currently covers all **86** PostgreSQL tables parsed from
 `src/persistence/schema.ts` and `src/persistence/module-schema.ts`. Shared tables
 may support more than one activity, but every current table must appear at
 least once. A schema addition therefore fails the inventory drift check until

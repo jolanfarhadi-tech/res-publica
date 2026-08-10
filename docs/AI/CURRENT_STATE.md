@@ -1,5 +1,41 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Release A Academy platform, 2026-08-10
+
+The Civic-domain Academy is implemented as a governed multilingual learning
+platform rather than a catalogue of invented offerings. It owns programmes,
+courses, translations, modules, lessons, resources, instructor assignments,
+cohorts, four enrollment policies, applications, invitations, enrollments,
+progress, human-reviewed assessments and completion records. It references the
+canonical Person/Notification/AuditLog entities and introduces no duplicate
+identity, session, authorization, rate-limit or audit mechanism.
+
+Programme and course publication follows
+`draft -> review -> approved -> published -> archived`. Course creators cannot
+approve their own work, approvers cannot publish it, learners cannot review
+their own assessments, issuers cannot revoke their own certificates, and
+learners cannot issue their own records. Staff writes require origin checks,
+the shared PostgreSQL limiter, exact Civic capabilities and MFA; accepted
+state changes append canonical AuditLog evidence in the same transaction.
+Completion IDs are random and non-sequential, and the public verification DTO
+contains no learner identifier or contact data. Completion copy expressly
+disclaims external or state accreditation.
+
+Localized public routes now exist at `/[locale]/academy`, courses and programme
+details; private routes exist at `/[locale]/dashboard/academy` and
+`/[locale]/operations/academy`. DE/EN/FA copy is complete and Persian continues
+through the existing RTL layout. No course, instructor or completion claim is
+seeded or fabricated: the public catalogue remains empty until independently
+reviewed records are actually published.
+
+Migration `0019_academy-platform` is additive. A fresh database applies 20
+journaled migrations and creates 86 tables. The processing inventory now
+covers 19 activities and all 86 tables. Real learner writes remain fail-closed
+unless `ACADEMY_ENROLLMENT_ENABLED=true`; that Production setting is not added
+or activated by this implementation. Local Release-A verification passes 85
+test files / 350 tests, lint, typecheck, structure, Drizzle checks, fresh
+migrations, the 140-page Production build and the inventory drift gate.
+
 ## Incremental update — governed Content Operations client, 2026-08-10
 
 The protected Operations Console now exposes the seven already-implemented

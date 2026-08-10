@@ -113,10 +113,11 @@ describe("public website boundaries", () => {
   it("keeps the primary navigation concise and localized", () => {
     for (const locale of locales) {
       const items = publicNavigation(locale);
-      expect(items).toHaveLength(7);
+      expect(items).toHaveLength(8);
       expect(items.map((item) => item.href)).toEqual(
         expect.arrayContaining([
           `/${locale}/programs`,
+          `/${locale}/academy`,
           `/${locale}/projects`,
           `/${locale}/lab`,
           `/${locale}/research`,
