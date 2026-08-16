@@ -53,6 +53,7 @@ describe("privileged write boundary", () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.restoreAllMocks();
   });
 
   it("allows the existing protected operation after request protection", async () => {
@@ -103,6 +104,7 @@ describe("privileged write boundary", () => {
   });
 
   it("preserves MFA, capability, and separation-of-duties denials", async () => {
+    const errorLog = vi.spyOn(console, "error").mockImplementation(() => undefined);
     const forbidden = await executePrivilegedWrite(
       request(),
       policy,
@@ -123,6 +125,15 @@ describe("privileged write boundary", () => {
     expect(conflict.status).toBe(409);
     await expect(conflict.json()).resolves.toEqual({
       error: "separation_of_duties_violation",
+    });
+    expect(errorLog).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(String(errorLog.mock.calls[0][0]))).toMatchObject({
+      event: "privileged_access.denied",
+      method: "POST",
+      path: "/api/governance/cases",
+      status: 403,
+      scope: "governance.privileged-write",
+      requestId: expect.stringMatching(/^[0-9a-f-]{36}$/),
     });
   });
 

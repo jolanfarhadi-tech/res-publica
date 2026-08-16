@@ -17,7 +17,10 @@ import {
   rejectRateLimitedRequest,
   RESEARCH_CREDENTIAL_ISSUANCE_RATE_LIMIT,
 } from "../../../../../../platform/rate-limit";
-import { withRequestContext } from "../../../../../../platform/request-context";
+import {
+  logPrivilegedAccessDenial,
+  withRequestContext,
+} from "../../../../../../platform/request-context";
 
 const bodySchema = z.object({
   walletId: z.string().uuid(),
@@ -30,7 +33,7 @@ const bodySchema = z.object({
   }).strict(),
 }).strict();
 
-async function handlePost(request: Request) {
+async function handlePost(request: Request, requestId: string) {
   const originRejection = rejectUntrustedWriteRequest(request);
   if (originRejection) return originRejection;
   const runtime = getAuthRuntime();
@@ -46,7 +49,15 @@ async function handlePost(request: Request) {
     const challenge = await createCredentialIssuanceChallenge(runtime.db, actor, parsed.data, gate);
     return Response.json({ challenge });
   } catch (error) {
-    if (error instanceof AuthorizationDeniedError) return Response.json({ error: "forbidden" }, { status: 403 });
+    if (error instanceof AuthorizationDeniedError) {
+      logPrivilegedAccessDenial({
+        request,
+        requestId,
+        scope: RESEARCH_CREDENTIAL_ISSUANCE_RATE_LIMIT.scope,
+        status: 403,
+      });
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
     if (error instanceof ResearchRealDataGateClosedError) return Response.json({ error: "research_real_data_gate_closed" }, { status: 503 });
     if (error instanceof InvalidProjectPublicKeyError) return Response.json({ error: "invalid_project_key" }, { status: 400 });
     if (error instanceof ResearchWalletNotEligibleForIssuanceError ||
@@ -60,5 +71,5 @@ async function handlePost(request: Request) {
 }
 
 export function POST(request: Request) {
-  return withRequestContext(request, () => handlePost(request));
+  return withRequestContext(request, (context) => handlePost(request, context.requestId));
 }

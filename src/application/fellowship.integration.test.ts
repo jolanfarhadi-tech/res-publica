@@ -39,7 +39,7 @@ function actor(
   personId: string,
   capability: string,
   target: string | null,
-  assurance: "verified" | "mfa" = "mfa"
+  assurance: "verified" | "mfa" | "recent-mfa" = "recent-mfa"
 ): AuthenticatedActor {
   return {
     personId,
@@ -88,7 +88,10 @@ async function approvedRole(db: Database) {
     responsibilities: ["Facilitate documented civic dialogue"],
     sourceRefs: ["brain/BLUEPRINTS/master-product-blueprint.md#5-fellowship-system"],
   }, now);
-  await approveFellowshipRoleScope(db, actor("scope-approver", "fellowship.role-scope.approve", role.id), role.id, now);
+  await approveFellowshipRoleScope(db, actor("scope-approver", "fellowship.role-scope.approve", role.id), role.id, {
+    reasonCode: "fellowship-role-scope-approval",
+    requestId: "50000000-0000-4000-8000-000000000001",
+  }, now);
   return role;
 }
 
@@ -125,10 +128,19 @@ describe("Fellowship application boundary", () => {
       const decision = await decideFellowshipCandidacy(fixture.db, actor("decider", "fellowship.decision.record", candidacy.id), {
         candidacyId: candidacy.id, decision: "approve", reason: "Independent human decision.",
         memberFacingReason: "Your Fellowship role has been approved.", sponsorPersonId: "coordinator",
+      }, {
+        reasonCode: "fellowship-candidacy-decision",
+        requestId: "50000000-0000-4000-8000-000000000002",
       }, now);
       expect(decision.fellowship).toMatchObject({ personId: "candidate", status: "active" });
       expect(await fixture.db.select().from(fellowshipRecords)).toHaveLength(1);
       expect((await fixture.db.select().from(auditLog)).map((entry) => entry.action)).toContain("fellowship.candidacy.approved");
+      expect((await fixture.db.select().from(auditLog)).at(-1)).toMatchObject({
+        sessionId: "session-decider",
+        requestId: "50000000-0000-4000-8000-000000000002",
+        capability: "fellowship.decision.record",
+        reasonCode: "fellowship-candidacy-decision",
+      });
     } finally {
       await fixture.client.close();
       await rm(fixture.directory, { recursive: true, force: true });
@@ -219,6 +231,9 @@ describe("Fellowship application boundary", () => {
       const before = (await fixture.db.select().from(auditLog)).length;
       await expect(decideFellowshipCandidacy(fixture.db, actor("reviewer", "fellowship.decision.record", candidacy.id), {
         candidacyId: candidacy.id, decision: "approve", reason: "Must not persist.", memberFacingReason: "Must not persist.",
+      }, {
+        reasonCode: "fellowship-candidacy-decision",
+        requestId: "50000000-0000-4000-8000-000000000003",
       }, now)).rejects.toBeInstanceOf(FellowshipSeparationOfDutiesError);
       expect(await fixture.db.select().from(fellowshipRecords)).toHaveLength(0);
       expect((await fixture.db.select().from(fellowshipCandidacies))[0].status).toBe("under-review");

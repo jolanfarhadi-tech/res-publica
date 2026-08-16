@@ -1,5 +1,5 @@
 import { requireAuthorization } from "../../auth/authorize";
-import type { AuthenticatedActor } from "../../auth/types";
+import type { AssuranceLevel, AuthenticatedActor } from "../../auth/types";
 
 export const GOVERNANCE_ROLES = [
   "institution-admin", "intake-moderator", "validation-officer", "evidence-reviewer",
@@ -15,12 +15,13 @@ export function governanceCapability(role: GovernanceRole): string {
 export function requireInstitutionAdmin(
   actor: AuthenticatedActor | null,
   institutionId: string,
+  minimumAssurance: AssuranceLevel = "mfa",
 ): asserts actor is AuthenticatedActor {
   requireAuthorization(actor, {
     domain: "governance",
     capability: governanceCapability("institution-admin"),
     target: institutionId,
-    minimumAssurance: "mfa",
+    minimumAssurance,
   });
 }
 

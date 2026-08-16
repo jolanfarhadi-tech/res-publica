@@ -1,5 +1,22 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Mandatory hardening Phase B
+
+`src/platform/privileged-access.ts` owns the bounded reason-code vocabulary and
+validates server request IDs plus operation-compatible reasons. The shared
+authorization primitive now treats `recent-mfa` as a five-minute condition on
+the provider-authenticated instant, not merely an assurance label. OIDC step-up
+requests fresh authentication through standard protocol parameters; signed
+provider claims remain the only source of MFA assurance.
+
+Role changes, board decisions, Fellowship decisions/status changes and gated
+credential issuance reuse their existing application services. They add recent
+MFA and correlation at the service boundary without introducing a universal
+admin, second audit store or alternate authorization mechanism. Migration 0023
+extends the append-only canonical AuditLog with nullable session, request,
+capability and reason fields; existing atomic state-plus-audit transactions are
+preserved. Handled denials use privacy-minimized operational telemetry.
+
 ## Incremental implementation — Mandatory hardening Phase A
 
 Supply-chain verification is intentionally local and deterministic. The secret

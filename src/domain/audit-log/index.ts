@@ -35,6 +35,10 @@ const auditLogEntrySchema = z.object({
   actorPersonId: z.string().nullable(),
   action: z.string().min(1),
   target: z.string().min(1),
+  sessionId: z.string().nullable(),
+  requestId: z.string().nullable(),
+  capability: z.string().nullable(),
+  reasonCode: z.string().nullable(),
   timestamp: z.date(),
   pseudonymized: z.boolean(),
 });
@@ -45,6 +49,10 @@ export type AppendEntryInput = {
   actorPersonId: EntityId;
   action: string;
   target: string;
+  sessionId?: string | null;
+  requestId?: string | null;
+  capability?: string | null;
+  reasonCode?: string | null;
 };
 
 export function appendEntry(input: AppendEntryInput): Readonly<AuditLogEntry> {
@@ -53,6 +61,10 @@ export function appendEntry(input: AppendEntryInput): Readonly<AuditLogEntry> {
     actorPersonId: input.actorPersonId,
     action: input.action,
     target: input.target,
+    sessionId: input.sessionId ?? null,
+    requestId: input.requestId ?? null,
+    capability: input.capability ?? null,
+    reasonCode: input.reasonCode ?? null,
     timestamp: new Date(),
     pseudonymized: false,
   };

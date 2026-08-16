@@ -1,5 +1,38 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Mandatory hardening Phase B: privileged access, 2026-08-16
+
+High-impact Governance, Publishing, Membership, Fellowship and gated research
+credential operations now require a provider-backed `recent-mfa` session whose
+authentication instant is no older than five minutes. A standard OIDC step-up
+entry requests fresh provider authentication without manufacturing assurance
+locally. Existing exact capabilities, target scopes, domain isolation,
+separation of duties, rate limits, feature gates and atomic persistence remain
+in force.
+
+Sensitive transitions require a bounded, operation-compatible reason code and
+server-generated request ID. Accepted transitions correlate canonical audit
+evidence by actor, session, request, capability, reason and timestamp. Handled
+authorization denials emit privacy-minimized operational telemetry without raw
+IP addresses, identities, tokens or request bodies. Governance revocation now
+locks and conditionally changes the grant in the same transaction as its audit,
+preventing duplicate revoke evidence under concurrent requests.
+
+Additive migration `0023_privileged-access-audit-context.sql` adds only nullable
+audit-correlation columns and indexes. Provider MFA policy/enrollment, security
+event export, named owners, periodic review evidence, alert retention and
+Production migration remain external gates. The research real-data activation
+gate remains closed.
+
+Verification passes 10 focused files / 38 tests and the full serial suite at
+104 files / 428 tests. Lint, typecheck, structure, secret/supply-chain checks,
+the 20-activity/98-table processing inventory, zero-vulnerability Production
+dependency audit, Drizzle consistency, the fresh 24-migration/98-table main
+schema, isolated 1/6 research schema, all nine EAO pipelines, the 166-page
+Production build and `git diff --check` pass. EAO full-platform readiness
+remains correctly No-Go because 32 external activation gates are unresolved;
+Production itself remains unchanged.
+
 ## Incremental update — Mandatory hardening Phase A: supply chain and Tier-0, 2026-08-16
 
 The repository now pins the supported runtime to Node 24.18.0 across

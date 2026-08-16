@@ -56,7 +56,7 @@ function grant(
   personId: string,
   capability: string,
   target: string | null,
-  assuranceRequired: "verified" | "mfa" = "verified"
+  assuranceRequired: "verified" | "mfa" | "recent-mfa" = "verified"
 ): AuthorizationGrant {
   return {
     id: `grant-${personId}-${capability}-${target ?? "global"}`,
@@ -73,13 +73,14 @@ function grant(
 
 function actor(
   personId: string,
-  assurance: "verified" | "mfa" = "verified",
-  grants: AuthorizationGrant[] = []
+  assurance: "verified" | "mfa" | "recent-mfa" = "verified",
+  grants: AuthorizationGrant[] = [],
+  authenticatedAt = new Date("2026-08-04T09:00:00.000Z")
 ): AuthenticatedActor {
   return {
     personId,
     sessionId: `session-${personId}`,
-    authenticatedAt: new Date("2026-08-04T09:00:00.000Z"),
+    authenticatedAt,
     assurance,
     grants,
   };
@@ -181,27 +182,48 @@ describe("membership application protocol", () => {
         "application-other",
         "mfa"
       );
+      const decisionContext = {
+        reasonCode: "membership-board-approval" as const,
+        requestId: "11111111-1111-4111-8111-111111111111",
+      };
+      const decisionNow = new Date("2026-08-04T09:04:00.000Z");
 
       await expect(decideMembershipApplication(
         db,
         actor("person-board", "verified", [{ ...wrongTargetGrant, target: application.id }]),
         application.id,
-        "approved"
+        "approved",
+        decisionContext,
+        decisionNow
       )).rejects.toBeInstanceOf(AuthorizationDeniedError);
       await expect(decideMembershipApplication(
         db,
         actor("person-board", "mfa", [wrongTargetGrant]),
         application.id,
-        "approved"
+        "approved",
+        decisionContext,
+        decisionNow
       )).rejects.toBeInstanceOf(AuthorizationDeniedError);
       await expect(decideMembershipApplication(
         db,
-        actor("person-applicant", "mfa", [
+        actor("person-applicant", "recent-mfa", [
           grant("person-applicant", "membership.application.decide", application.id, "mfa"),
         ]),
         application.id,
-        "approved"
+        "approved",
+        decisionContext,
+        decisionNow
       )).rejects.toBeInstanceOf(ApplicantCannotDecideError);
+      await expect(decideMembershipApplication(
+        db,
+        actor("person-board", "recent-mfa", [
+          grant("person-board", "membership.application.decide", application.id, "mfa"),
+        ], new Date("2026-08-04T08:58:59.999Z")),
+        application.id,
+        "approved",
+        decisionContext,
+        decisionNow
+      )).rejects.toBeInstanceOf(AuthorizationDeniedError);
 
       expect(await db.select().from(members)).toHaveLength(0);
       expect(await db.select().from(notifications)).toHaveLength(0);
@@ -225,9 +247,9 @@ describe("membership application protocol", () => {
         grant("person-applicant", "membership.application.submit", null),
       ]);
       const application = await submitMembershipApplication(db, applicant, applicationInput);
-      const reviewer = actor("person-board", "mfa", [
+      const reviewer = actor("person-board", "recent-mfa", [
         grant("person-board", "membership.application.decide", application.id, "mfa"),
-      ]);
+      ], new Date("2026-08-04T11:58:00.000Z"));
       const decidedAt = new Date("2026-08-04T12:00:00.000Z");
 
       const result = await decideMembershipApplication(
@@ -235,6 +257,10 @@ describe("membership application protocol", () => {
         reviewer,
         application.id,
         "approved",
+        {
+          reasonCode: "membership-board-approval",
+          requestId: "22222222-2222-4222-8222-222222222222",
+        },
         decidedAt
       );
 
@@ -302,6 +328,12 @@ describe("membership application protocol", () => {
         "authorization.wallet-recovery-grant-created",
         "membership.application.approved",
       ]);
+      expect((await db.select().from(auditLog)).at(-1)).toMatchObject({
+        sessionId: "session-person-board",
+        requestId: "22222222-2222-4222-8222-222222222222",
+        capability: "membership.application.decide",
+        reasonCode: "membership-board-approval",
+      });
     } finally {
       await client.close();
     }

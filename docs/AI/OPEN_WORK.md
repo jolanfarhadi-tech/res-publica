@@ -1,5 +1,17 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-029 — Mandatory hardening Phase B external privileged-access evidence
+- **Implemented in repository:** five-minute recent-MFA enforcement for the
+  selected high-impact transitions; standard OIDC step-up; operation-compatible
+  reason codes; session/request/capability/reason audit correlation; structured
+  denied-access telemetry; Governance revoke row locking; regression coverage.
+- **External evidence still required:** Auth0 MFA enrollment and policy,
+  security-event export, alert destination/retention, named privileged-role
+  owners, independent periodic access-review evidence, and Production migration
+  authorization/deployment.
+- **Safety boundary:** do not infer provider policy or operational approval from
+  code. Keep `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` closed.
+
 ### OPEN-028 — Mandatory hardening Phase A provider-side activation
 
 - **Implemented locally:** exact Node runtime pinning; immutable Action SHAs;

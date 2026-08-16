@@ -9,6 +9,7 @@ type OperationalFailureEvent = {
     | "auth.provider_unavailable"
     | "health.database_unavailable"
     | "notification.delivery_failed"
+    | "privileged_access.denied"
     | "request.unhandled_error";
   requestId?: string;
   method?: string;
@@ -18,6 +19,7 @@ type OperationalFailureEvent = {
   attemptNumber?: number;
   retryable?: boolean;
   errorCode?: string;
+  scope?: string;
 };
 
 type RequestHandler = (
@@ -42,6 +44,23 @@ export function logOperationalFailure(event: OperationalFailureEvent): void {
       ...event,
     })
   );
+}
+
+export function logPrivilegedAccessDenial(input: {
+  request: Request;
+  requestId: string;
+  scope: string;
+  status: 401 | 403;
+}): void {
+  const url = new URL(input.request.url);
+  logOperationalFailure({
+    event: "privileged_access.denied",
+    requestId: input.requestId,
+    method: input.request.method,
+    path: url.pathname,
+    status: input.status,
+    scope: input.scope,
+  });
 }
 
 function logUnhandledError(request: Request, requestId: string): void {

@@ -4,7 +4,11 @@ import {
   rejectRateLimitedRequest,
   type RateLimitPolicy,
 } from "./rate-limit";
-import { withRequestContext, type RequestContext } from "./request-context";
+import {
+  logPrivilegedAccessDenial,
+  withRequestContext,
+  type RequestContext,
+} from "./request-context";
 
 export type PrivilegedWriteRuntime = NonNullable<
   ReturnType<typeof getAuthRuntime>
@@ -51,6 +55,15 @@ export function executePrivilegedWrite(
     );
     if (rateLimitRejection) return rateLimitRejection;
 
-    return operation(runtime, context);
+    const response = await operation(runtime, context);
+    if (response.status === 401 || response.status === 403) {
+      logPrivilegedAccessDenial({
+        request,
+        requestId: context.requestId,
+        status: response.status,
+        scope: policy.scope,
+      });
+    }
+    return response;
   });
 }

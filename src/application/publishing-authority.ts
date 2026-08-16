@@ -5,6 +5,10 @@ import { createId } from "../domain/shared";
 import { createRepositories, type Database } from "../persistence";
 import { authorizationGrants, people } from "../persistence/schema";
 import {
+  assertPrivilegedActionContext,
+  type PrivilegedActionContext,
+} from "../platform/privileged-access";
+import {
   assertEditorialDelegation,
   editorialCapability,
   requireEditorialRole,
@@ -13,8 +17,13 @@ import {
 
 export async function grantEditorialRole(db: Database, actor: AuthenticatedActor | null, input: {
   granteePersonId: string; publicationScope: string; role: OperationalEditorialRole; validUntil: Date | null;
+  reasonCode: PrivilegedActionContext["reasonCode"]; requestId: string;
 }) {
-  requireEditorialRole(actor, "publisher", input.publicationScope);
+  requireEditorialRole(actor, "publisher", input.publicationScope, "recent-mfa");
+  assertPrivilegedActionContext(input, [
+    "operational-role-assignment",
+    "duty-reassignment",
+  ]);
   assertEditorialDelegation({ actorPersonId: actor.personId, ...input });
   const now = new Date();
   if (input.validUntil !== null) {
@@ -37,6 +46,10 @@ export async function grantEditorialRole(db: Database, actor: AuthenticatedActor
       actorPersonId: actor.personId,
       action: "publishing.role-granted",
       target: `authorization-grant:${grant.id}`,
+      sessionId: actor.sessionId,
+      requestId: input.requestId,
+      capability: grant.capability,
+      reasonCode: input.reasonCode,
     }));
   });
   return grant;
@@ -44,8 +57,13 @@ export async function grantEditorialRole(db: Database, actor: AuthenticatedActor
 
 export async function revokeEditorialRole(db: Database, actor: AuthenticatedActor | null, input: {
   grantId: string; publicationScope: string;
+  reasonCode: PrivilegedActionContext["reasonCode"]; requestId: string;
 }) {
-  requireEditorialRole(actor, "publisher", input.publicationScope);
+  requireEditorialRole(actor, "publisher", input.publicationScope, "recent-mfa");
+  assertPrivilegedActionContext(input, [
+    "scheduled-access-review",
+    "duty-reassignment",
+  ]);
   return db.transaction(async (tx) => {
     const [grant] = await tx.select().from(authorizationGrants).where(and(
       eq(authorizationGrants.id, input.grantId), eq(authorizationGrants.domain, "civic"),
@@ -63,6 +81,10 @@ export async function revokeEditorialRole(db: Database, actor: AuthenticatedActo
       actorPersonId: actor.personId,
       action: "publishing.role-revoked",
       target: `authorization-grant:${grant.id}`,
+      sessionId: actor.sessionId,
+      requestId: input.requestId,
+      capability: grant.capability,
+      reasonCode: input.reasonCode,
     }));
     return { ...grant, revokedAt };
   });

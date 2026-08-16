@@ -62,6 +62,32 @@ describe("deny-by-default authorization", () => {
     })).toBe(true);
   });
 
+  it("requires recent MFA to be both asserted and fresh", () => {
+    const recentGrant = grant({ assuranceRequired: "recent-mfa" });
+    const request = {
+      domain: "civic" as const,
+      capability: "membership.create",
+      minimumAssurance: "recent-mfa" as const,
+      now,
+    };
+
+    expect(isAuthorized(actor({
+      assurance: "recent-mfa",
+      authenticatedAt: new Date("2026-07-19T11:58:00.000Z"),
+      grants: [recentGrant],
+    }), request)).toBe(true);
+    expect(isAuthorized(actor({
+      assurance: "recent-mfa",
+      authenticatedAt: new Date("2026-07-19T11:54:59.999Z"),
+      grants: [recentGrant],
+    }), request)).toBe(false);
+    expect(isAuthorized(actor({
+      assurance: "recent-mfa",
+      authenticatedAt: new Date("2026-07-19T12:00:01.000Z"),
+      grants: [recentGrant],
+    }), request)).toBe(false);
+  });
+
   it("throws a typed error when authorization is required", () => {
     expect(() => requireAuthorization(null, {
       domain: "civic", capability: "membership.create", now,

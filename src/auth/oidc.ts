@@ -22,7 +22,8 @@ function configuration(environment: OidcEnvironment): Promise<oidc.Configuration
 
 export async function beginOidcFlow(
   environment: OidcEnvironment,
-  intent: "login" | "signup" = "login"
+  intent: "login" | "signup" = "login",
+  options: { stepUp?: boolean } = {}
 ): Promise<OidcFlow> {
   const config = await configuration(environment);
   const codeVerifier = oidc.randomPKCECodeVerifier();
@@ -38,6 +39,7 @@ export async function beginOidcFlow(
     state,
     nonce,
     ...(intent === "signup" ? { screen_hint: "signup" } : {}),
+    ...(options.stepUp ? { prompt: "login", max_age: "0" } : {}),
   });
   return { authorizationUrl, state, nonce, codeVerifier };
 }

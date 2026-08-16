@@ -27,12 +27,14 @@ async function handleLogin(request: Request, context: RequestContext) {
   const intent = new URL(request.url).searchParams.get("mode") === "signup"
     ? "signup" as const
     : "login" as const;
+  const stepUp = intent === "login" &&
+    new URL(request.url).searchParams.get("stepUp") === "recent-mfa";
   const returnTo = requestedReturnTo.startsWith("/") && !requestedReturnTo.startsWith("//")
     ? requestedReturnTo
     : "/de";
 
   try {
-    const flow = await beginOidcFlow(runtime.oidc, intent);
+    const flow = await beginOidcFlow(runtime.oidc, intent, { stepUp });
     const now = new Date();
     await saveAuthFlow(runtime.db, {
       stateHash: hashSecret(flow.state),

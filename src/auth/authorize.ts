@@ -11,6 +11,8 @@ const assuranceRank: Record<AssuranceLevel, number> = {
   "recent-mfa": 3,
 };
 
+export const RECENT_MFA_MAX_AGE_MS = 5 * 60 * 1000;
+
 export type AuthorizationRequest = {
   domain: AuthorizationDomain;
   capability: string;
@@ -33,6 +35,17 @@ export function isAuthorized(
   const now = request.now ?? new Date();
   const minimumAssurance = request.minimumAssurance ?? "verified";
   if (assuranceRank[actor.assurance] < assuranceRank[minimumAssurance]) return false;
+  if (minimumAssurance === "recent-mfa") {
+    const authenticatedAt = actor.authenticatedAt.getTime();
+    const currentTime = now.getTime();
+    if (
+      !Number.isFinite(authenticatedAt) ||
+      authenticatedAt > currentTime ||
+      currentTime - authenticatedAt > RECENT_MFA_MAX_AGE_MS
+    ) {
+      return false;
+    }
+  }
 
   return actor.grants.some((grant) =>
     grant.personId === actor.personId &&

@@ -13,6 +13,10 @@ import {
   type BbsIssuerKey,
 } from "../domain/research-wallet/bbs-credential";
 import type { Database } from "../persistence";
+import {
+  assertPrivilegedActionContext,
+  type PrivilegedActionContext,
+} from "../platform/privileged-access";
 import { auditLog } from "../persistence/schema";
 import {
   members,
@@ -45,6 +49,8 @@ export async function createCredentialIssuanceChallenge(
     capability: "research.wallet.credential.issue",
     target: input.walletId,
     requireExactTarget: true,
+    minimumAssurance: "recent-mfa",
+    now,
   });
   assertPublicProjectKey(input.projectPublicKey);
   const [wallet] = await db.select().from(researchWallets).where(and(
@@ -105,14 +111,18 @@ export async function issueProjectResearchCredential(
   },
   issuer: BbsIssuerKey,
   gate: ResearchRealDataGate,
+  context: PrivilegedActionContext,
   now = new Date()
 ) {
   if (!gate.enabled) throw new ResearchRealDataGateClosedError();
+  assertPrivilegedActionContext(context, ["credential-issuance"]);
   requireAuthorization(actor, {
     domain: "civic",
     capability: "research.wallet.credential.issue",
     target: input.walletId,
     requireExactTarget: true,
+    minimumAssurance: "recent-mfa",
+    now,
   });
   const challengeHash = sha256(input.challenge.challenge);
   const [record] = await db.select().from(researchCredentialIssuanceChallenges).where(and(
@@ -158,6 +168,10 @@ export async function issueProjectResearchCredential(
       action: "research.wallet.project-credential-issued",
       target: input.walletId,
       timestamp: now, pseudonymized: false,
+      sessionId: actor.sessionId,
+      requestId: context.requestId,
+      capability: "research.wallet.credential.issue",
+      reasonCode: context.reasonCode,
     });
     return credential;
   });

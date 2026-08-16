@@ -1,5 +1,13 @@
 # Module: Membership
 
+## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
+
+Board approval/rejection now requires a five-minute recent-MFA session and the
+decision-matching reason code. The decision and any bounded grants created by
+approval share the server request ID, actor session, capability, reason and
+timestamp in canonical audit evidence. Applicant/decider separation and atomic
+Membership persistence are unchanged.
+
 ## Incremental implementation — protected board workspace, 2026-08-10
 
 The bounded Operations Console adds a read side for assigned Membership

@@ -1,5 +1,14 @@
 # Module: HARM Governance
 
+## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
+
+Governance role grants and revocations now require five-minute recent MFA,
+exact institution scope and an operation-compatible reason. Revocation selects,
+locks, conditionally updates and audits the target grant in one transaction, so
+repeated/concurrent revocation cannot create duplicate canonical evidence.
+Governance remains isolated from Civic/Publishing authority and HARM operations
+remain server-disabled unless their separate activation gate is approved.
+
 ## Incremental implementation — server activation gate, 2026-07-29
 
 Every existing Governance write route shares the

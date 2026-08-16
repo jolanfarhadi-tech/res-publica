@@ -13,6 +13,7 @@ Production activation.
 | Controlled Membership authentication E2E | Repeatable check verifies anonymous/OIDC and read-only private boundaries without bypass; no approved synthetic session is stored | Controlled Auth0 session and genuine MFA verification required | Evidence for authenticated application and board operation |
 | Identity invitation/provisioning ownership | Separation-of-duties runbook exists; accountable administrator/reviewer not appointed | Owner assignment required | External user onboarding |
 | Auth0 MFA plan | ADR requires MFA for sensitive capabilities; Production policy not verified | Open | Admin, Governance, Publishing operations |
+| Privileged recent-MFA and access review | Repository enforces five-minute recent MFA, operation-compatible reasons and correlated immutable audit for selected high-impact transitions; provider enrollment, security-event export, named owners and periodic review evidence are absent | External identity/operations evidence required | Full privileged-operation assurance |
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
 | Real DPIA | Repository DPIA remains a placeholder; technical appendix and processing inventory draft exist | Legal/DPO approval required | Approved real-person processing |
 | Processor DPAs | Vercel, Neon and Auth0 agreements not evidenced in repository | Owner/legal evidence required | Approved real-person processing |

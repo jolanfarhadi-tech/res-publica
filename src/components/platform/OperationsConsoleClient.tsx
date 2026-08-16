@@ -89,7 +89,12 @@ function MembershipDetail({
         method: "POST",
         credentials: "same-origin",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ decision: confirmation }),
+        body: JSON.stringify({
+          decision: confirmation,
+          reasonCode: confirmation === "approved"
+            ? "membership-board-approval"
+            : "membership-board-rejection",
+        }),
       }
     ).catch(() => null);
     if (!response?.ok) {

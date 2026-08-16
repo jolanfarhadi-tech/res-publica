@@ -5,6 +5,10 @@ import { createId } from "../domain/shared";
 import type { Database } from "../persistence";
 import { auditLog, people } from "../persistence/schema";
 import {
+  assertPrivilegedActionContext,
+  type PrivilegedActionContext,
+} from "../platform/privileged-access";
+import {
   fellowshipCandidacies,
   fellowshipConflictDeclarations,
   fellowshipEvidenceRefs,
@@ -37,14 +41,17 @@ type EvidenceInput = {
 function requireStaff(
   actor: AuthenticatedActor | null,
   capability: string,
-  target: string
+  target: string,
+  minimumAssurance: "mfa" | "recent-mfa" = "mfa",
+  now = new Date()
 ): asserts actor is AuthenticatedActor {
   requireAuthorization(actor, {
     domain: "civic",
     capability,
     target,
     requireExactTarget: true,
-    minimumAssurance: "mfa",
+    minimumAssurance,
+    now,
   });
 }
 
@@ -110,9 +117,11 @@ export async function approveFellowshipRoleScope(
   db: Database,
   actor: AuthenticatedActor | null,
   roleScopeId: string,
+  context: PrivilegedActionContext,
   now = new Date()
 ) {
-  requireStaff(actor, "fellowship.role-scope.approve", roleScopeId);
+  requireStaff(actor, "fellowship.role-scope.approve", roleScopeId, "recent-mfa", now);
+  assertPrivilegedActionContext(context, ["fellowship-role-scope-approval"]);
   return db.transaction(async (transaction) => {
     const [roleScope] = await transaction.select().from(fellowshipRoleScopes)
       .where(eq(fellowshipRoleScopes.id, roleScopeId)).limit(1);
@@ -125,6 +134,8 @@ export async function approveFellowshipRoleScope(
     await transaction.insert(auditLog).values({
       id: createId(), actorPersonId: actor.personId, action: "fellowship.role-scope.approved",
       target: roleScopeId, timestamp: now, pseudonymized: false,
+      sessionId: actor.sessionId, requestId: context.requestId,
+      capability: "fellowship.role-scope.approve", reasonCode: context.reasonCode,
     });
     return { ...roleScope, state: "approved" as const, approvedByPersonId: actor.personId, approvedAt: now };
   });
@@ -325,9 +336,11 @@ export async function decideFellowshipCandidacy(
     sponsorPersonId?: string;
     reviewDueAt?: Date | null;
   },
+  context: PrivilegedActionContext,
   now = new Date()
 ) {
-  requireStaff(actor, "fellowship.decision.record", input.candidacyId);
+  requireStaff(actor, "fellowship.decision.record", input.candidacyId, "recent-mfa", now);
+  assertPrivilegedActionContext(context, ["fellowship-candidacy-decision"]);
   return db.transaction(async (transaction) => {
     const [candidacy] = await transaction.select().from(fellowshipCandidacies)
       .where(eq(fellowshipCandidacies.id, input.candidacyId)).limit(1);
@@ -369,6 +382,8 @@ export async function decideFellowshipCandidacy(
     await transaction.insert(auditLog).values({
       id: createId(), actorPersonId: actor.personId, action: `fellowship.candidacy.${status}`,
       target: candidacy.id, timestamp: now, pseudonymized: false,
+      sessionId: actor.sessionId, requestId: context.requestId,
+      capability: "fellowship.decision.record", reasonCode: context.reasonCode,
     });
     return { candidacy: { ...candidacy, status, decidedAt: now, decidedByPersonId: actor.personId }, fellowship };
   });
@@ -378,9 +393,11 @@ export async function changeFellowshipStatus(
   db: Database,
   actor: AuthenticatedActor | null,
   input: { fellowshipId: string; toStatus: FellowshipRecordStatus; reason: string },
+  context: PrivilegedActionContext,
   now = new Date()
 ) {
-  requireStaff(actor, "fellowship.status.manage", input.fellowshipId);
+  requireStaff(actor, "fellowship.status.manage", input.fellowshipId, "recent-mfa", now);
+  assertPrivilegedActionContext(context, ["fellowship-status-change"]);
   return db.transaction(async (transaction) => {
     const [record] = await transaction.select().from(fellowshipRecords)
       .where(eq(fellowshipRecords.id, input.fellowshipId)).limit(1);
@@ -399,6 +416,8 @@ export async function changeFellowshipStatus(
     await transaction.insert(auditLog).values({
       id: createId(), actorPersonId: actor.personId, action: "fellowship.status.changed",
       target: record.id, timestamp: now, pseudonymized: false,
+      sessionId: actor.sessionId, requestId: context.requestId,
+      capability: "fellowship.status.manage", reasonCode: context.reasonCode,
     });
     return { ...record, status: input.toStatus, endedAt };
   });

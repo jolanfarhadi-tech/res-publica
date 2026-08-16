@@ -1,5 +1,14 @@
 # Module: Publishing
 
+## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
+
+Editorial grant and revocation services now require five-minute recent MFA,
+exact publication scope, a server request ID and a role-change-compatible
+reason code. Their canonical atomic audit rows correlate session, request,
+capability and reason. Existing delegation rules, separation of duties,
+publication workflow, `commitHash: null` ready boundary and no-auto-publish
+rule are unchanged.
+
 ## Incremental implementation — governed Content Operations client, 2026-08-10
 
 The localized Operations Console now consumes all seven existing protected

@@ -12,6 +12,10 @@ import type { MembershipTier } from "../modules/membership/types";
 import type { Database } from "../persistence";
 import { auditLog, authorizationGrants, notifications, people } from "../persistence/schema";
 import {
+  assertPrivilegedActionContext,
+  type PrivilegedActionContext,
+} from "../platform/privileged-access";
+import {
   documentAcknowledgements,
   membershipApplications,
   membershipStatusChanges,
@@ -135,14 +139,23 @@ export async function decideMembershipApplication(
   actor: AuthenticatedActor | null,
   applicationId: string,
   decision: "approved" | "rejected",
+  context: PrivilegedActionContext,
   now = new Date()
 ) {
+  assertPrivilegedActionContext(context);
+  const expectedReasonCode = decision === "approved"
+    ? "membership-board-approval"
+    : "membership-board-rejection";
+  if (context.reasonCode !== expectedReasonCode) {
+    throw new MembershipDecisionReasonMismatchError();
+  }
   requireAuthorization(actor, {
     domain: "civic",
     capability: "membership.application.decide",
     target: applicationId,
     requireExactTarget: true,
-    minimumAssurance: "mfa",
+    minimumAssurance: "recent-mfa",
+    now,
   });
 
   const [application] = await db.select().from(membershipApplications)
@@ -237,21 +250,29 @@ export async function decideMembershipApplication(
           id: createId(), actorPersonId: actor.personId,
           action: "research.wallet.offered", target: walletId,
           timestamp: now, pseudonymized: false,
+          sessionId: actor.sessionId, requestId: context.requestId,
+          capability: "membership.application.decide", reasonCode: context.reasonCode,
         },
         {
           id: createId(), actorPersonId: actor.personId,
           action: "authorization.wallet-activation-grant-created", target: walletGrantId,
           timestamp: now, pseudonymized: false,
+          sessionId: actor.sessionId, requestId: context.requestId,
+          capability: "research.wallet.activate", reasonCode: context.reasonCode,
         },
         {
           id: createId(), actorPersonId: actor.personId,
           action: "authorization.wallet-credential-grant-created", target: credentialGrantId,
           timestamp: now, pseudonymized: false,
+          sessionId: actor.sessionId, requestId: context.requestId,
+          capability: "research.wallet.credential.issue", reasonCode: context.reasonCode,
         },
         {
           id: createId(), actorPersonId: actor.personId,
           action: "authorization.wallet-recovery-grant-created", target: recoveryGrantId,
           timestamp: now, pseudonymized: false,
+          sessionId: actor.sessionId, requestId: context.requestId,
+          capability: "research.wallet.recover", reasonCode: context.reasonCode,
         },
       ]);
     }
@@ -272,6 +293,10 @@ export async function decideMembershipApplication(
       target: applicationId,
       timestamp: now,
       pseudonymized: false,
+      sessionId: actor.sessionId,
+      requestId: context.requestId,
+      capability: "membership.application.decide",
+      reasonCode: context.reasonCode,
     });
     return { application: updatedApplication, member, walletId };
   });
@@ -347,4 +372,5 @@ export class ExistingMemberCannotApplyError extends Error {}
 export class MembershipApplicationNotFoundError extends Error {}
 export class MembershipApplicationAlreadyDecidedError extends Error {}
 export class ApplicantCannotDecideError extends Error {}
+export class MembershipDecisionReasonMismatchError extends Error {}
 export class MembershipApplicationAuthenticationError extends Error {}

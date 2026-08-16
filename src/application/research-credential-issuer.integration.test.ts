@@ -5,6 +5,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { afterEach, describe, expect, it } from "vitest";
+import { AuthorizationDeniedError } from "../auth/authorize";
 import type { AuthenticatedActor } from "../auth/types";
 import {
   generateBbsIssuerKey,
@@ -53,12 +54,12 @@ async function database() {
   return { client, db: db as unknown as Database };
 }
 
-function actor(): AuthenticatedActor {
+function actor(authenticatedAt = now): AuthenticatedActor {
   return {
     personId: "person-holder",
     sessionId: "session-holder",
-    assurance: "verified",
-    authenticatedAt: now,
+    assurance: "recent-mfa",
+    authenticatedAt,
     grants: [{
       id: "grant-issue",
       personId: "person-holder",
@@ -129,7 +130,10 @@ describe("research credential issuer boundary", () => {
       const credential = await issueProjectResearchCredential(db, actor(), {
         walletId: "wallet-holder", challenge,
         deviceSignature: await signProjectChallenge(device.privateKey, challenge),
-      }, issuer, { enabled: true }, now);
+      }, issuer, { enabled: true }, {
+        requestId: "49f891a0-912c-4dce-a867-9bf160d86644",
+        reasonCode: "credential-issuance",
+      }, now);
       const presentation = await deriveResearchEligibilityPresentation(credential, issuer.publicKey);
 
       await expect(verifyResearchEligibilityPresentation(presentation, issuer.publicKey, now))
@@ -138,8 +142,14 @@ describe("research credential issuer boundary", () => {
         /Synthetic Holder|synthetic-holder|person-holder|member-holder|wallet-holder|project-alpha|consent-project/
       );
       expect(await db.select().from(researchCredentialIssuanceChallenges)).toHaveLength(0);
-      expect((await db.select().from(auditLog)).map((row) => row.action)).toEqual([
-        "research.wallet.project-credential-issued",
+      expect(await db.select().from(auditLog)).toEqual([
+        expect.objectContaining({
+          action: "research.wallet.project-credential-issued",
+          sessionId: "session-holder",
+          requestId: "49f891a0-912c-4dce-a867-9bf160d86644",
+          capability: "research.wallet.credential.issue",
+          reasonCode: "credential-issuance",
+        }),
       ]);
     } finally {
       await client.close();
@@ -170,10 +180,33 @@ describe("research credential issuer boundary", () => {
       await expect(issueProjectResearchCredential(db, actor(), {
         walletId: "wallet-holder", challenge: tampered,
         deviceSignature: await signProjectChallenge(device.privateKey, tampered),
-      }, issuer, { enabled: true }, now)).rejects.toBeInstanceOf(
+      }, issuer, { enabled: true }, {
+        requestId: "3a96d944-9ec4-4eaf-82f0-8f0d0b641ddc",
+        reasonCode: "credential-issuance",
+      }, now)).rejects.toBeInstanceOf(
         InvalidCredentialIssuanceChallengeError
       );
       expect(await db.select().from(researchCredentialIssuanceChallenges)).toHaveLength(1);
+      expect(await db.select().from(auditLog)).toHaveLength(0);
+    } finally {
+      await client.close();
+    }
+  }, 30_000);
+
+  it("rejects stale MFA before challenge or credential persistence", async () => {
+    const { client, db } = await database();
+    try {
+      await seed(db);
+      const projectKey = await generateProjectKeyMaterial();
+      const staleActor = actor(new Date(now.getTime() - 5 * 60 * 1000 - 1));
+
+      await expect(createCredentialIssuanceChallenge(db, staleActor, {
+        walletId: "wallet-holder", projectRef: "project-alpha",
+        projectPublicKey: projectKey.publicKey,
+        audience: "https://verifier.example.invalid/present",
+      }, { enabled: true }, now)).rejects.toBeInstanceOf(AuthorizationDeniedError);
+
+      expect(await db.select().from(researchCredentialIssuanceChallenges)).toHaveLength(0);
       expect(await db.select().from(auditLog)).toHaveLength(0);
     } finally {
       await client.close();

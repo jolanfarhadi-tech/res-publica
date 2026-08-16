@@ -1,5 +1,19 @@
 # Module: Persistence
 
+## Incremental implementation — privileged audit correlation, 2026-08-16
+
+Additive migration `0023_privileged-access-audit-context.sql` adds nullable
+`session_id`, `request_id`, `capability` and `reason_code` columns plus session
+and request indexes to the existing append-only `audit_log`. Existing rows and
+nullability remain valid; no table or destructive DDL is introduced. Sensitive
+application transactions write these fields alongside their existing state and
+audit transitions.
+
+The verified local main chain now applies 24 migrations and creates 98 tables;
+the isolated research chain remains one migration / six tables. Migration 0023
+is local only and Production remains unchanged pending the standard backup,
+authorization, TLS, journal, permission and post-migration checks.
+
 ## Incremental implementation — governed AI provenance, 2026-08-16
 
 Additive migration `0022_governed-ai-runtime.sql` extends the existing

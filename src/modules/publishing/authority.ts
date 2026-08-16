@@ -1,5 +1,5 @@
 import { requireAuthorization } from "../../auth/authorize";
-import type { AuthenticatedActor } from "../../auth/types";
+import type { AssuranceLevel, AuthenticatedActor } from "../../auth/types";
 
 export const EDITORIAL_ROLES = ["editor", "reviewer", "translator", "publisher"] as const;
 export type EditorialRole = (typeof EDITORIAL_ROLES)[number];
@@ -13,13 +13,14 @@ export function requireEditorialRole(
   actor: AuthenticatedActor | null,
   role: EditorialRole,
   publicationScope: string,
+  minimumAssurance: AssuranceLevel = "mfa",
 ): asserts actor is AuthenticatedActor {
   requireAuthorization(actor, {
     domain: "civic",
     capability: editorialCapability(role),
     target: publicationScope,
     requireExactTarget: true,
-    minimumAssurance: "mfa",
+    minimumAssurance,
   });
 }
 

@@ -1,5 +1,17 @@
 # Module: Identity, Authentication & Authorization
 
+## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
+
+The shared authorization primitive now validates `recent-mfa` against the
+provider-authenticated instant with a five-minute maximum age; stale, future or
+invalid instants fail closed. `/api/auth/login?stepUp=recent-mfa` requests fresh
+provider authentication with standard OIDC `prompt=login` and `max_age=0`.
+Signed provider claims remain authoritative for the resulting assurance.
+
+Selected high-impact operations additionally require bounded,
+operation-compatible reason codes and server request IDs. No universal admin,
+caller-supplied actor or locally fabricated MFA state was introduced.
+
 ## Incremental Release-D capability boundary — 2026-08-16
 
 Verified signup now creates an exact Civic `ai.rag.query` grant targeted to

@@ -138,12 +138,18 @@ export const auditLog = pgTable(
     }),
     action: text("action").notNull(),
     target: text("target").notNull(),
+    sessionId: text("session_id"),
+    requestId: text("request_id"),
+    capability: text("capability"),
+    reasonCode: text("reason_code"),
     timestamp: timestamp("timestamp", { withTimezone: true, mode: "date" }).notNull(),
     pseudonymized: boolean("pseudonymized").notNull().default(false),
   },
   (table) => [
     primaryKey({ columns: [table.timestamp, table.id] }),
     index("audit_log_actor_idx").on(table.actorPersonId),
+    index("audit_log_session_idx").on(table.sessionId),
+    index("audit_log_request_idx").on(table.requestId),
   ]
 );
 

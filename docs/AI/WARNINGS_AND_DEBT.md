@@ -1,5 +1,19 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-027 — Repository recent-MFA controls do not prove provider enforcement
+- **Evidence:** sensitive services now validate a five-minute provider
+  authentication instant and recognized MFA assurance, and expose a standard
+  step-up entry. Repository code cannot prove Auth0 tenant enrollment policy,
+  factor strength, security-event export, alert ownership or access-review
+  completion.
+- **Impact:** privileged Production readiness remains dependent on external
+  identity-provider and operational evidence even though application requests
+  fail closed when assurance is absent or stale.
+- **Severity:** **High / external privileged-control boundary**.
+- **Safe handling:** retain exact capability/target checks, recent MFA, bounded
+  reasons, immutable audit and separation of duties; complete OPEN-029 before
+  claiming full privileged-operation assurance.
+
 ### WARN-026 — Repository supply-chain controls do not activate Tier-0 provider controls
 
 - **Evidence:** CI now pins Actions, enforces least privilege and checks source,

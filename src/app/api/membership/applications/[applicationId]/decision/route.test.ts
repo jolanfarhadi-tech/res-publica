@@ -30,11 +30,11 @@ vi.mock("../../../../../../application/membership-applications", async (importOr
 
 import { POST } from "./route";
 
-function request(decision: unknown = "approved") {
+function request(decision: unknown = "approved", reasonCode: unknown = "membership-board-approval") {
   return new Request("https://respublica-ev.de/api/membership/applications/application-1/decision", {
     method: "POST",
     headers: { "content-type": "application/json", origin: "https://respublica-ev.de" },
-    body: JSON.stringify({ decision }),
+    body: JSON.stringify({ decision, reasonCode }),
   });
 }
 
@@ -51,11 +51,26 @@ describe("POST membership application decision", () => {
   it("passes the exact path application to the protected decision service", async () => {
     const response = await POST(request(), context);
     expect(response.status).toBe(200);
-    expect(mocks.decisions[0]).toEqual([{}, mocks.actor, "application-1", "approved"]);
+    expect(mocks.decisions[0]).toEqual([
+      {},
+      mocks.actor,
+      "application-1",
+      "approved",
+      expect.objectContaining({
+        reasonCode: "membership-board-approval",
+        requestId: expect.stringMatching(/^[0-9a-f-]{36}$/),
+      }),
+    ]);
   });
 
   it("rejects invalid decisions before persistence", async () => {
     const response = await POST(request("auto-approved"), context);
+    expect(response.status).toBe(400);
+    expect(mocks.decisions).toHaveLength(0);
+  });
+
+  it("rejects a missing privileged reason code before persistence", async () => {
+    const response = await POST(request("approved", null), context);
     expect(response.status).toBe(400);
     expect(mocks.decisions).toHaveLength(0);
   });

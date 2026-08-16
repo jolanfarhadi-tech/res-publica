@@ -1,5 +1,13 @@
 # Module: Fellowship
 
+## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
+
+Role-scope approval, candidacy decision and Fellowship status changes now
+require five-minute recent MFA and a distinct server-owned reason code for the
+exact transition. Their existing conflict, reviewer/decider and candidate
+separation rules remain in place; accepted transitions add session/request/
+capability/reason correlation to the same atomic canonical audit records.
+
 ## Incremental Release-F integration — 2026-08-16
 
 The central Operations index advertises the Fellowship workspace only for an
