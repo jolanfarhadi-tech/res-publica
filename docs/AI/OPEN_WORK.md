@@ -1,5 +1,22 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-034 — Mandatory hardening Phase G operational response evidence
+- **Implemented in repository:** ordered, replay-resistant synthetic Loops 1–5;
+  fixed A→A′ allowlist; E0–E3 evidence gating; Class 0/1 automatic authority
+  limited to reversible observation/inert-decoy state; independent recent-MFA
+  review for Class 2/3 alert/quarantine preparation; append-only proposal,
+  execution, effect-verification and rollback evidence; exact protected APIs,
+  canonical audit and DE/EN/FA Security Operations projection.
+- **External/operational remainder:** approve Security Operations purpose,
+  retention/legal hold, named evaluator/reviewer roles and grants; authorize
+  Production migration 0025; separately execute and verify any provider-side
+  session, token, account, capability, secret, database, recovery or service
+  containment through its governing runbook and approval boundary.
+- **Safety boundary:** the application does not autonomously terminate sessions,
+  revoke tokens, isolate accounts, disable AI/RAG or Research, rotate secrets,
+  change provider configuration or create permanent defensive rules. A ledger
+  entry is not evidence that an external provider effect occurred.
+
 ### OPEN-033 — Mandatory hardening Phase F operational attribution evidence
 - **Implemented in repository:** Governance-owned Security Operations module;
   append-only incident observations, A–D attribution claims and temporal
@@ -22,8 +39,9 @@
   backup→restore; exact migration/table integrity; revoked-access and audit
   preservation checks; read-only Neon verifier without mutable remote CLI;
   clean-recovery, backup-independence and credential-rotation procedures.
-- **External evidence still required:** run the current 25/102 verifier against
-  an authorized isolated Neon recovery branch; approve and evidence RPO/RTO,
+- **External evidence still required:** run the current 26/105 verifier against
+  an authorized isolated Neon recovery branch at the current 26/105 schema;
+  approve and evidence RPO/RTO,
   named incident/recovery owners, independent backup and control-plane access,
   configuration/Auth0/log recovery, credential custodians and dual-control
   destructive cutover.

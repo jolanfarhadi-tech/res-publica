@@ -9,8 +9,8 @@ describe("isolated synthetic recovery drill", () => {
 
     expect(result).toMatchObject({
       environment: "isolated-synthetic-pglite",
-      migrations: 25,
-      tables: 102,
+      migrations: 26,
+      tables: 105,
       invalidConstraints: 0,
       migrationIdentityPreserved: true,
       syntheticIntegrityPreserved: true,

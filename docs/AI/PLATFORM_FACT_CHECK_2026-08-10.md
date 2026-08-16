@@ -145,6 +145,24 @@ retained; it is not renamed as a new project phase.
    infrastructure; attacker-controlled input can never become executable code,
    SQL, shell, template, or model/tool commands.
 
+## Post-audit remediation note — Mandatory hardening Phase G
+
+The previously absent A→A′ correspondence boundary is remediated in the local
+Phase-G worktree at a deliberately bounded level. Ordered synthetic Loops 1–5,
+E0–E3 evidence policy, a fixed action allowlist, replay/order/scope checks,
+independent recent-MFA review, append-only effect evidence and rollback now
+exist. Synthetic self-DoS tests prove that one Research-, RAG- or
+administrator-themed probe, duplicated evidence or contradiction cannot cause
+high-impact containment. Migration 0025 is additive.
+
+This does not rewrite the original pre-remediation evidence or claim Production
+activation. Automatic authority ends at reversible observation/inert-decoy
+state; reviewed authority ends at internal alert/quarantine preparation. No
+provider-side token revocation, account isolation, service shutdown, secret
+rotation, Research/AI disablement, permanent policy or recovery cutover is
+executed or claimed. Production remains unchanged and the operational/legal
+gates in OPEN-034 remain controlling.
+
 ## External stop conditions preserved
 
 - No real research data or real ZK credential issuance until

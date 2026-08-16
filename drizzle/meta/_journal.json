@@ -176,6 +176,13 @@
       "when": 1786856348665,
       "tag": "0024_technical-attribution",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1786860543410,
+      "tag": "0025_defensive-correspondence",
+      "breakpoints": true
     }
   ]
 }

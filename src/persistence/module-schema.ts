@@ -1386,3 +1386,70 @@ export const securityIncidentCorrelations = pgTable(
     index("security_incident_correlations_right_idx").on(table.rightIncidentId),
   ]
 );
+
+export const securityDefensiveSignals = pgTable(
+  "security_defensive_signals",
+  {
+    id: text("id").primaryKey(),
+    incidentId: text("incident_id").notNull().references(() => securityIncidents.id, { onDelete: "restrict" }),
+    sequence: integer("sequence").notNull(),
+    loop: integer("loop").notNull(),
+    kind: text("kind", { enum: [
+      "INITIAL_DECOY_SIGNAL", "HONEYPOT_ENGAGEMENT", "HIGH_VALUE_CONFIRMATION",
+      "ADAPTIVE_ATTRIBUTION", "DEFENSIVE_SHADOW_CONFIRMATION",
+    ] }).notNull(),
+    evidenceIds: jsonb("evidence_ids").$type<string[]>().notNull(),
+    targetAsset: text("target_asset").notNull(),
+    targetScope: text("target_scope").notNull(),
+    contradictoryEvidence: jsonb("contradictory_evidence").$type<string[]>().notNull(),
+    compromiseConfirmed: boolean("compromise_confirmed").notNull(),
+    observedAt: timestamp("observed_at", { withTimezone: true, mode: "date" }).notNull(),
+    evidenceHash: text("evidence_hash").notNull(),
+    recordedByPersonId: text("recorded_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    recordedAt: timestamp("recorded_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("security_defensive_signals_incident_sequence_uq").on(table.incidentId, table.sequence),
+    index("security_defensive_signals_incident_time_idx").on(table.incidentId, table.observedAt),
+  ]
+);
+
+export const securityDefensiveActions = pgTable(
+  "security_defensive_actions",
+  {
+    id: text("id").primaryKey(),
+    incidentId: text("incident_id").notNull().references(() => securityIncidents.id, { onDelete: "restrict" }),
+    policyId: text("policy_id").notNull(),
+    evidenceLevel: text("evidence_level", { enum: ["E0", "E1", "E2", "E3"] }).notNull(),
+    action: text("action").notNull(),
+    actionClass: integer("action_class").notNull(),
+    disposition: text("disposition", { enum: ["AUTO_EXECUTE", "REQUIRES_OPERATOR", "REQUIRES_DUAL_APPROVAL"] }).notNull(),
+    approvalCount: integer("approval_count").notNull(),
+    reversibility: text("reversibility", { enum: ["REVERSIBLE", "CONDITIONALLY_REVERSIBLE", "MANUAL_RECOVERY_REQUIRED"] }).notNull(),
+    targetAsset: text("target_asset").notNull(),
+    targetScope: text("target_scope").notNull(),
+    eventIds: jsonb("event_ids").$type<string[]>().notNull(),
+    evidenceIds: jsonb("evidence_ids").$type<string[]>().notNull(),
+    contradictoryEvidence: jsonb("contradictory_evidence").$type<string[]>().notNull(),
+    rationale: text("rationale").notNull(),
+    proposedByPersonId: text("proposed_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    proposedAt: timestamp("proposed_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("security_defensive_actions_incident_time_idx").on(table.incidentId, table.proposedAt)]
+);
+
+export const securityDefensiveActionEvents = pgTable(
+  "security_defensive_action_events",
+  {
+    id: text("id").primaryKey(),
+    actionId: text("action_id").notNull().references(() => securityDefensiveActions.id, { onDelete: "restrict" }),
+    state: text("state", { enum: [
+      "PROPOSED", "APPROVED", "EXECUTED", "EFFECT_VERIFIED", "ROLLED_BACK", "REJECTED",
+    ] }).notNull(),
+    actorPersonId: text("actor_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    requestId: text("request_id").notNull(),
+    evidenceHash: text("evidence_hash").notNull(),
+    occurredAt: timestamp("occurred_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("security_defensive_action_events_action_time_idx").on(table.actionId, table.occurredAt)]
+);

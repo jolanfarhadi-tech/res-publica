@@ -20,3 +20,10 @@ separately approved passive provider, DPA, source record and retention policy.
 
 The module performs no source scanning, counter-intrusion or hack-back. Its
 records describe defensive evidence and hypotheses only.
+
+The Phase-G correspondence engine connects ordered, synthetic Loops 1–5 to a
+fixed A→A′ policy allowlist. E0/E1 may execute only reversible observation or
+inert-decoy state; E2/E3 create bounded operator-reviewed alert/quarantine
+preparation. They do not terminate sessions, change provider configuration,
+disable Research or AI, rotate secrets, or create permanent policy. All
+signals, decisions and state transitions are append-only and evidence-linked.

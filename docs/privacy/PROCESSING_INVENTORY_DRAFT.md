@@ -137,7 +137,8 @@ conclusions.
 - **Data:** daily rotating keyed handles for technical source, account,
   session and API credential; query-free routes; coarse client/protocol
   characteristics; allowlisted techniques/assets; evidence hashes; bounded
-  claims and incident correlations.
+  claims and incident correlations; ordered defensive-loop signals and
+  allowlisted A→A′ decision/effect/rollback evidence.
 - **Purpose:** investigate serious activity against Res Publica-controlled
   systems without asserting unsupported real-world identity.
 - **Boundary:** exact Governance capability and target, MFA/recent MFA,
@@ -280,7 +281,7 @@ conclusions.
 
 ## Schema coverage and exclusions
 
-The machine inventory currently covers all **98** PostgreSQL tables parsed from
+The machine inventory currently covers all **105** PostgreSQL tables parsed from
 `src/persistence/schema.ts` and `src/persistence/module-schema.ts`. Shared tables
 may support more than one activity, but every current table must appear at
 least once. A schema addition therefore fails the inventory drift check until

@@ -10,6 +10,8 @@ type Copy = {
   routes: string; techniques: string; evidenceHash: string; level: string;
   confidence: string; evidence: string; inferences: string; contradictions: string;
   alternatives: string; relation: string; identityBoundary: string; passiveBoundary: string;
+  responses: string; responseBoundary: string; actionClass: string; effectState: string;
+  target: string; reversibility: string; loopEvidence: string;
 };
 
 const de: Copy = {
@@ -31,6 +33,8 @@ const de: Copy = {
   alternatives: "Alternative Erklärungen", relation: "Beziehung",
   identityBoundary: "Technische Ähnlichkeit ist kein Nachweis derselben Person. Die Ebenen A–D werden niemals automatisch zu einer realen Identität hochgestuft.",
   passiveBoundary: "Kein Hack-back und kein unbefugtes Scannen von Quellsystemen. Externe Netzwerkanreicherung bleibt ohne gesondert genehmigte Quelle deaktiviert.",
+  responses: "A→A′-Abwehrentscheidungen", responseBoundary: "Nur fest erlaubte, evidenzgebundene Abwehraktionen innerhalb der Infrastruktur von Res Publica werden erfasst. Höhere Wirkungsklassen benötigen eine unabhängige Freigabe.",
+  actionClass: "Wirkungsklasse", effectState: "Geprüfter Verlauf", target: "Begrenztes Ziel", reversibility: "Reversibilität", loopEvidence: "Erfasste Loop-Evidenz",
 };
 
 const en: Copy = {
@@ -47,6 +51,8 @@ const en: Copy = {
   alternatives: "Alternative explanations", relation: "Relation",
   identityBoundary: "Technical similarity is not proof of the same person. Levels A–D are never automatically promoted to a real-world identity.",
   passiveBoundary: "There is no hack-back or unauthorized scanning of source systems. External network enrichment remains disabled without a separately approved source.",
+  responses: "A→A′ defensive decisions", responseBoundary: "Only explicitly allowlisted, evidence-gated actions inside Res Publica infrastructure are recorded. Higher-impact classes require independent approval.",
+  actionClass: "Impact class", effectState: "Verified history", target: "Bounded target", reversibility: "Reversibility", loopEvidence: "Recorded loop evidence",
 };
 
 const fa: Copy = {
@@ -63,6 +69,8 @@ const fa: Copy = {
   alternatives: "توضیح‌های جایگزین", relation: "رابطه",
   identityBoundary: "شباهت فنی اثبات نمی‌کند که یک شخص واحد مسئول بوده است. سطوح A تا D هرگز به‌طور خودکار به هویت واقعی ارتقا نمی‌یابند.",
   passiveBoundary: "هیچ اقدام تلافی‌جویانه یا اسکن غیرمجاز سامانه‌های مبدأ انجام نمی‌شود. غنی‌سازی بیرونی شبکه بدون منبع جداگانه و تأییدشده غیرفعال می‌ماند.",
+  responses: "تصمیم‌های دفاعی A→A′", responseBoundary: "فقط اقدام‌های دفاعی صریحاً مجاز و وابسته به شواهد در زیرساخت Res Publica ثبت می‌شوند. رده‌های پراثر به تأیید مستقل نیاز دارند.",
+  actionClass: "ردهٔ اثر", effectState: "سیر تأییدشده", target: "هدف محدود", reversibility: "برگشت‌پذیری", loopEvidence: "شواهد ثبت‌شدهٔ حلقه‌ها",
 };
 
 export const securityOperationsCopy: Record<Locale, Copy> = { de, en, fa };

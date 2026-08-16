@@ -230,6 +230,33 @@ automatic Level E attribution; active source scanning or hack-back.
 
 ---
 
+## D-23: A→A′ autonomy is bounded to reversible internal state
+
+**Decision:** the Phase-G engine selects actions only from a frozen allowlist.
+E0/E1 may automatically create verified observation or inert synthetic-decoy
+state. E2/E3 require an independent exact-scope, recent-MFA reviewer and can
+execute only an internal alert or quarantine-preparation state. Provider,
+session, token, account, capability, Research, AI/RAG, secret, database,
+permanent-policy and recovery effects remain outside this executor.
+**Rationale:** connecting Loops 1–5 must not let attacker-controlled evidence
+weaponize defensive automation against Res Publica. A narrow append-only ledger
+provides provenance, effect verification and rollback without claiming or
+performing unverified control-plane effects.
+**Evidence:** `src/modules/security-operations/defensive-correspondence.ts`;
+`src/application/defensive-correspondence.ts`; migration 0025; synthetic
+self-DoS/replay/ordering and PGlite integration tests;
+`docs/security/DEFENSIVE_CORRESPONDENCE_MODEL.md`.
+**Related commit:** the atomic Mandatory hardening Phase G commit containing
+this entry.
+**Related ADR:** ADR-027 exact authorization/MFA and ADR-029 atomic canonical
+audit remain controlling. No ADR is created or changed.
+**Rejected alternatives:** attacker- or model-selected actions; automatic
+high-impact containment; provider calls without effect/rollback evidence;
+permanent rules learned from one attack sequence; documentation-only claims
+that a prepared action changed Production.
+
+---
+
 ## Decisions with rejected alternatives not otherwise itemized above
 
 **Verified**, `docs/source/DECISION_LOG.md` (read in full), additional items not already covered by D-01–D-16:

@@ -1,5 +1,18 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-032 — A→A′ ledger is not provider-side containment
+- **Evidence:** Phase G executes and verifies only bounded internal observation,
+  inert-decoy, alert and quarantine-preparation states. The allowlist includes
+  stronger defensive vocabulary for policy classification, but application
+  code cannot invoke those provider/session/control-plane effects.
+- **Impact:** describing a prepared or internally verified action as token
+  revocation, account isolation, service shutdown, secret rotation or provider
+  quarantine would be an operationally dangerous overclaim.
+- **Severity:** **High / defensive automation and self-DoS boundary**.
+- **Safe handling:** retain OPEN-034, exact approvals, effect evidence and
+  separate runbooks. Do not expand autonomous authority until provider-backed
+  effect/rollback and anti-poisoning tests prove it safe.
+
 ### WARN-031 — Technical attribution is bounded evidence, not identity proof
 - **Evidence:** Phase F persists only daily rotating keyed technical handles,
   query-free routes, coarse client traits, append-only observations and
@@ -14,7 +27,7 @@
   any real-world identity process; never activate scanning or hack-back.
 
 ### WARN-030 — Current local recovery proof is not current provider recovery proof
-- **Evidence:** the Phase-E drill now restores the exact 25/102 repository schema
+- **Evidence:** the Phase-E drill now restores the exact 26/105 repository schema
   and synthetic security state in isolated PGlite. The last real Neon restore
   evidence is the named 2026-08-10 snapshot at 19 migrations/66 tables.
 - **Impact:** claiming current provider recoverability, RPO/RTO, independent

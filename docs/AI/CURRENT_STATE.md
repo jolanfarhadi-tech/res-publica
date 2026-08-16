@@ -1,5 +1,34 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Mandatory hardening Phase G: A→A′ and Loops 1–5, 2026-08-16
+
+The Security Operations module now connects ordered, replay-resistant
+synthetic Loops 1–5 to a frozen A→A′ action allowlist and E0–E3 evidence
+policy. Attacker-controlled input cannot select an action or become executable
+code. Contradictions reduce authority; replay, reordering, skipped loops and
+mixed scopes are rejected. Class 0/1 automatic authority is limited to
+reversible observation or inert synthetic-decoy state. Class 2/3 creates only
+independently reviewed internal alert/quarantine preparation. Provider,
+session, token, account, capability, Research, AI/RAG, secret, database,
+permanent-policy and recovery effects remain outside this executor.
+
+Signals, decisions and transitions are append-only under migration 0025. Each
+evaluation, review and rollback preserves exact Governance capability/target,
+recent MFA, separation of duties, shared rate limiting and atomic canonical
+audit. Effects require explicit verification before rollback. The protected
+DE/EN/FA Security Operations view exposes policy, evidence class, bounded
+target, reversibility and transition state without operator person IDs or raw
+technical identifiers.
+
+Verification passes 7 focused files / 34 tests and the full serial suite at
+114 files / 474 tests. Lint, typecheck, structure, secret and supply-chain
+checks, the 21-activity/105-table processing inventory, zero-vulnerability
+Production dependency audit, Drizzle consistency, fresh 26/105 main and 1/6
+research schemas, all nine EAO pipelines, the 170-page Production build with
+canonical site URL and `git diff --check` pass. EAO full-platform readiness
+remains correctly No-Go because 36 external activation gates remain open;
+Production is unchanged.
+
 ## Incremental update — Mandatory hardening Phase F: technical attribution, 2026-08-16
 
 The Security Operations module now records privacy-minimized technical

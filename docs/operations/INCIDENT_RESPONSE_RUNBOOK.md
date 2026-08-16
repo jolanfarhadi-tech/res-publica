@@ -46,6 +46,11 @@ strict A–D boundary, explicit contradictory evidence and alternative
 explanations. A source address, authenticated account or behavioral cluster is
 not a real-world identity and never authorizes active scanning or hack-back.
 
+Use `DEFENSIVE_CORRESPONDENCE_RUNBOOK.md` for ordered Loops 1–5 and A→A′
+evaluation. Its ledger authorizes only the bounded effect it records; it does
+not substitute for provider-side containment, capability quarantine, secret
+rotation or recovery approval.
+
 ## Recovery and closure
 
 Recovery requires smoke tests for anonymous routes, authentication, the

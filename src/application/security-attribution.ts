@@ -16,6 +16,9 @@ import {
 import type { Database } from "../persistence";
 import {
   securityAttributionClaims,
+  securityDefensiveActionEvents,
+  securityDefensiveActions,
+  securityDefensiveSignals,
   securityIncidentCorrelations,
   securityIncidents,
   securityObservations,
@@ -303,7 +306,59 @@ export async function getSecurityOperationsOverview(
       ))
     : [];
 
-  return { incidents, observations, claims, correlations };
+  const defensiveSignals = incidentIds.length
+    ? await db.select({
+        id: securityDefensiveSignals.id,
+        incidentId: securityDefensiveSignals.incidentId,
+        sequence: securityDefensiveSignals.sequence,
+        loop: securityDefensiveSignals.loop,
+        kind: securityDefensiveSignals.kind,
+        targetAsset: securityDefensiveSignals.targetAsset,
+        targetScope: securityDefensiveSignals.targetScope,
+        contradictoryEvidence: securityDefensiveSignals.contradictoryEvidence,
+        compromiseConfirmed: securityDefensiveSignals.compromiseConfirmed,
+        observedAt: securityDefensiveSignals.observedAt,
+        evidenceHash: securityDefensiveSignals.evidenceHash,
+      }).from(securityDefensiveSignals).where(inArray(securityDefensiveSignals.incidentId, incidentIds))
+    : [];
+  const defensiveActions = incidentIds.length
+    ? await db.select({
+        id: securityDefensiveActions.id,
+        incidentId: securityDefensiveActions.incidentId,
+        policyId: securityDefensiveActions.policyId,
+        evidenceLevel: securityDefensiveActions.evidenceLevel,
+        action: securityDefensiveActions.action,
+        actionClass: securityDefensiveActions.actionClass,
+        disposition: securityDefensiveActions.disposition,
+        reversibility: securityDefensiveActions.reversibility,
+        targetAsset: securityDefensiveActions.targetAsset,
+        targetScope: securityDefensiveActions.targetScope,
+        evidenceIds: securityDefensiveActions.evidenceIds,
+        contradictoryEvidence: securityDefensiveActions.contradictoryEvidence,
+        rationale: securityDefensiveActions.rationale,
+        proposedAt: securityDefensiveActions.proposedAt,
+      }).from(securityDefensiveActions).where(inArray(securityDefensiveActions.incidentId, incidentIds))
+    : [];
+  const actionIds = defensiveActions.map((action) => action.id);
+  const defensiveActionEvents = actionIds.length
+    ? await db.select({
+        id: securityDefensiveActionEvents.id,
+        actionId: securityDefensiveActionEvents.actionId,
+        state: securityDefensiveActionEvents.state,
+        evidenceHash: securityDefensiveActionEvents.evidenceHash,
+        occurredAt: securityDefensiveActionEvents.occurredAt,
+      }).from(securityDefensiveActionEvents).where(inArray(securityDefensiveActionEvents.actionId, actionIds))
+    : [];
+
+  return {
+    incidents,
+    observations,
+    claims,
+    correlations,
+    defensiveSignals,
+    defensiveActions,
+    defensiveActionEvents,
+  };
 }
 
 export class SecurityAttributionError extends Error {
