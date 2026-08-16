@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Documentation Review Pipeline - Broken Link Detection skill.
 // See brain/AI/EAO_EXECUTION_PIPELINES.md #3 and brain/AI/EAO_SKILL_LIBRARY.md
 // (Documentation Skills -> Broken Link Detection).

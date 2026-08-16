@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable ADR Review Pipeline - Architectural Decision Gap Analysis.
 // See brain/AI/EAO_EXECUTION_PIPELINES.md #4.
 //

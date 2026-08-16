@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Release Readiness Pipeline.
 // See brain/AI/EAO_EXECUTION_PIPELINES.md #9.
 //

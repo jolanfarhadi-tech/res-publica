@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Knowledge Skill - Terminology Drift Detection.
 // See brain/AI/EAO_SKILL_LIBRARY.md (Knowledge Skills -> Terminology Drift
 // Detection). Validates that a retired term hasn't silently crept back in

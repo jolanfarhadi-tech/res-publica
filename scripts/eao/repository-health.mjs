@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Repository Health Pipeline (EAO, ADR-024) - see
 // brain/AI/EAO_EXECUTION_PIPELINES.md #1 and brain/AI/EAO_REPORTING_TEMPLATES.md #1.
 // Read-only: runs only inspection git commands, writes nothing, modifies nothing.

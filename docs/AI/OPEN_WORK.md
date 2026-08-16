@@ -1,5 +1,20 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-028 — Mandatory hardening Phase A provider-side activation
+
+- **Implemented locally:** exact Node runtime pinning; immutable Action SHAs;
+  least-privilege CI; source-SHA verification; dependency review; CodeQL;
+  active-tree/history secret detection; lockfile registry/install-script
+  allowlisting; Tier-0 inventory and dependency-compromise playbook.
+- **External follow-up:** make the checks required in GitHub branch protection;
+  appoint separate source, deploy, identity, database, incident and recovery
+  owners; verify Auth0 security-event export, Vercel Production protection,
+  secret-store inventory/rotation evidence and approved egress controls.
+- **Boundary:** repository controls cannot prove provider configuration. Do not
+  grant autonomous response authority or attacker-defined A/A′ actions.
+- **Production status:** no migration or deployment is introduced by this
+  slice; existing activation and real-data gates remain unchanged.
+
 ### OPEN-027 — Release F deployment and operational grant provisioning
 
 - **Implemented locally:** one exact-MFA Operations index for Membership,

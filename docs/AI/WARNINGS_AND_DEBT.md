@@ -1,5 +1,19 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-026 — Repository supply-chain controls do not activate Tier-0 provider controls
+
+- **Evidence:** CI now pins Actions, enforces least privilege and checks source,
+  dependencies, secrets and CodeQL configuration. The Tier-0 inventory still
+  identifies GitHub, Auth0, Neon, Vercel, secret-store and recovery controls
+  whose settings and accountable owners cannot be proven from source.
+- **Impact:** treating a green repository build as proof of branch protection,
+  provider audit export, secret rotation or Production separation of duties
+  would create an unverified control-plane trust claim.
+- **Severity:** **High / supply-chain and privileged-control boundary**.
+- **Safe handling:** complete OPEN-028 with provider evidence and named owners;
+  retain immutable pins, read-only defaults, explicit allowlists and human
+  approval for permanent containment or recovery decisions.
+
 ### WARN-025 — Integrated Operations is navigation, not universal authority
 
 - **Evidence:** Release F derives its area list solely from active exact Civic

@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=20.9.0"
+    "node": "24.x"
   },
   "scripts": {
     "audit:production": "npm audit --omit=dev --audit-level=high",
+    "security:secrets": "node scripts/check-secret-leaks.mjs",
+    "security:supply-chain": "node scripts/check-supply-chain.mjs",
     "check-structure": "node scripts/check-structure.mjs",
     "privacy:inventory:check": "node scripts/check-processing-inventory.mjs",
     "ops:health": "node scripts/check-deployment-health.mjs",

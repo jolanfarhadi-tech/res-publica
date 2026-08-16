@@ -1,5 +1,34 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Mandatory hardening Phase A: supply chain and Tier-0, 2026-08-16
+
+The repository now pins the supported runtime to Node 24.18.0 across
+`package.json`, `.nvmrc` and CI. GitHub Actions are immutable-SHA pinned,
+checkout credentials are not persisted, default workflow authority is
+read-only, and source-commit identity is checked before verification. Pull
+requests receive dependency review; CodeQL provides the repository SAST gate.
+
+Two deterministic local controls now fail CI on high-confidence secret
+material in the active tree or Git history, unexpected lockfile registries or
+install scripts, mutable workflow actions, runtime drift, or missing CI gates.
+The scanners suppress secret values. The exact install-script allowlist and
+Tier-0/provider boundaries are documented with a dependency-compromise
+playbook. Provider-side branch protection, named owners, event export, secret
+rotation and Production control-plane configuration remain external evidence,
+not claims made by repository code.
+
+A Vite 8/Node 24 regression was also corrected: imported CRLF `.mjs` EAO and
+operations modules no longer retain executable shebangs that Vite moved behind
+generated exports. They continue to run through the existing explicit `node`
+npm commands, and the canonical Vitest runner remains unchanged.
+
+Verification passes 8 focused files / 28 tests and the full serial suite at
+101 files / 418 tests. Lint, typecheck, structure, secret/supply-chain checks,
+Drizzle consistency, the fresh 23-migration/98-table main schema, isolated 1/6
+research schema, 20-activity/98-table processing inventory, all nine EAO
+pipelines, zero-vulnerability Production dependency audit, Production build
+and `git diff --check` pass. Production remains unchanged.
+
 ## Incremental update — Release F Integrated Operations and EAO readiness, 2026-08-16
 
 The protected `/{locale}/operations` entry now composes Membership, Publishing,

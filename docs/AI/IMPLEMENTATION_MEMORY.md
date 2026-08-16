@@ -1,5 +1,25 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Mandatory hardening Phase A
+
+Supply-chain verification is intentionally local and deterministic. The secret
+scanner reads tracked content plus added Git-history lines and reports only
+rule/source metadata, never candidate values. The supply-chain scanner validates
+the exact Node patch, npm registry origin, packages with install scripts,
+immutable workflow Action references and required CI gates. Both are unit
+tested and run before dependency installation in CI.
+
+CI uses a read-only default token, non-persistent checkout credentials, exact
+source-SHA verification, immutable third-party Action commits, pull-request
+dependency review and a separate CodeQL workflow. The repository policy and
+Tier-0 inventory explicitly separate implemented source controls from GitHub,
+Auth0, Neon, Vercel and human-owner configuration.
+
+Vite 8 under Node 24 emitted invalid transformed code when an imported CRLF
+`.mjs` dependency retained a shebang. Only modules imported by tests had that
+non-functional shebang removed; explicit `node scripts/...` invocation remains
+the executable contract, so no global alternate Vitest runner was introduced.
+
 ## Incremental implementation — Release E Public API
 
 The V1 public projection adapts the existing Knowledge Graph application

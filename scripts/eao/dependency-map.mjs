@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Dependency Analysis Pipeline - full architectural dependency graph.
 // See brain/AI/EAO_EXECUTION_PIPELINES.md #5 and brain/AI/EAO_REPORTING_TEMPLATES.md #10.
 //

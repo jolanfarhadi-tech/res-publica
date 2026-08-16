@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Project Health Pipeline.
 // See brain/AI/EAO_EXECUTION_PIPELINES.md #6 and brain/AI/EAO_REPORTING_TEMPLATES.md #2.
 //

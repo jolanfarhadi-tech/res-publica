@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Risk Analysis Pipeline.
 // See brain/AI/EAO_EXECUTION_PIPELINES.md #8.
 //

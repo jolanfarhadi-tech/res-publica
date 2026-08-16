@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Executable Roadmap Generation Pipeline.
 // See brain/AI/EAO_EXECUTION_PIPELINES.md #7 and brain/AI/EAO_REPORTING_TEMPLATES.md #8, #9, #12, #13.
 //

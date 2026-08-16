@@ -26,6 +26,8 @@ Production activation.
 | Incident-response ownership | Technical runbook exists; named commander, deputy, privacy and communications owners absent | Owner assignment required | Operational launch assurance |
 | Production administrator responsibility | No verified named operational responsibility | Open | Privileged administration |
 | Security logging/retention | Minimal request logging and incident evidence procedure exist; retention/recipients unapproved | Owner/legal approval required | Monitoring and incident evidence |
+| Software supply-chain enforcement | Exact Node runtime, immutable Action SHAs, read-only CI defaults, source identity, dependency review, CodeQL, secret-history scan and lockfile/install-script policy are implemented and locally verified | GitHub required-check and branch-protection evidence required | Provider-side merge enforcement |
+| Tier-0 control-plane ownership | Repository inventory and dependency-compromise playbook cover GitHub, Auth0, Neon, Vercel, secret store, authorization, audit and recovery boundaries | Named owners and provider configuration evidence required | Full control-plane operational assurance |
 | Browser security headers | CSP/HSTS/cross-origin policy implemented and verified at the Production edge; browser console and Vercel error-log checks are clean | Verified 2026-07-30 | — |
 | Distributed rate-limit store | Migration 0012 is applied in Production; PostgreSQL buckets protect auth login, membership creation, event registration, and all 15 Governance/Publishing writes without raw client addresses | Verified 2026-07-30 | — |
 | Production migration state | Protected EU Neon branch contains all migrations through 0018: 19 journal entries and 66 public tables | Verified 2026-08-10 | — |
