@@ -1,5 +1,31 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Release F Integrated Operations and EAO readiness, 2026-08-16
+
+The protected `/{locale}/operations` entry now composes Membership, Publishing,
+Academy, Fellowship and Civic Knowledge Graph workspaces without creating a
+universal administrator role. The server returns only operational-area links
+supported by an active, exact Civic grant at MFA assurance. Domain pages retain
+their own authorization checks and write semantics. The Academy aggregate read
+was tightened from any `academy.*` MFA grant to the dedicated exact
+`academy.operations.read:academy` grant, preventing course-scoped staff from
+receiving the full Academy operational projection.
+
+The EAO Release Readiness pipeline now consumes unresolved blocking rows from
+the canonical Security/Legal Gate Register during its existing dependency-map
+walk. Its recommendation is explicitly scoped to full-platform Production
+activation. The current repository therefore reports `No-Go` while 29 external,
+legal or capability-specific operational gates remain open; this does not
+misrepresent a bounded code-only deployment as either approved or forbidden.
+EAO execution remains read-only and advisory.
+
+Verification passes 7 focused files / 26 tests and the full serial suite at 99
+files / 413 tests. Lint, typecheck, structure, all nine EAO pipelines, Drizzle
+consistency, the fresh 23-migration/98-table main schema, isolated 1/6 research
+schema, 20-activity/98-table processing inventory, zero-vulnerability
+Production dependency audit, `git diff --check`, and a 166-page Production
+build pass. Production remains unchanged.
+
 ## Incremental update — Release E Public API and Public Knowledge Projection, 2026-08-16
 
 The implemented `public-api` module owns no database table and projects the

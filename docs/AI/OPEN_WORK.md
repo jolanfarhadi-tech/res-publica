@@ -1,5 +1,21 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-027 — Release F deployment and operational grant provisioning
+
+- **Implemented locally:** one exact-MFA Operations index for Membership,
+  Publishing, Academy, Fellowship and the Civic Knowledge Graph; dedicated
+  exact Academy aggregate-read authority; EAO full-platform readiness includes
+  the canonical operational gate register and cannot report a broad `Go` while
+  blocking gates remain open.
+- **Production status:** no migration is introduced. Release-F code is not
+  deployed by this slice; Production remains at 19 migrations / 66 tables.
+- **Operational follow-up:** provision only named operators with the narrow
+  grants needed for their domain and verify real Auth0 MFA before using private
+  operations. Existing Academy, Fellowship, graph, AI, research and legal
+  activation gates remain controlling.
+- **Boundary:** the integrated index grants no authority and does not bypass a
+  domain API's exact target, MFA, separation-of-duties, audit or feature gate.
+
 ### OPEN-026 — Public API deployment and deferred partner capabilities
 
 - **Implemented locally:** read-only V1 discovery and Content Graph entity/

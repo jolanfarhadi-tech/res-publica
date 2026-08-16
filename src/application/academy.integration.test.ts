@@ -25,10 +25,12 @@ import {
 } from "../persistence/module-schema";
 import {
   AcademyEnrollmentError,
+  AcademyOperationsAuthorizationError,
   AcademySeparationOfDutiesError,
   createAcademyCourse,
   decideAcademyEnrollmentApplication,
   enrollInAcademyCourse,
+  getAcademyOperationsOverview,
   issueAcademyCertificate,
   listPublishedAcademyCatalog,
   reviewAcademyAssessment,
@@ -236,6 +238,55 @@ describe("Academy application boundary", () => {
         now
       )).rejects.toBeInstanceOf(AuthorizationDeniedError);
       expect(await fixture.db.select().from(auditLog)).toHaveLength(beforeAudit.length);
+    } finally {
+      await fixture.client.close();
+      await rm(fixture.directory, { recursive: true, force: true });
+    }
+  }, 30_000);
+
+  it("requires the exact Academy operations-read grant for the aggregate overview", async () => {
+    const fixture = await database();
+    try {
+      await seedPeople(fixture.db);
+      const course = await createAcademyCourse(
+        fixture.db,
+        actor("editor", "academy.course.create", "academy", "mfa"),
+        courseInput(),
+        now
+      );
+      const beforeAudit = await fixture.db.select().from(auditLog);
+
+      await expect(
+        getAcademyOperationsOverview(
+          fixture.db,
+          actor("editor", "academy.course.edit", course.id, "mfa"),
+          now
+        )
+      ).rejects.toBeInstanceOf(AcademyOperationsAuthorizationError);
+      await expect(
+        getAcademyOperationsOverview(
+          fixture.db,
+          actor("editor", "academy.operations.read", null, "mfa"),
+          now
+        )
+      ).rejects.toBeInstanceOf(AcademyOperationsAuthorizationError);
+      await expect(
+        getAcademyOperationsOverview(
+          fixture.db,
+          actor("editor", "academy.operations.read", "academy", "verified"),
+          now
+        )
+      ).rejects.toBeInstanceOf(AcademyOperationsAuthorizationError);
+
+      const overview = await getAcademyOperationsOverview(
+        fixture.db,
+        actor("editor", "academy.operations.read", "academy", "mfa"),
+        now
+      );
+      expect(overview.courses).toEqual([
+        expect.objectContaining({ id: course.id }),
+      ]);
+      expect(await fixture.db.select().from(auditLog)).toEqual(beforeAudit);
     } finally {
       await fixture.client.close();
       await rm(fixture.directory, { recursive: true, force: true });

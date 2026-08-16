@@ -21,8 +21,9 @@ Replaces free-form category strings with a formal registry. Referenced by `EAO_C
 | `documentation-formatting-drift` | Heading-depth drift or non-backtick filename formatting | `dependency-map.mjs` | Documentation | Roadmap, Risk Analysis | warning |
 | `technical-debt` | Outstanding TODO markers | `project-health.mjs` | Technical Debt | Roadmap, Risk Analysis | warning |
 | `mvp-implementation-pending` | An MVP-critical specification's implementation status is unconfirmed | `project-health.mjs` (via `dependency-map.mjs`'s `mvpStatusFindings`) | Release | Roadmap, Risk Analysis, Release Readiness | critical |
+| `operational-activation-gate-open` | The canonical Security/Legal Gate Register contains an unresolved row that blocks at least one Production capability | `dependency-map.mjs` (via `project-health.mjs`) | Release | Roadmap, Risk Analysis, Release Readiness | critical |
 
-**Confirmed at Transition:** only 5 of the 8 categories are currently active against this repository's present state (`terminology-drift`, `broken-link`, and `unreferenced-core-document` are defined but not currently triggered). All 8 are registered here, since the registry describes what the model *can* produce, not only what a single snapshot happens to show.
+**Confirmed at Transition:** only 5 of the original 8 categories were active against that repository state (`terminology-drift`, `broken-link`, and `unreferenced-core-document` were defined but not triggered). The additive Release-F category records current operational activation gates without changing or removing an original category.
 
 ## Deprecation Strategy
 

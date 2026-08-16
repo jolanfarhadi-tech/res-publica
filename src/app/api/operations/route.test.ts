@@ -22,7 +22,11 @@ vi.mock("../../../application/operations-console", async (importOriginal) => {
     getOperationsOverview: async (...args: unknown[]) => {
       mocks.calls.push(args);
       if (mocks.error) throw mocks.error;
-      return { membershipApplications: [], publishingScopes: [] };
+      return {
+        operationalAreas: [],
+        membershipApplications: [],
+        publishingScopes: [],
+      };
     },
   };
 });

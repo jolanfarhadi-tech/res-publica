@@ -18,6 +18,11 @@ export type OperationsCopy = {
   errorText: string;
   assuranceLabel: string;
   exactAuthority: string;
+  areaNavigationTitle: string;
+  areaNavigationLede: string;
+  openArea: string;
+  areaLabels: Record<"membership" | "publishing" | "academy" | "fellowship" | "knowledge-graph", string>;
+  areaDescriptions: Record<"membership" | "publishing" | "academy" | "fellowship" | "knowledge-graph", string>;
   membershipTitle: string;
   membershipLede: string;
   membershipEmpty: string;
@@ -90,6 +95,23 @@ const de: OperationsCopy = {
   errorText: "Bitte laden Sie die Seite neu oder versuchen Sie es später erneut.",
   assuranceLabel: "Sicherheitsstufe",
   exactAuthority: "Exakt begrenzte Zuständigkeit",
+  areaNavigationTitle: "Zugewiesene Arbeitsbereiche",
+  areaNavigationLede: "Es werden nur Bereiche angezeigt, für die dieses Konto eine aktive, exakt begrenzte und MFA-geschützte Zuständigkeit besitzt.",
+  openArea: "Arbeitsbereich öffnen",
+  areaLabels: {
+    membership: "Mitgliedschaft",
+    publishing: "Publishing Authority",
+    academy: "Academy",
+    fellowship: "Fellowships",
+    "knowledge-graph": "Knowledge Graph",
+  },
+  areaDescriptions: {
+    membership: "Zugewiesene Mitgliedschaftsanträge prüfen.",
+    publishing: "Redaktionelle Arbeit innerhalb zugewiesener Publikationsbereiche.",
+    academy: "Kurse, Einschreibungsanträge und Assessments verwalten.",
+    fellowship: "Kandidaturen, Reviews und Fellowship-Status bearbeiten.",
+    "knowledge-graph": "Graph-Aufbauten und menschliche Kandidatenprüfung verwalten.",
+  },
   membershipTitle: "Mitgliedschaftsanträge",
   membershipLede: "Es erscheinen nur Anträge, für die diesem Konto eine aktive Entscheidungszuständigkeit zugewiesen wurde.",
   membershipEmpty: "Keine zugewiesenen Mitgliedschaftsanträge vorhanden.",
@@ -182,6 +204,23 @@ const en: OperationsCopy = {
   errorText: "Please reload the page or try again later.",
   assuranceLabel: "Security assurance",
   exactAuthority: "Exact bounded authority",
+  areaNavigationTitle: "Assigned workspaces",
+  areaNavigationLede: "Only areas covered by this account's active, exactly bounded and MFA-protected authority are shown.",
+  openArea: "Open workspace",
+  areaLabels: {
+    membership: "Membership",
+    publishing: "Publishing Authority",
+    academy: "Academy",
+    fellowship: "Fellowships",
+    "knowledge-graph": "Knowledge Graph",
+  },
+  areaDescriptions: {
+    membership: "Review assigned membership applications.",
+    publishing: "Carry out editorial work within assigned publication scopes.",
+    academy: "Manage courses, enrollment applications and assessments.",
+    fellowship: "Manage candidacies, reviews and Fellowship status.",
+    "knowledge-graph": "Manage graph builds and human candidate review.",
+  },
   membershipTitle: "Membership applications",
   membershipLede: "Only applications covered by an active decision assignment for this account are shown.",
   membershipEmpty: "No assigned membership applications.",
@@ -274,6 +313,23 @@ const fa: OperationsCopy = {
   errorText: "لطفاً صفحه را دوباره بارگذاری کنید یا بعداً تلاش کنید.",
   assuranceLabel: "سطح اطمینان امنیتی",
   exactAuthority: "مسئولیت دقیق و محدود",
+  areaNavigationTitle: "محیط‌های کاری واگذارشده",
+  areaNavigationLede: "فقط بخش‌هایی نمایش داده می‌شوند که این حساب برای آن‌ها اختیار فعال، دقیقاً محدود و محافظت‌شده با MFA دارد.",
+  openArea: "باز کردن محیط کاری",
+  areaLabels: {
+    membership: "عضویت",
+    publishing: "مرجع انتشار",
+    academy: "آکادمی",
+    fellowship: "همراهی‌ها",
+    "knowledge-graph": "گراف دانش",
+  },
+  areaDescriptions: {
+    membership: "بررسی درخواست‌های عضویت واگذارشده.",
+    publishing: "کار تحریریه در محدوده‌های انتشار واگذارشده.",
+    academy: "مدیریت دوره‌ها، درخواست‌های ثبت‌نام و ارزیابی‌ها.",
+    fellowship: "مدیریت نامزدی‌ها، بررسی‌ها و وضعیت همراهی.",
+    "knowledge-graph": "مدیریت ساخت گراف و بررسی انسانی نامزدها.",
+  },
   membershipTitle: "درخواست‌های عضویت",
   membershipLede: "فقط درخواست‌هایی نمایش داده می‌شوند که مسئولیت تصمیم‌گیری فعال آن‌ها به این حساب واگذار شده است.",
   membershipEmpty: "هیچ درخواست عضویت واگذارشده‌ای وجود ندارد.",

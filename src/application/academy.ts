@@ -1204,20 +1204,14 @@ export async function revokeAcademyCertificate(
 }
 
 export function canOperateAcademy(actor: AuthenticatedActor | null, now = new Date()) {
-  if (!actor) return false;
-  return actor.grants.some((grant) =>
-    grant.domain === "civic" &&
-    grant.capability.startsWith("academy.") &&
-    grant.assuranceRequired === "mfa" &&
-    isAuthorized(actor, {
-      domain: "civic",
-      capability: grant.capability,
-      target: grant.target ?? undefined,
-      requireExactTarget: grant.target !== null,
-      minimumAssurance: "mfa",
-      now,
-    })
-  );
+  return isAuthorized(actor, {
+    domain: "civic",
+    capability: "academy.operations.read",
+    target: ACADEMY_SCOPE,
+    requireExactTarget: true,
+    minimumAssurance: "mfa",
+    now,
+  });
 }
 
 export class AcademyValidationError extends Error {

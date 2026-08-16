@@ -18,6 +18,18 @@ import {
 } from "../persistence/module-schema";
 
 const MEMBERSHIP_DECISION_CAPABILITY = "membership.application.decide";
+const INTEGRATED_OPERATIONAL_CAPABILITIES = {
+  academy: { capability: "academy.operations.read", target: "academy" },
+  fellowship: { capability: "fellowship.operations.read", target: "fellowship" },
+  "knowledge-graph": {
+    capability: "knowledge-graph.operations.read",
+    target: "civic",
+  },
+} as const;
+export type OperationalArea =
+  | "membership"
+  | "publishing"
+  | keyof typeof INTEGRATED_OPERATIONAL_CAPABILITIES;
 const DECISION_ACTIONS = [
   "membership.application.approved",
   "membership.application.rejected",
@@ -47,7 +59,12 @@ function operationalGrants(actor: AuthenticatedActor, now: Date) {
       grant.target !== null &&
       isActive(grant, now) &&
       (grant.capability === MEMBERSHIP_DECISION_CAPABILITY ||
-        editorialCapabilities.has(grant.capability))
+        editorialCapabilities.has(grant.capability) ||
+        Object.values(INTEGRATED_OPERATIONAL_CAPABILITIES).some(
+          (requirement) =>
+            grant.capability === requirement.capability &&
+            grant.target === requirement.target
+        ))
   );
 }
 
@@ -160,6 +177,29 @@ export async function getOperationsOverview(
     }
   }
 
+  const operationalAreas = new Set<OperationalArea>();
+  if (membershipGrantByTarget.size) operationalAreas.add("membership");
+  if (publishingByScope.size) operationalAreas.add("publishing");
+  for (const [area, requirement] of Object.entries(
+    INTEGRATED_OPERATIONAL_CAPABILITIES
+  ) as Array<
+    [keyof typeof INTEGRATED_OPERATIONAL_CAPABILITIES, {
+      capability: string;
+      target: string;
+    }]
+  >) {
+    if (
+      grants.some(
+        (grant) =>
+          grant.capability === requirement.capability &&
+          grant.target === requirement.target &&
+          isGrantAuthorized(resolvedActor, grant, now)
+      )
+    ) {
+      operationalAreas.add(area);
+    }
+  }
+
   const applicationIds = [...membershipGrantByTarget.keys()];
   const applications = applicationIds.length
     ? await db
@@ -184,6 +224,15 @@ export async function getOperationsOverview(
       assurance: resolvedActor.assurance,
       authenticatedAt: resolvedActor.authenticatedAt,
     },
+    operationalAreas: [
+      "membership",
+      "publishing",
+      "academy",
+      "fellowship",
+      "knowledge-graph",
+    ].filter((area): area is OperationalArea =>
+      operationalAreas.has(area as OperationalArea)
+    ),
     membershipApplications: applications
       .filter((application) => application.personId !== resolvedActor.personId)
       .map((application) => {

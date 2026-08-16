@@ -17,7 +17,7 @@ Formalizes the `riskDomain` concept used by the Canonical Action Model and consu
 | `Documentation` | Findings about document quality/formatting/references | `broken-reference`, `broken-link`, `documentation-formatting-drift` | The largest domain by category count; distinct from `Architecture` (structural/foundational concerns) | Additions require review |
 | `Architecture` | Findings touching the dependency graph's structural layer | `unreferenced-core-document` | Overlaps intentionally with `Governance` (see above) | Additions require review |
 | `Technical Debt` | Non-blocking maintenance findings | `technical-debt` | Independent | Additions require review |
-| `Release` | Findings specifically relevant to release readiness | `mvp-implementation-pending` | Independent today; conceptually adjacent to `Architecture` (MVP specs are architectural artifacts) but kept distinct since it answers a different question ("is this ready to ship" vs. "is this structurally sound") | Additions require review |
+| `Release` | Findings specifically relevant to release readiness | `mvp-implementation-pending`, `operational-activation-gate-open` | Independent today; conceptually adjacent to `Architecture` (MVP specs are architectural artifacts) but kept distinct since it answers a different question ("is this ready to ship" vs. "is this structurally sound") | Additions require review |
 
 **Disclosed, not fabricated:** a `Dependency` domain was named as an illustrative example during Generation 2 planning but has never had a real category map to it - it is intentionally absent from this registry rather than included to complete a hypothetical list.
 

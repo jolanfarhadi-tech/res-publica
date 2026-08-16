@@ -63,13 +63,15 @@ export function computeProjectHealth(root = process.cwd()) {
   const genuineBrokenRefs = deps.brokenReferences.filter((b) => !b.note);
   const scopeArtifactRefs = deps.brokenReferences.filter((b) => b.note);
 
-  // Release Readiness signal: derived entirely from deps.mvpStatusFindings
-  // (extracted at the source in dependency-map.mjs, not re-scanned here).
+  // Release Readiness signals are extracted at the source in
+  // dependency-map.mjs, not re-scanned here: implementation status from MVP
+  // sections and operational approval from the canonical gate register.
   // "Blocking" classified by keyword, matching the actual convention already
   // used across MVP Status sections ("MVP CRITICAL" vs "NON-BLOCKING" /
   // "Non-blocking ...") - disclosed heuristic, not free-form guessing.
   const mvpBlocking = deps.mvpStatusFindings.filter((f) => /critical/i.test(f.blockingStatus));
   const mvpNonBlocking = deps.mvpStatusFindings.filter((f) => !/critical/i.test(f.blockingStatus));
+  const operationalGateFindings = deps.operationalGateFindings ?? [];
 
   const totalCycles =
     deps.cyclesByKind.documentation.length +
@@ -169,6 +171,9 @@ export function computeProjectHealth(root = process.cwd()) {
       nonBlockingCount: mvpNonBlocking.length,
       blocking: mvpBlocking,
       nonBlocking: mvpNonBlocking,
+      operationalActivationGateCount: operationalGateFindings.length,
+      operationalActivationGates: operationalGateFindings,
+      note: "MVP specification status and the canonical Security/Legal Gate Register are separate release signals. Open operational gates block full platform activation, not necessarily a bounded code-only deployment.",
     },
     criticalIssues,
     warnings,
@@ -184,11 +189,11 @@ export function computeProjectHealth(root = process.cwd()) {
     circularDependencySummary: deps.cyclesByKind,
     orphanDocumentsSummary: deps.orphans,
     unreferencedCoreDocuments: deps.unreferencedCoreDocuments,
-    priorityActions: buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos, mvpBlocking }),
+    priorityActions: buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos, mvpBlocking, operationalGateFindings }),
   };
 }
 
-function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos, mvpBlocking }) {
+function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, governanceOrphans, governanceBrokenRefs, todos, mvpBlocking, operationalGateFindings }) {
   // severity/governanceSensitive are stated explicitly here (matching exactly
   // which criticalIssues/warnings entry each action corresponds to above)
   // rather than left for a downstream consumer (e.g. the Roadmap pipeline)
@@ -356,6 +361,21 @@ function buildPriorityActions({ terminology, genuineBrokenRefs, links, deps, gov
       evidence: mvpBlocking,
     });
   }
+  if (operationalGateFindings.length) {
+    pushAction({
+      priority: 9,
+      action: "Resolve or explicitly scope open Production activation gates",
+      severity: "critical",
+      category: CATEGORIES.OPERATIONAL_ACTIVATION_GATE_OPEN,
+      riskDomain: riskDomainForCategory(CATEGORIES.OPERATIONAL_ACTIVATION_GATE_OPEN),
+      sourcePipeline: "dependency-analysis",
+      affectsArchitecture: false,
+      governanceSensitive: true,
+      autoFixable: false,
+      humanApprovalRequired: true,
+      evidence: operationalGateFindings,
+    });
+  }
   return actions.sort((a, b) => a.priority - b.priority);
 }
 
@@ -404,6 +424,10 @@ export function renderProjectHealthMarkdown(h) {
   lines.push("### Technical Debt Indicators");
   lines.push("");
   lines.push(`TODO count: ${h.technicalDebtIndicators.todoCount}. _${h.technicalDebtIndicators.note}_`);
+  lines.push("");
+  lines.push("### Operational Activation Gates");
+  lines.push("");
+  lines.push(`Open gates that block at least one Production capability: ${h.releaseReadinessHealth.operationalActivationGateCount}. _${h.releaseReadinessHealth.note}_`);
   lines.push("");
   lines.push("### Documentation Coverage");
   lines.push("");

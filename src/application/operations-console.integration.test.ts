@@ -229,6 +229,7 @@ describe("bounded Operations Console projection", () => {
       expect(overview.publishingScopes).toEqual([
         { scope: "website", roles: ["reviewer", "translator"] },
       ]);
+      expect(overview.operationalAreas).toEqual(["membership", "publishing"]);
       expect(JSON.stringify(overview)).not.toContain("application-2");
       expect(JSON.stringify(overview)).not.toContain("research-preference");
       expect(JSON.stringify(overview)).not.toContain("ada@example.org");
@@ -251,7 +252,47 @@ describe("bounded Operations Console projection", () => {
         now
       )
     ).toBe(false);
+    expect(
+      canAccessOperations(
+        actor("academy-operator", "mfa", [
+          grant("academy-operator", "academy.operations.read", "academy"),
+        ]),
+        now
+      )
+    ).toBe(true);
+    expect(
+      canAccessOperations(
+        actor("academy-editor", "mfa", [
+          grant("academy-editor", "academy.course.edit", "course-1"),
+        ]),
+        now
+      )
+    ).toBe(false);
   });
+
+  it("exposes only explicitly authorized integrated operational areas", async () => {
+    const { client, db } = await database();
+    try {
+      const operator = actor("operator", "mfa", [
+        grant("operator", "academy.operations.read", "academy"),
+        grant("operator", "fellowship.operations.read", "fellowship"),
+        grant("operator", "knowledge-graph.operations.read", "civic"),
+        grant("operator", "knowledge-graph.operations.read", "governance"),
+      ]);
+
+      const overview = await getOperationsOverview(db, operator, now);
+
+      expect(overview.operationalAreas).toEqual([
+        "academy",
+        "fellowship",
+        "knowledge-graph",
+      ]);
+      expect(overview.membershipApplications).toEqual([]);
+      expect(overview.publishingScopes).toEqual([]);
+    } finally {
+      await client.close();
+    }
+  }, 30_000);
 
   it("reveals applicant details, versioned acknowledgements and decision evidence only after exact MFA authority", async () => {
     const { client, db } = await database();

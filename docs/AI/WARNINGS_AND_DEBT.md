@@ -1,5 +1,20 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-025 — Integrated Operations is navigation, not universal authority
+
+- **Evidence:** Release F derives its area list solely from active exact Civic
+  grants at MFA assurance; each linked domain API independently reauthorizes
+  the session actor. Academy aggregate reads require the dedicated exact
+  `academy.operations.read:academy` grant.
+- **Impact:** treating the Operations index as an administrator role, accepting
+  wildcard/null targets, or authorizing a domain from a different domain's
+  grant would expose private operational records.
+- **Severity:** **High / privileged-access and data-minimization boundary**.
+- **Safe handling:** retain server-derived area projection, exact targets, MFA,
+  domain reauthorization and existing separation-of-duties/audit rules. EAO
+  `No-Go` refers to full-platform activation and must not be relabelled as a
+  general Production approval.
+
 ### WARN-024 — Public projection is not partner-platform activation
 
 - **Evidence:** Release E adds only anonymous, read-only grounded Content Graph

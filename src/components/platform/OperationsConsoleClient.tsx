@@ -413,6 +413,13 @@ export function OperationsConsoleClient({ locale }: { locale: Locale }) {
   if (state.kind === "error") return <StatePanel title={copy.errorTitle} text={copy.errorText} />;
 
   const { overview } = state;
+  const areaHrefs = {
+    membership: `/${locale}/operations#operations-membership-title`,
+    publishing: `/${locale}/operations#operations-publishing-title`,
+    academy: `/${locale}/operations/academy`,
+    fellowship: `/${locale}/operations/fellowship`,
+    "knowledge-graph": `/${locale}/operations/knowledge-graph`,
+  } as const;
   return (
     <div className="space-y-10">
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5">
@@ -422,6 +429,22 @@ export function OperationsConsoleClient({ locale }: { locale: Locale }) {
         </div>
         <p className="text-sm text-muted">{formatDate(overview.account.authenticatedAt, locale)}</p>
       </div>
+
+      <nav aria-labelledby="operations-area-navigation">
+        <h2 id="operations-area-navigation" className="text-3xl">{copy.areaNavigationTitle}</h2>
+        <p className="mt-3 max-w-3xl leading-relaxed text-muted">{copy.areaNavigationLede}</p>
+        <ul className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {overview.operationalAreas.map((area) => (
+            <li key={area} className="rounded-2xl border border-border bg-surface p-5">
+              <h3 className="text-xl">{copy.areaLabels[area]}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{copy.areaDescriptions[area]}</p>
+              <div className="mt-5">
+                <Button href={areaHrefs[area]} variant="secondary">{copy.openArea}</Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       <section aria-labelledby="operations-membership-title">
         <h2 id="operations-membership-title" className="text-3xl">{copy.membershipTitle}</h2>

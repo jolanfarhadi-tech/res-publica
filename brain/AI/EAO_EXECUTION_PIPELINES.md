@@ -80,11 +80,11 @@ Defines 9 complete, end-to-end pipelines, each a concrete composition of existin
 
 ### 9. Release Readiness Pipeline
 
-- Inputs: MVP Status sections across methodology documents
+- Inputs: MVP Status sections across methodology documents and unresolved rows in the canonical `docs/AI/SECURITY_LEGAL_GATE_REGISTER.md`
 - Agents: Release Advisor, Chief Delivery Officer
 - Skills: Release Readiness, Change Impact Review
 - Plugins: GitHub (Phase 2, not installed - degrades to gh CLI via Bash)
-- Outputs: a Release Readiness section within the Project Health Report
+- Outputs: a scope-labelled full-platform Production-activation recommendation and a Release Readiness section within the Project Health Report
 - Human approval points: mandatory before any release is declared ready; Git operations (tagging, releasing) remain human-executed always
 
 ### Relationship to Existing Documents

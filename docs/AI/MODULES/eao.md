@@ -1,5 +1,25 @@
 # Module: Executive AI Office (EAO)
 
+## Incremental Release-F readiness correction — 2026-08-16
+
+`dependency-map.mjs` now extracts unresolved blocking rows from the canonical
+`docs/AI/SECURITY_LEGAL_GATE_REGISTER.md` during its existing Markdown walk.
+The additive `operational-activation-gate-open` category is owned by Dependency
+Analysis and bound to the existing Release risk domain. Project Health exposes
+the evidence separately from MVP implementation status; Release Readiness adds
+it as a blocking gate and labels its scope
+`full-platform-production-activation`.
+
+The current report therefore returns `No-Go` with 29 underlying gate records
+instead of allowing five documentation-oriented gates to imply complete
+platform readiness. It explicitly states that this does not decide whether a
+narrower code-only deployment may proceed. Pipelines remain read-only,
+deterministic and advisory; no approval, provider, repository write or runtime
+mutation was added. Focused EAO and Operations verification passes as part of
+the 7-file / 26-test Release-F set. All nine EAO CLI pipelines and the full
+99-file / 413-test repository suite pass; the readiness output reports 29
+underlying operational-gate evidence records rather than one aggregate action.
+
 ## Purpose
 
 Repository-wide, read-only coordination/reporting tooling — health checks, documentation-intelligence pipelines, and a governance-registered "Chief Systems Officer" agent role that advises but never modifies files, commits, or approves architecture. Evidence: `architecture/adr/ADR-024-executive-ai-office.md`; this session's own system context, which describes the `program-orchestrator` agent as "Read Only + Suggest Only — never modifies files, never commits, never approves architecture."

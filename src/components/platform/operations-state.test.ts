@@ -5,6 +5,7 @@ describe("Operations Console response mapping", () => {
   it("maps a bounded private overview", async () => {
     const overview = {
       account: { assurance: "mfa", authenticatedAt: "2026-08-10T10:00:00Z" },
+      operationalAreas: ["academy"],
       membershipApplications: [],
       publishingScopes: [],
     };

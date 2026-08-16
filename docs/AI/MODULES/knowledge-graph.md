@@ -1,5 +1,13 @@
 # Module: Knowledge Graph
 
+## Incremental Release-F integration — 2026-08-16
+
+The central Operations index advertises the Knowledge Graph workspace only for
+an active exact `knowledge-graph.operations.read:civic` grant at MFA assurance.
+The domain API independently reauthorizes the session actor; Governance-domain
+authority does not unlock the Civic workspace and candidate/reviewer
+separation remains unchanged.
+
 ## Incremental public V1 projection — 2026-08-16
 
 Release E consumes `getPublicKnowledgeGraph` through a separate explicit DTO

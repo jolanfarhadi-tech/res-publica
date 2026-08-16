@@ -22,6 +22,7 @@ export const CATEGORIES = Object.freeze({
   DOCUMENTATION_FORMATTING_DRIFT: "documentation-formatting-drift",
   TECHNICAL_DEBT: "technical-debt",
   MVP_IMPLEMENTATION_PENDING: "mvp-implementation-pending",
+  OPERATIONAL_ACTIVATION_GATE_OPEN: "operational-activation-gate-open",
 });
 
 // category id -> bound risk domain, per brain/AI/EAO_RISK_DOMAIN_REGISTRY.md.
@@ -37,6 +38,7 @@ const CATEGORY_RISK_DOMAIN = Object.freeze({
   [CATEGORIES.DOCUMENTATION_FORMATTING_DRIFT]: "Documentation",
   [CATEGORIES.TECHNICAL_DEBT]: "Technical Debt",
   [CATEGORIES.MVP_IMPLEMENTATION_PENDING]: "Release",
+  [CATEGORIES.OPERATIONAL_ACTIVATION_GATE_OPEN]: "Release",
 });
 
 export function riskDomainForCategory(categoryId) {

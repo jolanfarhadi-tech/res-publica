@@ -1,5 +1,16 @@
 # Module: Academy
 
+## Incremental Release-F correction — 2026-08-16
+
+The aggregate staff overview now requires the dedicated exact Civic
+`academy.operations.read` capability targeted to `academy` at MFA assurance.
+A course-scoped Academy edit/review grant no longer unlocks all courses,
+enrollment applications and assessment submissions. The central Operations
+index advertises Academy only when this exact grant is active; the Academy API
+still performs its own independent authorization. Focused denial/allow and
+no-audit-mutation coverage passes within the Release-F 7-file / 26-test set;
+the full repository suite passes 99 files / 413 tests.
+
 ## Purpose
 
 The Civic-domain learning platform for governed programmes, courses,

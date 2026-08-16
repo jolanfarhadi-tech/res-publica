@@ -55,6 +55,24 @@ function walkScripts(dir, results = []) {
   return results;
 }
 
+export function parseSecurityLegalGateRegister(content, file = "docs/AI/SECURITY_LEGAL_GATE_REGISTER.md") {
+  const findings = [];
+  for (const line of content.split(/\r?\n/)) {
+    if (!line.trim().startsWith("|")) continue;
+    const cells = line.split("|").slice(1, -1).map((cell) => cell.trim());
+    if (
+      cells.length !== 4 ||
+      cells[0] === "Gate" ||
+      cells.every((cell) => /^-+$/.test(cell.replaceAll(":", "")))
+    ) continue;
+    const [gate, , state, blocks] = cells;
+    const verified = /^Verified(?:\s|$)/i.test(state);
+    const blocksNothing = blocks === "—" || blocks === "-" || /^none$/i.test(blocks);
+    if (!verified && !blocksNothing) findings.push({ file, gate, state, blocks });
+  }
+  return findings;
+}
+
 export function computeDependencyGraph(root = process.cwd()) {
   const coreDocs = CORE_DOCS.filter((p) => fs.existsSync(path.join(root, p)));
   const mdFiles = findMarkdownFiles(root);
@@ -83,11 +101,17 @@ export function computeDependencyGraph(root = process.cwd()) {
   const brokenRefs = [];
   const plainFormattingDrift = [];
   const mvpStatusFindings = []; // { file, blockingStatus, implementationPriority, rawText } - extracted from "## MVP Status" during the same file walk, not a second scan
+  const operationalGateFindings = []; // open rows from the canonical Security/Legal Gate Register, extracted during this same walk
   const danglingAdrReferences = []; // { file, context, adrNumber } - ADR-### mentioned in text with no matching file under architecture/adr/
 
   for (const file of mdFiles) {
     const base = path.basename(file);
     const content = fs.readFileSync(file, "utf8");
+    const relativeFile = path.relative(root, file).replaceAll("\\", "/");
+
+    if (relativeFile === "docs/AI/SECURITY_LEGAL_GATE_REGISTER.md") {
+      operationalGateFindings.push(...parseSecurityLegalGateRegister(content, relativeFile));
+    }
 
     const mvpStatusText = extractSection(content, "MVP Status", { exact: false });
     if (mvpStatusText) {
@@ -233,6 +257,7 @@ export function computeDependencyGraph(root = process.cwd()) {
     optedInCount: optedIn.length,
     danglingAdrReferences,
     mvpStatusFindings,
+    operationalGateFindings,
   };
 }
 
@@ -251,6 +276,7 @@ export function renderDependencyGraphJson(result) {
       brokenReferences: result.brokenReferences,
       unreferencedCoreDocuments: result.unreferencedCoreDocuments,
       danglingAdrReferences: result.danglingAdrReferences,
+      operationalGateFindings: result.operationalGateFindings,
     },
     null,
     2
@@ -275,7 +301,7 @@ export function renderDependencyGraphDot(result) {
 }
 
 export function renderDependencyGraphMarkdown(result) {
-  const { nodes, edges, reverseAdjacency, cyclesByKind, orphans, brokenReferences, unreferencedCoreDocuments, plainFormattingDrift, headingDrift, generatedCount, danglingAdrReferences } = result;
+  const { nodes, edges, reverseAdjacency, cyclesByKind, orphans, brokenReferences, unreferencedCoreDocuments, plainFormattingDrift, headingDrift, generatedCount, danglingAdrReferences, operationalGateFindings } = result;
   const lines = [];
   lines.push("## Dependency Map");
   lines.push("");
@@ -358,6 +384,15 @@ export function renderDependencyGraphMarkdown(result) {
     "_ADR numbers mentioned in text with no matching file under architecture/adr/ - previously " +
       "silently dropped; now surfaced, since a mention of a non-existent ADR is itself a real " +
       "architectural signal (typo, or a decision that was referenced as if made but never recorded)._"
+  );
+  lines.push("");
+
+  lines.push(`### Open Operational Activation Gates — ${operationalGateFindings.length}`);
+  lines.push("");
+  lines.push(
+    operationalGateFindings.length
+      ? operationalGateFindings.map((finding) => `- ${finding.gate}: ${finding.state} — blocks ${finding.blocks}`).join("\n")
+      : "- none"
   );
   lines.push("");
   lines.push(

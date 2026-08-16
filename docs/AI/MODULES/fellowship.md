@@ -1,5 +1,12 @@
 # Module: Fellowship
 
+## Incremental Release-F integration — 2026-08-16
+
+The central Operations index advertises the Fellowship workspace only for an
+active exact `fellowship.operations.read:fellowship` grant at MFA assurance.
+The Fellowship API remains independently protected and no review, decision,
+conflict or activation boundary changed.
+
 ## Purpose
 
 The Civic-domain system for human-gated, non-gamified recognition of bounded
