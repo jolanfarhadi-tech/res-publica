@@ -52,7 +52,7 @@ secret or build artifact not traceable to the selected source commit.
 `npm run ops:recovery-drill:local` creates a fully migrated isolated PGlite
 source, writes synthetic revoked access and audit state, produces an in-memory
 compressed backup, restores it into a second isolated directory, validates the
-24-migration/98-table identity and security state, then removes both temporary
+25-migration/102-table identity and security state, then removes both temporary
 directories. It never connects to Production and processes no real person.
 
 The provider drill remains `npm run ops:restore-drill`. It requires a dedicated

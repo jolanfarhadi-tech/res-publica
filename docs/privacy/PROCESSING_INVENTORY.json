@@ -192,6 +192,23 @@
       "decisionGates": ["security-log retention and recipients", "incident hold procedure"]
     },
     {
+      "id": "security-incident-attribution",
+      "operationalStatus": "implemented-provider-enrichment-disabled",
+      "dataSubjects": ["request clients", "authenticated account holders", "security operators"],
+      "dataCategories": ["daily rotating keyed technical-source/account/session/API-credential handles", "source port where available", "query-free route sequence", "coarse User-Agent family", "protocol/TLS labels", "allowlisted techniques and affected assets", "evidence hashes", "evidence-bounded attribution claims and incident correlations"],
+      "purposeEvidence": "Investigate serious activity against Res Publica-controlled systems without unsupported real-world identity attribution.",
+      "systems": ["Vercel runtime", "Neon PostgreSQL", "protected Security Operations workspace"],
+      "stores": ["postgres:security_incidents", "postgres:security_observations", "postgres:security_attribution_claims", "postgres:security_incident_correlations"],
+      "accessBoundary": "Exact Governance capability, exact target, MFA/recent MFA, separation of duties, distributed rate limit and append-only evidence triggers.",
+      "sourceEvidence": ["src/modules/security-operations/attribution.ts", "src/application/security-attribution.ts", "docs/security/TECHNICAL_ATTRIBUTION_MODEL.md"],
+      "externalDependencies": ["No enrichment provider active; Vercel and Auth0 exports require separately approved access and retention"],
+      "realDataPermitted": false,
+      "legalBasis": null,
+      "retentionPeriod": null,
+      "erasureRule": null,
+      "decisionGates": ["security incident processing purpose/legal basis", "retention and legal hold", "named Security Operations owners", "provider security-event export", "passive enrichment provider/DPA if used"]
+    },
+    {
       "id": "canonical-audit",
       "operationalStatus": "active",
       "dataSubjects": ["participants", "institutional actors"],

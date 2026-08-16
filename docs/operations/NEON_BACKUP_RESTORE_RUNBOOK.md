@@ -58,8 +58,8 @@ The completed 2026-08-10 drill is recorded in
 migrations and 66 tables. This evidence does not approve RPO/RTO.
 
 The repeatable local Phase-E drill is separately available as
-`npm run ops:recovery-drill:local`. It validates the current 24-migration,
-98-table repository state with synthetic revoked-access and audit fixtures. It
+`npm run ops:recovery-drill:local`. It validates the current 25-migration,
+102-table repository state with synthetic revoked-access and audit fixtures. It
 does not replace or overstate the historical Neon provider evidence.
 
 ## Production recovery decision

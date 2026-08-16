@@ -8,6 +8,7 @@ const protectedReads = [
   "src/app/api/operations/route.ts",
   "src/app/api/publishing/workspace/route.ts",
   "src/app/api/academy/certificates/[verificationId]/route.ts",
+  "src/app/api/operations/security/route.ts",
 ];
 
 describe("application-layer resource exhaustion boundaries", () => {
@@ -30,6 +31,7 @@ describe("application-layer resource exhaustion boundaries", () => {
       "FELLOWSHIP_PRIVILEGED_WRITE_RATE_LIMIT",
       "KNOWLEDGE_GRAPH_PRIVILEGED_WRITE_RATE_LIMIT",
       "AI_RAG_QUERY_RATE_LIMIT",
+      "SECURITY_OPERATIONS_WRITE_RATE_LIMIT",
     ]) {
       const start = source.indexOf(`export const ${policy}`);
       expect(start).toBeGreaterThanOrEqual(0);

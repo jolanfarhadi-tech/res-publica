@@ -41,6 +41,11 @@ of a signal, not proof of root cause.
    enforcement without weakening authentication.
 6. Compare the failing behavior with the last verified release.
 
+For technical attribution, use `TECHNICAL_ATTRIBUTION_RUNBOOK.md`. Preserve the
+strict A–D boundary, explicit contradictory evidence and alternative
+explanations. A source address, authenticated account or behavioral cluster is
+not a real-world identity and never authorizes active scanning or hack-back.
+
 ## Recovery and closure
 
 Recovery requires smoke tests for anonymous routes, authentication, the

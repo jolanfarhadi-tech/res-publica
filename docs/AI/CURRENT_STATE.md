@@ -1,5 +1,35 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Mandatory hardening Phase F: technical attribution, 2026-08-16
+
+The Security Operations module now records privacy-minimized technical
+incidents, immutable observations, review claims and cross-incident
+correlations without attempting real-world identity attribution. Collection
+is limited to Levels A–D. Source, authentication, session and API identifiers
+are HMAC-derived; service correlation scope rotates daily; routes, user agents
+and protocol metadata are reduced before persistence. Claims retain observed
+evidence, explicit inference, contradictions, alternative explanations,
+confidence and provenance. Correlation outcomes are bounded to likely related,
+possibly related, insufficient evidence or not related and never assert that
+two actors are the same person.
+
+Governance-scoped Security Operations reads and writes preserve exact
+capability targets, recent MFA, separation of duties, shared PostgreSQL rate
+limiting, atomic canonical audit evidence and append-only database controls.
+The DE/EN/FA Operations workspace exposes only the protected minimized view;
+raw identifiers and operator person IDs are not returned. No hack-back,
+attacker scanning, arbitrary execution, Production configuration or real-data
+activation is included.
+
+Verification passes 7 focused files / 31 tests and the full serial suite at
+112 files / 462 tests. Lint, typecheck, structure, secret and supply-chain
+checks, the 21-activity/102-table processing inventory, zero-vulnerability
+Production dependency audit, Drizzle consistency, fresh 25/102 main and 1/6
+research schemas, all nine EAO pipelines, the 170-page Production build with
+canonical site URL and `git diff --check` pass. EAO full-platform readiness
+remains correctly No-Go because 36 external activation gates remain open;
+Production is unchanged.
+
 ## Incremental update — Mandatory hardening Phase E: verified clean recovery, 2026-08-16
 
 The current 24-migration/98-table main schema now has a repeatable, real

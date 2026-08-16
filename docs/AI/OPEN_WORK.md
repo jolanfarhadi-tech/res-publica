@@ -1,11 +1,28 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-033 — Mandatory hardening Phase F operational attribution evidence
+- **Implemented in repository:** Governance-owned Security Operations module;
+  append-only incident observations, A–D attribution claims and temporal
+  correlations; daily rotating HMAC handles instead of persisted raw network,
+  Auth0, session or API-credential identifiers; query-free routes and coarse
+  User-Agent; exact MFA/recent-MFA authority, separation of duties, canonical
+  audit, distributed rate limits, protected API and DE/EN/FA read console.
+- **External/legal remainder:** approve incident-processing purpose/legal
+  basis, retention/legal hold and access roles; appoint Security Operations and
+  privacy owners; provision the correlation secret and exact grants; authorize
+  Production migration 0024. Any Auth0/Vercel export or passive ASN/provider/
+  VPN/Tor/region/rDNS/reputation enrichment requires approved source access,
+  DPA/transfer review and source/retention evidence.
+- **Safety boundary:** Level E real-world identity, automated person claims,
+  active source scanning and hack-back are unavailable. Repository tests do not
+  prove provider telemetry, operator readiness or Production migration.
+
 ### OPEN-032 — Mandatory hardening Phase E provider recovery and owner objectives
 - **Implemented in repository:** repeatable current-schema synthetic
   backup→restore; exact migration/table integrity; revoked-access and audit
   preservation checks; read-only Neon verifier without mutable remote CLI;
   clean-recovery, backup-independence and credential-rotation procedures.
-- **External evidence still required:** run the current 24/98 verifier against
+- **External evidence still required:** run the current 25/102 verifier against
   an authorized isolated Neon recovery branch; approve and evidence RPO/RTO,
   named incident/recovery owners, independent backup and control-plane access,
   configuration/Auth0/log recovery, credential custodians and dual-control

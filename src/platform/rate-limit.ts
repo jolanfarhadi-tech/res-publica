@@ -174,6 +174,19 @@ export const OPERATIONS_READ_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 15 * 60 * 1000,
 };
 
+export const SECURITY_OPERATIONS_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "security.operations-read",
+  limit: 60,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const SECURITY_OPERATIONS_WRITE_RATE_LIMIT: RateLimitPolicy = {
+  scope: "security.operations-write",
+  limit: 30,
+  windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 128 * 1024,
+};
+
 export const PUBLISHING_WORKSPACE_READ_RATE_LIMIT: RateLimitPolicy = {
   scope: "publishing.workspace.read",
   limit: 60,

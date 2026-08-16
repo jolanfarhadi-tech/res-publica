@@ -9,6 +9,8 @@ export const PRIVILEGED_REASON_CODES = [
   "fellowship-status-change",
   "credential-issuance",
   "incident-containment",
+  "security-incident-recording",
+  "security-attribution-review",
 ] as const;
 
 export type PrivilegedReasonCode = (typeof PRIVILEGED_REASON_CODES)[number];

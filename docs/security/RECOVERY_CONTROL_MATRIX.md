@@ -17,7 +17,7 @@ commitments or evidence of current service levels.
 
 | Asset | Recovery source | Repository evidence | Backup independence / open boundary |
 |---|---|---|---|
-| Main PostgreSQL data | Neon history/snapshot restored to an isolated branch | 2026-08-10 provider drill at 19 migrations/66 tables; current synthetic drill at 24/98 | provider retention and deletion authority share the Neon control plane; independent owner/access evidence required |
+| Main PostgreSQL data | Neon history/snapshot restored to an isolated branch | 2026-08-10 provider drill at 19 migrations/66 tables; current synthetic drill at 25/102 | provider retention and deletion authority share the Neon control plane; independent owner/access evidence required |
 | Anonymous research verifier | separate migration chain and gated database URL | fresh isolated check applies 1 migration/6 tables | real provider backup is not activated while the real-data gate is closed |
 | Application source | private Git repository and immutable commit | CI source-SHA and supply-chain checks | branch protection, recovery owner and independent provider access evidence required |
 | Deployment/configuration | Vercel project plus documented environment names | build, health and project-boundary checks | secret values are not in Git; independent inventory/export and restore procedure require provider evidence |

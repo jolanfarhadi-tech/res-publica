@@ -205,6 +205,31 @@ business mutation.
 
 ---
 
+## D-22: Technical attribution uses rotating pseudonyms and cannot assert identity
+
+**Decision:** Security Operations stores daily rotating HMAC handles for raw
+technical source, authentication subject, session and API-credential inputs;
+persists append-only A–D evidence/claims/correlations; and structurally rejects
+Level E real-world identity. Query strings and full User-Agent values are not
+stored. Provider enrichment is absent until separately approved.
+**Rationale:** incident correlation needs bounded technical continuity, but a
+permanent identifier would enable unnecessary cross-incident linkage and raw
+identifiers would enlarge breach impact. A daily scope supports short-window
+defensive comparison while preserving the owner's rule that technical evidence
+must never silently become personal attribution.
+**Evidence:** `src/modules/security-operations/attribution.ts`;
+`src/application/security-attribution.ts`; migration 0024; focused adversarial
+and PGlite integration tests; `docs/security/TECHNICAL_ATTRIBUTION_MODEL.md`.
+**Related commit:** the atomic Mandatory hardening Phase F commit containing
+this entry.
+**Related ADR:** ADR-027 exact authorization and MFA; ADR-029 canonical atomic
+audit. No ADR is changed or created by this implementation decision.
+**Rejected alternatives:** raw-IP/account/session persistence; a permanent
+cross-incident identifier; numerical confidence without a validated model;
+automatic Level E attribution; active source scanning or hack-back.
+
+---
+
 ## Decisions with rejected alternatives not otherwise itemized above
 
 **Verified**, `docs/source/DECISION_LOG.md` (read in full), additional items not already covered by D-01–D-16:

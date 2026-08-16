@@ -1,7 +1,20 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-031 — Technical attribution is bounded evidence, not identity proof
+- **Evidence:** Phase F persists only daily rotating keyed technical handles,
+  query-free routes, coarse client traits, append-only observations and
+  structured A–D claims. Level E is rejected by domain and HTTP schemas. No
+  external network-intelligence or provider security-event feed is active.
+- **Impact:** treating a source handle, account, route pattern or correlation as
+  a person—or describing repository code as active provider attribution—would
+  create a serious privacy, due-process and operational overclaim.
+- **Severity:** **High / privacy, security-evidence and attribution boundary**.
+- **Safe handling:** retain OPEN-033 gates, explicit contradictions and
+  alternatives; require independent lawful evidence and human governance for
+  any real-world identity process; never activate scanning or hack-back.
+
 ### WARN-030 — Current local recovery proof is not current provider recovery proof
-- **Evidence:** the Phase-E drill restores the exact 24/98 repository schema
+- **Evidence:** the Phase-E drill now restores the exact 25/102 repository schema
   and synthetic security state in isolated PGlite. The last real Neon restore
   evidence is the named 2026-08-10 snapshot at 19 migrations/66 tables.
 - **Impact:** claiming current provider recoverability, RPO/RTO, independent

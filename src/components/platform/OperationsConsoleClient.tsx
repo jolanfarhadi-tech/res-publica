@@ -424,6 +424,7 @@ export function OperationsConsoleClient({ locale }: { locale: Locale }) {
     academy: `/${locale}/operations/academy`,
     fellowship: `/${locale}/operations/fellowship`,
     "knowledge-graph": `/${locale}/operations/knowledge-graph`,
+    security: `/${locale}/operations/security`,
   } as const;
   return (
     <div className="space-y-10">

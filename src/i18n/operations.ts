@@ -21,8 +21,8 @@ export type OperationsCopy = {
   areaNavigationTitle: string;
   areaNavigationLede: string;
   openArea: string;
-  areaLabels: Record<"membership" | "publishing" | "academy" | "fellowship" | "knowledge-graph", string>;
-  areaDescriptions: Record<"membership" | "publishing" | "academy" | "fellowship" | "knowledge-graph", string>;
+  areaLabels: Record<"membership" | "publishing" | "academy" | "fellowship" | "knowledge-graph" | "security", string>;
+  areaDescriptions: Record<"membership" | "publishing" | "academy" | "fellowship" | "knowledge-graph" | "security", string>;
   membershipTitle: string;
   membershipLede: string;
   membershipEmpty: string;
@@ -104,6 +104,7 @@ const de: OperationsCopy = {
     academy: "Academy",
     fellowship: "Fellowships",
     "knowledge-graph": "Knowledge Graph",
+    security: "Security Operations",
   },
   areaDescriptions: {
     membership: "Zugewiesene Mitgliedschaftsanträge prüfen.",
@@ -111,6 +112,7 @@ const de: OperationsCopy = {
     academy: "Kurse, Einschreibungsanträge und Assessments verwalten.",
     fellowship: "Kandidaturen, Reviews und Fellowship-Status bearbeiten.",
     "knowledge-graph": "Graph-Aufbauten und menschliche Kandidatenprüfung verwalten.",
+    security: "Technische Vorfälle und evidenzgebundene Zuordnungshypothesen prüfen.",
   },
   membershipTitle: "Mitgliedschaftsanträge",
   membershipLede: "Es erscheinen nur Anträge, für die diesem Konto eine aktive Entscheidungszuständigkeit zugewiesen wurde.",
@@ -213,6 +215,7 @@ const en: OperationsCopy = {
     academy: "Academy",
     fellowship: "Fellowships",
     "knowledge-graph": "Knowledge Graph",
+    security: "Security Operations",
   },
   areaDescriptions: {
     membership: "Review assigned membership applications.",
@@ -220,6 +223,7 @@ const en: OperationsCopy = {
     academy: "Manage courses, enrollment applications and assessments.",
     fellowship: "Manage candidacies, reviews and Fellowship status.",
     "knowledge-graph": "Manage graph builds and human candidate review.",
+    security: "Review technical incidents and evidence-bounded attribution hypotheses.",
   },
   membershipTitle: "Membership applications",
   membershipLede: "Only applications covered by an active decision assignment for this account are shown.",
@@ -322,6 +326,7 @@ const fa: OperationsCopy = {
     academy: "آکادمی",
     fellowship: "همراهی‌ها",
     "knowledge-graph": "گراف دانش",
+    security: "عملیات امنیتی",
   },
   areaDescriptions: {
     membership: "بررسی درخواست‌های عضویت واگذارشده.",
@@ -329,6 +334,7 @@ const fa: OperationsCopy = {
     academy: "مدیریت دوره‌ها، درخواست‌های ثبت‌نام و ارزیابی‌ها.",
     fellowship: "مدیریت نامزدی‌ها، بررسی‌ها و وضعیت همراهی.",
     "knowledge-graph": "مدیریت ساخت گراف و بررسی انسانی نامزدها.",
+    security: "رخدادهای فنی و فرضیه‌های انتسابِ محدود به شواهد را بررسی کنید.",
   },
   membershipTitle: "درخواست‌های عضویت",
   membershipLede: "فقط درخواست‌هایی نمایش داده می‌شوند که مسئولیت تصمیم‌گیری فعال آن‌ها به این حساب واگذار شده است.",

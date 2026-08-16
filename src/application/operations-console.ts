@@ -25,6 +25,10 @@ const INTEGRATED_OPERATIONAL_CAPABILITIES = {
     capability: "knowledge-graph.operations.read",
     target: "civic",
   },
+  security: {
+    capability: "security.operations.read",
+    target: "security-operations",
+  },
 } as const;
 export type OperationalArea =
   | "membership"
@@ -230,6 +234,7 @@ export async function getOperationsOverview(
       "academy",
       "fellowship",
       "knowledge-graph",
+      "security",
     ].filter((area): area is OperationalArea =>
       operationalAreas.has(area as OperationalArea)
     ),

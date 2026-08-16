@@ -129,6 +129,25 @@ conclusions.
   arbitrary exception content are not stored by these application controls.
 - **Unresolved:** security-log retention, recipients and incident-hold rules.
 
+<!-- inventory:security-incident-attribution -->
+### Security incident and technical attribution
+
+- **Status:** implemented with provider enrichment disabled; real-data
+  operation requires the listed owner/legal gates.
+- **Data:** daily rotating keyed handles for technical source, account,
+  session and API credential; query-free routes; coarse client/protocol
+  characteristics; allowlisted techniques/assets; evidence hashes; bounded
+  claims and incident correlations.
+- **Purpose:** investigate serious activity against Res Publica-controlled
+  systems without asserting unsupported real-world identity.
+- **Boundary:** exact Governance capability and target, MFA/recent MFA,
+  separation of duties, append-only evidence and canonical audit. No raw IP,
+  Auth0 subject, session ID, API credential ID, query string or full User-Agent
+  is persisted by the module.
+- **Unresolved:** legal basis/purpose approval, retention/legal hold,
+  responsible operators, provider security-event export and any passive
+  enrichment provider/DPA.
+
 <!-- inventory:canonical-audit -->
 ### Canonical AuditLog
 

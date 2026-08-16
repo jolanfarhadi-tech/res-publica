@@ -14,6 +14,7 @@ import { harmGovernanceManifest } from "./harm-governance/manifest";
 import { academyManifest } from "./academy/manifest";
 import { fellowshipManifest } from "./fellowship/manifest";
 import { publicApiManifest } from "./public-api/manifest";
+import { securityOperationsManifest } from "./security-operations/manifest";
 
 /**
  * Bootstrap — registers every implemented module's manifest with the
@@ -36,6 +37,7 @@ const implementedManifests: readonly ModuleManifest[] = [
   academyManifest,
   fellowshipManifest,
   publicApiManifest,
+  securityOperationsManifest,
 ];
 
 export function bootstrapModules(): readonly ModuleManifest[] {

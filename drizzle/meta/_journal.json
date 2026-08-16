@@ -169,6 +169,13 @@
       "when": 1786846915940,
       "tag": "0023_privileged-access-audit-context",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1786856348665,
+      "tag": "0024_technical-attribution",
+      "breakpoints": true
     }
   ]
 }

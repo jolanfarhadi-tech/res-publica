@@ -1305,3 +1305,84 @@ export const fellowshipAttributions = pgTable("fellowship_attributions", {
   approvedByPersonId: text("approved_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull(),
 });
+
+export const securityIncidents = pgTable(
+  "security_incidents",
+  {
+    id: text("id").primaryKey(),
+    title: text("title").notNull(),
+    severity: text("severity", { enum: ["low", "moderate", "high", "critical"] }).notNull(),
+    status: text("status", { enum: ["open", "contained", "closed"] }).notNull(),
+    affectedAssets: jsonb("affected_assets").$type<string[]>().notNull(),
+    openedByPersonId: text("opened_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    openedAt: timestamp("opened_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("security_incidents_status_opened_idx").on(table.status, table.openedAt)]
+);
+
+export const securityObservations = pgTable(
+  "security_observations",
+  {
+    id: text("id").primaryKey(),
+    incidentId: text("incident_id").notNull().references(() => securityIncidents.id, { onDelete: "restrict" }),
+    observedAt: timestamp("observed_at", { withTimezone: true, mode: "date" }).notNull(),
+    source: text("source", { enum: ["application-request", "provider-export", "canonical-audit", "human-security-review"] }).notNull(),
+    sourceHandle: text("source_handle"),
+    sourcePort: integer("source_port"),
+    actorHandle: text("actor_handle"),
+    sessionHandle: text("session_handle"),
+    apiCredentialHandle: text("api_credential_handle"),
+    routeSequence: jsonb("route_sequence").$type<string[]>().notNull(),
+    userAgentFamily: text("user_agent_family", { enum: ["chromium", "firefox", "safari", "other"] }),
+    protocol: text("protocol"),
+    tlsVersion: text("tls_version"),
+    techniques: jsonb("techniques").$type<string[]>().notNull(),
+    affectedAssets: jsonb("affected_assets").$type<string[]>().notNull(),
+    evidenceHash: text("evidence_hash").notNull(),
+    recordedByPersonId: text("recorded_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    recordedAt: timestamp("recorded_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [
+    index("security_observations_incident_time_idx").on(table.incidentId, table.observedAt),
+    index("security_observations_source_handle_idx").on(table.sourceHandle),
+  ]
+);
+
+export const securityAttributionClaims = pgTable(
+  "security_attribution_claims",
+  {
+    id: text("id").primaryKey(),
+    incidentId: text("incident_id").notNull().references(() => securityIncidents.id, { onDelete: "restrict" }),
+    level: text("level", { enum: ["A", "B", "C", "D"] }).notNull(),
+    claim: text("claim").notNull(),
+    observedEvidence: jsonb("observed_evidence").$type<string[]>().notNull(),
+    inferences: jsonb("inferences").$type<string[]>().notNull(),
+    contradictoryEvidence: jsonb("contradictory_evidence").$type<string[]>().notNull(),
+    alternativeExplanations: jsonb("alternative_explanations").$type<string[]>().notNull(),
+    confidence: text("confidence", { enum: ["LOW", "MODERATE", "HIGH"] }).notNull(),
+    source: text("source", { enum: ["human-security-review", "provider-export", "canonical-audit"] }).notNull(),
+    authoredByPersonId: text("authored_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    timestamp: timestamp("timestamp", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("security_attribution_claims_incident_time_idx").on(table.incidentId, table.timestamp)]
+);
+
+export const securityIncidentCorrelations = pgTable(
+  "security_incident_correlations",
+  {
+    id: text("id").primaryKey(),
+    leftIncidentId: text("left_incident_id").notNull().references(() => securityIncidents.id, { onDelete: "restrict" }),
+    rightIncidentId: text("right_incident_id").notNull().references(() => securityIncidents.id, { onDelete: "restrict" }),
+    relation: text("relation", { enum: ["LIKELY RELATED", "POSSIBLY RELATED", "INSUFFICIENT EVIDENCE", "NOT RELATED"] }).notNull(),
+    matchingSignals: jsonb("matching_signals").$type<string[]>().notNull(),
+    contradictorySignals: jsonb("contradictory_signals").$type<string[]>().notNull(),
+    alternativeExplanations: jsonb("alternative_explanations").$type<string[]>().notNull(),
+    reviewedByPersonId: text("reviewed_by_person_id").notNull().references(() => people.id, { onDelete: "restrict" }),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [
+    uniqueIndex("security_incident_correlations_pair_uq").on(table.leftIncidentId, table.rightIncidentId),
+    index("security_incident_correlations_left_idx").on(table.leftIncidentId),
+    index("security_incident_correlations_right_idx").on(table.rightIncidentId),
+  ]
+);

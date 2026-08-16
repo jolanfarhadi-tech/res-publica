@@ -278,6 +278,7 @@ describe("bounded Operations Console projection", () => {
         grant("operator", "fellowship.operations.read", "fellowship"),
         grant("operator", "knowledge-graph.operations.read", "civic"),
         grant("operator", "knowledge-graph.operations.read", "governance"),
+        grant("operator", "security.operations.read", "security-operations"),
       ]);
 
       const overview = await getOperationsOverview(db, operator, now);
@@ -286,6 +287,7 @@ describe("bounded Operations Console projection", () => {
         "academy",
         "fellowship",
         "knowledge-graph",
+        "security",
       ]);
       expect(overview.membershipApplications).toEqual([]);
       expect(overview.publishingScopes).toEqual([]);
