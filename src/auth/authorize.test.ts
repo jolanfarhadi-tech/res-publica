@@ -1,8 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthorizationDeniedError, isAuthorized, requireAuthorization } from "./authorize";
 import type { AuthenticatedActor, AuthorizationGrant } from "./types";
 
 const now = new Date("2026-07-19T12:00:00.000Z");
+
+afterEach(() => vi.unstubAllEnvs());
 
 function grant(overrides: Partial<AuthorizationGrant> = {}): AuthorizationGrant {
   return {
@@ -92,5 +94,12 @@ describe("deny-by-default authorization", () => {
     expect(() => requireAuthorization(null, {
       domain: "civic", capability: "membership.create", now,
     })).toThrow(AuthorizationDeniedError);
+  });
+
+  it("denies an otherwise valid grant while its capability is quarantined", () => {
+    vi.stubEnv("SECURITY_QUARANTINED_CAPABILITIES", "civic:membership.create");
+    expect(isAuthorized(actor(), {
+      domain: "civic", capability: "membership.create", now,
+    })).toBe(false);
   });
 });

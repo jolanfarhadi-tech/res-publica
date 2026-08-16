@@ -21,4 +21,15 @@ describe("real research data activation gate", () => {
     }
     expect(readResearchRealDataGate(complete)).toEqual({ enabled: true });
   });
+
+  it("keeps real data closed when the emergency research control is set or malformed", () => {
+    expect(readResearchRealDataGate({
+      ...complete,
+      SECURITY_FORCE_RESEARCH_FAIL_CLOSED: "true",
+    })).toEqual({ enabled: false });
+    expect(readResearchRealDataGate({
+      ...complete,
+      SECURITY_FORCE_RESEARCH_FAIL_CLOSED: "unexpected",
+    })).toEqual({ enabled: false });
+  });
 });

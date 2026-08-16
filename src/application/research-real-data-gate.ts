@@ -1,3 +1,5 @@
+import { isResearchForcedClosed } from "../platform/capability-quarantine";
+
 export const RESEARCH_REAL_DATA_GATE_NAME =
   "RESEARCH_REAL_DATA_ACTIVATION_APPROVED";
 
@@ -6,6 +8,7 @@ export type ResearchRealDataGate = { enabled: boolean };
 export function readResearchRealDataGate(
   environment: Record<string, string | undefined> = process.env
 ): ResearchRealDataGate {
+  if (isResearchForcedClosed(environment)) return { enabled: false };
   return {
     enabled: environment.RESEARCH_WALLET_ENABLED === "true" &&
       environment.RESEARCH_WALLET_ARCHITECTURE_APPROVED === "true" &&

@@ -185,6 +185,30 @@ describe("privileged write boundary", () => {
     expect(audit).toEqual([]);
   });
 
+  it("freezes a quarantined write scope before runtime, rate limiting, or persistence", async () => {
+    vi.stubEnv("SECURITY_FROZEN_WRITE_SCOPES", "governance.privileged-write");
+    const errorLog = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const operation = vi.fn();
+
+    const response = await executePrivilegedWrite(request(), policy, operation);
+
+    expect(response.status).toBe(503);
+    expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
+    await expect(response.json()).resolves.toEqual({ error: "security_quarantine_active" });
+    expect(mocks.runtimeCalls).toBe(0);
+    expect(mocks.rateLimitCalls).toBe(0);
+    expect(operation).not.toHaveBeenCalled();
+    expect(errorLog).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(String(errorLog.mock.calls[0][0]))).toMatchObject({
+      event: "security.quarantine.enforced",
+      method: "POST",
+      path: "/api/governance/cases",
+      status: 503,
+      scope: "governance.privileged-write",
+      requestId: expect.stringMatching(/^[0-9a-f-]{36}$/),
+    });
+  });
+
   it("does not apply the HARM gate to Publishing operations", async () => {
     vi.stubEnv("HARM_OPERATIONS_ENABLED", "false");
     const publishingPolicy = {

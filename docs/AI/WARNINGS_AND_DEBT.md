@@ -1,5 +1,20 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-028 — Modular-monolith quarantine is not process isolation
+- **Evidence:** exact authorization capabilities, write scopes, separate
+  verifier persistence and server gates are enforced and tested, but most
+  server routes execute in one Vercel application with the same main
+  `DATABASE_URL` and environment-secret namespace.
+- **Impact:** an arbitrary-code-execution zero-day in the shared server runtime
+  could bypass application-level imports and authorization. Emergency
+  environment controls remain useful for narrow containment but execute inside
+  that same trust boundary.
+- **Severity:** **High / residual zero-day blast radius**.
+- **Safe handling:** use the narrow repository controls for known capability
+  abuse; revoke provider credentials and isolate/roll back the deployment for a
+  credible runtime compromise. Resolve OPEN-030 before claiming service-level
+  isolation.
+
 ### WARN-027 — Repository recent-MFA controls do not prove provider enforcement
 - **Evidence:** sensitive services now validate a five-minute provider
   authentication instant and recognized MFA assurance, and expose a standard

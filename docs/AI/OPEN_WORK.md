@@ -1,5 +1,20 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-030 — Mandatory hardening Phase C process and infrastructure isolation
+- **Implemented in repository:** exact capability quarantine, protected-write
+  scope freeze, emergency Research fail-closed override, correlated containment
+  telemetry, synthetic cross-capability tests, component/egress matrix and
+  quarantine runbook.
+- **External/architectural remainder:** the modular monolith shares a Vercel
+  process and main database credential. Per-service compute identities, database
+  roles, network egress policy, component-wide edge isolation, provider event
+  ingestion and an independently operated quarantine channel require an
+  approved deployment architecture and provider configuration.
+- **Safety boundary:** do not claim process-level isolation from logical module
+  controls. In-process quarantine cannot contain arbitrary code execution in
+  the same runtime; provider credential revocation and deployment isolation are
+  then required.
+
 ### OPEN-029 — Mandatory hardening Phase B external privileged-access evidence
 - **Implemented in repository:** five-minute recent-MFA enforcement for the
   selected high-impact transitions; standard OIDC step-up; operation-compatible

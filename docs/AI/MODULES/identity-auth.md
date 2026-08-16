@@ -1,5 +1,14 @@
 # Module: Identity, Authentication & Authorization
 
+## Incremental Mandatory-hardening Phase-C boundary — 2026-08-16
+
+The shared authorization primitive now checks a server-only list of exact
+`domain:capability` quarantine keys before assurance and grant evaluation. A
+quarantined capability fails closed even when an otherwise valid actor, MFA
+state, target and grant are present. Keys contain no person, session, IP or
+target identifier. This is emergency containment, not grant revocation or a
+replacement for provider credential isolation.
+
 ## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
 
 The shared authorization primitive now validates `recent-mfa` against the

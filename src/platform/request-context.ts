@@ -10,6 +10,7 @@ type OperationalFailureEvent = {
     | "health.database_unavailable"
     | "notification.delivery_failed"
     | "privileged_access.denied"
+    | "security.quarantine.enforced"
     | "request.unhandled_error";
   requestId?: string;
   method?: string;
@@ -59,6 +60,22 @@ export function logPrivilegedAccessDenial(input: {
     method: input.request.method,
     path: url.pathname,
     status: input.status,
+    scope: input.scope,
+  });
+}
+
+export function logSecurityQuarantineEnforced(input: {
+  request: Request;
+  requestId: string;
+  scope: string;
+}): void {
+  const url = new URL(input.request.url);
+  logOperationalFailure({
+    event: "security.quarantine.enforced",
+    requestId: input.requestId,
+    method: input.request.method,
+    path: url.pathname,
+    status: 503,
     scope: input.scope,
   });
 }

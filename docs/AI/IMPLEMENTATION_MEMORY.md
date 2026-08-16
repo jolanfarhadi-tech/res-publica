@@ -1,5 +1,21 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Mandatory hardening Phase C
+
+`src/platform/capability-quarantine.ts` parses three independent server-only
+emergency controls. Exact `domain:capability` values are checked by the shared
+authorization primitive. Existing rate-limit scope names are checked by the
+shared privileged-write wrapper before runtime/database acquisition. The
+Research override takes precedence over both wallet and real-data approval
+gates. Missing values preserve ordinary behavior; malformed configured values
+fail closed only for the affected control class.
+
+Quarantine uses no actor-, IP-, session- or target-derived key. Enforced write
+scope quarantine returns a correlated no-store 503 and logs only request ID,
+method, path, status and scope. The implementation adds no database state,
+remote control API, universal administrator or bypass of existing feature,
+authorization, MFA, rate-limit, separation-of-duties or audit controls.
+
 ## Incremental implementation — Mandatory hardening Phase B
 
 `src/platform/privileged-access.ts` owns the bounded reason-code vocabulary and

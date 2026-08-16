@@ -6,9 +6,11 @@ import {
 } from "./rate-limit";
 import {
   logPrivilegedAccessDenial,
+  logSecurityQuarantineEnforced,
   withRequestContext,
   type RequestContext,
 } from "./request-context";
+import { isWriteScopeQuarantined } from "./capability-quarantine";
 
 export type PrivilegedWriteRuntime = NonNullable<
   ReturnType<typeof getAuthRuntime>
@@ -27,6 +29,21 @@ export function executePrivilegedWrite(
   return withRequestContext(request, async (context) => {
     const originRejection = rejectUntrustedWriteRequest(request);
     if (originRejection) return originRejection;
+
+    if (isWriteScopeQuarantined(policy.scope)) {
+      logSecurityQuarantineEnforced({
+        request,
+        requestId: context.requestId,
+        scope: policy.scope,
+      });
+      return Response.json(
+        { error: "security_quarantine_active" },
+        {
+          status: 503,
+          headers: { "Cache-Control": "private, no-store, max-age=0" },
+        }
+      );
+    }
 
     if (!isPrivilegedWriteActivated(policy)) {
       return Response.json(

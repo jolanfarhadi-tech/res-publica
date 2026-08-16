@@ -1,5 +1,35 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Mandatory hardening Phase C: zero-day containment, 2026-08-16
+
+The shared authorization boundary now supports exact emergency capability
+quarantine through server-only configuration. The shared privileged-write
+boundary can freeze an existing limiter scope before runtime acquisition, rate
+limiting, authorization or persistence and emits a correlated,
+privacy-minimized quarantine event. A separate emergency override forces both
+Research wallet and real-data gates closed even if every ordinary approval is
+present. Malformed configured values fail closed at their own boundary rather
+than globally disabling unrelated public functions.
+
+Synthetic adversarial tests prove that AI, Academy, Fellowship and Governance
+grants cannot cross into Membership, Research, Fellowship or Civic Publishing
+capabilities. The blast-radius matrix records data, API, credential, egress,
+authority, kill-switch and quarantine boundaries for the requested components.
+It also records the material residual risk: the application is a modular
+monolith with shared Vercel process and main database credential, so logical
+boundaries are not process-level isolation and arbitrary server code execution
+could bypass them.
+
+No migration, provider setting, Production configuration or deployment is part
+of this slice. Verification passes 6 focused files / 23 tests and the full
+serial suite at 106 files / 437 tests. Lint, typecheck, structure,
+secret/supply-chain checks, the 20-activity/98-table processing inventory,
+zero-vulnerability Production dependency audit, Drizzle consistency, fresh
+24-migration/98-table main schema, isolated 1/6 research schema, 166-page
+Production build and `git diff --check` pass. All nine EAO pipelines exit zero;
+full-platform readiness remains correctly No-Go because 33 external activation
+gates remain open. Production remains unchanged.
+
 ## Incremental update — Mandatory hardening Phase B: privileged access, 2026-08-16
 
 High-impact Governance, Publishing, Membership, Fellowship and gated research

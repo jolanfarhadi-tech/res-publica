@@ -4,6 +4,7 @@ import type {
   AuthorizationDomain,
   AuthorizationGrant,
 } from "./types";
+import { isCapabilityQuarantined } from "../platform/capability-quarantine";
 
 const assuranceRank: Record<AssuranceLevel, number> = {
   verified: 1,
@@ -32,6 +33,7 @@ export function isAuthorized(
   request: AuthorizationRequest
 ): actor is AuthenticatedActor {
   if (!actor) return false;
+  if (isCapabilityQuarantined(request.domain, request.capability)) return false;
   const now = request.now ?? new Date();
   const minimumAssurance = request.minimumAssurance ?? "verified";
   if (assuranceRank[actor.assurance] < assuranceRank[minimumAssurance]) return false;
