@@ -5,6 +5,10 @@ import {
   getSelfDashboard,
 } from "../../../application/dashboard";
 import { withRequestContext } from "../../../platform/request-context";
+import {
+  DASHBOARD_READ_RATE_LIMIT,
+  rejectRateLimitedRequest,
+} from "../../../platform/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +26,11 @@ export function GET(request: Request) {
         { status: 503, headers: PRIVATE_HEADERS }
       );
     }
+
+    const rateLimitRejection = await rejectRateLimitedRequest(
+      runtime.db, request, DASHBOARD_READ_RATE_LIMIT
+    );
+    if (rateLimitRejection) return rateLimitRejection;
 
     const actor = await createActorResolver(runtime.db).resolve(request);
     try {

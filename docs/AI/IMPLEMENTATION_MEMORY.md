@@ -1,5 +1,21 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Mandatory hardening Phase D
+
+`src/platform/rate-limit.ts` remains the single application-level distributed
+limiter. Policy objects now optionally declare `maxBodyBytes`; the common
+request guard rejects an invalid or excessive declared `Content-Length` before
+pepper lookup or database access. Dynamic read projections with material query
+cost use distinct scopes for Dashboard, Membership Profile, Operations,
+Publishing Workspace and public Academy certificate verification.
+
+The implementation adds no alternate authorization mechanism, raw-IP store,
+generic administrator role, migration or persistence path. Route handlers
+still perform their existing session-derived authorization and projection
+logic after the shared resource guard. Provider-level request streaming,
+Firewall/WAF, bot management and volumetric controls are external operational
+boundaries documented in the Phase-D runbook and gate register.
+
 ## Incremental implementation — Mandatory hardening Phase C
 
 `src/platform/capability-quarantine.ts` parses three independent server-only

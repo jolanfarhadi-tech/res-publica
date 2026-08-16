@@ -1,5 +1,19 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-029 — Application budgets do not prove provider DDoS enforcement
+- **Evidence:** shared PostgreSQL limits, bounded schemas, pagination caps and
+  declared-body budgets protect known application routes, but source code
+  cannot verify Vercel Firewall/WAF rules, bot challenges, volumetric
+  mitigation, stream limits, security-log export or alert ownership.
+- **Impact:** treating route-level `429`/`413` controls as complete DDoS
+  protection would leave edge and unknown-length request exhaustion
+  unverified. A Promise timeout would also not safely cancel a running
+  PostgreSQL transaction.
+- **Severity:** **High / external availability and cost-amplification boundary**.
+- **Safe handling:** retain endpoint-specific limits and fail-closed rejection;
+  verify OPEN-031 at the provider and introduce real cancellable execution or
+  concurrency budgets only through an approved runtime/database design.
+
 ### WARN-028 — Modular-monolith quarantine is not process isolation
 - **Evidence:** exact authorization capabilities, write scopes, separate
   verifier persistence and server gates are enforced and tested, but most

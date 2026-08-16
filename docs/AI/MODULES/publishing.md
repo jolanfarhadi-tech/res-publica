@@ -1,5 +1,13 @@
 # Module: Publishing
 
+## Incremental resource protection — 2026-08-16
+
+The private Publishing Workspace read projection now consumes a distinct
+shared PostgreSQL rate-limit scope before actor resolution and database work.
+Publishing write policies declare a bounded JSON body size while all existing
+ADR-036 exact scope, MFA, separation-of-duties, provenance, atomic audit,
+`commitHash: null` and no-auto-publish boundaries remain unchanged.
+
 ## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
 
 Editorial grant and revocation services now require five-minute recent MFA,

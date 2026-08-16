@@ -1,5 +1,20 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-031 — Mandatory hardening Phase D provider-edge evidence and execution budgets
+- **Implemented in repository:** distinct distributed limits for costly public
+  and authenticated reads; bounded declared-body policies for sensitive JSON
+  writes; pre-persistence `413` rejection; bounded public pagination/query
+  inputs; abuse regression coverage; degradation matrix and operator runbook.
+- **External/architectural remainder:** verify the canonical Vercel project's
+  Firewall/WAF and DDoS controls, bot/challenge behavior, provider request-body
+  and execution limits, security-log export and alert destination. Process- and
+  database-level concurrency/cancellation budgets require a separately
+  approved runtime design; JavaScript Promise timeouts must not be described as
+  cancellation of PostgreSQL transactions.
+- **Safety boundary:** a declared `Content-Length` guard does not inspect an
+  unknown-length stream. Do not claim provider-level DDoS readiness from
+  repository controls or activate paid/provider controls without authority.
+
 ### OPEN-030 — Mandatory hardening Phase C process and infrastructure isolation
 - **Implemented in repository:** exact capability quarantine, protected-write
   scope freeze, emergency Research fail-closed override, correlated containment

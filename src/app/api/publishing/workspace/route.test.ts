@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   actor: { personId: "publisher" } as null | { personId: string },
   calls: [] as unknown[],
   error: null as Error | null,
+  rateLimitResponse: null as Response | null,
 }));
 
 vi.mock("../../../../auth/runtime", () => ({
@@ -12,6 +13,10 @@ vi.mock("../../../../auth/runtime", () => ({
 }));
 vi.mock("../../../../auth/actor-resolver", () => ({
   createActorResolver: () => ({ resolve: async () => mocks.actor }),
+}));
+vi.mock("../../../../platform/rate-limit", () => ({
+  PUBLISHING_WORKSPACE_READ_RATE_LIMIT: { scope: "publishing.workspace.read", limit: 60, windowMs: 900_000 },
+  rejectRateLimitedRequest: async () => mocks.rateLimitResponse,
 }));
 vi.mock("../../../../application/publishing-workspace", () => ({
   getPublishingWorkspace: async (
@@ -36,6 +41,7 @@ describe("GET /api/publishing/workspace", () => {
     mocks.actor = { personId: "publisher" };
     mocks.calls = [];
     mocks.error = null;
+    mocks.rateLimitResponse = null;
   });
 
   it("uses the session actor and exact requested publication scope", async () => {

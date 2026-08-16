@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   actor: { personId: "board-1" } as null | { personId: string },
   calls: [] as unknown[],
   error: null as Error | null,
+  rateLimitResponse: null as Response | null,
 }));
 
 vi.mock("../../../auth/runtime", () => ({
@@ -12,6 +13,10 @@ vi.mock("../../../auth/runtime", () => ({
 }));
 vi.mock("../../../auth/actor-resolver", () => ({
   createActorResolver: () => ({ resolve: async () => mocks.actor }),
+}));
+vi.mock("../../../platform/rate-limit", () => ({
+  OPERATIONS_READ_RATE_LIMIT: { scope: "operations.read", limit: 60, windowMs: 900_000 },
+  rejectRateLimitedRequest: async () => mocks.rateLimitResponse,
 }));
 vi.mock("../../../application/operations-console", async (importOriginal) => {
   const original = await importOriginal<
@@ -44,6 +49,7 @@ describe("GET /api/operations", () => {
     mocks.actor = { personId: "board-1" };
     mocks.calls = [];
     mocks.error = null;
+    mocks.rateLimitResponse = null;
   });
 
   it("uses only the session actor and returns private correlated data", async () => {

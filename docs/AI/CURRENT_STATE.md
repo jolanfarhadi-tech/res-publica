@@ -1,5 +1,34 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Mandatory hardening Phase D: application resource exhaustion, 2026-08-16
+
+The shared distributed PostgreSQL limiter now protects the previously
+unmetered authenticated Dashboard, Membership Profile, Integrated Operations
+and Publishing Workspace projections and public Academy certificate
+verification. Each receives a distinct stable scope and a privacy-preserving
+HMAC client key; raw addresses and sensitive identifiers are not persisted.
+
+Sensitive JSON policy classes now declare bounded request-body budgets. A
+malformed or over-budget declared `Content-Length` is rejected with a private,
+no-store `413` before rate-limit persistence, actor resolution, authorization
+or domain persistence. Existing exact capability/target checks, MFA,
+separation of duties, atomic audit, feature gates and fail-closed research
+boundaries remain unchanged.
+
+Repository controls do not prove Vercel Firewall/WAF, bot challenge, Attack
+Mode, provider stream limits, security-log export or alert routing. The body
+guard validates a declared transfer length and is not presented as a streaming
+byte limiter. No migration, provider setting, Production configuration or
+deployment is part of this slice. Verification passes 6 focused files / 28
+tests and the full serial suite at 107 files / 445 tests. Lint, typecheck,
+structure, secret/supply-chain checks, the 20-activity/98-table processing
+inventory, zero-vulnerability Production dependency audit, Drizzle
+consistency, fresh 24-migration/98-table main schema, isolated 1/6 research
+schema, all nine EAO pipelines, the 166-page Production build with the
+canonical site URL and `git diff --check` pass. Full-platform readiness remains
+correctly No-Go because 34 external activation gates remain open; Production
+is unchanged.
+
 ## Incremental update — Mandatory hardening Phase C: zero-day containment, 2026-08-16
 
 The shared authorization boundary now supports exact emergency capability

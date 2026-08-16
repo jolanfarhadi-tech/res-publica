@@ -1,5 +1,13 @@
 # Module: Membership
 
+## Incremental resource protection — 2026-08-16
+
+The authenticated self-profile projection now consumes its own shared
+PostgreSQL rate-limit scope before actor resolution and database projection.
+Membership application/create policies also declare bounded JSON body sizes.
+These guards do not change account/application status, consent, board decision,
+MFA, exact-target authorization or atomic persistence semantics.
+
 ## Incremental Mandatory-hardening Phase-B boundary — 2026-08-16
 
 Board approval/rejection now requires a five-minute recent-MFA session and the

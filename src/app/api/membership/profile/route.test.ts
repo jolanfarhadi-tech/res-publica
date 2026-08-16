@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => ({
   runtime: null as null | { db: object },
   actor: null as null | { personId: string },
   profile: { enrolled: false } as object,
+  rateLimitResponse: null as Response | null,
 }));
 
 vi.mock("../../../../auth/runtime", () => ({
@@ -12,6 +13,10 @@ vi.mock("../../../../auth/runtime", () => ({
 
 vi.mock("../../../../auth/actor-resolver", () => ({
   createActorResolver: () => ({ resolve: async () => mocks.actor }),
+}));
+vi.mock("../../../../platform/rate-limit", () => ({
+  MEMBERSHIP_PROFILE_READ_RATE_LIMIT: { scope: "membership.profile.read", limit: 120, windowMs: 900_000 },
+  rejectRateLimitedRequest: async () => mocks.rateLimitResponse,
 }));
 
 vi.mock("../../../../application/member-profile", async (importOriginal) => {
@@ -32,6 +37,7 @@ describe("GET /api/membership/profile", () => {
     mocks.runtime = { db: {} };
     mocks.actor = { personId: "person-owner" };
     mocks.profile = { enrolled: false };
+    mocks.rateLimitResponse = null;
   });
 
   it("fails closed when protected dependencies are unavailable", async () => {

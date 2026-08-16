@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => ({
   runtime: { db: {} } as null | { db: object },
   actor: { personId: "person-self" } as null | { personId: string },
   calls: [] as unknown[],
+  rateLimitResponse: null as Response | null,
 }));
 
 vi.mock("../../../auth/runtime", () => ({
@@ -14,6 +15,10 @@ vi.mock("../../../auth/actor-resolver", () => ({
   createActorResolver: () => ({
     resolve: async () => mocks.actor,
   }),
+}));
+vi.mock("../../../platform/rate-limit", () => ({
+  DASHBOARD_READ_RATE_LIMIT: { scope: "dashboard.self-read", limit: 60, windowMs: 900_000 },
+  rejectRateLimitedRequest: async () => mocks.rateLimitResponse,
 }));
 
 vi.mock("../../../application/dashboard", async (importOriginal) => {
@@ -44,6 +49,14 @@ describe("GET /api/dashboard", () => {
     mocks.runtime = { db: {} };
     mocks.actor = { personId: "person-self" };
     mocks.calls = [];
+    mocks.rateLimitResponse = null;
+  });
+
+  it("rate limits before actor resolution or dashboard projection", async () => {
+    mocks.rateLimitResponse = Response.json({ error: "rate_limited" }, { status: 429 });
+    const response = await GET(new Request("https://respublica-ev.de/api/dashboard"));
+    expect(response.status).toBe(429);
+    expect(mocks.calls).toEqual([]);
   });
 
   it("returns only the session-derived actor's private projection", async () => {

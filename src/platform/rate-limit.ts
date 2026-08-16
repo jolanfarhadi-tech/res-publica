@@ -23,6 +23,7 @@ export type RateLimitPolicy = {
   scope: string;
   limit: number;
   windowMs: number;
+  maxBodyBytes?: number;
 };
 
 export const AUTH_LOGIN_RATE_LIMIT: RateLimitPolicy = {
@@ -35,90 +36,105 @@ export const MEMBERSHIP_CREATE_RATE_LIMIT: RateLimitPolicy = {
   scope: "membership.create",
   limit: 5,
   windowMs: 60 * 60 * 1000,
+  maxBodyBytes: 32 * 1024,
 };
 
 export const MEMBERSHIP_APPLICATION_RATE_LIMIT: RateLimitPolicy = {
   scope: "membership.application.submit",
   limit: 5,
   windowMs: 60 * 60 * 1000,
+  maxBodyBytes: 32 * 1024,
 };
 
 export const MEMBERSHIP_DECISION_RATE_LIMIT: RateLimitPolicy = {
   scope: "membership.application.decide",
   limit: 30,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 4 * 1024,
 };
 
 export const RESEARCH_WALLET_ACTIVATION_RATE_LIMIT: RateLimitPolicy = {
   scope: "research.wallet.activate",
   limit: 10,
   windowMs: 60 * 60 * 1000,
+  maxBodyBytes: 32 * 1024,
 };
 
 export const RESEARCH_CREDENTIAL_ISSUANCE_RATE_LIMIT: RateLimitPolicy = {
   scope: "research.wallet.credential-issuance",
   limit: 20,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 32 * 1024,
 };
 
 export const RESEARCH_WALLET_RECOVERY_RATE_LIMIT: RateLimitPolicy = {
   scope: "research.wallet.recovery",
   limit: 5,
   windowMs: 60 * 60 * 1000,
+  maxBodyBytes: 64 * 1024,
 };
 
 export const EVENT_REGISTRATION_RATE_LIMIT: RateLimitPolicy = {
   scope: "events.registration",
   limit: 20,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 16 * 1024,
 };
 
 export const NEWSLETTER_SUBSCRIBE_RATE_LIMIT: RateLimitPolicy = {
   scope: "newsletter.subscribe",
   limit: 5,
   windowMs: 60 * 60 * 1000,
+  maxBodyBytes: 8 * 1024,
 };
 
 export const GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
   scope: "governance.privileged-write",
   limit: 60,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 256 * 1024,
 };
 
 export const PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
   scope: "publishing.privileged-write",
   limit: 60,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 256 * 1024,
 };
 
 export const ACADEMY_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
   scope: "academy.privileged-write",
   limit: 60,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 2 * 1024 * 1024,
 };
 
 export const ACADEMY_SELF_SERVICE_RATE_LIMIT: RateLimitPolicy = {
   scope: "academy.self-service",
   limit: 30,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 128 * 1024,
 };
 
 export const FELLOWSHIP_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
   scope: "fellowship.privileged-write",
   limit: 60,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 256 * 1024,
 };
 
 export const FELLOWSHIP_SELF_SERVICE_RATE_LIMIT: RateLimitPolicy = {
   scope: "fellowship.self-service",
   limit: 10,
   windowMs: 60 * 60 * 1000,
+  maxBodyBytes: 256 * 1024,
 };
 
 export const KNOWLEDGE_GRAPH_PRIVILEGED_WRITE_RATE_LIMIT: RateLimitPolicy = {
   scope: "knowledge-graph.privileged-write",
   limit: 30,
   windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 256 * 1024,
 };
 
 export const KNOWLEDGE_GRAPH_PUBLIC_READ_RATE_LIMIT: RateLimitPolicy = {
@@ -136,6 +152,37 @@ export const KNOWLEDGE_GRAPH_OPERATIONS_READ_RATE_LIMIT: RateLimitPolicy = {
 export const AI_RAG_QUERY_RATE_LIMIT: RateLimitPolicy = {
   scope: "ai.rag.query",
   limit: 30,
+  windowMs: 15 * 60 * 1000,
+  maxBodyBytes: 8 * 1024,
+};
+
+export const DASHBOARD_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "dashboard.self-read",
+  limit: 60,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const MEMBERSHIP_PROFILE_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "membership.profile.read",
+  limit: 120,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const OPERATIONS_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "operations.read",
+  limit: 60,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const PUBLISHING_WORKSPACE_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "publishing.workspace.read",
+  limit: 60,
+  windowMs: 15 * 60 * 1000,
+};
+
+export const ACADEMY_CERTIFICATE_VERIFY_RATE_LIMIT: RateLimitPolicy = {
+  scope: "academy.certificate.verify",
+  limit: 120,
   windowMs: 15 * 60 * 1000,
 };
 
@@ -251,6 +298,18 @@ export async function rejectRateLimitedRequest(
     now?: Date;
   } = {}
 ): Promise<Response | null> {
+  const declaredLength = request.headers.get("content-length");
+  if (policy.maxBodyBytes !== undefined && declaredLength !== null) {
+    if (!/^\d+$/.test(declaredLength) || Number(declaredLength) > policy.maxBodyBytes) {
+      return Response.json(
+        { error: "payload_too_large" },
+        {
+          status: 413,
+          headers: { "Cache-Control": "private, no-store, max-age=0" },
+        }
+      );
+    }
+  }
   const environment = options.environment ?? process.env;
   const pepper = environment.SESSION_SECRET;
   if (!pepper) {

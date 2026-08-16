@@ -11,9 +11,14 @@ import * as coreSchema from "../persistence/schema";
 import { rateLimitBuckets } from "../persistence/schema";
 import {
   AI_RAG_QUERY_RATE_LIMIT,
+  ACADEMY_CERTIFICATE_VERIFY_RATE_LIMIT,
+  DASHBOARD_READ_RATE_LIMIT,
   GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT,
+  MEMBERSHIP_PROFILE_READ_RATE_LIMIT,
   NEWSLETTER_SUBSCRIBE_RATE_LIMIT,
+  OPERATIONS_READ_RATE_LIMIT,
   PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT,
+  PUBLISHING_WORKSPACE_READ_RATE_LIMIT,
   PUBLIC_API_READ_RATE_LIMIT,
   consumeRateLimit,
   rejectRateLimitedRequest,
@@ -45,27 +50,44 @@ describe("shared PostgreSQL rate limiting", () => {
       scope: "governance.privileged-write",
       limit: 60,
       windowMs: 900_000,
+      maxBodyBytes: 262_144,
     });
     expect(PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT).toEqual({
       scope: "publishing.privileged-write",
       limit: 60,
       windowMs: 900_000,
+      maxBodyBytes: 262_144,
     });
     expect(NEWSLETTER_SUBSCRIBE_RATE_LIMIT).toEqual({
       scope: "newsletter.subscribe",
       limit: 5,
       windowMs: 3_600_000,
+      maxBodyBytes: 8_192,
     });
     expect(AI_RAG_QUERY_RATE_LIMIT).toEqual({
       scope: "ai.rag.query",
       limit: 30,
       windowMs: 900_000,
+      maxBodyBytes: 8_192,
     });
     expect(PUBLIC_API_READ_RATE_LIMIT).toEqual({
       scope: "public-api.read",
       limit: 120,
       windowMs: 900_000,
     });
+    expect([
+      DASHBOARD_READ_RATE_LIMIT.scope,
+      MEMBERSHIP_PROFILE_READ_RATE_LIMIT.scope,
+      OPERATIONS_READ_RATE_LIMIT.scope,
+      PUBLISHING_WORKSPACE_READ_RATE_LIMIT.scope,
+      ACADEMY_CERTIFICATE_VERIFY_RATE_LIMIT.scope,
+    ]).toEqual([
+      "dashboard.self-read",
+      "membership.profile.read",
+      "operations.read",
+      "publishing.workspace.read",
+      "academy.certificate.verify",
+    ]);
   });
 
   it("atomically limits a pseudonymized client within one window", async () => {
@@ -183,4 +205,21 @@ describe("shared PostgreSQL rate limiting", () => {
     });
     await client.close();
   }, 20_000);
+
+  it("rejects an oversized declared body before database rate-limit work", async () => {
+    const database = { insert: () => { throw new Error("database must not be used"); } } as unknown as Database;
+    const response = await rejectRateLimitedRequest(
+      database,
+      new Request("https://respublica-ev.de/api/ai/rag", {
+        method: "POST",
+        headers: { "content-length": "8193" },
+      }),
+      AI_RAG_QUERY_RATE_LIMIT,
+      { environment: { SESSION_SECRET: "test-only-pepper" } }
+    );
+
+    expect(response?.status).toBe(413);
+    expect(response?.headers.get("cache-control")).toContain("no-store");
+    await expect(response?.json()).resolves.toEqual({ error: "payload_too_large" });
+  });
 });
