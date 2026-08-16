@@ -7,17 +7,10 @@ import { createLedger } from "../modules/ai-layer/cost-governance";
 import { resolveAIUseCasePolicy } from "../modules/ai-layer/policy";
 import { createLocalProvider } from "../modules/ai-layer/providers/local-provider";
 import { queryAILayer } from "../modules/ai-layer/query";
+import { publicContentSource } from "../modules/knowledge-graph/public-source";
 import type { KnowledgeGraph } from "../modules/knowledge-graph/types";
 
 const TARGET = "public-knowledge";
-
-function contentUrl(file: string): string | null {
-  const normalized = file.replaceAll("\\", "/");
-  const match = normalized.match(/(?:^|\/)content\/(de|en|fa)\/(news|projects|research|publications|events|pages)\/([a-z0-9-]+)\.mdx$/);
-  if (!match) return null;
-  const [, locale, section, slug] = match;
-  return section === "pages" ? `/${locale}/${slug}` : `/${locale}/${section}/${slug}`;
-}
 
 export async function runGroundedCivicQuery(
   db: Database,
@@ -44,7 +37,13 @@ export async function runGroundedCivicQuery(
     domain: "civic",
     useCaseId: "grounded-search",
   });
-  const citations = [...new Set(result.citations.map(contentUrl).filter((value): value is string => value !== null))];
+  const citations = [
+    ...new Set(
+      result.citations
+        .map((file) => publicContentSource(file)?.url)
+        .filter((value): value is string => value !== undefined)
+    ),
+  ];
   const refused = result.refused || citations.length === 0;
   const answer = refused ? "No approved public source supports this answer." : result.answer;
   const now = options.now ?? new Date();

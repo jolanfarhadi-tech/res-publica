@@ -1,5 +1,33 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Release E Public API and Public Knowledge Projection, 2026-08-16
+
+The implemented `public-api` module owns no database table and projects the
+existing human-approved public Knowledge Graph through three versioned routes:
+`/api/public/v1`, `/content-graph/entities`, and
+`/content-graph/relationships`. The boundary is anonymous, read-only and
+grounded-public-content-only; it is not the deferred institutional partner
+platform.
+
+Entity and relationship responses are built through explicit DTO allowlists.
+They contain public URLs and deterministic/human-verified provenance but no
+repository paths, canonical-source paths, domain ownership fields or private
+table records. Locale filters project DE/EN/FA names and sources. Stable opaque
+cursors are bound to resource and filter scope; unknown parameters and invalid
+or cross-scope cursors fail closed. Responses provide deterministic ETags,
+conditional 304 handling, public cache controls and request IDs. Collection
+reads use the shared privacy-preserving PostgreSQL limiter before projection.
+
+No migration, partner account, API key, agreement, quota store, embed widget,
+AI provider or Event data integration is introduced. Consumers must preserve
+public source URLs; no additional reuse licence is implied. Production remains
+at 19 migrations / 66 tables and is unchanged.
+
+Verification passes 21 focused tests, the full serial suite (97 files / 407
+tests), lint, typecheck, structure, main and isolated fresh migration checks,
+processing-inventory drift, Production dependency audit (zero vulnerabilities),
+`git diff --check`, and a 166-page Production build.
+
 ## Incremental update — Release D Governed AI/RAG, 2026-08-16
 
 The shared AI Layer now exposes one authenticated Civic route at

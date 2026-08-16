@@ -139,6 +139,12 @@ export const AI_RAG_QUERY_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 15 * 60 * 1000,
 };
 
+export const PUBLIC_API_READ_RATE_LIMIT: RateLimitPolicy = {
+  scope: "public-api.read",
+  limit: 120,
+  windowMs: 15 * 60 * 1000,
+};
+
 const RETENTION_AFTER_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function hashIdentifier(

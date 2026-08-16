@@ -204,3 +204,15 @@ answers, enforces cost governance and persists privacy-minimized provenance.
 This does not claim an LLM or external provider: output remains deterministic
 local keyword retrieval, Governance AI and external mode fail closed, migration
 0022 is not in Production, and Production remains 19 migrations / 66 tables.
+
+## Post-audit remediation note — Release E Public API
+
+The absent Public API/public-projection finding is remediated in the local
+Release-E worktree at the bounded level approved for this sequence. One
+registered module exposes V1 discovery and cursor-paginated Content Graph
+entities/relationships through explicit DTO allowlists, DE/EN/FA filters,
+public source provenance, ETags/cache, request IDs and the shared distributed
+rate limiter. It reuses the existing human-approved graph and owns no table.
+This is not the full V3 partner platform: accounts, keys, agreements, quota
+stores, embeds and Event integration remain deferred, and no private table is
+serialized. No Production deployment or migration is claimed.

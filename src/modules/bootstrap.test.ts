@@ -17,6 +17,7 @@ describe("Module bootstrap", () => {
     expect(getModule("harm-governance")).toBeDefined();
     expect(getModule("academy")).toBeDefined();
     expect(getModule("fellowship")).toBeDefined();
+    expect(getModule("public-api")).toBeDefined();
   });
 
   it("is idempotent across repeated server invocations", () => {
@@ -24,6 +25,6 @@ describe("Module bootstrap", () => {
     const second = bootstrapModules();
 
     expect(second).toEqual(first);
-    expect(second).toHaveLength(12);
+    expect(second).toHaveLength(13);
   });
 });

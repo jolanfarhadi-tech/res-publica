@@ -1,5 +1,17 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-024 — Public projection is not partner-platform activation
+
+- **Evidence:** Release E adds only anonymous, read-only grounded Content Graph
+  DTOs and no partner account, key, agreement, usage, embed or Event store.
+- **Impact:** direct ORM serialization, private-table expansion, unsupported
+  reuse/licensing claims or representing partner capabilities as active would
+  violate Constitution §19 and the verified implementation boundary.
+- **Severity:** **High / privacy, attribution and external-contract boundary**.
+- **Safe handling:** retain DTO allowlists, public source URLs, rate limits and
+  versioning; require explicit partner/legal/security/operational approval for
+  every deferred capability.
+
 ### WARN-023 — Governed local retrieval is not external-AI activation
 
 - **Evidence:** Release D adds the authenticated `/api/ai/rag` boundary and

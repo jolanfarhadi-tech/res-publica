@@ -231,8 +231,9 @@ conclusions.
 
 - **Technical status:** deterministic build, candidate ledger, independent
   human review, provenance and bounded public graph projection are implemented;
-  authenticated local citation-or-refuse retrieval is implemented; no external
-  AI provider is active.
+  versioned read-only Public API DTOs and authenticated local
+  citation-or-refuse retrieval are implemented; no external AI provider is
+  active.
 - **Potential data:** entity names/aliases, deterministic relationships,
   source eligibility, build digest, human decisions, HMAC query digest,
   request/policy/provider provenance, public citations, answer digest and cost.
@@ -240,10 +241,12 @@ conclusions.
   separation of duties protect approval; public reads expose only allowlisted
   fields backed by currently public-eligible approved provenance. Authenticated
   retrieval requires exact verified Civic scope before graph access, stores no
-  raw prompt or answer and rejects external provider mode.
+  raw prompt or answer and rejects external provider mode. Public API v1
+  serializes no private table or internal source path.
 - **Unresolved:** retention for build/candidate/provenance records and ongoing
-  source-eligibility governance. External AI still requires an approved
-  provider/use case, DPIA and AI-governance activation.
+  source-eligibility governance. Partner capabilities require partner/legal/
+  security approval; external AI still requires an approved provider/use case,
+  DPIA and AI-governance activation.
 
 <!-- inventory:funding-impact-and-partnerships -->
 ### Funding, impact and partnership models

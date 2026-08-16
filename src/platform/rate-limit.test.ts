@@ -14,6 +14,7 @@ import {
   GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT,
   NEWSLETTER_SUBSCRIBE_RATE_LIMIT,
   PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT,
+  PUBLIC_API_READ_RATE_LIMIT,
   consumeRateLimit,
   rejectRateLimitedRequest,
 } from "./rate-limit";
@@ -58,6 +59,11 @@ describe("shared PostgreSQL rate limiting", () => {
     expect(AI_RAG_QUERY_RATE_LIMIT).toEqual({
       scope: "ai.rag.query",
       limit: 30,
+      windowMs: 900_000,
+    });
+    expect(PUBLIC_API_READ_RATE_LIMIT).toEqual({
+      scope: "public-api.read",
+      limit: 120,
       windowMs: 900_000,
     });
   });

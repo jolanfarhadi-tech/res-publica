@@ -1,5 +1,18 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-026 — Public API deployment and deferred partner capabilities
+
+- **Implemented locally:** read-only V1 discovery and Content Graph entity/
+  relationship collections; explicit DTOs; DE/EN/FA projection; scoped cursor
+  pagination; ETag/cache; public provenance; shared distributed rate limit.
+- **Production status:** no migration is required, but Release-E code is not
+  deployed by this slice. Production remains at 19 migrations / 66 tables.
+- **Deferred:** partner accounts/API keys, signed agreements, per-partner quota
+  and usage stores, Q&A embeds and Event integration require a build-ready
+  partner contract, legal/privacy/security review and accountable operations.
+- **Boundary:** do not expose raw Person, ConsentRecord, membership, research,
+  Governance, audit, authentication or other private-table records.
+
 ### OPEN-025 — Governed AI Production migration and bounded activation
 
 - **Implemented locally:** authenticated deterministic grounded retrieval;
@@ -364,10 +377,10 @@ MFA, migration, legal, and operational gates in
 
 Per `brain/ROADMAP.md` (read in full, prior session): Speech Academy, Writing
 Academy, News Analysis Lab, Research Lab, Store, full Admin Portal (V2 tier)
-and Public API (V3 tier) remain deferred in that roadmap. Academy and
-Fellowship were subsequently scoped and implemented under owner-approved
-Releases A and B; this historical roadmap paragraph no longer describes those
-two modules as absent.
+and Public API (V3 tier) were deferred in that roadmap. Academy, Fellowship and
+the bounded read-only Public API projection were subsequently scoped and
+implemented under owner-approved Releases A, B and E. The broader Public API
+partner platform remains deferred under OPEN-026.
 
 ## CLA / contribution process
 

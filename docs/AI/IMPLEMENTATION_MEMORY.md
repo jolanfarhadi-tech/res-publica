@@ -1,5 +1,18 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Release E Public API
+
+The V1 public projection adapts the existing Knowledge Graph application
+service rather than duplicating graph storage or retrieval. A pure projector
+creates explicit entity/relationship DTOs and public source URLs; no ORM row or
+private source record is serialized directly.
+
+The API uses URL versioning, filter-bound opaque cursor pagination, allowlisted
+DE/EN/FA filters, deterministic ETags/304 responses, cache policy, request
+correlation and the shared PostgreSQL limiter. The module manifest owns no
+table. Full institutional partner authentication, agreements, quotas, embeds
+and Event integration remain deferred rather than represented as implemented.
+
 ## Incremental implementation — Release D Governed AI/RAG
 
 The existing AI Layer now has an authenticated application/API boundary rather

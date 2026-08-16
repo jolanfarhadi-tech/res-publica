@@ -315,17 +315,17 @@
       "operationalStatus": "implemented-local-provider-only",
       "dataSubjects": ["repository content subjects where represented", "authenticated account holders using governed retrieval"],
       "dataCategories": ["entity names and aliases", "deterministic candidate relationships", "source eligibility and approval provenance", "build commit and content digest", "HMAC query digest", "request and policy provenance", "public citation URLs", "answer digest", "cost and refusal state"],
-      "purposeEvidence": "Support deterministic repository knowledge retrieval, a human-approved public content projection and authenticated citation-or-refuse queries while keeping external AI inactive.",
+      "purposeEvidence": "Support deterministic repository knowledge retrieval, a versioned human-approved public Content Graph projection and authenticated citation-or-refuse queries while keeping external AI inactive.",
       "systems": ["Neon PostgreSQL", "repository runtime"],
       "stores": ["postgres:kg_entities", "postgres:kg_relationships", "postgres:kg_graph_builds", "postgres:kg_candidates", "postgres:kg_provenance", "postgres:ai_query_log", "postgres:ai_cost_ledger"],
-      "accessBoundary": "Public graph reads expose allowlisted fields only from current public-eligible, human-approved provenance; build and review operations require exact MFA capabilities and separation of duties; governed retrieval requires an exact verified Civic grant before retrieval, stores no raw prompt or answer, and rejects external providers.",
-      "sourceEvidence": ["src/application/knowledge-graph.ts", "src/application/governed-ai.ts", "src/modules/knowledge-graph/README.md", "src/modules/ai-layer/query.ts", "src/app/api/ai/rag/route.ts"],
+      "accessBoundary": "Public graph reads and Public API v1 expose explicit DTO allowlists only from current public-eligible, human-approved provenance; no private table or internal source path is serialized; build/review requires exact MFA and separation of duties; governed retrieval requires exact verified Civic scope, stores no raw prompt/answer and rejects external providers.",
+      "sourceEvidence": ["src/application/knowledge-graph.ts", "src/application/governed-ai.ts", "src/modules/knowledge-graph/README.md", "src/modules/public-api/projection.ts", "src/modules/ai-layer/query.ts", "src/app/api/public/v1/route.ts", "src/app/api/ai/rag/route.ts"],
       "externalDependencies": ["none active"],
       "realDataPermitted": false,
       "legalBasis": null,
       "retentionPeriod": null,
       "erasureRule": null,
-      "decisionGates": ["continued editorial source eligibility review", "retention approval for build/candidate/provenance ledgers", "approved AI provider/use case before external AI", "DPIA and AI governance before external AI"]
+      "decisionGates": ["continued editorial source eligibility review", "retention approval for build/candidate/provenance ledgers", "partner/legal/security approval before partner API capabilities", "approved AI provider/use case before external AI", "DPIA and AI governance before external AI"]
     },
     {
       "id": "funding-impact-and-partnerships",

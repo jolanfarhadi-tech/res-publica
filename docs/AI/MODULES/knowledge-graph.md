@@ -1,5 +1,15 @@
 # Module: Knowledge Graph
 
+## Incremental public V1 projection — 2026-08-16
+
+Release E consumes `getPublicKnowledgeGraph` through a separate explicit DTO
+projector; it does not add a graph, table or relationship-generation path.
+Versioned public entities and relationships include only mapped public content
+URLs and deterministic/human-reviewed provenance. Internal file paths,
+canonical source paths, domain ownership and non-public records are excluded.
+DE/EN/FA filtering and filter-bound cursor tests preserve cross-locale and
+pagination boundaries.
+
 ## Incremental implementation — Release C, 2026-08-10
 
 The previously declarative HTTP paths are now implemented under
