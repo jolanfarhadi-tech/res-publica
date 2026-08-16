@@ -4,7 +4,7 @@ import {
   rejectRateLimitedRequest,
   type RateLimitPolicy,
 } from "./rate-limit";
-import { withRequestContext } from "./request-context";
+import { withRequestContext, type RequestContext } from "./request-context";
 
 export type PrivilegedWriteRuntime = NonNullable<
   ReturnType<typeof getAuthRuntime>
@@ -18,9 +18,9 @@ function isPrivilegedWriteActivated(policy: RateLimitPolicy): boolean {
 export function executePrivilegedWrite(
   request: Request,
   policy: RateLimitPolicy,
-  operation: (runtime: PrivilegedWriteRuntime) => Promise<Response>
+  operation: (runtime: PrivilegedWriteRuntime, context: RequestContext) => Promise<Response>
 ): Promise<Response> {
-  return withRequestContext(request, async () => {
+  return withRequestContext(request, async (context) => {
     const originRejection = rejectUntrustedWriteRequest(request);
     if (originRejection) return originRejection;
 
@@ -51,6 +51,6 @@ export function executePrivilegedWrite(
     );
     if (rateLimitRejection) return rateLimitRejection;
 
-    return operation(runtime);
+    return operation(runtime, context);
   });
 }

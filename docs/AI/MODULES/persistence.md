@@ -1,5 +1,19 @@
 # Module: Persistence
 
+## Incremental implementation — governed AI provenance, 2026-08-16
+
+Additive migration `0022_governed-ai-runtime.sql` extends the existing
+`ai_query_log` with nullable actor, request, prompt-digest, policy, input-class,
+provider-mode, citation and answer-digest fields. It creates no second AI log,
+changes no existing nullability and contains no destructive DDL. New runtime
+writes use an HMAC prompt digest in the legacy primary-key `prompt` column and
+never persist raw prompt or answer text.
+
+The fresh main chain now applies 23 migrations and creates 98 tables; the
+isolated research chain remains one migration / six tables. Production remains
+at 19 migrations / 66 tables until the standard backup, TLS, journal,
+authorization, permission and post-migration checks are completed.
+
 ## Incremental implementation — Knowledge Graph governance persistence, 2026-08-10
 
 Additive migration `0021_knowledge-graph-governance.sql` introduces

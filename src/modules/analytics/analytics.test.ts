@@ -54,7 +54,7 @@ describe("Analytics x AI Layer integration (no independent usage ledger)", () =>
     let ledger = createLedger(100);
     ledger = recordQuery(ledger, {
       timestamp: new Date(),
-      prompt: "x",
+      inputCharacters: 1,
       providerName: "local-keyword-search",
       domain: "civic",
       useCaseId: "analytics-test",

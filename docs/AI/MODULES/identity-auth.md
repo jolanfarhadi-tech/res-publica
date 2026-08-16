@@ -1,5 +1,14 @@
 # Module: Identity, Authentication & Authorization
 
+## Incremental Release-D capability boundary — 2026-08-16
+
+Verified signup now creates an exact Civic `ai.rag.query` grant targeted to
+`public-knowledge` in the same transaction as the Person, identity, other
+bounded self-service grants and canonical audit evidence. The governed query
+route resolves only the session actor and requires verified assurance plus an
+exact target before retrieval. Existing accounts are not silently broadened;
+they require a separately approved and audited provisioning operation.
+
 ## Production and observability update — 2026-08-10
 
 The verified-signup implementation is committed in `326229f`, deployed in

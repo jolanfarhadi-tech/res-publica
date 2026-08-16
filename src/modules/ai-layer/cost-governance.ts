@@ -10,7 +10,7 @@ import type { BusinessDomain } from "../../platform/domain";
 
 export type QueryLogEntry = {
   timestamp: Date;
-  prompt: string;
+  inputCharacters: number;
   providerName: string;
   domain: BusinessDomain;
   useCaseId: string;

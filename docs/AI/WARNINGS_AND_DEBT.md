@@ -1,5 +1,20 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-023 — Governed local retrieval is not external-AI activation
+
+- **Evidence:** Release D adds the authenticated `/api/ai/rag` boundary and
+  migration 0022, but the only accepted runtime provider is deterministic
+  local keyword retrieval. External provider mode and Governance use cases
+  throw before provider execution.
+- **Impact:** describing the feature as LLM-generated RAG, activating a provider
+  without approved DPIA/residency/security/budget/credentials, or broadly
+  granting access would overstate capability and bypass accepted governance.
+- **Severity:** **High / AI governance and privacy activation gate**.
+- **Safe handling:** keep external provider mode closed; retain exact verified
+  Civic scope, auth-before-retrieval, query-specific citation enforcement and
+  privacy-minimized logs; apply migration/provision grants only through the
+  normal approved Production process.
+
 ### WARN-022 — Knowledge Graph code completion is not Production activation
 
 - **Evidence:** Release C adds additive migration 0021 and complete deterministic

@@ -133,6 +133,12 @@ export const KNOWLEDGE_GRAPH_OPERATIONS_READ_RATE_LIMIT: RateLimitPolicy = {
   windowMs: 15 * 60 * 1000,
 };
 
+export const AI_RAG_QUERY_RATE_LIMIT: RateLimitPolicy = {
+  scope: "ai.rag.query",
+  limit: 30,
+  windowMs: 15 * 60 * 1000,
+};
+
 const RETENTION_AFTER_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 function hashIdentifier(

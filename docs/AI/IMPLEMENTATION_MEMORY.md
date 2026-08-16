@@ -1,5 +1,24 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Release D Governed AI/RAG
+
+The existing AI Layer now has an authenticated application/API boundary rather
+than a parallel provider mechanism. Requests reuse trusted-origin validation,
+the shared privacy-preserving PostgreSQL limiter, session-derived actors and an
+exact verified Civic capability. Authorization completes before the retrieval
+callback can read the public Knowledge Graph.
+
+The provider contract carries immutable policy separately from untrusted
+input and returns a query-specific retrieval set. The shared runtime rejects
+citations outside that exact set and preserves citation-or-refuse and the hard
+cost ceiling. The local provider remains deterministic and advisory; external
+providers and Governance use cases are not activated.
+
+Migration 0022 extends `ai_query_log` with nullable request, policy, provider,
+citation and digest provenance. Runtime persistence stores no raw prompt or
+answer. The local chain is 23 migrations / 98 tables; Production remains
+19 / 66.
+
 ## Incremental implementation — Release C Knowledge Graph and Search
 
 The existing shared graph mechanism now has an application boundary and

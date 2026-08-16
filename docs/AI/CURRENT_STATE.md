@@ -1,5 +1,35 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Release D Governed AI/RAG, 2026-08-16
+
+The shared AI Layer now exposes one authenticated Civic route at
+`POST /api/ai/rag`. The shared PostgreSQL limiter runs before actor resolution;
+the application boundary then requires the session-derived actor's exact
+`civic:ai.rag.query:public-knowledge` capability and verified assurance before
+any Knowledge Graph retrieval occurs. Existing accounts require a separately
+approved grant-provisioning operation; new verified-signup accounts receive the
+exact self-service grant atomically with their other bounded grants.
+
+The executable policy registry keeps untrusted input structurally separate
+from frozen policy data. Citations are accepted only when they belong to the
+query-specific retrieval set, and unsupported output is replaced by refusal.
+Only currently public Knowledge Graph sources become public citation URLs.
+The local provider remains deterministic keyword retrieval, zero-cost and
+advisory; Governance AI and every external provider fail closed.
+
+Raw prompts are not persisted or retained in the in-memory cost ledger. The
+database records an HMAC prompt digest, policy/input/provider provenance,
+public citation URLs, refusal state, zero cost, request ID and answer digest.
+Additive migration `0022_governed-ai-runtime` adds only nullable provenance
+columns to the existing `ai_query_log`; it creates no table and contains no
+destructive DDL. The local fresh chain applies 23 migrations and creates 98
+tables. Production remains at 19 migrations / 66 tables and is unchanged.
+
+Verification passes 35/35 focused tests, the full serial suite (94 files /
+395 tests), lint, typecheck, structure, main and isolated fresh migration
+checks, processing-inventory drift, Production dependency audit (zero
+vulnerabilities), `git diff --check`, and a 163-page Production build.
+
 ## Incremental update — Release C Knowledge Graph and Search, 2026-08-10
 
 The accepted generic Knowledge Graph boundary is implemented without creating

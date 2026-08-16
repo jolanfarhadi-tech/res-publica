@@ -15,9 +15,26 @@ export type AIQueryResult = {
   refused: boolean;
 };
 
+export type AIProviderRequest = {
+  /** Untrusted user/editor text. It is never concatenated into policy instructions by the runtime. */
+  readonly userInput: string;
+  readonly policy: {
+    readonly id: string;
+    readonly inputClass: string;
+    readonly outputStatus: "advisory" | "draft";
+    readonly humanReviewRequired: boolean;
+  };
+};
+
+export type AIProviderResult = AIQueryResult & {
+  /** Query-specific retrieval set. Citations outside this set are rejected. */
+  retrievedReferences: readonly string[];
+};
+
 export type AIProvider = {
   name: string;
-  query(prompt: string): AIQueryResult;
+  mode: "local" | "external";
+  query(request: AIProviderRequest): AIProviderResult;
   /** Approximate cost in the smallest currency unit, for cost governance. Real providers report real cost; the local provider is free. */
   estimatedCostPerQuery: number;
 };

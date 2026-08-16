@@ -1,5 +1,21 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-025 — Governed AI Production migration and bounded activation
+
+- **Implemented locally:** authenticated deterministic grounded retrieval;
+  auth-before-retrieval; executable domain policy; prompt/policy isolation;
+  exact query-specific citation checking; citation-or-refuse; zero-cost local
+  fallback; privacy-minimized provenance; shared rate limiting; additive
+  migration 0022.
+- **Production status:** migration 0022 is not applied and Release-D code is
+  not deployed by this slice. Production remains at 19 migrations / 66 tables.
+- **Operational follow-up:** authorize migration after normal backup/TLS/
+  journal/permission checks; approve retention/access rules for AI query
+  provenance; define an audited exact-scope grant-provisioning path for
+  existing accounts.
+- **Boundary:** local output is deterministic advisory retrieval, not generated
+  analysis. Governance AI and all external providers remain fail-closed.
+
 ### OPEN-024 — Knowledge Graph Production migration and operational retention
 
 - **Implemented locally:** additive migration 0021; deterministic rebuild and

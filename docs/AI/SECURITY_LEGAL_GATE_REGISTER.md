@@ -16,7 +16,7 @@ Production activation.
 | Auth0 security-event export | Required by ADR-027; not verified | Open | Production security operations |
 | Real DPIA | Repository DPIA remains a placeholder; technical appendix and processing inventory draft exist | Legal/DPO approval required | Approved real-person processing |
 | Processor DPAs | Vercel, Neon and Auth0 agreements not evidenced in repository | Owner/legal evidence required | Approved real-person processing |
-| Record of processing activities | Machine/human technical inventory covers 20 activities and all 98 repository-schema tables, including local Academy, Fellowship and Knowledge Graph migrations; CI detects schema/source/legal-field drift | Owner/legal approval required | Privacy governance |
+| Record of processing activities | Machine/human technical inventory covers 20 activities and all 98 repository-schema tables, including local Academy, Fellowship, Knowledge Graph and governed local-retrieval changes; CI detects schema/source/legal-field drift | Owner/legal approval required | Privacy governance |
 | Retention schedule | Decision matrix exists without invented periods | Owner/legal approval required | Withdrawal, erasure, operational data lifecycle |
 | AuditLog pseudonymization | Engineering pattern exists; ADR-029 keeps activation legally blocked | Blocked by legal approval | Erasure workflow |
 | Consent withdrawal policy | Canonical entity supports revocation but operational ADR-035 is absent | Architecture/legal gate | Withdrawal UI/API |
@@ -33,7 +33,7 @@ Production activation.
 | Newsletter legal basis/provider | Exact server activation gate, versioned explicit consent and PostgreSQL abuse protection implemented; provider, DPA, approved text and withdrawal/retention operations remain absent | Intentionally disabled / owner activation required | Newsletter activation |
 | Analytics provider/legal basis | No provider; disabled by default | Intentionally disabled | Analytics activation |
 | Object storage | No approved EU storage or malware scanner | Intentionally disabled | File uploads |
-| External AI provider | No approved provider/DPIA/governance activation | Intentionally disabled | External AI |
+| External AI provider | Deterministic local retrieval is implemented with exact citations and privacy-minimized logs; no external provider, DPIA, residency/security review, credentials or budget is approved | Intentionally disabled; external mode fails closed | External AI |
 | Research real-data activation | BBS issuance, project proof, isolated verifier and anonymous intake are implemented and synthetic-tested; external DPIA, cryptographic/reidentification audit, operators and project approval are absent | Closed: `RESEARCH_REAL_DATA_ACTIVATION_APPROVED` remains unset/false | Real ZK credentials and real research contributions |
 | HARM evidence/case Production operation | All Governance writes are server-disabled by default; activation requires exact `HARM_OPERATIONS_ENABLED=true`; secure storage and safeguarding remain unapproved | Intentionally disabled / owner activation required | Sensitive case processing |
 | Programme operational approval | Staffing, dates, and approved content not established | Intentionally disabled | Public programme opening |

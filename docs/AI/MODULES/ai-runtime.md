@@ -1,5 +1,29 @@
 # Module: AI Runtime (AI Layer)
 
+## Incremental implementation — Release D Governed AI/RAG, 2026-08-16
+
+The previously in-process-only local provider is now available through the
+authenticated `POST /api/ai/rag` route and `runGroundedCivicQuery` application
+boundary. The shared PostgreSQL rate limiter precedes actor resolution; exact
+`civic:ai.rag.query:public-knowledge` authorization with verified assurance
+precedes all retrieval. The response is correlated, private and non-cacheable.
+
+`policy.ts` is the executable domain/use-case registry. Untrusted input and
+frozen policy are separate provider fields. Provider results include the exact
+query retrieval references, and `queryAILayer` refuses citations outside that
+set. Public responses convert only eligible repository content paths to public
+URLs. Governance use cases and providers with `mode: "external"` fail closed.
+
+The runtime persists no raw prompt or answer. It writes HMAC prompt and answer
+digests, request/policy/input/provider provenance, public citations, refusal
+state and zero local cost to the existing AI query ledger. The transient cost
+ledger retains character count rather than prompt text. Additive migration
+0022 supplies nullable provenance columns for legacy compatibility.
+
+Focused verification passes 35 tests; the full serial suite passes 94 files /
+395 tests. External provider activation remains the owner/legal/infrastructure
+gate in OPEN-005 and the Security/Legal Gate Register.
+
 ## Purpose
 
 The single, shared, grounded-retrieval service every other module consumes rather than reimplements — citation-or-refuse, cost-governed. Evidence: `src/modules/ai-layer/README.md` (read in full, this session).
@@ -41,6 +65,10 @@ Citation-or-refuse is enforced "regardless of provider" — a deliberate design 
 ## Open work
 
 External provider (grounded RAG, embeddings, real LLM calls) — explicitly deferred, infrastructure-dependent, no provider/cost decision evidenced anywhere in this repository. See `OPEN_WORK.md` OPEN-005. The `AIProvider` interface is the documented extension point for this future work — implement against it rather than modifying `queryAILayer`'s core contract.
+
+Production migration 0022 and exact-grant provisioning for existing accounts
+remain operational work; see OPEN-025. Do not bypass authorization or broaden
+the self-service target to provision those accounts.
 
 ## Do not redo
 

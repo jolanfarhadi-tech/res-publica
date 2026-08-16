@@ -475,6 +475,14 @@ export const aiQueryLog = pgTable(
     useCaseId: text("use_case_id").notNull(),
     cost: numeric("cost", { precision: 14, scale: 6, mode: "number" }).notNull(),
     refused: boolean("refused").notNull(),
+    actorPersonId: text("actor_person_id").references(() => people.id, { onDelete: "restrict" }),
+    requestId: text("request_id"),
+    promptHash: text("prompt_hash"),
+    policyId: text("policy_id"),
+    inputClass: text("input_class"),
+    providerMode: text("provider_mode", { enum: ["local", "external"] }),
+    citations: jsonb("citations").$type<string[]>(),
+    answerDigest: text("answer_digest"),
   },
   (table) => [primaryKey({ columns: [table.timestamp, table.providerName, table.prompt] })]
 );

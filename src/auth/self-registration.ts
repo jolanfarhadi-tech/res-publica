@@ -43,6 +43,7 @@ export async function provisionSelfRegisteredIdentity(
   const academyAssessmentGrantId = createId();
   const fellowshipApplicationGrantId = createId();
   const fellowshipDashboardGrantId = createId();
+  const aiRagGrantId = createId();
   const person = {
     id: personId,
     name: cleanDisplayName(claims.displayName, email),
@@ -147,6 +148,18 @@ export async function provisionSelfRegisteredIdentity(
         grantedByPersonId: personId,
         revokedAt: null,
       },
+      {
+        id: aiRagGrantId,
+        personId,
+        domain: "civic",
+        capability: "ai.rag.query",
+        target: "public-knowledge",
+        assuranceRequired: "verified",
+        validFrom: now,
+        validUntil: null,
+        grantedByPersonId: personId,
+        revokedAt: null,
+      },
     ]);
     await transaction.insert(auditLog).values([
       {
@@ -170,6 +183,7 @@ export async function provisionSelfRegisteredIdentity(
         academyAssessmentGrantId,
         fellowshipApplicationGrantId,
         fellowshipDashboardGrantId,
+        aiRagGrantId,
       ].map((grantId) => ({
         id: createId(), actorPersonId: personId,
         action: "authorization.self-service-grant-created", target: grantId,

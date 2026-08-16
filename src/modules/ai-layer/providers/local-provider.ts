@@ -1,6 +1,6 @@
 import type { KnowledgeGraph } from "../../knowledge-graph/types";
 import { searchEntities } from "../../knowledge-graph/api";
-import type { AIProvider, AIQueryResult } from "../types";
+import type { AIProvider, AIProviderResult } from "../types";
 
 /**
  * Local Provider — the repository-local AI Layer implementation, grounded
@@ -17,20 +17,30 @@ import type { AIProvider, AIQueryResult } from "../types";
 export function createLocalProvider(graph: KnowledgeGraph): AIProvider {
   return {
     name: "local-keyword-search",
+    mode: "local",
     estimatedCostPerQuery: 0,
-    query(prompt: string): AIQueryResult {
+    query({ userInput: prompt }): AIProviderResult {
       const matches = searchEntities(graph, prompt);
       if (matches.length === 0) {
         return {
           answer: `No grounded source found for "${prompt}" — refusing rather than guessing (Constitution Principle 1).`,
           citations: [],
+          retrievedReferences: [],
           refused: true,
         };
       }
       const top = matches[0];
+      const retrievedReferences = [
+        ...new Set(
+          matches.flatMap((match) =>
+            match.sources.map((source) => source.file)
+          )
+        ),
+      ];
       return {
         answer: `${top.canonicalName} (${top.type}) — found via deterministic keyword search.`,
         citations: top.sources.map((s) => s.file),
+        retrievedReferences,
         refused: false,
       };
     },

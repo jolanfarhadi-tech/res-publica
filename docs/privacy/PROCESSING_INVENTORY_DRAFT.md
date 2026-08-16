@@ -231,12 +231,16 @@ conclusions.
 
 - **Technical status:** deterministic build, candidate ledger, independent
   human review, provenance and bounded public graph projection are implemented;
-  no external AI provider is active.
+  authenticated local citation-or-refuse retrieval is implemented; no external
+  AI provider is active.
 - **Potential data:** entity names/aliases, deterministic relationships,
-  source eligibility, build digest, human decisions and AI query/cost fields.
+  source eligibility, build digest, human decisions, HMAC query digest,
+  request/policy/provider provenance, public citations, answer digest and cost.
 - **Boundary:** rebuild never publishes automatically; exact-scope MFA and
   separation of duties protect approval; public reads expose only allowlisted
-  fields backed by currently public-eligible approved provenance.
+  fields backed by currently public-eligible approved provenance. Authenticated
+  retrieval requires exact verified Civic scope before graph access, stores no
+  raw prompt or answer and rejects external provider mode.
 - **Unresolved:** retention for build/candidate/provenance records and ongoing
   source-eligibility governance. External AI still requires an approved
   provider/use case, DPIA and AI-governance activation.

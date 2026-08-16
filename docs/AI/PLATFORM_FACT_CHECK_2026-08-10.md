@@ -192,3 +192,15 @@ This note does not rewrite the original audit evidence or claim Production
 activation: migration 0021 is not applied to Production, public data is limited
 to current reviewed/source-grounded MDX provenance, and no external AI provider
 or ADR-035-reserved HARM graph rule is enabled.
+
+## Post-audit remediation note — Release D Governed AI/RAG
+
+The RAG gap recorded above has been remediated in the local Release-D worktree
+at the bounded level authorized by ADR-008/030. One authenticated route now
+enforces shared rate limiting, exact verified Civic scope and authorization
+before retrieval. The runtime separates frozen policy from untrusted input,
+checks citations against the exact query retrieval set, refuses unsupported
+answers, enforces cost governance and persists privacy-minimized provenance.
+This does not claim an LLM or external provider: output remains deterministic
+local keyword retrieval, Governance AI and external mode fail closed, migration
+0022 is not in Production, and Production remains 19 migrations / 66 tables.

@@ -10,6 +10,7 @@ import type { Database } from "../persistence";
 import * as coreSchema from "../persistence/schema";
 import { rateLimitBuckets } from "../persistence/schema";
 import {
+  AI_RAG_QUERY_RATE_LIMIT,
   GOVERNANCE_PRIVILEGED_WRITE_RATE_LIMIT,
   NEWSLETTER_SUBSCRIBE_RATE_LIMIT,
   PUBLISHING_PRIVILEGED_WRITE_RATE_LIMIT,
@@ -53,6 +54,11 @@ describe("shared PostgreSQL rate limiting", () => {
       scope: "newsletter.subscribe",
       limit: 5,
       windowMs: 3_600_000,
+    });
+    expect(AI_RAG_QUERY_RATE_LIMIT).toEqual({
+      scope: "ai.rag.query",
+      limit: 30,
+      windowMs: 900_000,
     });
   });
 

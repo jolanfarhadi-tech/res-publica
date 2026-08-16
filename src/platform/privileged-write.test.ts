@@ -69,7 +69,12 @@ describe("privileged write boundary", () => {
     expect(response.status).toBe(201);
     expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
     expect(mocks.rateLimitCalls).toBe(1);
-    expect(operation).toHaveBeenCalledWith(mocks.runtime);
+    expect(operation).toHaveBeenCalledWith(
+      mocks.runtime,
+      expect.objectContaining({
+        requestId: expect.stringMatching(/^[0-9a-f-]{36}$/),
+      })
+    );
   });
 
   it("returns a correlated 429 before persistence or audit mutation", async () => {

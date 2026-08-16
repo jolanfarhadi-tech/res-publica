@@ -4,7 +4,7 @@ export const aiLayerManifest: ModuleManifest = {
   moduleName: "ai-layer",
   entities: [],
   databaseTables: ["ai_query_log", "ai_cost_ledger"],
-  apiRoutes: ["/api/ai-layer/query"],
+  apiRoutes: ["/api/ai/rag"],
   dashboardContribution: "ai-cost-governance-summary",
   aiLayerCapabilities: [],
 };
