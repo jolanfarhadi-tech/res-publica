@@ -14,6 +14,7 @@
     "ops:health": "node scripts/check-deployment-health.mjs",
     "ops:membership-e2e": "node scripts/check-membership-production-e2e.mjs",
     "ops:restore-drill": "node scripts/verify-neon-restore-drill.mjs",
+    "ops:recovery-drill:local": "node scripts/run-isolated-recovery-drill.mjs",
     "eao:repo-health": "node scripts/eao/repository-health.mjs",
     "eao:broken-links": "node scripts/eao/broken-links.mjs",
     "eao:terminology-drift": "node scripts/eao/terminology-drift.mjs",

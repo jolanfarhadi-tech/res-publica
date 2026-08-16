@@ -1,5 +1,35 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — Mandatory hardening Phase E: verified clean recovery, 2026-08-16
+
+The current 24-migration/98-table main schema now has a repeatable, real
+isolated backup→restore drill using synthetic data only. The drill creates a
+fully migrated source, records synthetic revoked session/grant/wallet state and
+canonical audit evidence, produces a compressed in-memory backup, restores it
+into a separate temporary database and compares exact migration/table and
+fixture digests. It proves that revoked access does not revive and removes all
+temporary state afterward. Production and real research data are untouched.
+
+The existing Neon verifier no longer downloads or executes
+`neonctl@latest`. It accepts a secret isolated-branch URL only through the
+environment, validates the Neon/TLS boundary and wraps all integrity checks in
+a read-only transaction. The separately supplied non-secret Production host is
+rejected as a drill target. Clean-recovery, last-known-good selection, backup
+inventory/independence, credential rotation and post-restore security checks
+are documented without inventing approved RPO/RTO values.
+
+The 2026-08-10 Neon 19/66 restore remains historical provider evidence. A
+current 24/98 provider drill, independent backup/access evidence, named owners,
+approved RPO/RTO and any destructive Production cutover remain external gates.
+Verification passes 3 focused files / 7 tests and the full serial suite at 109
+files / 449 tests. The executable isolated recovery drill passes at 24/98;
+lint, typecheck, structure, secret/supply-chain checks, the 20-activity/98-table
+processing inventory, zero-vulnerability Production dependency audit, Drizzle
+consistency, fresh 24/98 main and 1/6 research schemas, all nine EAO pipelines,
+the 166-page Production build with canonical site URL and `git diff --check`
+pass. EAO full-platform readiness remains correctly No-Go because 35 external
+activation gates remain open; Production is unchanged.
+
 ## Incremental update — Mandatory hardening Phase D: application resource exhaustion, 2026-08-16
 
 The shared distributed PostgreSQL limiter now protects the previously

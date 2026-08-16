@@ -1,5 +1,21 @@
 # Module: Persistence
 
+## Incremental recovery verification — 2026-08-16
+
+The current local main chain has a complete synthetic backup→restore drill in
+`scripts/run-isolated-recovery-drill.mjs`. It compares exact migration hashes,
+all 98 public table names, constraint validity, canonical audit evidence and
+revoked session/grant/wallet state across separate migrated and restored
+PGlite directories. The in-memory backup and both temporary directories are
+removed after verification; no migration or Production connection is added.
+
+The existing Neon verifier now requires an ephemeral secret isolated-branch
+URL, validates a Neon PostgreSQL host and certificate-authorized TLS, and runs
+only inside a read-only transaction. It rejects the separately declared
+Production hostname. The mutable runtime
+`neonctl@latest` dependency is removed. Current 24/98 provider restoration,
+RPO/RTO, backup independence and destructive cutover remain OPEN-032.
+
 ## Incremental implementation — privileged audit correlation, 2026-08-16
 
 Additive migration `0023_privileged-access-audit-context.sql` adds nullable

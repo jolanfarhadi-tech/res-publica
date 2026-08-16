@@ -1,5 +1,20 @@
 # Open Work — Evidence-Based Register
 
+### OPEN-032 — Mandatory hardening Phase E provider recovery and owner objectives
+- **Implemented in repository:** repeatable current-schema synthetic
+  backup→restore; exact migration/table integrity; revoked-access and audit
+  preservation checks; read-only Neon verifier without mutable remote CLI;
+  clean-recovery, backup-independence and credential-rotation procedures.
+- **External evidence still required:** run the current 24/98 verifier against
+  an authorized isolated Neon recovery branch; approve and evidence RPO/RTO,
+  named incident/recovery owners, independent backup and control-plane access,
+  configuration/Auth0/log recovery, credential custodians and dual-control
+  destructive cutover.
+- **Safety boundary:** the local drill is real technical restore execution but
+  not provider SLA or current Production-backup evidence. Do not restore over
+  Production, rotate credentials or delete provider recovery artifacts without
+  explicit authority.
+
 ### OPEN-031 — Mandatory hardening Phase D provider-edge evidence and execution budgets
 - **Implemented in repository:** distinct distributed limits for costly public
   and authenticated reads; bounded declared-body policies for sensitive JSON

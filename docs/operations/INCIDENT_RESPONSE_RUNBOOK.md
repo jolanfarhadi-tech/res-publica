@@ -49,3 +49,9 @@ root cause, timeline, impact, evidence locations, corrective actions, owner,
 and due dates are recorded. A post-incident review must explicitly assess
 authorization, separation of duties, personal-data exposure, and whether an
 ADR or legal review is required.
+
+Use `CLEAN_RECOVERY_RUNBOOK.md` for a destructive or integrity-affecting event.
+Recovery must select a supported last-known-good source and recovery point,
+must not restore suspected secrets, roles, data mutations, dependencies or
+build artifacts, and must verify that revoked access remains revoked. A
+Production cutover remains explicit human/dual-control work.

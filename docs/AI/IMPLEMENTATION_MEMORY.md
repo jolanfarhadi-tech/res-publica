@@ -1,5 +1,21 @@
 # Implementation Memory — Cross-Cutting Summary
 
+## Incremental implementation — Mandatory hardening Phase E
+
+`scripts/run-isolated-recovery-drill.mjs` reuses the canonical Drizzle chain
+and PGlite dependency to execute a complete synthetic backup→restore in two
+temporary directories. It checks exact migration hashes/table names,
+constraints, an audit fixture and revoked session/grant/wallet state before and
+after restore. The compressed backup exists only in process memory and every
+temporary directory is removed in `finally`.
+
+`scripts/verify-neon-restore-drill.mjs` now receives its isolated-branch URL
+from `NEON_RESTORE_DRILL_DATABASE_URL`, accepts only PostgreSQL Neon hosts,
+rejects the separately supplied Production hostname, forces certificate
+validation and runs integrity queries inside `BEGIN READ ONLY`/`ROLLBACK`. The
+previous mutable `npx --yes neonctl@latest` execution path is removed. Provider
+branch lifecycle and Production recovery remain external operator actions.
+
 ## Incremental implementation — Mandatory hardening Phase D
 
 `src/platform/rate-limit.ts` remains the single application-level distributed

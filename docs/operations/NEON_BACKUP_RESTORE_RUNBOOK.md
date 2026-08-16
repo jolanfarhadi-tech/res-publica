@@ -43,15 +43,24 @@ window may be claimed.
 
 The repository provides `npm run ops:restore-drill` for step 4. It refuses the
 Production branch ID, requires a `restore-drill-` branch name, obtains the
-connection only in process memory, enforces certificate-authorized TLS, and
-uses only read-only integrity queries. Required environment names are
+connection only from an ephemeral environment secret, enforces a Neon host,
+certificate-authorized TLS and a read-only SQL transaction. It does not invoke
+or download a mutable provider CLI. Required environment names are
 `NEON_RESTORE_DRILL_PROJECT_ID`, `NEON_RESTORE_DRILL_BRANCH_ID`,
 `NEON_RESTORE_DRILL_BRANCH_NAME`, `NEON_PRODUCTION_BRANCH_ID`,
-`NEON_RESTORE_EXPECTED_MIGRATIONS`, and `NEON_RESTORE_EXPECTED_TABLES`.
+`NEON_PRODUCTION_DATABASE_HOST`, `NEON_RESTORE_DRILL_DATABASE_URL`,
+`NEON_RESTORE_EXPECTED_MIGRATIONS`, and `NEON_RESTORE_EXPECTED_TABLES`. The
+non-secret Production hostname is required so the verifier rejects a restore
+URL aimed at that endpoint. Never place the URL in shell history or Git.
 
 The completed 2026-08-10 drill is recorded in
 `NEON_RESTORE_DRILL_EVIDENCE_2026-08-10.md`. The current schema restored as 19
 migrations and 66 tables. This evidence does not approve RPO/RTO.
+
+The repeatable local Phase-E drill is separately available as
+`npm run ops:recovery-drill:local`. It validates the current 24-migration,
+98-table repository state with synthetic revoked-access and audit fixtures. It
+does not replace or overstate the historical Neon provider evidence.
 
 ## Production recovery decision
 

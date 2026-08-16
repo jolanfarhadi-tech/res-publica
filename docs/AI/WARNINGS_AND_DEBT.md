@@ -1,5 +1,17 @@
 # Warnings and Debt — Verified Risk Register
 
+### WARN-030 — Current local recovery proof is not current provider recovery proof
+- **Evidence:** the Phase-E drill restores the exact 24/98 repository schema
+  and synthetic security state in isolated PGlite. The last real Neon restore
+  evidence is the named 2026-08-10 snapshot at 19 migrations/66 tables.
+- **Impact:** claiming current provider recoverability, RPO/RTO, independent
+  backup survival or Production cutover readiness from the local drill would
+  overstate evidence.
+- **Severity:** **High / disaster-recovery and control-plane boundary**.
+- **Safe handling:** retain the repeatable local gate and read-only provider
+  verifier; complete OPEN-032 with an authorized isolated current-schema Neon
+  drill and owner/dual-control decisions before any destructive recovery.
+
 ### WARN-029 — Application budgets do not prove provider DDoS enforcement
 - **Evidence:** shared PostgreSQL limits, bounded schemas, pagination caps and
   declared-body budgets protect known application routes, but source code

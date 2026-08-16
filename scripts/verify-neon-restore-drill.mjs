@@ -1,9 +1,7 @@
-import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import pg from "pg";
 
 const SAFE_NEON_ID = /^[a-z0-9][a-z0-9-]{2,80}$/;
-const SAFE_DATABASE_NAME = /^[a-z_][a-z0-9_]{0,62}$/;
 
 function requireSafe(value, pattern, label) {
   if (!value || !pattern.test(value)) throw new Error(`${label} is invalid`);
@@ -17,7 +15,10 @@ export function validateRestoreDrillTarget({
 }) {
   requireSafe(branchId, SAFE_NEON_ID, "Restore branch ID");
   requireSafe(productionBranchId, SAFE_NEON_ID, "Production branch ID");
-  if (!branchName?.startsWith("restore-drill-")) {
+  if (
+    !branchName?.startsWith("restore-drill-") ||
+    !SAFE_NEON_ID.test(branchName)
+  ) {
     throw new Error("Restore branch name must use the restore-drill- prefix");
   }
   if (branchId === productionBranchId) {
@@ -26,20 +27,58 @@ export function validateRestoreDrillTarget({
   return { branchId, branchName, productionBranchId };
 }
 
+export function parseRestoreDatabaseUrl(value, productionHostname) {
+  try {
+    const parsed = new URL(value);
+    if (
+      !["postgres:", "postgresql:"].includes(parsed.protocol) ||
+      !parsed.hostname.endsWith(".neon.tech") ||
+      !productionHostname?.endsWith(".neon.tech") ||
+      parsed.hostname === productionHostname ||
+      !parsed.username ||
+      !parsed.password ||
+      !parsed.pathname.slice(1)
+    ) {
+      throw new Error("invalid");
+    }
+    for (const parameter of ["sslmode", "sslcert", "sslkey", "sslrootcert"]) {
+      parsed.searchParams.delete(parameter);
+    }
+    return {
+      connectionString: parsed.href,
+      ssl: { rejectUnauthorized: true },
+    };
+  } catch {
+    throw new Error("Neon restore database URL is invalid");
+  }
+}
+
 export async function verifyRestoredDatabase(client, expected) {
-  const proxyTls = await client.query(
-    "select ssl, version, cipher from pg_stat_ssl where pid=pg_backend_pid()"
-  );
-  const migrations = await client.query(
-    "select count(*)::int as count from drizzle.__drizzle_migrations"
-  );
-  const tables = await client.query(
-    "select count(*)::int as count from information_schema.tables where table_schema='public' and table_type='BASE TABLE'"
-  );
-  const invalidConstraints = await client.query(
-    "select count(*)::int as count from pg_constraint where convalidated = false"
-  );
-  const readiness = await client.query("select 1::int as ready");
+  await client.query("begin read only");
+  let transactionReadOnly;
+  let proxyTls;
+  let migrations;
+  let tables;
+  let invalidConstraints;
+  let readiness;
+  try {
+    transactionReadOnly = await client.query("show transaction_read_only");
+    proxyTls = await client.query(
+      "select ssl, version, cipher from pg_stat_ssl where pid=pg_backend_pid()"
+    );
+    migrations = await client.query(
+      "select count(*)::int as count from drizzle.__drizzle_migrations"
+    );
+    tables = await client.query(
+      "select count(*)::int as count from information_schema.tables where table_schema='public' and table_type='BASE TABLE'"
+    );
+    invalidConstraints = await client.query(
+      "select count(*)::int as count from pg_constraint where convalidated = false"
+    );
+    readiness = await client.query("select 1::int as ready");
+  } finally {
+    await client.query("rollback");
+  }
 
   const stream = client.connection?.stream;
   const result = {
@@ -51,6 +90,7 @@ export async function verifyRestoredDatabase(client, expected) {
         : null,
     },
     databaseProxyTls: proxyTls.rows[0],
+    transactionReadOnly: transactionReadOnly.rows[0]?.transaction_read_only === "on",
     migrations: migrations.rows[0]?.count,
     tables: tables.rows[0]?.count,
     invalidConstraints: invalidConstraints.rows[0]?.count,
@@ -59,6 +99,7 @@ export async function verifyRestoredDatabase(client, expected) {
   if (
     result.tls.encrypted !== true ||
     result.tls.authorized !== true ||
+    result.transactionReadOnly !== true ||
     result.migrations !== expected.migrations ||
     result.tables !== expected.tables ||
     result.invalidConstraints !== 0 ||
@@ -69,29 +110,6 @@ export async function verifyRestoredDatabase(client, expected) {
     );
   }
   return result;
-}
-
-function getConnectionString({ projectId, branchId, roleName, databaseName }) {
-  requireSafe(projectId, SAFE_NEON_ID, "Neon project ID");
-  requireSafe(branchId, SAFE_NEON_ID, "Restore branch ID");
-  requireSafe(roleName, SAFE_DATABASE_NAME, "Restore role name");
-  requireSafe(databaseName, SAFE_DATABASE_NAME, "Restore database name");
-  const command = [
-    "npx --yes neonctl@latest connection-string",
-    branchId,
-    "--project-id",
-    projectId,
-    "--role-name",
-    roleName,
-    "--database-name",
-    databaseName,
-    "--ssl verify-full --no-color",
-  ].join(" ");
-  return execFileSync(
-    "powershell.exe",
-    ["-NoProfile", "-Command", command],
-    { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }
-  ).trim();
 }
 
 export async function runRestoreDrill(environment = process.env) {
@@ -110,18 +128,16 @@ export async function runRestoreDrill(environment = process.env) {
 
   let client;
   try {
-    const connectionString = getConnectionString({
-      projectId: environment.NEON_RESTORE_DRILL_PROJECT_ID,
-      branchId: target.branchId,
-      roleName: environment.NEON_RESTORE_DRILL_ROLE_NAME ?? "neondb_owner",
-      databaseName: environment.NEON_RESTORE_DRILL_DATABASE_NAME ?? "neondb",
-    });
-    const tlsConnection = new URL(connectionString);
-    tlsConnection.searchParams.delete("sslmode");
-    client = new pg.Client({
-      connectionString: tlsConnection.href,
-      ssl: { rejectUnauthorized: true },
-    });
+    requireSafe(
+      environment.NEON_RESTORE_DRILL_PROJECT_ID,
+      SAFE_NEON_ID,
+      "Neon project ID"
+    );
+    const connection = parseRestoreDatabaseUrl(
+      environment.NEON_RESTORE_DRILL_DATABASE_URL,
+      environment.NEON_PRODUCTION_DATABASE_HOST
+    );
+    client = new pg.Client(connection);
     await client.connect();
     const verification = await verifyRestoredDatabase(client, expected);
     return {
