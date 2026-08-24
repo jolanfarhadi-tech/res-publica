@@ -32,6 +32,13 @@ export function Button({
   const className = `${base} ${variants[variant]}`;
 
   if (href) {
+    if (href.startsWith("/api/")) {
+      return (
+        <a href={href} className={className}>
+          {children}
+        </a>
+      );
+    }
     return (
       <Link href={href} className={className}>
         {children}

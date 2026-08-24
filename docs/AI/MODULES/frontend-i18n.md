@@ -20,9 +20,11 @@ registration after reload through an exactly scoped, non-mutating read.
 Verification passes 4 focused files / 35 tests and the complete serial suite at
 115 files / 486 tests. Structure, lint, typecheck, the 173-page Production
 build and `git diff --check` pass. Rendered DE/EN/FA checks at 390, 1280 and
-1440px confirm the responsive boundary, Persian RTL, zero horizontal overflow,
-ordered landmarks/headings and zero browser console warnings/errors. No
-deployment has occurred.
+1440px confirm the responsive boundary, Persian RTL, zero horizontal overflow
+and ordered landmarks/headings. Production smoke found that shared Button
+links to `/api/auth/login` were incorrectly prefetched as RSC requests; API
+destinations now use native document navigation while normal application links
+continue to use `next/link`, preventing the Auth0 redirect console error.
 
 ## Incremental implementation — Knowledge Graph and search surfaces, 2026-08-10
 

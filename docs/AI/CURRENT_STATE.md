@@ -24,8 +24,10 @@ Focused regression verification passes 4 files / 35 tests. The complete serial
 suite passes 115 files / 486 tests; structure, lint, typecheck, the optimized
 173-page Production build and `git diff --check` pass. Production-mode browser
 checks cover DE/EN/FA, 390/1280/1440px navigation boundaries, Persian RTL,
-zero horizontal overflow, ordered headings and zero console warnings/errors.
-This slice is local only: no staging, commit, push or deployment has occurred.
+zero horizontal overflow and ordered headings. The first Production smoke
+identified that `next/link` prefetches `/api/auth/login` redirects as RSC;
+the shared Button now renders API destinations as document-navigation anchors,
+with regression coverage, so Auth0 entry no longer creates that console error.
 The unrelated `tsconfig.json` and `tatus` paths remain excluded.
 
 ## Incremental update — Mandatory hardening Phase G: A→A′ and Loops 1–5, 2026-08-16

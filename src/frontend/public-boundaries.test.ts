@@ -214,6 +214,12 @@ describe("public website boundaries", () => {
     expect(css).toContain("hyphens: auto");
   });
 
+  it("uses document navigation for authentication API links", () => {
+    const button = source("src", "components", "ui", "Button.tsx");
+    expect(button).toContain('href.startsWith("/api/")');
+    expect(button).toContain("<a href={href}");
+  });
+
   it("renders the approved two-path homepage instead of a flat collection inventory", () => {
     const homepage = source("src", "app", "[locale]", "page.tsx");
     expect(homepage).toContain("<ConstellationNarrative");
