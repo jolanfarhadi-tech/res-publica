@@ -25,8 +25,8 @@ export default async function FellowshipPage({ params }: Props) {
     <PageHeader title={copy.title} lede={copy.lede} />
     <Container className="py-14 sm:py-20">
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card title={copy.principleTitle}>{copy.principleText}</Card>
-        <Card title={copy.processTitle}>{copy.processText}</Card>
+        <Card title={copy.principleTitle} headingLevel={2}>{copy.principleText}</Card>
+        <Card title={copy.processTitle} headingLevel={2}>{copy.processText}</Card>
       </div>
       <div className="mt-8"><Button href={`/${locale}/dashboard/fellowship`} variant="secondary">{copy.dashboardAction}</Button></div>
       <section className="mt-14" aria-labelledby="fellowship-application-title">

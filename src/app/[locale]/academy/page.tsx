@@ -24,7 +24,7 @@ export default async function AcademyPage({ params }: Props) {
   return <>
     <PageHeader title={copy.title} lede={copy.lede} />
     <Container className="py-14 sm:py-20">
-      <Card title={copy.principleTitle}>{copy.principleText}</Card>
+      <Card title={copy.principleTitle} headingLevel={2}>{copy.principleText}</Card>
       <div className="mt-8 flex flex-wrap gap-3">
         <Button href={`/${locale}/academy/courses`}>{copy.coursesAction}</Button>
         <Button href={`/${locale}/dashboard/academy`} variant="secondary">{copy.dashboardAction}</Button>

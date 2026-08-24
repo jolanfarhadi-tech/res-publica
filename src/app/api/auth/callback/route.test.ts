@@ -67,6 +67,13 @@ function callbackRequest() {
   return new Request("https://respublica-ev.de/api/auth/callback?state=valid&code=code");
 }
 
+function browserCallbackRequest() {
+  return new Request(
+    "https://respublica-ev.de/api/auth/callback?state=valid&code=code",
+    { headers: { accept: "text/html", "accept-language": "en-US,en;q=0.9" } }
+  );
+}
+
 describe("OIDC callback registration intent", () => {
   beforeEach(() => {
     mocks.runtime = { db: {}, oidc: {} };
@@ -120,5 +127,16 @@ describe("OIDC callback registration intent", () => {
     await expect(response.json()).resolves.toEqual({ error: "email_verification_pending" });
     expect(mocks.provisioned).toHaveLength(0);
     expect(mocks.sessions).toHaveLength(0);
+  });
+
+  it("sends browser callback failures to a localized recovery page", async () => {
+    mocks.flow = null;
+    const response = await GET(browserCallbackRequest());
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe(
+      "https://respublica-ev.de/en/auth/error?reason=invalid_or_expired_authentication_state"
+    );
+    expect(response.headers.get("cache-control")).toContain("no-store");
   });
 });

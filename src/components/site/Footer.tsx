@@ -20,6 +20,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     { href: `/${locale}/contact`, label: site.nav.contact },
   ];
   const work = [
+    { href: `/${locale}/method`, label: site.nav.method },
     { href: `/${locale}/programs`, label: site.nav.programs },
     { href: `/${locale}/projects`, label: site.nav.projects },
     { href: `/${locale}/lab`, label: experience.home.lab.label },
@@ -29,8 +30,8 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   ];
   const participation = [
     { href: `/${locale}/membership`, label: site.nav.membership },
-    { href: `/${locale}/products`, label: site.nav.products },
-    { href: `/${locale}/services`, label: site.nav.services },
+    { href: `/${locale}/contact`, label: site.nav.contact },
+    { href: `/${locale}/events`, label: site.nav.events },
     { href: `/${locale}/search`, label: dict.search.label },
   ];
 

@@ -21,11 +21,38 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
 
   useEffect(() => {
     let active = true;
-    fetch(`/api/events/capacity?eventId=${encodeURIComponent(eventId)}`, { cache: "no-store" })
-      .then((response) => {
-        if (active) setAvailable(response.ok);
-      })
-      .catch(() => undefined);
+    async function restoreRegistration() {
+      try {
+        const capacity = await fetch(
+          `/api/events/capacity?eventId=${encodeURIComponent(eventId)}`,
+          { cache: "no-store" }
+        );
+        if (!active) return;
+        setAvailable(capacity.ok);
+        if (!capacity.ok) return;
+
+        const current = await fetch(
+          `/api/events/registration?eventId=${encodeURIComponent(eventId)}`,
+          { cache: "no-store" }
+        );
+        if (!active || !current.ok) return;
+        const registration = (await current.json()) as {
+          status?: "confirmed" | "waitlisted";
+        };
+        if (
+          registration.status === "confirmed" ||
+          registration.status === "waitlisted"
+        ) {
+          setActiveRegistration(true);
+          setState(
+            registration.status === "waitlisted" ? "waitlisted" : "success"
+          );
+        }
+      } catch {
+        // The public event detail remains readable when status recovery fails.
+      }
+    }
+    void restoreRegistration();
     return () => { active = false; };
   }, [eventId]);
 
@@ -44,7 +71,11 @@ export function EventRegistration({ locale, eventId, dict }: { locale: Locale; e
       });
       const nextState = await actionStateFromResponse(response);
       setState(nextState);
-      if (nextState === "success" || nextState === "waitlisted") {
+      if (
+        nextState === "success" ||
+        nextState === "waitlisted" ||
+        nextState === "duplicate"
+      ) {
         setActiveRegistration(true);
       }
     } catch {

@@ -421,6 +421,12 @@ MFA, migration, legal, and operational gates in
 - **Remaining blocker:** complete the read-only controlled Membership E2E with
   an owner-approved synthetic Auth0 session and complete a separate genuine-MFA
   board boundary check. No session cookie or test identity is stored in Git.
+- **Incremental status 2026-08-24:** browser callback failures now have a
+  localized DE/EN/FA recovery surface instead of exposing raw JSON to people,
+  and authenticated event pages can restore the current actor's active
+  registration after reload without write or audit mutation. These local
+  changes do not constitute a controlled Auth0 Membership E2E and have not been
+  deployed.
 - **Safe next action:** use
   `docs/operations/MEMBERSHIP_PRODUCTION_E2E.md`; never introduce an auth or MFA
   bypass for automation.

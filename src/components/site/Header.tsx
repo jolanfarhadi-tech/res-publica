@@ -38,7 +38,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </span>
         </Link>
 
-        <nav aria-label={dict.a11y.mainNavigation} className="hidden lg:block">
+        <nav aria-label={dict.a11y.mainNavigation} className="hidden min-[90rem]:block">
           <ul className="flex items-center gap-1">
             {items.map((item) => (
               <li key={item.href}>
@@ -49,7 +49,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <div className="hidden 2xl:block">
+          <div className="hidden min-[90rem]:block">
             <AccountControl locale={locale} dict={dict} />
           </div>
           <Link

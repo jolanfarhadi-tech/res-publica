@@ -113,18 +113,18 @@ describe("public website boundaries", () => {
   it("keeps the primary navigation concise and localized", () => {
     for (const locale of locales) {
       const items = publicNavigation(locale);
-      expect(items).toHaveLength(8);
-      expect(items.map((item) => item.href)).toEqual(
-        expect.arrayContaining([
-          `/${locale}/programs`,
-          `/${locale}/academy`,
-          `/${locale}/projects`,
-          `/${locale}/lab`,
-          `/${locale}/research`,
-          `/${locale}/publications`,
-          `/${locale}/membership`,
-          `/${locale}/contact`,
-        ])
+      expect(items).toHaveLength(7);
+      expect(items.map((item) => item.href)).toEqual([
+        `/${locale}/mission-vision`,
+        `/${locale}/method`,
+        `/${locale}/projects`,
+        `/${locale}/programs`,
+        `/${locale}/research`,
+        `/${locale}/publications`,
+        `/${locale}/membership`,
+      ]);
+      expect(items.map((item) => item.href)).not.toContain(
+        `/${locale}/academy`
       );
       expect(items.map((item) => item.href)).not.toContain(
         `/${locale}/products`
@@ -201,14 +201,49 @@ describe("public website boundaries", () => {
     expect(mobileMenu).toContain("<dialog");
     expect(mobileMenu).toContain("showModal()");
     expect(mobileMenu).toContain(
-      'className="icon-button inline-grid lg:hidden"'
+      'className="icon-button inline-grid min-[90rem]:hidden"'
     );
+    expect(mobileMenu).toContain("<AccountControl");
+    expect(mobileMenu).toContain('window.matchMedia("(min-width: 90rem)")');
+    expect(header.match(/hidden min-\[90rem\]:block/g)).toHaveLength(3);
     expect(activeLink).toContain("usePathname()");
     expect(css).not.toMatch(
       /\.icon-button\s*\{[\s\S]*?display:\s*inline-grid/
     );
     expect(css).toContain("overflow-wrap: anywhere");
     expect(css).toContain("hyphens: auto");
+  });
+
+  it("renders the approved two-path homepage instead of a flat collection inventory", () => {
+    const homepage = source("src", "app", "[locale]", "page.tsx");
+    expect(homepage).toContain("<ConstellationNarrative");
+    expect(homepage).toContain("copy.human");
+    expect(homepage).toContain("copy.institutional");
+    expect(homepage).toContain("copy.trust");
+    expect(homepage).toContain("copy.fellowship");
+    expect(homepage).toContain('category="programs"');
+    expect(homepage).not.toContain("CollectionPreview");
+    expect(homepage).not.toContain('getEntries(locale, "research")');
+  });
+
+  it("keeps programme and collection-card heading levels structurally valid", () => {
+    const card = source("src", "components", "ui", "Card.tsx");
+    const entryCard = source("src", "components", "ui", "EntryCard.tsx");
+    const academy = source("src", "app", "[locale]", "academy", "page.tsx");
+    const fellowship = source("src", "app", "[locale]", "fellowship", "page.tsx");
+    expect(card).toContain("headingLevel");
+    expect(entryCard).toContain("<h2");
+    expect(academy).toContain("headingLevel={2}");
+    expect(fellowship.match(/headingLevel=\{2\}/g)).toHaveLength(2);
+  });
+
+  it("classifies Academy inside Programmes rather than as a parallel top-level category", () => {
+    const academy = publicOfferings.find((offering) => offering.id === "academy");
+    expect(academy).toMatchObject({
+      category: "programs",
+      maturity: "partial",
+      href: "/academy",
+    });
   });
 
   it("localizes legal links and keeps structured-data claims bounded", () => {

@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { requireAuthorization } from "../auth/authorize";
 import type { AuthenticatedActor } from "../auth/types";
 import {
@@ -43,6 +43,31 @@ export async function getEventCapacity(db: Database, eventId: string) {
     remaining: remainingCapacity(event, current),
     waitlistActive: current.some((registration) => registration.status === "waitlisted"),
   };
+}
+
+export async function getAuthenticatedActorEventRegistration(
+  db: Database,
+  actor: AuthenticatedActor | null,
+  eventId: string
+) {
+  requireAuthorization(actor, {
+    domain: "civic",
+    capability: "events.register",
+    target: eventId,
+  });
+  const [registration] = await db
+    .select()
+    .from(registrations)
+    .where(
+      and(
+        eq(registrations.eventId, eventId),
+        eq(registrations.personId, actor.personId),
+        ne(registrations.status, "cancelled")
+      )
+    )
+    .limit(1);
+  if (!registration) throw new EventRegistrationNotFoundError(eventId);
+  return registration;
 }
 
 export async function cancelAuthenticatedActorEventRegistration(

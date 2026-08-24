@@ -79,20 +79,20 @@ export const publicSiteCopy = {
       offerings: {
         index: "07",
         eyebrow: "Was Res Publica ermöglicht",
-        title: "Programme, Produkte, Dienstleistungen und Projekte — klar getrennt.",
-        text: "Jede öffentliche Kategorie folgt einer eigenen Aufgabe. Reifegrad und Herkunft bleiben sichtbar; Methodiken und interne Infrastruktur werden nicht als Produkte dargestellt.",
+        title: "Programme, Projekte und Forschungsräume — klar unterschieden.",
+        text: "Programme bauen zivile Kapazität auf, Projekte verfolgen begrenzte Vorhaben und das Lab entwickelt Forschung und institutionelle Praxis. Reifegrad und Herkunft bleiben sichtbar; interne Infrastruktur wird nicht als öffentliches Angebot dargestellt.",
         links: [
           ["Programme", "/programs"],
-          ["Produkte", "/products"],
-          ["Dienstleistungen", "/services"],
           ["Projekte", "/projects"],
+          ["Labor", "/lab"],
+          ["Forschung", "/research"],
         ],
       },
       work: {
         index: "08",
         eyebrow: "Arbeit in der Öffentlichkeit",
         title: "Praxis, Forschung und Publikation brauchen nachweisbare Herkunft.",
-        text: "Derzeit sind keine quellengeprüften Sammlungseinträge zur öffentlichen Anzeige freigegeben. Die Bereiche bleiben als ehrliche Leerräume sichtbar, bis Herkunft, Status, Autorschaft und Veröffentlichungsrecht bestätigt sind.",
+        text: "Öffentlich sichtbar werden nur quellengeprüfte Einträge mit nachvollziehbarer Herkunft, Status, Autorschaft und Veröffentlichungsrecht. Nicht freigegebene Entwürfe und interne Arbeitsstände bleiben geschützt.",
         links: [
           ["Projekte", "/projects"],
           ["Forschung", "/research"],
@@ -272,20 +272,20 @@ export const publicSiteCopy = {
       offerings: {
         index: "07",
         eyebrow: "What Res Publica enables",
-        title: "Programs, products, services and projects—clearly separated.",
-        text: "Each public category has a distinct purpose. Maturity and provenance remain visible; methodologies and internal infrastructure are not presented as products.",
+        title: "Programs, projects and research spaces—clearly distinguished.",
+        text: "Programs build civic capacity, projects pursue bounded work, and the Lab develops research and institutional practice. Maturity and provenance remain visible; internal infrastructure is not presented as a public offering.",
         links: [
           ["Programs", "/programs"],
-          ["Products", "/products"],
-          ["Services", "/services"],
           ["Projects", "/projects"],
+          ["Lab", "/lab"],
+          ["Research", "/research"],
         ],
       },
       work: {
         index: "08",
         eyebrow: "Work in public",
         title: "Practice, research and publication require traceable provenance.",
-        text: "No source-reviewed collection entries are currently cleared for public display. These areas remain as honest empty spaces until provenance, status, authorship and publication rights are confirmed.",
+        text: "Only source-reviewed entries with traceable provenance, status, authorship and publication rights become public. Unapproved drafts and internal working states remain protected.",
         links: [
           ["Projects", "/projects"],
           ["Research", "/research"],
@@ -465,20 +465,20 @@ export const publicSiteCopy = {
       offerings: {
         index: "۰۷",
         eyebrow: "آنچه رس پوبلیکا ممکن می‌سازد",
-        title: "برنامه‌ها، محصولات، خدمات و پروژه‌ها — به‌روشنی از هم جدا.",
-        text: "هر دسته عمومی هدفی متمایز دارد. سطح بلوغ و منشأ آشکار می‌ماند؛ روش‌ها و زیرساخت داخلی به‌عنوان محصول معرفی نمی‌شوند.",
+        title: "برنامه‌ها، پروژه‌ها و فضاهای پژوهشی — با مرزهای روشن.",
+        text: "برنامه‌ها ظرفیت مدنی می‌سازند، پروژه‌ها کارهای محدود و مشخص را دنبال می‌کنند و آزمایشگاه پژوهش و عمل نهادی را توسعه می‌دهد. سطح بلوغ و منشأ آشکار می‌ماند؛ زیرساخت داخلی به‌عنوان عرضه عمومی معرفی نمی‌شود.",
         links: [
           ["برنامه‌ها", "/programs"],
-          ["محصولات", "/products"],
-          ["خدمات", "/services"],
           ["پروژه‌ها", "/projects"],
+          ["آزمایشگاه", "/lab"],
+          ["پژوهش", "/research"],
         ],
       },
       work: {
         index: "۰۸",
         eyebrow: "کار در عرصه عمومی",
         title: "کنش، پژوهش و انتشار به منشأ قابل‌پیگیری نیاز دارند.",
-        text: "در حال حاضر هیچ مدخل مجموعه‌ای که منبع آن بازبینی شده باشد برای نمایش عمومی تأیید نشده است. این بخش‌ها تا تأیید منشأ، وضعیت، پدیدآورندگی و حق انتشار، به‌صورت فضای خالی صادقانه باقی می‌مانند.",
+        text: "فقط مدخل‌های منبع‌سنجی‌شده با منشأ، وضعیت، پدیدآورندگی و حق انتشار قابل‌پیگیری عمومی می‌شوند. پیش‌نویس‌های تأییدنشده و وضعیت‌های کاری داخلی محافظت می‌شوند.",
         links: [
           ["پروژه‌ها", "/projects"],
           ["پژوهش", "/research"],

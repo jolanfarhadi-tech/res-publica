@@ -1,5 +1,29 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental implementation — narrative and responsive coherence, 2026-08-24
+
+The current unstaged slice restores the approved seven-item WHY / HOW / WHAT /
+JOIN navigation and makes the homepage the complete public narrative rather
+than a flat collection inventory. Human dignity and agency remain visible
+beside institutional evidence, responsibility and repair; trust and civic
+fellowship are explicit outcomes. Academy is presented as a Programme, and
+Products/Services remain valid routes without becoming primary story pillars.
+
+Desktop navigation, account controls and language selection now share one
+90rem breakpoint; the native mobile dialog remains available below it and
+contains the account and language controls. Heading levels on Academy,
+Fellowship and collection indexes are ordered. Auth callback failures from a
+browser use a localized noindex recovery page; JSON API behavior is preserved
+for non-browser clients. Event pages restore the authenticated actor's active
+registration after reload through an exactly scoped, non-mutating read.
+
+Verification passes 4 focused files / 35 tests and the complete serial suite at
+115 files / 486 tests. Structure, lint, typecheck, the 173-page Production
+build and `git diff --check` pass. Rendered DE/EN/FA checks at 390, 1280 and
+1440px confirm the responsive boundary, Persian RTL, zero horizontal overflow,
+ordered landmarks/headings and zero browser console warnings/errors. No
+deployment has occurred.
+
 ## Incremental implementation — Knowledge Graph and search surfaces, 2026-08-10
 
 The existing DE/EN/FA search index now includes explicit entity IDs and labels

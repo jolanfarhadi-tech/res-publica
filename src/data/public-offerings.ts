@@ -1,4 +1,5 @@
 import type { Locale } from "@/i18n/config";
+import { academyCopy } from "../i18n/academy";
 
 export type OfferingMaturity =
   | "available"
@@ -22,6 +23,23 @@ export type PublicOffering = {
  * machinery and the AI/EAO layers are intentionally absent.
  */
 export const publicOfferings: readonly PublicOffering[] = [
+  {
+    id: "academy",
+    category: "programs",
+    maturity: "partial",
+    href: "/academy",
+    operational: true,
+    title: {
+      de: academyCopy.de.title,
+      en: academyCopy.en.title,
+      fa: academyCopy.fa.title,
+    },
+    description: {
+      de: academyCopy.de.lede,
+      en: academyCopy.en.lede,
+      fa: academyCopy.fa.lede,
+    },
+  },
   {
     id: "website",
     category: "products",

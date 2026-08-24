@@ -1,5 +1,33 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — public narrative coherence and recovery UX, 2026-08-24
+
+The current unstaged frontend slice restores the approved WHY / HOW / WHAT /
+JOIN public architecture without changing routes or backend contracts. The
+homepage now carries the complete human path (experience → being heard →
+meaning → agency) and institutional path (documentation → evidence →
+responsibility → repair), with trust, civic fellowship and truthful programme
+maturity integrated into one server-rendered narrative. Primary navigation is
+again the documented seven-item set; Academy is classified under Programmes,
+while Products and Services remain reachable but are no longer competing
+top-level story categories.
+
+The header now uses one 90rem desktop boundary for navigation, account and
+language controls, eliminating the intermediate-width access gap. Academy,
+Fellowship and collection-card heading levels are ordered. Event registration
+state can be restored after reload through a session-derived, exactly scoped,
+rate-limited self-read that performs no persistence or audit mutation. Browser
+OIDC callback failures redirect to a localized DE/EN/FA recovery page while
+non-browser API clients retain the existing JSON errors and status codes.
+
+Focused regression verification passes 4 files / 35 tests. The complete serial
+suite passes 115 files / 486 tests; structure, lint, typecheck, the optimized
+173-page Production build and `git diff --check` pass. Production-mode browser
+checks cover DE/EN/FA, 390/1280/1440px navigation boundaries, Persian RTL,
+zero horizontal overflow, ordered headings and zero console warnings/errors.
+This slice is local only: no staging, commit, push or deployment has occurred.
+The unrelated `tsconfig.json` and `tatus` paths remain excluded.
+
 ## Incremental update — Mandatory hardening Phase G: A→A′ and Loops 1–5, 2026-08-16
 
 The Security Operations module now connects ordered, replay-resistant

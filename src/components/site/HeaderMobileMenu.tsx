@@ -61,7 +61,7 @@ export function HeaderMobileMenu({
   }, [open]);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 64rem)");
+    const desktop = window.matchMedia("(min-width: 90rem)");
     const closeAtDesktop = () => {
       if (desktop.matches) setOpen(false);
     };
@@ -74,7 +74,7 @@ export function HeaderMobileMenu({
       <button
         ref={menuButtonRef}
         type="button"
-        className="icon-button inline-grid lg:hidden"
+        className="icon-button inline-grid min-[90rem]:hidden"
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? dict.nav.menuClose : dict.nav.menuOpen}

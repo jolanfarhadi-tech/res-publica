@@ -27,9 +27,9 @@ export function EntryCard({
       className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-6 transition-[border-color,transform,box-shadow] duration-200 hover:border-accent motion-safe:hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-32px_rgb(5_26_43_/_0.42)] sm:p-7"
     >
       <p className="civic-label">{date}</p>
-      <h3 className="mt-5 text-2xl transition-colors group-hover:text-accent">
+      <h2 className="mt-5 text-2xl transition-colors group-hover:text-accent">
         {title}
-      </h3>
+      </h2>
       {meta && <p className="mt-1 text-sm text-muted">{meta}</p>}
       <p className="mt-4 flex-1 leading-relaxed text-muted">{description}</p>
       {tags && tags.length > 0 && (

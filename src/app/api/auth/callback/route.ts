@@ -10,18 +10,34 @@ import {
   provisionSelfRegisteredIdentity,
 } from "../../../../auth/self-registration";
 import { withRequestContext } from "../../../../platform/request-context";
+import { defaultLocale, isLocale, type Locale } from "../../../../i18n/config";
 
 export const dynamic = "force-dynamic";
 
 async function handleCallback(request: Request) {
   const runtime = getAuthRuntime();
-  if (!runtime) return Response.json({ error: "authentication_not_configured" }, { status: 503 });
+  if (!runtime) {
+    return authenticationError(
+      request,
+      "authentication_not_configured",
+      503
+    );
+  }
   const callbackUrl = new URL(request.url);
   const state = callbackUrl.searchParams.get("state");
-  if (!state) return Response.json({ error: "invalid_authentication_state" }, { status: 400 });
+  if (!state) {
+    return authenticationError(request, "invalid_authentication_state", 400);
+  }
 
   const flow = await consumeAuthFlow(runtime.db, hashSecret(state));
-  if (!flow) return Response.json({ error: "invalid_or_expired_authentication_state" }, { status: 400 });
+  if (!flow) {
+    return authenticationError(
+      request,
+      "invalid_or_expired_authentication_state",
+      400
+    );
+  }
+  const locale = localeFromReturnTo(flow.returnTo);
 
   try {
     const result = await finishOidcFlow(runtime.oidc, callbackUrl, {
@@ -32,7 +48,12 @@ async function handleCallback(request: Request) {
     let identity = await findAuthIdentity(runtime.db, result.issuer, result.subject);
     if (!identity && flow.intent === "signup") {
       if (!result.emailVerified) {
-        return Response.json({ error: "email_verification_pending" }, { status: 403 });
+        return authenticationError(
+          request,
+          "email_verification_pending",
+          403,
+          locale
+        );
       }
       const provisioned = await provisionSelfRegisteredIdentity(
         runtime.db,
@@ -41,7 +62,14 @@ async function handleCallback(request: Request) {
       );
       identity = provisioned.identity;
     }
-    if (!identity) return Response.json({ error: "identity_not_provisioned" }, { status: 403 });
+    if (!identity) {
+      return authenticationError(
+        request,
+        "identity_not_provisioned",
+        403,
+        locale
+      );
+    }
 
     const token = createSessionToken();
     const expiresAt = new Date(Date.now() + 8 * 60 * 60 * 1000);
@@ -65,13 +93,63 @@ async function handleCallback(request: Request) {
     });
   } catch (error) {
     if (error instanceof EmailVerificationRequiredError) {
-      return Response.json({ error: "email_verification_pending" }, { status: 403 });
+      return authenticationError(
+        request,
+        "email_verification_pending",
+        403,
+        locale
+      );
     }
     if (error instanceof IdentityReviewRequiredError) {
-      return Response.json({ error: "identity_review_required" }, { status: 409 });
+      return authenticationError(
+        request,
+        "identity_review_required",
+        409,
+        locale
+      );
     }
-    return Response.json({ error: "authentication_callback_failed" }, { status: 400 });
+    return authenticationError(
+      request,
+      "authentication_callback_failed",
+      400,
+      locale
+    );
   }
+}
+
+function authenticationError(
+  request: Request,
+  reason: string,
+  status: number,
+  locale = preferredLocale(request)
+) {
+  if (request.headers.get("accept")?.includes("text/html")) {
+    const target = new URL(`/${locale}/auth/error`, request.url);
+    target.searchParams.set("reason", reason);
+    return new Response(null, {
+      status: 303,
+      headers: {
+        Location: target.toString(),
+        "Cache-Control": "private, no-store, max-age=0",
+      },
+    });
+  }
+  return Response.json(
+    { error: reason },
+    {
+      status,
+      headers: { "Cache-Control": "private, no-store, max-age=0" },
+    }
+  );
+}
+
+function preferredLocale(request: Request): Locale {
+  const accepted = request.headers.get("accept-language") ?? "";
+  for (const preference of accepted.split(",")) {
+    const language = preference.trim().split(";")[0]?.split("-")[0];
+    if (language && isLocale(language)) return language;
+  }
+  return defaultLocale;
 }
 
 function localeFromReturnTo(returnTo: string): "de" | "en" | "fa" {
