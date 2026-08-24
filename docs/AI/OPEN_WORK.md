@@ -2,9 +2,14 @@
 
 ### OPEN-034 — Mandatory hardening Phase G operational response evidence
 - **Implemented in repository:** ordered, replay-resistant synthetic Loops 1–5;
-  fixed A→A′ allowlist; E0–E3 evidence gating; Class 0/1 automatic authority
-  limited to reversible observation/inert-decoy state; independent recent-MFA
-  review for Class 2/3 alert/quarantine preparation; append-only proposal,
+  mandatory Loop-1/sequence-1 start, contiguous sequence numbers and strictly
+  increasing observation times; Loop-5-only compromise confirmation; fixed
+  A→A′ allowlist; E0–E3 evidence gating; Class 0/1 automatic authority limited
+  to reversible observation/inert-decoy state; Class 2/3 requires a referenced
+  same-incident HIGH-confidence persisted claim authored independently from
+  both opener and evaluator, with every evidence reference incident-bound,
+  before any defensive/audit write, plus independent recent-MFA
+  review for alert/quarantine preparation; append-only proposal,
   execution, effect-verification and rollback evidence; exact protected APIs,
   canonical audit and DE/EN/FA Security Operations projection.
 - **External/operational remainder:** approve Security Operations purpose,

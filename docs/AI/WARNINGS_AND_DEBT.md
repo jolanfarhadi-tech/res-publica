@@ -4,7 +4,11 @@
 - **Evidence:** Phase G executes and verifies only bounded internal observation,
   inert-decoy, alert and quarantine-preparation states. The allowlist includes
   stronger defensive vocabulary for policy classification, but application
-  code cannot invoke those provider/session/control-plane effects.
+  code cannot invoke those provider/session/control-plane effects. Local
+  anti-poisoning now enforces a contiguous, time-monotonic Loop-1-starting
+  sequence, same-incident evidence binding and independent persisted HIGH-
+  confidence provenance before Class 2/3 state can be proposed; this does not
+  prove a provider-side effect.
 - **Impact:** describing a prepared or internally verified action as token
   revocation, account isolation, service shutdown, secret rotation or provider
   quarantine would be an operationally dangerous overclaim.

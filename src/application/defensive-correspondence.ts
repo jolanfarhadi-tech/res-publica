@@ -92,15 +92,37 @@ export async function recordDefensiveSequence(
       ...decision.evidenceIds,
       ...decision.contradictoryEvidence,
     ])];
-    const observations = evidenceIds.length ? await transaction.select({ id: securityObservations.id })
+    const observations = evidenceIds.length ? await transaction.select({
+      id: securityObservations.id,
+      incidentId: securityObservations.incidentId,
+    })
       .from(securityObservations)
       .where(inArray(securityObservations.id, evidenceIds)) : [];
-    const claims = evidenceIds.length ? await transaction.select({ id: securityAttributionClaims.id })
+    const claims = evidenceIds.length ? await transaction.select({
+      id: securityAttributionClaims.id,
+      incidentId: securityAttributionClaims.incidentId,
+      confidence: securityAttributionClaims.confidence,
+      authoredByPersonId: securityAttributionClaims.authoredByPersonId,
+    })
       .from(securityAttributionClaims)
       .where(inArray(securityAttributionClaims.id, evidenceIds)) : [];
     const foundEvidence = new Set([...observations, ...claims].map((item) => item.id));
     if (evidenceIds.some((id) => !foundEvidence.has(id))) {
       throw new DefensiveResponseError("defensive_evidence_not_found");
+    }
+    if ([...observations, ...claims].some((item) => item.incidentId !== input.incidentId)) {
+      throw new DefensiveResponseError("defensive_evidence_scope_mismatch");
+    }
+    if (
+      decision.actionClass >= 2 &&
+      !claims.some((claim) =>
+        decision.evidenceIds.includes(claim.id) &&
+        claim.confidence === "HIGH" &&
+        claim.authoredByPersonId !== actor.personId &&
+        claim.authoredByPersonId !== incident.openedByPersonId
+      )
+    ) {
+      throw new DefensiveResponseError("defensive_independent_confirmation_required");
     }
 
     await transaction.insert(securityDefensiveSignals).values(input.signals.map((signal) => ({

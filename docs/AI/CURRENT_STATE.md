@@ -5,10 +5,15 @@
 The Security Operations module now connects ordered, replay-resistant
 synthetic Loops 1–5 to a frozen A→A′ action allowlist and E0–E3 evidence
 policy. Attacker-controlled input cannot select an action or become executable
-code. Contradictions reduce authority; replay, reordering, skipped loops and
-mixed scopes are rejected. Class 0/1 automatic authority is limited to
-reversible observation or inert synthetic-decoy state. Class 2/3 creates only
-independently reviewed internal alert/quarantine preparation. Provider,
+code. Contradictions reduce authority; invalid starts, replay, reordering,
+sequence gaps, non-increasing observation times, skipped loops and mixed scopes
+are rejected. `compromiseConfirmed` is valid only at Loop 5. Class 0/1
+automatic authority is limited to reversible observation or inert synthetic-
+decoy state. Class 2/3 creates only internal alert/quarantine preparation after
+a referenced same-incident HIGH-confidence claim from a person independent of
+both incident opener and evaluator, followed by independent review. Every
+referenced observation and claim is incident-bound. The provenance checks
+precede all defensive and audit writes in the existing transaction. Provider,
 session, token, account, capability, Research, AI/RAG, secret, database,
 permanent-policy and recovery effects remain outside this executor.
 
@@ -20,8 +25,10 @@ DE/EN/FA Security Operations view exposes policy, evidence class, bounded
 target, reversibility and transition state without operator person IDs or raw
 technical identifiers.
 
-Verification passes 7 focused files / 34 tests and the full serial suite at
-114 files / 474 tests. Lint, typecheck, structure, secret and supply-chain
+Integrity hardening was reverified on 2026-08-24 without an API or migration
+change. Verification passes 7 focused files / 39 tests, an 11-file / 49-test
+adversarial authorization matrix, and the full serial suite at 114 files / 479
+tests. Lint, typecheck, structure, secret and supply-chain
 checks, the 21-activity/105-table processing inventory, zero-vulnerability
 Production dependency audit, Drizzle consistency, fresh 26/105 main and 1/6
 research schemas, all nine EAO pipelines, the 170-page Production build with

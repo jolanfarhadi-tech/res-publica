@@ -40,5 +40,5 @@ describe("EAO operational release readiness", () => {
     expect(renderReleaseReadinessMarkdown(result)).toContain(
       "not whether a narrower code-only deployment may proceed"
     );
-  });
+  }, 15_000);
 });

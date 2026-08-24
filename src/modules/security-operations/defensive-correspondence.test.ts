@@ -119,6 +119,37 @@ describe("A/A′ defensive correspondence", () => {
     ])).toThrow("defensive_target_scope_invalid");
   });
 
+  it("requires every sequence to start at Loop 1 with sequence number 1", () => {
+    expect(() => evaluateDefensiveSequence([
+      signal(5, 5, "DEFENSIVE_SHADOW_CONFIRMATION", {
+        evidenceIds: ["evidence-1", "evidence-2", "evidence-3", "evidence-4", "evidence-5"],
+        compromiseConfirmed: true,
+      }),
+    ])).toThrow("defensive_sequence_start_invalid");
+
+    expect(() => evaluateDefensiveSequence([
+      signal(2, 1, "INITIAL_DECOY_SIGNAL"),
+    ])).toThrow("defensive_sequence_start_invalid");
+  });
+
+  it("requires contiguous sequence numbers and strictly increasing observation times", () => {
+    expect(() => evaluateDefensiveSequence([
+      signal(1, 1, "INITIAL_DECOY_SIGNAL"),
+      signal(3, 2, "HONEYPOT_ENGAGEMENT"),
+    ])).toThrow("defensive_event_sequence_gap");
+
+    expect(() => evaluateDefensiveSequence([
+      signal(1, 1, "INITIAL_DECOY_SIGNAL", { observedAt: at(10) }),
+      signal(2, 2, "HONEYPOT_ENGAGEMENT", { observedAt: at(9) }),
+    ])).toThrow("defensive_event_time_order_invalid");
+  });
+
+  it("accepts compromise confirmation only at the final defensive-shadow loop", () => {
+    expect(() => evaluateDefensiveSequence([
+      signal(1, 1, "INITIAL_DECOY_SIGNAL", { compromiseConfirmed: true }),
+    ])).toThrow("defensive_confirmation_scope_invalid");
+  });
+
   it("requires verified effect before rollback and preserves transition order", () => {
     const proposed = transitionDefensiveAction([], "PROPOSED", at(1));
     const executed = transitionDefensiveAction([proposed], "EXECUTED", at(2));

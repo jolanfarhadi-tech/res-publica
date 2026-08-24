@@ -112,6 +112,9 @@ function assertSignal(signal: DefensiveSignal): void {
   if (!Number.isFinite(signal.observedAt.getTime())) {
     throw new DefensiveCorrespondenceError("defensive_event_time_invalid");
   }
+  if (signal.compromiseConfirmed === true && signal.loop !== 5) {
+    throw new DefensiveCorrespondenceError("defensive_confirmation_scope_invalid");
+  }
   if (signal.evidenceIds.length === 0 || signal.evidenceIds.length > 32) {
     throw new DefensiveCorrespondenceError("defensive_evidence_invalid");
   }
@@ -146,6 +149,7 @@ export function evaluateDefensiveSequence(signals: DefensiveSignal[]): Defensive
   const ids = new Set<string>();
   let previousSequence = 0;
   let previousLoop = 0;
+  let previousObservedAt: Date | null = null;
   const incidentId = signals[0].incidentId;
   const targetAsset = signals[0].targetAsset;
   const targetScope = signals[0].targetScope;
@@ -157,8 +161,14 @@ export function evaluateDefensiveSequence(signals: DefensiveSignal[]): Defensive
     if (signal.sequence <= previousSequence) {
       throw new DefensiveCorrespondenceError("defensive_event_order_invalid");
     }
+    if (previousSequence > 0 && signal.sequence !== previousSequence + 1) {
+      throw new DefensiveCorrespondenceError("defensive_event_sequence_gap");
+    }
     if (previousLoop > 0 && (signal.loop < previousLoop || signal.loop > previousLoop + 1)) {
       throw new DefensiveCorrespondenceError("defensive_loop_transition_invalid");
+    }
+    if (previousObservedAt !== null && signal.observedAt <= previousObservedAt) {
+      throw new DefensiveCorrespondenceError("defensive_event_time_order_invalid");
     }
     if (
       signal.incidentId !== incidentId ||
@@ -170,6 +180,10 @@ export function evaluateDefensiveSequence(signals: DefensiveSignal[]): Defensive
     ids.add(signal.id);
     previousSequence = signal.sequence;
     previousLoop = signal.loop;
+    previousObservedAt = signal.observedAt;
+  }
+  if (signals[0].sequence !== 1 || signals[0].loop !== 1) {
+    throw new DefensiveCorrespondenceError("defensive_sequence_start_invalid");
   }
 
   const level = evidenceLevel(signals);

@@ -16,6 +16,7 @@ import {
   securityDefensiveActionEvents,
   securityDefensiveActions,
   securityDefensiveSignals,
+  securityAttributionClaims,
   securityIncidents,
   securityObservations,
 } from "../persistence/module-schema";
@@ -55,7 +56,7 @@ async function database() {
   const client = new PGlite(path);
   const db = drizzle({ client, schema: { ...coreSchema, ...moduleSchema } });
   await migrate(db, { migrationsFolder: join(process.cwd(), "drizzle") });
-  await db.insert(people).values(["opener", "evaluator", "reviewer"].map((id) => ({
+  await db.insert(people).values(["opener", "evaluator", "corroborator", "reviewer"].map((id) => ({
     id,
     name: `Synthetic ${id}`,
     contact: { email: `${id}@example.invalid` },
@@ -93,6 +94,30 @@ async function database() {
     recordedAt: new Date(),
   })));
   return { client, db, serviceDb: db as unknown as Database };
+}
+
+async function addHighConfidenceClaim(
+  db: ReturnType<typeof drizzle<typeof moduleSchema & typeof coreSchema>>,
+  input: {
+    id?: string;
+    incidentId?: string;
+    authoredByPersonId?: string;
+  } = {}
+) {
+  await db.insert(securityAttributionClaims).values({
+    id: input.id ?? "claim-independent-high",
+    incidentId: input.incidentId ?? "incident-1",
+    level: "D",
+    claim: "Independent synthetic evidence supports the bounded incident hypothesis.",
+    observedEvidence: ["observation-1", "observation-2", "observation-3"],
+    inferences: ["The ordered evidence is consistent with the bounded hypothesis."],
+    contradictoryEvidence: ["Provider-level enrichment remains unavailable."],
+    alternativeExplanations: ["A shared automation tool could produce similar behavior."],
+    confidence: "HIGH",
+    source: "human-security-review",
+    authoredByPersonId: input.authoredByPersonId ?? "corroborator",
+    timestamp: new Date("2026-08-16T12:09:00.000Z"),
+  });
 }
 
 function fiveLoopSequence(): DefensiveSignal[] {
@@ -173,13 +198,90 @@ describe("defensive correspondence persistence", () => {
     } finally { await client.close(); }
   }, 30_000);
 
+  it("rejects Class 2 or higher without independent high-confidence evidence and leaves no mutation", async () => {
+    const { client, db, serviceDb } = await database();
+    try {
+      await expect(recordDefensiveSequence(
+        serviceDb,
+        actor("evaluator", "security.response.evaluate", "incident-1"),
+        {
+          incidentId: "incident-1",
+          requestId: "50000000-0000-4000-8000-000000000097",
+          signals: fiveLoopSequence().slice(0, 3),
+        }
+      )).rejects.toThrow("defensive_independent_confirmation_required");
+
+      expect(await db.select().from(securityDefensiveSignals)).toHaveLength(0);
+      expect(await db.select().from(securityDefensiveActions)).toHaveLength(0);
+      expect(await db.select().from(securityDefensiveActionEvents)).toHaveLength(0);
+      expect(await db.select().from(auditLog)).toHaveLength(0);
+
+      await addHighConfidenceClaim(db, { authoredByPersonId: "evaluator" });
+      const selfCorroborated = fiveLoopSequence().slice(0, 3);
+      selfCorroborated[2].evidenceIds.push("claim-independent-high");
+      await expect(recordDefensiveSequence(
+        serviceDb,
+        actor("evaluator", "security.response.evaluate", "incident-1"),
+        {
+          incidentId: "incident-1",
+          requestId: "50000000-0000-4000-8000-000000000096",
+          signals: selfCorroborated,
+        }
+      )).rejects.toThrow("defensive_independent_confirmation_required");
+
+      expect(await db.select().from(securityDefensiveSignals)).toHaveLength(0);
+      expect(await db.select().from(securityDefensiveActions)).toHaveLength(0);
+      expect(await db.select().from(securityDefensiveActionEvents)).toHaveLength(0);
+      expect(await db.select().from(auditLog)).toHaveLength(0);
+    } finally { await client.close(); }
+  }, 30_000);
+
+  it("rejects high-confidence evidence from another incident without mutation", async () => {
+    const { client, db, serviceDb } = await database();
+    try {
+      await db.insert(securityIncidents).values({
+        id: "incident-2",
+        title: "Separate synthetic incident",
+        severity: "high",
+        status: "open",
+        affectedAssets: ["research-zk"],
+        openedByPersonId: "opener",
+        openedAt: new Date("2026-08-16T12:00:00.000Z"),
+      });
+      await addHighConfidenceClaim(db, {
+        id: "claim-other-incident",
+        incidentId: "incident-2",
+      });
+      const signals = fiveLoopSequence().slice(0, 3);
+      signals[2].evidenceIds.push("claim-other-incident");
+
+      await expect(recordDefensiveSequence(
+        serviceDb,
+        actor("evaluator", "security.response.evaluate", "incident-1"),
+        {
+          incidentId: "incident-1",
+          requestId: "50000000-0000-4000-8000-000000000095",
+          signals,
+        }
+      )).rejects.toThrow("defensive_evidence_scope_mismatch");
+
+      expect(await db.select().from(securityDefensiveSignals)).toHaveLength(0);
+      expect(await db.select().from(securityDefensiveActions)).toHaveLength(0);
+      expect(await db.select().from(securityDefensiveActionEvents)).toHaveLength(0);
+      expect(await db.select().from(auditLog)).toHaveLength(0);
+    } finally { await client.close(); }
+  }, 30_000);
+
   it("keeps high-impact preparation inactive until independent review and supports verified rollback", async () => {
     const { client, db, serviceDb } = await database();
     try {
+      await addHighConfidenceClaim(db);
+      const signals = fiveLoopSequence();
+      signals[4].evidenceIds.push("claim-independent-high");
       const result = await recordDefensiveSequence(
         serviceDb,
         actor("evaluator", "security.response.evaluate", "incident-1"),
-        { incidentId: "incident-1", requestId: "50000000-0000-4000-8000-000000000004", signals: fiveLoopSequence() }
+        { incidentId: "incident-1", requestId: "50000000-0000-4000-8000-000000000004", signals }
       );
       expect(result.decision).toMatchObject({ actionClass: 3, disposition: "REQUIRES_OPERATOR" });
       expect((await db.select().from(securityDefensiveActionEvents)).map((event) => event.state))

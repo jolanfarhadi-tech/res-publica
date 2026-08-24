@@ -27,8 +27,11 @@ atomically with each evaluation, review or rollback.
    inform policy evaluation but cannot overwrite Membership, Fellowship,
    Research, Knowledge Graph or Publishing facts.
 
-Events must be ordered, cannot skip a loop, cannot be replayed, and must retain
-evidence references. Loop labels are evidence states, not proof of identity.
+Every sequence must begin at sequence 1 and Loop 1. Sequence numbers are
+contiguous, observation times strictly increase, loops cannot be skipped or
+regress, events cannot be replayed, and evidence references are retained.
+Explicit compromise confirmation is valid only at Loop 5. Loop labels and a
+caller-supplied confirmation flag are evidence states, not proof of identity.
 
 ## Evidence and impact classes
 
@@ -36,10 +39,19 @@ evidence references. Loop labels are evidence states, not proof of identity.
 - E1: at least two independent references through Loop 2. Class 1 inert
   `ACTIVATE_DECOY_BRANCH` state.
 - E2: at least three independent references through Loop 3. Class 2
-  `ALERT_OPERATOR`, requiring independent review.
+  `ALERT_OPERATOR`, requiring referenced independent HIGH-confidence persisted
+  attribution evidence and independent review.
 - E3: at least five independent references, Loop 5 and explicit confirmed-
-  compromise evidence. Class 3 `PREPARE_QUARANTINE`, requiring independent
-  review.
+  compromise evidence. Class 3 `PREPARE_QUARANTINE`, requiring the same
+  independent persisted confirmation and independent review.
+
+For Class 2/3, the qualifying HIGH-confidence claim must belong to the same
+incident, be positive evidence referenced by the decision, and be authored by
+a person other than both the incident opener and the evaluator. All referenced
+observations and claims must belong to that incident. A caller-supplied
+compromise flag alone is insufficient. The checks run inside the existing
+transaction before defensive signals, actions, transitions or canonical audit
+are written.
 
 Class 4 structural actions—secret rotation, Research activation, database
 privilege, permanent policy and disaster-recovery cutover—are represented in
@@ -56,10 +68,11 @@ controlled.
 
 One malformed request, 403, decoy hit, suspicious prompt or spoofable network
 signal cannot trigger high-impact containment. Contradictory evidence lowers
-the decision to E0. Replayed, reordered, scope-mixed and loop-skipping events
-are rejected. A single source cannot create permanent rules. Research, AI/RAG
-and administrator-themed probes receive only Class 0/1 treatment without the
-independent composite evidence and review required by higher classes.
+the decision to E0. Replayed, reordered, sequence-gapped, time-regressing,
+scope-mixed and loop-skipping events are rejected. A single source cannot
+create permanent rules. Research, AI/RAG and administrator-themed probes
+receive only Class 0/1 treatment without the independent composite evidence
+and review required by higher classes.
 
 The only automatic states are reversible observation and inert synthetic
 branch activation. Optional Security Operations failure does not take down the
