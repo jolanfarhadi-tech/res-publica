@@ -192,7 +192,7 @@ export const publicSiteCopy = {
       notice: "Ihre Nachricht wird in Ihrem E-Mail-Programm geöffnet und erst nach Ihrer Bestätigung versendet.",
     },
     people: {
-      team: "Derzeit sind keine Namen und Rollen für die öffentliche Anzeige bestätigt.",
+      team: "Drei Namen und Rollen sind für die öffentliche Anzeige bestätigt.",
       partners: "Derzeit sind keine Partnerschaften für die öffentliche Anzeige bestätigt.",
     },
     newsletterUnavailable: "Ein bestätigter Newsletter-Dienst ist derzeit nicht konfiguriert. Deshalb wird keine Anmeldung angeboten.",
@@ -209,7 +209,7 @@ export const publicSiteCopy = {
       events: "Events",
       membership: "Participate",
       contact: "Contact",
-      about: "About",
+      about: "About Us",
       research: "Research",
       publications: "Publications",
       news: "News",
@@ -385,7 +385,7 @@ export const publicSiteCopy = {
       notice: "Your message opens in your email application and is sent only after you confirm it.",
     },
     people: {
-      team: "No names or roles are currently confirmed for public display.",
+      team: "Three names and roles are confirmed for public display.",
       partners: "No partnerships are currently confirmed for public display.",
     },
     newsletterUnavailable: "No confirmed newsletter service is currently configured, so subscription is not offered.",
@@ -578,7 +578,7 @@ export const publicSiteCopy = {
       notice: "پیام در برنامه ایمیل شما باز می‌شود و فقط پس از تأیید شما ارسال خواهد شد.",
     },
     people: {
-      team: "در حال حاضر هیچ نام یا نقشی برای نمایش عمومی تأیید نشده است.",
+      team: "نام و نقش سه نفر برای نمایش عمومی تأیید شده است.",
       partners: "در حال حاضر هیچ همکاری سازمانی برای نمایش عمومی تأیید نشده است.",
     },
     newsletterUnavailable: "در حال حاضر سرویس خبرنامه تأییدشده‌ای پیکربندی نشده است؛ بنابراین امکان ثبت‌نام ارائه نمی‌شود.",

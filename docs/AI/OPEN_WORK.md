@@ -410,6 +410,13 @@ MFA, migration, legal, and operational gates in
   action and no research-participation intake form is exposed because no
   verified receiving workflow, collection purpose, retention path, or consent
   record exists.
+- **Incremental status 2026-08-25:** the owner approved exactly three public
+  team identities and clarified Jolan Farhadi Babadi's dual Vorstand and
+  Geschäftsführer capacity. That identity subtask is resolved without
+  assigning unverified individual Vorstand offices. Partnership and collection
+  publication approvals remain open. The public signed PDF was replaced by a
+  name- and signature-free Word reading copy; the signed source remains an
+  owner-held legal record rather than a public website asset.
 
 ### OPEN-011 — Production runtime deployed; authenticated operational E2E remains open
 - **Resolved:** the canonical Vercel project `res-publica` has its verified

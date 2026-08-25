@@ -1,5 +1,22 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental implementation — About, team and public Satzung, 2026-08-25
+
+Primary navigation now uses the existing localized About route in place of
+Mission & Vision. About composes the institutional narrative with a reusable
+Team section. Three owner-approved identities are public; Jolan Farhadi Babadi
+is shown as both Vorstand/Board and Geschäftsführer, while no unverified
+person-to-office mapping for Vorsitz, Stellvertretung or Schatzmeister is
+published. The collective responsibility description is source-bounded to the
+Satzung.
+
+The signed, name-bearing PDF has been removed from `public/documents`. Public
+About and Membership links now resolve to the generated Word reading copy
+`satzung-res-publica-ev.docx`, which contains no signature image or personal
+name. Academy/Civic School is one available Programme backed by the implemented
+Academy surface; Fellowship remains a separate Programme without weakening its
+server-side activation gate.
+
 ## Incremental implementation — narrative and responsive coherence, 2026-08-24
 
 The current unstaged slice restores the approved seven-item WHY / HOW / WHAT /

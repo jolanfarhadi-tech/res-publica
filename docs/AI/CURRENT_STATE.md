@@ -1,5 +1,32 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — About, public team and programme coherence, 2026-08-25
+
+The seven-item public header now opens localized `About Us` / `Über uns` /
+`درباره ما` instead of Mission & Vision. The About route includes the three
+owner-approved public team identities. Atie Kashef and Donya Nasiri Zarghani
+are presented only as Board/Vorstand; Jolan Farhadi Babadi is presented as
+Board/Vorstand and Geschäftsführer. No unsupported assignment of the three
+individual statutory offices is made. Collective Board responsibilities are
+summarized from §§ 6, 7, 11 and 13 of the Satzung.
+
+The signed PDF and its signatures are no longer a public website asset. About
+and Membership link only to a public Word reading copy containing §§ 1–17
+without signatures or personal names. The implemented Academy and Civic School
+are represented by one available Programme entry, while Civic Fellowship
+remains a distinct Programme with its existing activation gate and no public
+candidate or Fellow directory.
+
+The secret scanner now skips tracked paths that are intentionally absent from
+the active worktree while continuing to scan the active tree and full Git
+history; this prevents a deleted public asset from crashing the security gate.
+
+Focused verification passes 3 files / 39 tests and the complete serial suite
+passes 115 files / 491 tests. Lint, typecheck, structure, migration checks, a
+173-page Production build and `git diff --check` pass. Rendered DE/EN/FA About
+checks confirm the localized header, three identities and roles, Word link,
+Persian RTL, zero horizontal overflow and zero browser console errors.
+
 ## Incremental update — public narrative coherence and recovery UX, 2026-08-24
 
 The current unstaged frontend slice restores the approved WHY / HOW / WHAT /

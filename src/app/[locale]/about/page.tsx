@@ -4,6 +4,7 @@ import { isLocale, type Locale } from "@/i18n/config";
 import { getPage } from "@/lib/content";
 import { pageAlternates } from "@/lib/seo";
 import { MdxPage } from "@/components/site/MdxPage";
+import { TeamSection } from "@/components/site/TeamSection";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -21,5 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  return <MdxPage locale={locale as Locale} slug="about" />;
+  return (
+    <>
+      <MdxPage locale={locale as Locale} slug="about" />
+      <TeamSection locale={locale as Locale} />
+    </>
+  );
 }

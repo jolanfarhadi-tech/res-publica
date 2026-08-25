@@ -9,7 +9,7 @@ export function PersonCard({
 }: {
   name: string;
   role: string;
-  bio: string;
+  bio?: string;
 }) {
   const initials = name
     .split(" ")
@@ -27,7 +27,7 @@ export function PersonCard({
       </div>
       <h3 className="text-xl">{name}</h3>
       <p className="mt-2 text-sm font-semibold text-verdigris">{role}</p>
-      <p className="mt-3 leading-relaxed text-muted">{bio}</p>
+      {bio && <p className="mt-3 leading-relaxed text-muted">{bio}</p>}
     </div>
   );
 }

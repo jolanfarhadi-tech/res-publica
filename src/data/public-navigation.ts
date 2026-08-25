@@ -4,7 +4,7 @@ import { getPublicSiteCopy } from "../i18n/public-site";
 export function publicNavigation(locale: Locale) {
   const labels = getPublicSiteCopy(locale).nav;
   return [
-    { href: `/${locale}/mission-vision`, label: labels.mission },
+    { href: `/${locale}/about`, label: labels.about },
     { href: `/${locale}/method`, label: labels.method },
     { href: `/${locale}/projects`, label: labels.projects },
     { href: `/${locale}/programs`, label: labels.programs },

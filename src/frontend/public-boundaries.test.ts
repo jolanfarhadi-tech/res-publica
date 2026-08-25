@@ -67,9 +67,53 @@ describe("public website boundaries", () => {
     }
   });
 
-  it("does not expose placeholder people or partnerships", () => {
-    expect(team).toEqual([]);
+  it("publishes only the three approved institutional team identities", () => {
+    expect(team).toHaveLength(3);
+    expect(team.map((member) => member.name)).toEqual([
+      "Atie Kashef",
+      "Donya Nasiri Zarghani",
+      "Jolan Farhadi Babadi",
+    ]);
+    const managingDirector = team.find(
+      (member) => member.name === "Jolan Farhadi Babadi"
+    );
+    expect(managingDirector?.role).toEqual({
+      de: "Vorstand · Geschäftsführer",
+      en: "Board · Geschäftsführer",
+      fa: "هیئت‌مدیره · Geschäftsführer",
+    });
+    expect(managingDirector?.bio).toBeUndefined();
     expect(partners).toEqual([]);
+  });
+
+  it("publishes only the name-free Word reading copy of the Statutes", () => {
+    const publicDocuments = path.join(process.cwd(), "public", "documents");
+    expect(
+      fs.existsSync(path.join(publicDocuments, "satzung-res-publica-ev.docx"))
+    ).toBe(true);
+    expect(
+      fs.existsSync(path.join(publicDocuments, "satzung-res-publica-ev-signed.pdf"))
+    ).toBe(false);
+
+    const publicReferences = [
+      source("src", "components", "platform", "MembershipForm.tsx"),
+      source("src", "components", "site", "TeamSection.tsx"),
+      source("src", "i18n", "membership-application.ts"),
+      source("src", "data", "team.ts"),
+    ].join("\n");
+    expect(publicReferences).toContain("satzung-res-publica-ev.docx");
+    expect(publicReferences).not.toContain("satzung-res-publica-ev-signed.pdf");
+    expect(publicReferences).not.toMatch(/Unterzeichnete Satzung|signed Statutes|امضاشده/);
+  });
+
+  it("places the approved team on About without removing the legacy Team route", () => {
+    const about = source("src", "app", "[locale]", "about", "page.tsx");
+    expect(about).toContain("<TeamSection");
+    expect(
+      fs.existsSync(
+        path.join(process.cwd(), "src", "app", "[locale]", "team", "page.tsx")
+      )
+    ).toBe(true);
   });
 
   it("contains no Publishing Authority write calls in public frontend source", () => {
@@ -115,7 +159,7 @@ describe("public website boundaries", () => {
       const items = publicNavigation(locale);
       expect(items).toHaveLength(7);
       expect(items.map((item) => item.href)).toEqual([
-        `/${locale}/mission-vision`,
+        `/${locale}/about`,
         `/${locale}/method`,
         `/${locale}/projects`,
         `/${locale}/programs`,
@@ -133,7 +177,19 @@ describe("public website boundaries", () => {
         `/${locale}/services`
       );
       expect(items.map((item) => item.href)).not.toContain(`/${locale}/offerings`);
+      expect(items[0]?.label).toBe(publicSiteCopy[locale].nav.about);
     }
+  });
+
+  it("presents the implemented Academy and Fellowship as programmes", () => {
+    expect(publicOfferings.find((offering) => offering.id === "academy")).toMatchObject({
+      category: "programs",
+      maturity: "available",
+      operational: true,
+    });
+    expect(publicOfferings.find((offering) => offering.id === "fellowship")).toMatchObject({
+      category: "programs",
+    });
   });
 
   it("presents HARM as a reviewed research project, not a product", () => {
@@ -153,13 +209,16 @@ describe("public website boundaries", () => {
     expect(publicOfferings.map((offering) => offering.id)).not.toContain("harm");
   });
 
-  it("classifies RPCS Civic School as a documented Program, never as a Project", () => {
-    const rpcs = publicOfferings.find((offering) => offering.id === "rpcs");
-    expect(rpcs).toMatchObject({
+  it("presents Civic School through the implemented Academy programme, never as a Project", () => {
+    const academy = publicOfferings.find((offering) => offering.id === "academy");
+    expect(academy).toMatchObject({
       category: "programs",
-      maturity: "documented",
-      operational: false,
+      maturity: "available",
+      operational: true,
+      href: "/academy",
     });
+    expect(academy?.title.en).toContain("Civic School");
+    expect(publicOfferings.some((offering) => offering.id === "rpcs")).toBe(false);
     for (const locale of locales) {
       expect(getEntries(locale, "projects").some((entry) => /RPCS|Civic School/i.test(entry.title))).toBe(false);
     }
@@ -247,7 +306,7 @@ describe("public website boundaries", () => {
     const academy = publicOfferings.find((offering) => offering.id === "academy");
     expect(academy).toMatchObject({
       category: "programs",
-      maturity: "partial",
+      maturity: "available",
       href: "/academy",
     });
   });

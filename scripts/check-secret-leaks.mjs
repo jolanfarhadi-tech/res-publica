@@ -40,6 +40,10 @@ export function scanText(text, source) {
   return findings;
 }
 
+export function existingTrackedPaths(root, tracked) {
+  return tracked.filter((relative) => fs.existsSync(path.join(root, relative)));
+}
+
 function git(root, args, maxBuffer = 256 * 1024 * 1024) {
   const result = spawnSync("git", args, { cwd: root, encoding: "utf8", maxBuffer });
   if (result.status !== 0) throw new Error(`git_${args[0]}_failed`);
@@ -48,7 +52,10 @@ function git(root, args, maxBuffer = 256 * 1024 * 1024) {
 
 export function scanRepository(root = process.cwd()) {
   const findings = [];
-  const tracked = git(root, ["ls-files", "-z"]).split("\0").filter(Boolean);
+  const tracked = existingTrackedPaths(
+    root,
+    git(root, ["ls-files", "-z"]).split("\0").filter(Boolean)
+  );
   for (const relative of tracked) {
     const absolute = path.join(root, relative);
     const stat = fs.statSync(absolute);

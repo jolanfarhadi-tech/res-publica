@@ -162,7 +162,7 @@ function ApplicationForm({ locale, dict, onSubmitted }: { locale: Locale; dict: 
         <legend className="text-lg font-semibold">{copy.confirmationsTitle}</legend>
         <p className="text-sm leading-relaxed text-muted">{copy.confirmationsHelp}</p>
         <Confirmation id="statutes-ack" checked={statutes} setChecked={setStatutes} invalid={attempted && !statutes} label={copy.statutes} error={copy.required}>
-          <a href="/documents/satzung-res-publica-ev-signed.pdf" target="_blank" rel="noreferrer" className="text-sm font-semibold text-accent underline underline-offset-4">{copy.statutesLink}</a>
+          <a href="/documents/satzung-res-publica-ev.docx" className="text-sm font-semibold text-accent underline underline-offset-4">{copy.statutesLink}</a>
         </Confirmation>
         <Confirmation id="protocol-ack" checked={protocol} setChecked={setProtocol} invalid={attempted && !protocol} label={copy.protocol} error={copy.required}>
           <Link href={`/${locale}/membership/protocol`} className="text-sm font-semibold text-accent underline underline-offset-4">{copy.protocolLink}</Link>

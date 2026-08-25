@@ -2,13 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { team } from "@/data/team";
 import { pageAlternates } from "@/lib/seo";
-import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { PersonCard } from "@/components/ui/PersonCard";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { getPublicSiteCopy } from "@/i18n/public-site";
+import { TeamSection } from "@/components/site/TeamSection";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -30,39 +26,8 @@ export default async function TeamPage({ params }: Props) {
 
   return (
     <>
-      {team.length > 0 && <JsonLd data={{
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          itemListElement: team.map((member, index) => ({
-            "@type": "ListItem",
-            position: index + 1,
-            item: {
-              "@type": "Person",
-              name: member.name,
-              jobTitle: member.role[locale as Locale],
-              worksFor: { "@type": "Organization", name: "Res Publica" },
-            },
-          })),
-        }} />}
       <PageHeader title={dict.pages.team.title} lede={dict.pages.team.lede} />
-      <Container className="py-14 sm:py-20">
-        {team.length === 0 && (
-          <p className="glass-panel max-w-2xl rounded-3xl p-6 text-lg leading-relaxed text-muted sm:p-8">
-            {getPublicSiteCopy(locale as Locale).people.team}
-          </p>
-        )}
-        <ul className="grid list-none gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {team.map((member) => (
-            <li key={member.id}>
-              <PersonCard
-                name={member.name}
-                role={member.role[locale as Locale]}
-                bio={member.bio[locale as Locale]}
-              />
-            </li>
-          ))}
-        </ul>
-      </Container>
+      <TeamSection locale={locale as Locale} />
     </>
   );
 }

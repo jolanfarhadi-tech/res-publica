@@ -6,7 +6,7 @@
   "nav": {
     "home": "Home",
     "news": "News",
-    "about": "About",
+    "about": "About Us",
     "missionVision": "Mission & Vision",
     "projects": "Projects",
     "research": "Research",
@@ -69,7 +69,7 @@
   "pages": {
     "team": {
       "title": "Team",
-      "lede": "Confirmed names and roles are displayed only after publication approval."
+      "lede": "Publicly confirmed people and the statutory boundaries of responsibility at Res Publica."
     },
     "partners": {
       "title": "Partners",

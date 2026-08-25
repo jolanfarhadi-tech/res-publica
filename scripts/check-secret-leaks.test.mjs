@@ -1,5 +1,8 @@
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { scanText } from "./check-secret-leaks.mjs";
+import { existingTrackedPaths, scanText } from "./check-secret-leaks.mjs";
 
 describe("secret leak scanner", () => {
   it("reports credential material without returning the value", () => {
@@ -24,5 +27,17 @@ describe("secret leak scanner", () => {
   it("does not report its own detector declarations", () => {
     expect(scanText("const PRIVATE_KEY_BLOCK = /key-pattern/g;", "scanner")).toEqual([]);
     expect(scanText("const DATABASE_CREDENTIAL_URL = /url-pattern/g;", "scanner")).toEqual([]);
+  });
+
+  it("skips a tracked file that is intentionally deleted in the worktree", () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "secret-scan-"));
+    try {
+      fs.writeFileSync(path.join(root, "present.txt"), "safe");
+      expect(
+        existingTrackedPaths(root, ["present.txt", "deleted.txt"])
+      ).toEqual(["present.txt"]);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
   });
 });

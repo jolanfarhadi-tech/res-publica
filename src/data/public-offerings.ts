@@ -1,5 +1,4 @@
 import type { Locale } from "@/i18n/config";
-import { academyCopy } from "../i18n/academy";
 
 export type OfferingMaturity =
   | "available"
@@ -26,18 +25,18 @@ export const publicOfferings: readonly PublicOffering[] = [
   {
     id: "academy",
     category: "programs",
-    maturity: "partial",
+    maturity: "available",
     href: "/academy",
     operational: true,
     title: {
-      de: academyCopy.de.title,
-      en: academyCopy.en.title,
-      fa: academyCopy.fa.title,
+      de: "Res Publica Academy / Civic School",
+      en: "Res Publica Academy / Civic School",
+      fa: "آکادمی رس پوبلیکا / مدرسه مدنی",
     },
     description: {
-      de: academyCopy.de.lede,
-      en: academyCopy.en.lede,
-      fa: academyCopy.fa.lede,
+      de: "Die Lernplattform ist vollständig implementiert. Im Katalog erscheinen ausschließlich freigegebene und tatsächlich veröffentlichte Programme und Kurse.",
+      en: "The learning platform is fully implemented. Its catalogue shows only programmes and courses that are approved and actually published.",
+      fa: "پلتفرم یادگیری به‌طور کامل پیاده‌سازی شده است. در فهرست آن فقط برنامه‌ها و دوره‌هایی نمایش داده می‌شوند که تأیید و واقعاً منتشر شده‌اند.",
     },
   },
   {
@@ -157,22 +156,6 @@ export const publicOfferings: readonly PublicOffering[] = [
       de: "Ein dokumentiertes Modell für dauerhafte Zugehörigkeit, gegenseitiges Lernen und gemeinsame institutionelle Praxis.",
       en: "A documented model for sustained belonging, mutual learning and shared institutional practice.",
       fa: "الگویی مستند برای تعلق پایدار، یادگیری متقابل و کنش نهادی مشترک.",
-    },
-  },
-  {
-    id: "rpcs",
-    category: "programs",
-    maturity: "documented",
-    operational: false,
-    title: {
-      de: "RPCS / Civic School",
-      en: "RPCS / Civic School",
-      fa: "RPCS / مدرسه مدنی",
-    },
-    description: {
-      de: "Ein dokumentiertes Bildungsprogramm; derzeit kein öffentlich gestartetes Kursangebot.",
-      en: "A documented education programme; not currently presented as a launched public course.",
-      fa: "برنامه‌ای آموزشی و مستند؛ در حال حاضر به‌عنوان دوره عمومی آغازشده معرفی نمی‌شود.",
     },
   },
 ] as const;
