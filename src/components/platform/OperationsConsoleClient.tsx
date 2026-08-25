@@ -11,6 +11,7 @@ import {
   type PublishingWorkspacePayload,
 } from "./operations-state";
 import { PublishingWorkflowControls } from "./PublishingWorkflowControls";
+import { OperationsControlPanel } from "./OperationsControlPanel";
 
 type Decision = "approved" | "rejected";
 type DetailState =
@@ -435,6 +436,13 @@ export function OperationsConsoleClient({ locale }: { locale: Locale }) {
         </div>
         <p className="text-sm text-muted">{formatDate(overview.account.authenticatedAt, locale)}</p>
       </div>
+
+      <OperationsControlPanel
+        locale={locale}
+        assignedAreaCount={overview.operationalAreas.length}
+        membershipApplicationCount={overview.membershipApplications.length}
+        publishingScopeCount={overview.publishingScopes.length}
+      />
 
       <nav aria-labelledby="operations-area-navigation">
         <h2 id="operations-area-navigation" className="text-3xl">{copy.areaNavigationTitle}</h2>

@@ -1,5 +1,28 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — bounded Admin Control Panel, 2026-08-25
+
+The existing protected `/{locale}/operations` entry now presents a localized
+Admin Control Panel rather than only a Membership/Publishing workspace. It
+links to all 25 currently implemented top-level public, legal and self-account
+routes for quality review and summarizes counts for the operational areas,
+Membership applications and Publishing scopes already returned by the
+session-derived Operations projection.
+
+This is a composition and navigation change, not a universal administrator
+role. Operational cards remain derived exclusively from active exact-target
+MFA grants, and each linked workspace continues to reauthorize independently.
+Public-page links do not write content; Publishing still ends at human-confirmed
+readiness without automatic publication. Existing legal, research, Academy and
+Fellowship activation gates are unchanged.
+
+Focused verification passes 3 files / 6 tests and the complete serial suite
+passes 116 files / 493 tests. Structure, lint, typecheck, Drizzle consistency,
+fresh 26-migration/105-table verification, secret and supply-chain checks, a
+zero-vulnerability Production dependency audit, the 173-page Production build
+and `git diff --check` pass. DE/EN/FA rendering confirms localized titles,
+Persian RTL and fail-closed behavior when the protected runtime is unavailable.
+
 ## Incremental update — About, public team and programme coherence, 2026-08-25
 
 The seven-item public header now opens localized `About Us` / `Über uns` /

@@ -1,5 +1,20 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental implementation — bounded Admin Control Panel, 2026-08-25
+
+The localized Operations route now provides one responsive Control Panel for
+all 25 implemented top-level website, legal and self-account routes. It groups
+public review links separately from the six existing protected operational
+areas and displays only aggregate counts from the established Operations
+projection. Copy is complete in DE/EN/FA and Persian continues to inherit the
+root RTL direction.
+
+The panel grants no authority and creates no new API, persistence path or
+content mutation. Membership, Publishing, Academy, Fellowship, Knowledge Graph
+and Security workspaces remain server-selected through exact-target MFA grants
+and independently reauthorize every protected action. Public links are review
+links only; the no-auto-publish and activation-gate boundaries remain explicit.
+
 ## Incremental implementation — About, team and public Satzung, 2026-08-25
 
 Primary navigation now uses the existing localized About route in place of

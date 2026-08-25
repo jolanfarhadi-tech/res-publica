@@ -78,8 +78,8 @@ export type OperationsCopy = {
 };
 
 const de: OperationsCopy = {
-  title: "Geschützter Arbeitsbereich",
-  lede: "Antragsprüfung und redaktionelle Arbeit innerhalb exakt zugewiesener Zuständigkeiten.",
+  title: "Admin Control Panel",
+  lede: "Zentrale, geschützte Übersicht aller Website-Bereiche und der exakt zugewiesenen operativen Arbeitsräume.",
   link: "Arbeitsbereich",
   loading: "Arbeitsbereich wird geladen …",
   loginTitle: "Anmeldung erforderlich",
@@ -189,8 +189,8 @@ const de: OperationsCopy = {
 };
 
 const en: OperationsCopy = {
-  title: "Protected workspace",
-  lede: "Application review and editorial work within precisely assigned authority.",
+  title: "Admin Control Panel",
+  lede: "A central, protected overview of every website area and each precisely assigned operational workspace.",
   link: "Workspace",
   loading: "Loading workspace …",
   loginTitle: "Sign-in required",
@@ -300,8 +300,8 @@ const en: OperationsCopy = {
 };
 
 const fa: OperationsCopy = {
-  title: "محیط کاری حفاظت‌شده",
-  lede: "بررسی درخواست‌ها و کار تحریریه در محدودهٔ مسئولیت‌های دقیق و واگذارشده.",
+  title: "مرکز کنترل مدیریت",
+  lede: "نمایی مرکزی و حفاظت‌شده از همه بخش‌های وب‌سایت و محیط‌های عملیاتی با اختیار دقیق و واگذارشده.",
   link: "محیط کاری",
   loading: "محیط کاری در حال بارگذاری است…",
   loginTitle: "ورود لازم است",
