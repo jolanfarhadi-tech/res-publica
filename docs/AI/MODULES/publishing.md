@@ -1,5 +1,15 @@
 # Module: Publishing
 
+## Incremental Publisher appointment and delegation UI — 2026-09-02
+
+The non-HTTP founder-authority command can record an externally approved,
+exact-scope Publisher appointment; ordinary Publishing APIs still cannot grant
+or revoke Publisher. An appointed Publisher now sees the existing operational
+Editor/Reviewer/Translator delegation controls in the localized Operations
+Control Panel. All writes continue through the existing recent-MFA, exact-scope,
+no-self-grant and atomic-audit services. Publishing workflow semantics,
+separation of duties, `commitHash: null` and no-auto-publish remain unchanged.
+
 ## Incremental resource protection — 2026-08-16
 
 The private Publishing Workspace read projection now consumes a distinct

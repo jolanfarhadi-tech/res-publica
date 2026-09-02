@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, gt, inArray, isNull, lte, or } from "drizzle-orm";
 import { isAuthorized } from "../auth/authorize";
 import type {
   AssuranceLevel,
@@ -9,9 +9,15 @@ import {
   EDITORIAL_ROLES,
   editorialCapability,
   type EditorialRole,
+  type OperationalEditorialRole,
 } from "../modules/publishing/authority";
+import {
+  GOVERNANCE_ROLES,
+  governanceCapability,
+  type OperationalGovernanceRole,
+} from "../modules/harm-governance/authority";
 import type { Database } from "../persistence";
-import { auditLog } from "../persistence/schema";
+import { auditLog, authorizationGrants } from "../persistence/schema";
 import {
   documentAcknowledgements,
   membershipApplications,
@@ -59,16 +65,18 @@ function operationalGrants(actor: AuthenticatedActor, now: Date) {
   );
   return actor.grants.filter(
     (grant) =>
-      grant.domain === "civic" &&
       grant.target !== null &&
       isActive(grant, now) &&
-      (grant.capability === MEMBERSHIP_DECISION_CAPABILITY ||
-        editorialCapabilities.has(grant.capability) ||
-        Object.values(INTEGRATED_OPERATIONAL_CAPABILITIES).some(
-          (requirement) =>
-            grant.capability === requirement.capability &&
-            grant.target === requirement.target
-        ))
+      ((grant.domain === "civic" &&
+        (grant.capability === MEMBERSHIP_DECISION_CAPABILITY ||
+          editorialCapabilities.has(grant.capability) ||
+          Object.values(INTEGRATED_OPERATIONAL_CAPABILITIES).some(
+            (requirement) =>
+              grant.capability === requirement.capability &&
+              grant.target === requirement.target
+          ))) ||
+        (grant.domain === "governance" &&
+          grant.capability === governanceCapability("institution-admin")))
   );
 }
 
@@ -81,7 +89,7 @@ function isGrantAuthorized(
   return isAuthorized(
     { ...actor, grants: [grant] },
     {
-      domain: "civic",
+      domain: grant.domain,
       capability: grant.capability,
       target: grant.target,
       requireExactTarget: true,
@@ -181,6 +189,117 @@ export async function getOperationsOverview(
     }
   }
 
+  const governanceInstitutions = grants
+    .filter(
+      (grant) =>
+        grant.domain === "governance" &&
+        grant.capability === governanceCapability("institution-admin") &&
+        grant.target !== null &&
+        isGrantAuthorized(resolvedActor, grant, now)
+    )
+    .map((grant) => grant.target as string)
+    .filter((target, index, targets) => targets.indexOf(target) === index)
+    .sort();
+  const publishingAdministrationScopes = grants
+    .filter(
+      (grant) =>
+        grant.domain === "civic" &&
+        grant.capability === editorialCapability("publisher") &&
+        grant.target !== null &&
+        isGrantAuthorized(resolvedActor, grant, now)
+    )
+    .map((grant) => grant.target as string)
+    .filter((target, index, targets) => targets.indexOf(target) === index)
+    .sort();
+
+  const managedTargets = [
+    ...governanceInstitutions,
+    ...publishingAdministrationScopes,
+  ];
+  const managedRows = managedTargets.length
+    ? await db
+        .select({
+          grantId: authorizationGrants.id,
+          personId: authorizationGrants.personId,
+          domain: authorizationGrants.domain,
+          capability: authorizationGrants.capability,
+          target: authorizationGrants.target,
+          validFrom: authorizationGrants.validFrom,
+          validUntil: authorizationGrants.validUntil,
+        })
+        .from(authorizationGrants)
+        .where(and(
+          inArray(authorizationGrants.target, managedTargets),
+          isNull(authorizationGrants.revokedAt),
+          lte(authorizationGrants.validFrom, now),
+          or(
+            isNull(authorizationGrants.validUntil),
+            gt(authorizationGrants.validUntil, now)
+          )
+        ))
+    : [];
+  const governanceOperationalCapabilities = new Map(
+    GOVERNANCE_ROLES
+      .filter((role): role is OperationalGovernanceRole => role !== "institution-admin")
+      .map((role) => [governanceCapability(role), role])
+  );
+  const publishingOperationalCapabilities = new Map(
+    EDITORIAL_ROLES
+      .filter((role) => role !== "publisher")
+      .map((role) => [editorialCapability(role), role])
+  );
+  type ActiveDelegation = {
+    grantId: string;
+    personId: string;
+    domain: "governance" | "publishing";
+    role: OperationalGovernanceRole | OperationalEditorialRole;
+    target: string;
+    validFrom: Date;
+    validUntil: Date | null;
+  };
+  const activeDelegations: ActiveDelegation[] = [];
+  for (const grant of managedRows) {
+    if (
+      grant.domain === "governance" &&
+      grant.target !== null &&
+      governanceInstitutions.includes(grant.target)
+    ) {
+      const role = governanceOperationalCapabilities.get(grant.capability);
+      if (role) activeDelegations.push({
+        grantId: grant.grantId,
+        personId: grant.personId,
+        domain: "governance",
+        role,
+        target: grant.target,
+        validFrom: grant.validFrom,
+        validUntil: grant.validUntil,
+      });
+      continue;
+    }
+    if (
+      grant.domain === "civic" &&
+      grant.target !== null &&
+      publishingAdministrationScopes.includes(grant.target)
+    ) {
+      const role = publishingOperationalCapabilities.get(grant.capability);
+      if (role) activeDelegations.push({
+        grantId: grant.grantId,
+        personId: grant.personId,
+        domain: "publishing",
+        role,
+        target: grant.target,
+        validFrom: grant.validFrom,
+        validUntil: grant.validUntil,
+      });
+    }
+  }
+  activeDelegations.sort((left, right) =>
+      left.domain.localeCompare(right.domain) ||
+      left.target.localeCompare(right.target) ||
+      left.role.localeCompare(right.role) ||
+      left.personId.localeCompare(right.personId)
+    );
+
   const operationalAreas = new Set<OperationalArea>();
   if (membershipGrantByTarget.size) operationalAreas.add("membership");
   if (publishingByScope.size) operationalAreas.add("publishing");
@@ -264,6 +383,11 @@ export async function getOperationsOverview(
         scope,
         roles: EDITORIAL_ROLES.filter((role) => roles.has(role)),
       })),
+    authorityAdministration: {
+      governanceInstitutions,
+      publishingScopes: publishingAdministrationScopes,
+      activeDelegations,
+    },
   };
 }
 

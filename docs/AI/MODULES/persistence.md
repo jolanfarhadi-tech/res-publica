@@ -1,5 +1,13 @@
 # Module: Persistence
 
+## Incremental foundational-authority persistence — 2026-09-02
+
+Founder-appointed Institution Admin and Publisher records reuse the accepted
+`auth_identities`, `authorization_grants` and append-only `audit_log` tables.
+The exact grant and its human approval audit event commit in one transaction;
+the audit carries the approval request UUID, capability and dedicated reason
+code but no OIDC issuer/subject. No schema change or migration was introduced.
+
 ## Incremental recovery verification — 2026-08-16
 
 The current local main chain has a complete synthetic backup→restore drill in

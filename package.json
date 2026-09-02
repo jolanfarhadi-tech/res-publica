@@ -13,6 +13,7 @@
     "privacy:inventory:check": "node scripts/check-processing-inventory.mjs",
     "ops:health": "node scripts/check-deployment-health.mjs",
     "ops:membership-e2e": "node scripts/check-membership-production-e2e.mjs",
+    "ops:record-founder-authority": "tsx scripts/record-founder-authority-appointment.ts",
     "ops:restore-drill": "node scripts/verify-neon-restore-drill.mjs",
     "ops:recovery-drill:local": "node scripts/run-isolated-recovery-drill.mjs",
     "eao:repo-health": "node scripts/eao/repository-health.mjs",

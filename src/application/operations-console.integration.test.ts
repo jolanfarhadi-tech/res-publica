@@ -10,7 +10,8 @@ import { editorialCapability } from "../modules/publishing/authority";
 import type { Database } from "../persistence";
 import * as coreSchema from "../persistence/schema";
 import * as moduleSchema from "../persistence/module-schema";
-import { auditLog, people } from "../persistence/schema";
+import { auditLog, authorizationGrants, people } from "../persistence/schema";
+import { governanceCapability } from "../modules/harm-governance/authority";
 import {
   documentAcknowledgements,
   membershipApplications,
@@ -51,12 +52,13 @@ function grant(
   personId: string,
   capability: string,
   target: string | null,
-  assuranceRequired: "verified" | "mfa" | "recent-mfa" = "mfa"
+  assuranceRequired: "verified" | "mfa" | "recent-mfa" = "mfa",
+  domain: "civic" | "governance" = "civic"
 ): AuthorizationGrant {
   return {
     id: `grant-${capability}-${target ?? "none"}`,
     personId,
-    domain: "civic",
+    domain,
     capability,
     target,
     assuranceRequired,
@@ -291,6 +293,104 @@ describe("bounded Operations Console projection", () => {
       ]);
       expect(overview.membershipApplications).toEqual([]);
       expect(overview.publishingScopes).toEqual([]);
+    } finally {
+      await client.close();
+    }
+  }, 30_000);
+
+  it("admits foundational authorities and exposes only their exact delegable scopes and active operational grants", async () => {
+    const { client, db } = await database();
+    try {
+      await db.insert(people).values([
+        {
+          id: "authority",
+          name: "Authority",
+          contact: { email: "authority@example.org" },
+          locale: "de",
+          rtlPreference: false,
+          createdAt: now,
+        },
+        {
+          id: "delegate",
+          name: "Delegate",
+          contact: { email: "delegate@example.org" },
+          locale: "de",
+          rtlPreference: false,
+          createdAt: now,
+        },
+      ]);
+      await db.insert(authorizationGrants).values([
+        {
+          id: "managed-governance",
+          personId: "delegate",
+          domain: "governance",
+          capability: governanceCapability("evidence-reviewer"),
+          target: "institution-1",
+          assuranceRequired: "mfa",
+          validFrom: now,
+          validUntil: null,
+          grantedByPersonId: "authority",
+          revokedAt: null,
+        },
+        {
+          id: "managed-editorial",
+          personId: "delegate",
+          domain: "civic",
+          capability: editorialCapability("editor"),
+          target: "website",
+          assuranceRequired: "mfa",
+          validFrom: now,
+          validUntil: null,
+          grantedByPersonId: "authority",
+          revokedAt: null,
+        },
+        {
+          id: "other-scope",
+          personId: "delegate",
+          domain: "civic",
+          capability: editorialCapability("reviewer"),
+          target: "private-collection",
+          assuranceRequired: "mfa",
+          validFrom: now,
+          validUntil: null,
+          grantedByPersonId: "authority",
+          revokedAt: null,
+        },
+      ]);
+      const authority = actor("authority", "mfa", [
+        grant(
+          "authority",
+          governanceCapability("institution-admin"),
+          "institution-1",
+          "mfa",
+          "governance"
+        ),
+        grant("authority", editorialCapability("publisher"), "website"),
+      ]);
+
+      expect(canAccessOperations(authority, now)).toBe(true);
+      const overview = await getOperationsOverview(db, authority, now);
+      expect(overview.authorityAdministration).toEqual({
+        governanceInstitutions: ["institution-1"],
+        publishingScopes: ["website"],
+        activeDelegations: [
+          expect.objectContaining({
+            grantId: "managed-governance",
+            personId: "delegate",
+            domain: "governance",
+            role: "evidence-reviewer",
+            target: "institution-1",
+          }),
+          expect.objectContaining({
+            grantId: "managed-editorial",
+            personId: "delegate",
+            domain: "publishing",
+            role: "editor",
+            target: "website",
+          }),
+        ],
+      });
+      expect(JSON.stringify(overview)).not.toContain("private-collection");
     } finally {
       await client.close();
     }

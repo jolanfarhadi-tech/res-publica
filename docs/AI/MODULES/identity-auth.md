@@ -1,5 +1,20 @@
 # Module: Identity, Authentication & Authorization
 
+## Incremental foundational-authority provisioning — 2026-09-02
+
+`src/application/founder-authority.ts` and the non-HTTP
+`ops:record-founder-authority` command persist an externally approved
+Institution Admin or Publisher appointment using two distinct active OIDC
+identity links, an exact target and a UUID approval reference. Self-appointment,
+invalid/disabled identities, expired appointments and duplicate active grants
+fail before mutation. Grant and canonical audit evidence are atomic; raw
+issuer/subject values are not copied into audit evidence or command output.
+
+This is not an identity-provider role bridge or universal admin. The web
+Control Panel cannot create foundational authority. Existing operational
+delegation remains session-derived, exact-scope, recent-MFA protected and
+domain-owned under ADR-033/036. No migration was required.
+
 ## Incremental Mandatory-hardening Phase-C boundary — 2026-08-16
 
 The shared authorization primitive now checks a server-only list of exact

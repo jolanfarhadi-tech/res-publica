@@ -12,6 +12,7 @@ import {
 } from "./operations-state";
 import { PublishingWorkflowControls } from "./PublishingWorkflowControls";
 import { OperationsControlPanel } from "./OperationsControlPanel";
+import { AccessManagementPanel } from "./AccessManagementPanel";
 
 type Decision = "approved" | "rejected";
 type DetailState =
@@ -442,6 +443,12 @@ export function OperationsConsoleClient({ locale }: { locale: Locale }) {
         assignedAreaCount={overview.operationalAreas.length}
         membershipApplicationCount={overview.membershipApplications.length}
         publishingScopeCount={overview.publishingScopes.length}
+      />
+
+      <AccessManagementPanel
+        locale={locale}
+        administration={overview.authorityAdministration}
+        onChanged={loadOverview}
       />
 
       <nav aria-labelledby="operations-area-navigation">

@@ -1,5 +1,6 @@
 export const PRIVILEGED_REASON_CODES = [
   "operational-role-assignment",
+  "founder-authority-appointment",
   "scheduled-access-review",
   "duty-reassignment",
   "membership-board-approval",

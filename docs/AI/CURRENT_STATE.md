@@ -1,5 +1,25 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — foundational authority provisioning, 2026-09-02
+
+The repository now contains a non-HTTP operator command for recording an
+already-approved Founder/Human Approval Authority appointment of an exact
+`Institution Admin` or `Publisher`. It resolves two distinct active OIDC
+identity links, rejects self-appointment and duplicate active authority, and
+atomically appends the scoped grant plus canonical audit evidence. The command
+does not infer authority from email, Auth0 metadata, public office, or UI state
+and does not expose connection values or identity tuples in its output/audit.
+
+The existing Operations Control Panel now admits an MFA-authenticated account
+that holds one of those exact foundational grants and shows a bounded access
+management section. Institution Admins can use the existing Governance grant
+API only for the seven ADR-033 operational roles in their own institution;
+Publishers can use the existing Publishing grant API only for Editor, Reviewer
+and Translator in their own publication scope. Writes still require recent
+MFA and preserve no-self-grant, exact-scope, atomic audit, separation-of-duty
+and no-auto-publish boundaries. No migration or public authority endpoint was
+added. No Production appointment has been executed by this implementation.
+
 ## Incremental update — bounded Admin Control Panel, 2026-08-25
 
 The existing protected `/{locale}/operations` entry now presents a localized

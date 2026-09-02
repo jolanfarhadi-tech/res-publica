@@ -1,5 +1,16 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental bounded access management — 2026-09-02
+
+The DE/EN/FA Operations Control Panel now renders access-management controls
+only when the server projection reports an exact Institution Admin or Publisher
+scope. It accepts an approved internal Person ID, an operational role, the
+server-provided exact scope and optional expiry; 403 write failures offer a
+fresh-MFA step-up. Active operational grants can be revoked from the same
+bounded view. Institution Admin and Publisher are explicitly excluded from the
+selectable roles and described as externally appointed authorities. Persian
+copy and inherited RTL behavior are preserved.
+
 ## Incremental implementation — bounded Admin Control Panel, 2026-08-25
 
 The localized Operations route now provides one responsive Control Panel for

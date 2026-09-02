@@ -127,6 +127,15 @@
   activation gates remain controlling.
 - **Boundary:** the integrated index grants no authority and does not bypass a
   domain API's exact target, MFA, separation-of-duties, audit or feature gate.
+- **Implemented follow-up (2026-09-02):** a non-HTTP command now records an
+  externally approved, exact Founder appointment for Institution Admin or
+  Publisher and the Control Panel exposes only the already-authorized
+  operational delegation APIs. No Production appointment is implied.
+- **Remaining external action:** create the external approval record, identify
+  two distinct active canonical OIDC-linked Persons, select exact institution/
+  publication targets, run the controlled command with an authorized database
+  connection, and verify real Auth0 MFA. Named provisioning owner/reviewer and
+  provider-side MFA/security-event evidence remain open in the gate register.
 
 ### OPEN-026 — Public API deployment and deferred partner capabilities
 
