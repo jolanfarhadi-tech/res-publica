@@ -5,9 +5,10 @@
 The localized homepage is now a visual institutional landing page rather than
 a long sequence of text panels. A generated, optimized 3D civic-environment
 asset expresses the official mark through upright nested U channels instead of
-generic semicircular parliamentary seating. The longitudinal centre remains
-uninterrupted; varied non-identifiable participants humanize the space without
-claiming a real event. A separate faceted gold-star layer provides restrained
+generic semicircular parliamentary seating. A narrow wooden civic lectern sits
+on the longitudinal centre axis; varied non-identifiable participants humanize
+the space without claiming a real event. A separate faceted amber-crystal
+layer provides restrained
 motion and becomes static for reduced-motion users. Localized copy, the
 owner-confirmed static metrics, team names and route labels remain semantic
 HTML. Six route cards expose Lab, Projects, Programmes, Events, Knowledge and

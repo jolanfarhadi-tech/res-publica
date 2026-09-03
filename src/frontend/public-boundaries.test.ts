@@ -174,7 +174,7 @@ describe("public website boundaries", () => {
     ).toBe(true);
     expect(
       fs.existsSync(
-        path.join(process.cwd(), "public", "brand", "res-publica-civic-forum-logo-3d-v2.webp")
+        path.join(process.cwd(), "public", "brand", "res-publica-civic-forum-logo-3d-v3.webp")
       )
     ).toBe(true);
 
@@ -184,16 +184,18 @@ describe("public website boundaries", () => {
     expect(header).toContain('/brand/res-publica-logo.png');
     expect(header).toContain('/brand/res-publica-mark.png');
     expect(footer).toContain('/brand/res-publica-logo.png');
-    expect(homepage).toContain('/brand/res-publica-civic-forum-logo-3d-v2.webp');
+    expect(homepage).toContain('/brand/res-publica-civic-forum-logo-3d-v3.webp');
     expect(homepage).toContain("copy.snapshot.items");
     expect(homepage).toContain("copy.ecosystem.platforms");
     expect(homepage).toContain("forum-hero__image");
-    expect(homepage).toContain("forum-signal__star");
+    expect(homepage).toContain("forum-signal__crystal");
+    expect(homepage).not.toContain("forum-signal__star");
     expect(homepage).toContain("portal-card__icon");
     const globalCss = source("src", "app", "globals.css");
     expect(globalCss).toContain("perspective: 1400px");
     expect(globalCss).toContain("@keyframes forum-signal-float");
     expect(globalCss).toContain("@keyframes forum-signal-turn");
+    expect(globalCss).toContain("@keyframes forum-signal-glint");
     expect(globalCss).toContain("prefers-reduced-motion: reduce");
 
     for (const locale of locales) {

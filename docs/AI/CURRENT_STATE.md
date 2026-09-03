@@ -7,10 +7,12 @@ copying its fictional publication covers, titles, biographies or role labels.
 Its primary visual is an optimized 1536 × 1024 three-dimensional civic forum
 that follows the official mark as a red outer U and four upright nested blue U
 channels with long near-parallel sides, rounded lower returns and a continuous
-vertical centre axis. The former semicircular parliamentary geometry, podium
-and horizontal committee-table hierarchy are absent. Small non-identifiable
-participants listen, read and speak in varied natural postures. The gold star
-is a separate animated CSS layer; its float, turn and orbit pulse stop under
+vertical centre axis. The former semicircular parliamentary geometry and wide
+horizontal committee-table hierarchy are absent; a narrow wooden civic
+lectern is restored on the centre axis. Small non-identifiable participants
+listen, read and speak in varied natural postures. The faceted amber crystal
+is a separate animated SVG layer; its float, turn, glint and orbit pulse stop
+under
 the reduced-motion preference. Names, metrics and navigation remain semantic
 HTML rather than pixels.
 

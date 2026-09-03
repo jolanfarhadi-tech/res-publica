@@ -16,6 +16,44 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
+function ForumCrystal() {
+  return (
+    <svg className="forum-signal__crystal" viewBox="0 0 120 120" focusable="false">
+      <defs>
+        <linearGradient id="crystal-top" x1="24" y1="10" x2="86" y2="62" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#fff0aa" />
+          <stop offset="0.48" stopColor="#efaa2f" />
+          <stop offset="1" stopColor="#b86910" />
+        </linearGradient>
+        <linearGradient id="crystal-right" x1="65" y1="30" x2="99" y2="91" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#efae31" />
+          <stop offset="1" stopColor="#8c4608" />
+        </linearGradient>
+        <linearGradient id="crystal-bottom" x1="75" y1="65" x2="43" y2="113" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#dd8514" />
+          <stop offset="1" stopColor="#ffcc55" />
+        </linearGradient>
+        <linearGradient id="crystal-left" x1="22" y1="33" x2="59" y2="86" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#ffd66b" />
+          <stop offset="1" stopColor="#9b4c08" />
+        </linearGradient>
+      </defs>
+      <g className="forum-signal__facets">
+        <polygon points="60,4 89,25 61,55 29,27" fill="url(#crystal-top)" />
+        <polygon points="89,25 104,58 61,55" fill="url(#crystal-right)" />
+        <polygon points="104,58 88,89 61,55" fill="#bf6810" />
+        <polygon points="88,89 61,113 61,55" fill="url(#crystal-bottom)" />
+        <polygon points="61,113 33,95 61,55" fill="#e99a20" />
+        <polygon points="33,95 15,62 61,55" fill="url(#crystal-left)" />
+        <polygon points="15,62 29,27 61,55" fill="#c56d10" />
+        <polygon points="29,27 60,4 61,55" fill="#f5bb3d" opacity="0.86" />
+        <polygon className="forum-signal__glint" points="60,4 73,40 61,55 48,35" fill="#fff5bd" opacity="0.6" />
+        <polygon points="61,55 88,89 61,113 48,78" fill="#a75408" opacity="0.72" />
+      </g>
+    </svg>
+  );
+}
+
 function PortalIcon({ kind }: { kind: string }) {
   const common = {
     fill: "none",
@@ -117,10 +155,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     </li>
                   ))}
                 </ul>
-                <Image src="/brand/res-publica-civic-forum-logo-3d-v2.webp" alt={copy.hero.forumAlt} width={1536} height={1024} priority sizes="(min-width: 1024px) 64vw, 100vw" className="forum-hero__image h-auto w-full" />
+                <Image src="/brand/res-publica-civic-forum-logo-3d-v3.webp" alt={copy.hero.forumAlt} width={1536} height={1024} priority sizes="(min-width: 1024px) 64vw, 100vw" className="forum-hero__image h-auto w-full" />
                 <span className="forum-signal" aria-hidden="true">
                   <span className="forum-signal__orbit" />
-                  <span className="forum-signal__star" />
+                  <ForumCrystal />
                 </span>
                 <figcaption className="mx-auto -mt-4 w-fit rounded-full border border-night/10 bg-white/88 px-4 py-2 text-center text-xs font-semibold text-deep-blue shadow-sm backdrop-blur sm:-mt-8">{copy.hero.forumCaption}</figcaption>
               </figure>

@@ -47,17 +47,17 @@ recoloured, redrawn, animated or placed over visually noisy imagery.
 
 The homepage translates the mark into a three-dimensional civic environment:
 a red outer U, four upright nested blue channels, a continuous vertical centre
-axis and a restrained gold signal. The long near-parallel sides and rounded
+axis and a restrained amber signal. The long near-parallel sides and rounded
 lower returns follow the mark rather than generic semicircular parliamentary
-seating. The centre axis must remain longitudinal; a podium or wide horizontal
-committee table would introduce an institutional hierarchy and interrupt the
-mark's geometry. The render contains no words, logos, portraits or
-institutional claims.
+seating. A narrow civic lectern sits on the longitudinal centre axis as the
+place where an account becomes publicly answerable; it does not become the
+wide horizontal committee-table hierarchy rejected by the composition. The
+render contains no words, logos, portraits or institutional claims.
 All names, metrics and navigation remain semantic HTML so they can be
 localized, audited, indexed and read by assistive technology.
 
 The current forum web asset is
-`public/brand/res-publica-civic-forum-logo-3d-v2.webp` (1536 × 1024, 131 KB),
+`public/brand/res-publica-civic-forum-logo-3d-v3.webp` (1536 × 1024, 117 KB),
 generated from the official mark as the strict geometry reference and the
 owner-provided landing-page direction as a composition/depth reference. It is
 not a documentary image of a real hearing. Small non-identifiable participants
@@ -65,6 +65,11 @@ use varied postures—listening, reading and quiet dialogue—to make the spatia
 metaphor human without implying a real event. The three supplied team
 illustrations are layered separately and remain decorative; public names and
 roles come from `src/data/team.ts`.
+
+The faceted amber crystal is an SVG-rendered layer rather than a star-shaped
+CSS polygon or a baked-in raster object. It floats, turns, glints and carries a
+restrained orbit above the lectern; all motion stops under the user's
+reduced-motion preference.
 
 The first team crops inherited connector lines, compression halos and fragments
 from the owner reference. They have been superseded by the `*-v2.webp` set:
