@@ -20,6 +20,7 @@ export function TeamSection({ locale }: { locale: Locale }) {
               "@type": "Person",
               name: member.name,
               jobTitle: member.role[locale],
+              description: member.bio?.[locale],
               worksFor: { "@type": "Organization", name: "Res Publica e.V." },
             },
           })),

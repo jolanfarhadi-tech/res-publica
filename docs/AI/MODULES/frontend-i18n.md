@@ -5,16 +5,26 @@
 The localized homepage is now a visual institutional landing page rather than
 a long sequence of text panels. A generated, optimized 3D civic-environment
 asset expresses the official mark through upright nested U channels instead of
-generic semicircular parliamentary seating. A narrow wooden civic lectern sits
-on the longitudinal centre axis; varied non-identifiable participants humanize
-the space without claiming a real event. A separate transparent amber
+generic semicircular parliamentary seating. Its v5 visual treatment turns the
+surround into a restrained glass civic laboratory with credible-scale,
+synthetic adults engaged in listening, document review and collaborative
+research. A narrow wooden civic lectern sits on the longitudinal centre axis;
+the image does not claim a real facility, event or participant. A separate transparent amber
 polyhedron with more than twenty unequal facets provides material depth and
 restrained motion, becoming static for reduced-motion users. Localized copy, the
 owner-confirmed static metrics, team names and route labels remain semantic
-HTML. Six route cards expose Lab, Projects, Programmes, Events, Knowledge and
+HTML. The glass-lab visualization also continues as a subdued fixed field
+behind every locale route; translucent page headers and the homepage copy plane
+make the experience spatially continuous, while high-contrast and
+reduced-transparency modes reduce or remove that decorative field. Six route
+cards expose Lab, Projects, Programmes, Events, Knowledge and
 Communities. The paired human and institutional journeys and the separate
 Civic/HARM/Governance platform map preserve the approved narrative and
-architecture in compact form.
+architecture in compact form. The map now uses a localized cybernetic visual
+grammar: two closed directional feedback loops, sensing junctions, bounded
+signal channels and the six verified principles. Shared Platform Services
+remain explicitly internal and every animation becomes static under reduced
+motion.
 
 The team uses coloured graphical portraits derived from the owner-supplied
 Donya/Atie/Jolan identity references and the verified roles in

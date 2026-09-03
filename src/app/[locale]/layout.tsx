@@ -115,7 +115,7 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${figtree.variable} ${sourceSerif.variable} ${vazirmatn.variable}`}
     >
-      <body className="flex min-h-screen flex-col">
+      <body className="site-depth-shell flex min-h-screen flex-col">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {/* Skip link: first focusable element on every page (WCAG 2.4.1). */}
         <a
@@ -126,7 +126,7 @@ export default async function LocaleLayout({
         </a>
         <PreferenceProvider locale={locale as Locale}>
           <Header locale={locale as Locale} dict={dict} />
-          <main id="main" className="flex-1">
+          <main id="main" className="site-content flex-1">
             {children}
           </main>
           <Footer locale={locale as Locale} dict={dict} />

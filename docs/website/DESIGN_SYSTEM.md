@@ -57,14 +57,29 @@ All names, metrics and navigation remain semantic HTML so they can be
 localized, audited, indexed and read by assistive technology.
 
 The current forum web asset is
-`public/brand/res-publica-civic-forum-logo-3d-v3.webp` (1536 × 1024, 117 KB),
-generated from the official mark as the strict geometry reference and the
-owner-provided landing-page direction as a composition/depth reference. It is
-not a documentary image of a real hearing. Small non-identifiable participants
-use varied postures—listening, reading and quiet dialogue—to make the spatial
-metaphor human without implying a real event. The three supplied team
-illustrations are layered separately and remain decorative; public names and
-roles come from `src/data/team.ts`.
+`public/brand/res-publica-civic-forum-glass-lab-v5.webp` (1536 × 1024, 295 KB),
+generated from the prior mark-faithful forum as a strict geometry reference.
+It preserves the red outer U, four upright nested blue channels, centre axis
+and narrow lectern while turning the empty surround into a transparent,
+materially believable civic research laboratory. Synthetic, non-identifiable
+adults now appear at credible scale in listening, document-review and
+collaborative-research situations rather than as miniature figurines. Every
+person stands on the floor or uses a visible chair and worktable; nobody sits
+on the coloured structural bands or glass partitions. Glass
+partitions, restrained research surfaces, daylight and reflections provide a
+humanitarian working environment without sci-fi interface effects. This is an
+architectural visualization, not a documentary image of a real facility,
+hearing, participant or project. The three supplied team illustrations are
+layered separately and remain decorative; public names and roles come from
+`src/data/team.ts`.
+
+The same visualization also forms a fixed, restrained architectural field
+behind the public site. It is intentionally softened and partially veiled by
+the page surface, while headings and interactive content sit on accessible
+glass layers. This creates the sense of looking into the institution rather
+than placing an unrelated illustration beside the copy. Dark, high-contrast
+and reduced-transparency modes preserve legibility and do not depend on the
+image for meaning.
 
 The amber focal object is a transparent 640 × 640 WebP render with more than
 twenty unequal crystalline planes, internal refraction and deep bronze shadow
@@ -88,6 +103,15 @@ planes, the institutional snapshot overlaps the forum plane, gateway cards
 respond within a bounded perspective, and the ecosystem field uses restrained
 spatial rotation. Reduced-motion mode removes transforms without changing
 information hierarchy.
+
+The ecosystem field uses a cybernetic visual grammar rather than a flat
+platform inventory. Two counter-moving closed feedback loops surround the
+institutional core; directional channels, sensing junctions and slow signal
+pulses show information moving inward and responsibility returning outward.
+The four platform cards remain bounded and separately named. The six visible
+principles—research, dialogue, participation, evidence, responsibility and
+repair—come from verified localized copy. Reduced-motion mode stops the loops
+and removes moving signal particles while preserving every label and boundary.
 
 The platform visualization uses the complete supplied horizontal identity,
 not a cropped or reconstructed mark. Four bounded platform cards sit on a

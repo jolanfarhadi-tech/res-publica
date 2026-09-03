@@ -95,6 +95,8 @@ html[data-theme="dark"] {
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   background:
     radial-gradient(circle at 12% 0%, rgb(7 93 204 / 0.06), transparent 31rem),
     var(--bg);
@@ -102,6 +104,64 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/*
+ * A fixed architectural field lets every public page feel as though it is
+ * viewed from inside the Res Publica civic laboratory. The image remains
+ * decorative, low-contrast and non-interactive; page meaning stays in HTML.
+ */
+body.site-depth-shell::before,
+body.site-depth-shell::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  inset: 0;
+}
+
+body.site-depth-shell::before {
+  z-index: -2;
+  background-image:
+    linear-gradient(180deg, rgb(247 250 251 / 0.3), rgb(244 247 248 / 0.64)),
+    url("/brand/res-publica-civic-forum-glass-lab-v5.webp");
+  background-position: center, center clamp(4rem, 8vh, 7rem);
+  background-repeat: no-repeat;
+  background-size: cover, min(108rem, 148vw) auto;
+  background-attachment: fixed;
+  filter: saturate(0.84) contrast(0.94);
+  opacity: 0.34;
+  transform: translateZ(0) scale(1.025);
+  transform-origin: center 18%;
+}
+
+body.site-depth-shell::after {
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.42), transparent 24rem, rgb(244 247 248 / 0.48)),
+    radial-gradient(ellipse at 50% 18%, transparent 0 31rem, rgb(244 247 248 / 0.44) 68rem);
+}
+
+.site-content {
+  position: relative;
+  z-index: 0;
+  background: linear-gradient(180deg, transparent, rgb(244 247 248 / 0.16) 46%, transparent);
+}
+
+.site-page-header {
+  background: color-mix(in srgb, var(--paper) 76%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+  backdrop-filter: blur(18px) saturate(118%);
+}
+
+[data-theme="dark"] body.site-depth-shell::before {
+  filter: brightness(0.42) saturate(0.62) contrast(1.08);
+  opacity: 0.3;
+}
+
+[data-theme="dark"] body.site-depth-shell::after {
+  background:
+    linear-gradient(180deg, rgb(7 19 31 / 0.62), transparent 24rem, rgb(7 19 31 / 0.72)),
+    radial-gradient(ellipse at 50% 18%, transparent 0 28rem, rgb(7 19 31 / 0.56) 68rem);
 }
 
 :lang(fa) body,
@@ -311,7 +371,9 @@ input:disabled {
   background:
     radial-gradient(circle at 76% 7%, rgb(0 109 138 / 0.1), transparent 32rem),
     radial-gradient(circle at 12% 44%, rgb(201 21 38 / 0.045), transparent 27rem),
-    linear-gradient(180deg, #fff 0, var(--paper) 38rem, var(--bg) 100%);
+    linear-gradient(180deg, rgb(255 255 255 / 0.58) 0, rgb(247 250 251 / 0.68) 38rem, rgb(244 247 248 / 0.76) 100%);
+  -webkit-backdrop-filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
 }
 
 .home-stage::before {
@@ -328,15 +390,24 @@ input:disabled {
   background:
     radial-gradient(circle at 24% 7%, rgb(0 109 138 / 0.1), transparent 32rem),
     radial-gradient(circle at 88% 44%, rgb(201 21 38 / 0.045), transparent 27rem),
-    linear-gradient(180deg, #fff 0, var(--paper) 38rem, var(--bg) 100%);
+    linear-gradient(180deg, rgb(255 255 255 / 0.58) 0, rgb(247 250 251 / 0.68) 38rem, rgb(244 247 248 / 0.76) 100%);
 }
 
 .home-hero {
   position: relative;
   perspective: 1400px;
   background:
-    linear-gradient(115deg, rgb(255 255 255 / 0.98) 0 35%, transparent 62%),
-    linear-gradient(180deg, rgb(255 255 255 / 0.98), rgb(247 250 251 / 0.62));
+    linear-gradient(115deg, rgb(255 255 255 / 0.74) 0 34%, transparent 62%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.5), rgb(247 250 251 / 0.3));
+}
+
+.home-hero__copy {
+  border: 1px solid rgb(255 255 255 / 0.74);
+  border-radius: 1.75rem;
+  background: linear-gradient(145deg, rgb(255 255 255 / 0.76), rgb(249 252 253 / 0.54));
+  box-shadow: 0 34px 72px -48px rgb(4 43 68 / 0.68), inset 0 1px rgb(255 255 255 / 0.92);
+  -webkit-backdrop-filter: blur(22px) saturate(126%);
+  backdrop-filter: blur(22px) saturate(126%);
 }
 
 .home-hero::after {
@@ -538,7 +609,9 @@ input:disabled {
 .home-section--journey {
   background:
     linear-gradient(90deg, rgb(0 109 138 / 0.045), transparent 45%, rgb(201 21 38 / 0.04)),
-    var(--surface);
+    color-mix(in srgb, var(--surface) 76%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .home-section--journey::before {
@@ -568,7 +641,9 @@ input:disabled {
   background:
     radial-gradient(circle at 72% 52%, rgb(0 109 138 / 0.13), transparent 30rem),
     linear-gradient(180deg, rgb(255 255 255 / 0.38), transparent 42%),
-    var(--paper);
+    color-mix(in srgb, var(--paper) 74%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .ecosystem-field::before {
@@ -585,16 +660,18 @@ input:disabled {
 
 .ecosystem-map {
   isolation: isolate;
-  min-height: 32rem;
+  min-height: 34rem;
   border-radius: 2rem;
   background:
-    radial-gradient(circle at 50% 48%, rgb(255 255 255 / 0.98) 0 11rem, transparent 21rem),
-    radial-gradient(circle at 13% 18%, rgb(0 127 159 / 0.14), transparent 18rem),
-    radial-gradient(circle at 88% 82%, rgb(198 29 45 / 0.1), transparent 17rem),
-    linear-gradient(145deg, #f7fafb, #edf4f6 48%, #faf7f2);
+    radial-gradient(circle at 50% 48%, rgb(255 255 255 / 0.98) 0 9rem, transparent 22rem),
+    radial-gradient(circle at 12% 14%, rgb(0 127 159 / 0.18), transparent 20rem),
+    radial-gradient(circle at 88% 86%, rgb(198 29 45 / 0.13), transparent 19rem),
+    linear-gradient(145deg, rgb(247 251 252 / 0.96), rgb(229 240 244 / 0.9) 48%, rgb(250 245 240 / 0.94));
   box-shadow: 0 52px 84px -58px rgb(4 43 68 / 0.76), 0 14px 32px -26px rgb(4 43 68 / 0.5);
   transform: perspective(1200px) rotateY(-1.2deg) rotateX(0.65deg);
   transform-origin: center;
+  -webkit-backdrop-filter: blur(24px) saturate(126%);
+  backdrop-filter: blur(24px) saturate(126%);
 }
 
 [dir="rtl"] .ecosystem-map {
@@ -646,15 +723,29 @@ input:disabled {
   overflow: visible;
 }
 
-.ecosystem-map__orbit {
-  fill: none;
-  stroke: rgb(4 43 68 / 0.12);
-  stroke-width: 1.25;
+.ecosystem-map__field {
+  opacity: 0.48;
+  transform-origin: center;
+  animation: ecosystem-core-breathe 7s ease-in-out infinite;
 }
 
-.ecosystem-map__orbit--inner {
-  stroke: rgb(200 138 61 / 0.34);
-  stroke-dasharray: 5 9;
+.ecosystem-map__feedback-loop {
+  fill: none;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-dasharray: 3 9;
+  animation: ecosystem-feedback-flow 18s linear infinite;
+}
+
+.ecosystem-map__feedback-loop--outer {
+  stroke: url("#ecosystem-route-blue");
+}
+
+.ecosystem-map__feedback-loop--inner {
+  stroke: url("#ecosystem-route-red");
+  stroke-dasharray: 2 8;
+  animation-direction: reverse;
+  animation-duration: 14s;
 }
 
 .ecosystem-map__route {
@@ -667,6 +758,28 @@ input:disabled {
 
 .ecosystem-map__route--reverse {
   animation-direction: reverse;
+}
+
+.ecosystem-map__sensors {
+  fill: rgb(248 252 253 / 0.98);
+  stroke: rgb(0 109 138 / 0.66);
+  stroke-width: 2;
+}
+
+.ecosystem-map__sensors circle:nth-child(even) {
+  stroke: rgb(198 29 45 / 0.58);
+}
+
+.ecosystem-map__signal {
+  opacity: 0.92;
+}
+
+.ecosystem-map__signal--blue {
+  fill: #0083a3;
+}
+
+.ecosystem-map__signal--red {
+  fill: #c61d2d;
 }
 
 .ecosystem-map__junctions {
@@ -707,6 +820,27 @@ input:disabled {
   transform: rotateX(68deg);
 }
 
+.ecosystem-map__core-ring {
+  position: absolute;
+  border: 1px solid rgb(0 109 138 / 0.22);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: ecosystem-core-ring 22s linear infinite;
+}
+
+.ecosystem-map__core-ring--outer {
+  inset: -46% -18%;
+  border-style: dashed;
+}
+
+.ecosystem-map__core-ring--inner {
+  inset: -22% 2%;
+  border-color: rgb(200 138 61 / 0.38);
+  border-style: dotted;
+  animation-direction: reverse;
+  animation-duration: 15s;
+}
+
 .ecosystem-map__logo {
   position: relative;
   z-index: 1;
@@ -730,6 +864,24 @@ input:disabled {
   box-shadow: 0 22px 48px -32px rgb(4 43 68 / 0.78), inset 0 1px rgb(255 255 255 / 0.9);
   text-align: start;
   backdrop-filter: blur(0.8rem);
+}
+
+.ecosystem-map__node-signal {
+  position: absolute;
+  inset-block-start: 0.6rem;
+  inset-inline-end: 0.65rem;
+  width: 0.42rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  box-shadow: 0 0 0 0.3rem rgb(0 109 138 / 0.08);
+  animation: ecosystem-node-pulse 4.8s ease-in-out infinite;
+}
+
+.ecosystem-map__node:nth-child(2n) .ecosystem-map__node-signal {
+  background: var(--brand-red);
+  box-shadow: 0 0 0 0.3rem rgb(201 21 38 / 0.07);
+  animation-delay: -2.2s;
 }
 
 .ecosystem-map__node::before {
@@ -758,9 +910,72 @@ input:disabled {
 .ecosystem-map__node--3 { inset-block-end: 7%; inset-inline-start: 5%; }
 .ecosystem-map__node--4 { inset-block-end: 7%; inset-inline-end: 5%; }
 
+.ecosystem-map__principles {
+  position: absolute;
+  z-index: 5;
+  inset-block-start: calc(50% + 5.4rem);
+  inset-inline: 18%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.38rem;
+}
+
+.ecosystem-map__principles li {
+  border: 1px solid rgb(4 43 68 / 0.1);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.68);
+  padding: 0.3rem 0.58rem;
+  color: rgb(4 43 68 / 0.68);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  box-shadow: 0 8px 20px -15px rgb(4 43 68 / 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
 @keyframes ecosystem-route-flow {
   to {
     stroke-dashoffset: -72;
+  }
+}
+
+@keyframes ecosystem-feedback-flow {
+  to {
+    stroke-dashoffset: -120;
+  }
+}
+
+@keyframes ecosystem-core-breathe {
+  0%,
+  100% {
+    opacity: 0.34;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 0.62;
+    transform: scale(1.045);
+  }
+}
+
+@keyframes ecosystem-core-ring {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ecosystem-node-pulse {
+  0%,
+  100% {
+    opacity: 0.46;
+    scale: 0.82;
+  }
+
+  50% {
+    opacity: 1;
+    scale: 1.12;
   }
 }
 
@@ -858,6 +1073,17 @@ input:disabled {
   .ecosystem-map__node--4 {
     inset-block-end: 6%;
   }
+
+  .ecosystem-map__principles {
+    inset-block-start: calc(50% + 4.8rem);
+    inset-inline: 10%;
+    gap: 0.28rem;
+  }
+
+  .ecosystem-map__principles li {
+    padding: 0.25rem 0.45rem;
+    font-size: 0.54rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -871,9 +1097,17 @@ input:disabled {
   .forum-signal,
   .forum-signal__orbit,
   .forum-signal__crystal,
+  .ecosystem-map__field,
+  .ecosystem-map__feedback-loop,
   .ecosystem-map__route,
+  .ecosystem-map__core-ring,
+  .ecosystem-map__node-signal,
   .ecosystem-map::after {
     animation: none;
+  }
+
+  .ecosystem-map__signals {
+    display: none;
   }
 }
 
@@ -1092,12 +1326,32 @@ input:disabled {
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  body.site-depth-shell::before {
+    opacity: 0.08;
+  }
+
+  body.site-depth-shell::after,
+  .site-page-header,
+  .home-hero__copy,
+  .home-section--journey,
+  .ecosystem-field {
+    background: var(--surface);
+  }
+
   .glass-panel,
   .preference-dialog {
     background: var(--surface);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+}
+
+[data-contrast="high"] body.site-depth-shell::before {
+  opacity: 0.06;
+}
+
+[data-contrast="high"] body.site-depth-shell::after {
+  background: color-mix(in srgb, var(--bg) 96%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

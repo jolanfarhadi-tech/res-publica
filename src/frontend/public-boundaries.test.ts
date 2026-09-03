@@ -70,17 +70,46 @@ describe("public website boundaries", () => {
   it("publishes only the three approved institutional team identities", () => {
     expect(team).toHaveLength(3);
     expect(team.map((member) => member.name)).toEqual([
-      "Atie Kashef",
+      "Dr. Atie Kashef",
       "Donya Nasiri Zarghani",
       "Jolan Farhadi Babadi",
     ]);
+    expect(team[0]).toMatchObject({
+      role: {
+        de: "Vizepräsidentin · Vorstand",
+        en: "Vice President · Board",
+        fa: "نایب‌رئیس · هیئت‌مدیره",
+      },
+      bio: {
+        de: "High-Tech Community Designerin und Social Capacity Builderin.",
+        en: "High-Tech Community Designer and Social Capacity Builder.",
+        fa: "طراح جوامع فناوری پیشرفته و توسعه‌دهنده ظرفیت اجتماعی.",
+      },
+    });
+    expect(team[1]).toMatchObject({
+      role: {
+        de: "Community-Hauptrepräsentantin · Vorstand",
+        en: "Principal Community Representative · Board",
+        fa: "نماینده اصلی جامعه · هیئت‌مدیره",
+      },
+      bio: {
+        de: "Real-Time Community Operatorin und Mathematikerin.",
+        en: "Real-Time Community Operator and Mathematician.",
+        fa: "راهبر بلادرنگ جامعه و ریاضی‌دان.",
+      },
+    });
     const managingDirector = team.find(
       (member) => member.name === "Jolan Farhadi Babadi"
     );
     expect(managingDirector?.role).toEqual({
       de: "Vorstand · Geschäftsführer",
-      en: "Board · Geschäftsführer",
-      fa: "هیئت‌مدیره · Geschäftsführer",
+      en: "Board · Managing Director",
+      fa: "هیئت‌مدیره · مدیرعامل",
+    });
+    expect(managingDirector?.bio).toEqual({
+      de: "Governance- und Systemdesigner · M.A. in Praktischer Philosophie und Organisationsdesign.",
+      en: "Governance and Systems Designer · M.A. in Practical Philosophy and Organizational Design.",
+      fa: "طراح حکمرانی و سیستم‌ها · کارشناسی ارشد فلسفه عملی و طراحی سازمانی.",
     });
     expect(team.map((member) => member.image)).toEqual([
       "/team/atie-kashef-v3.webp",
@@ -93,7 +122,6 @@ describe("public website boundaries", () => {
         fs.existsSync(path.join(process.cwd(), "public", member.image!.slice(1)))
       ).toBe(true);
     }
-    expect(managingDirector?.bio).toBeUndefined();
     expect(partners).toEqual([]);
   });
 
@@ -174,7 +202,7 @@ describe("public website boundaries", () => {
     ).toBe(true);
     expect(
       fs.existsSync(
-        path.join(process.cwd(), "public", "brand", "res-publica-civic-forum-logo-3d-v3.webp")
+        path.join(process.cwd(), "public", "brand", "res-publica-civic-forum-glass-lab-v5.webp")
       )
     ).toBe(true);
     expect(
@@ -186,10 +214,14 @@ describe("public website boundaries", () => {
     const header = source("src", "components", "site", "Header.tsx");
     const footer = source("src", "components", "site", "Footer.tsx");
     const homepage = source("src", "app", "[locale]", "page.tsx");
+    const layout = source("src", "app", "[locale]", "layout.tsx");
+    const pageHeader = source("src", "components", "ui", "PageHeader.tsx");
     expect(header).toContain('/brand/res-publica-logo.png');
     expect(header).toContain('/brand/res-publica-mark.png');
     expect(footer).toContain('/brand/res-publica-logo.png');
-    expect(homepage).toContain('/brand/res-publica-civic-forum-logo-3d-v3.webp');
+    expect(homepage).toContain('/brand/res-publica-civic-forum-glass-lab-v5.webp');
+    expect(homepage).not.toContain('/brand/res-publica-civic-forum-glass-lab-v4.webp');
+    expect(homepage).not.toContain('/brand/res-publica-civic-forum-logo-3d-v3.webp');
     expect(homepage).toContain('/brand/res-publica-amber-polyhedron-v1.webp');
     expect(homepage).toContain('/brand/res-publica-logo.png');
     expect(homepage).toContain("copy.snapshot.items");
@@ -199,13 +231,26 @@ describe("public website boundaries", () => {
     expect(homepage).not.toContain("forum-signal__star");
     expect(homepage).toContain("ecosystem-map__network");
     expect(homepage).toContain("ecosystem-map__core");
+    expect(homepage).toContain("ecosystem-map__feedback");
+    expect(homepage).toContain("ecosystem-map__signal");
+    expect(homepage).toContain("copy.ecosystem.principles");
+    expect(homepage).toContain("ecosystem-map__principles");
     expect(homepage).not.toContain("ecosystem-map__mark");
     expect(homepage).toContain("portal-card__icon");
     const globalCss = source("src", "app", "globals.css");
+    expect(layout).toContain('className="site-depth-shell flex min-h-screen flex-col"');
+    expect(layout).toContain('className="site-content flex-1"');
+    expect(pageHeader).toContain("site-page-header");
+    expect(globalCss).toContain("body.site-depth-shell::before");
+    expect(globalCss).toContain("/brand/res-publica-civic-forum-glass-lab-v5.webp");
+    expect(globalCss).toContain("background-attachment: fixed");
+    expect(globalCss).toContain(".home-hero__copy");
     expect(globalCss).toContain("perspective: 1400px");
     expect(globalCss).toContain("@keyframes forum-signal-float");
     expect(globalCss).toContain("@keyframes forum-signal-turn");
     expect(globalCss).toContain("@keyframes ecosystem-route-flow");
+    expect(globalCss).toContain("@keyframes ecosystem-feedback-flow");
+    expect(globalCss).toContain("@keyframes ecosystem-core-breathe");
     expect(globalCss).toContain("@keyframes ecosystem-map-sheen");
     expect(globalCss).toContain("prefers-reduced-motion: reduce");
 

@@ -30,7 +30,7 @@ export const publicSiteCopy = {
         lede: "Res Publica verbindet Forschung, öffentliche Hearings, Wissen und zivile Gemeinschaften — damit Erfahrung sichtbar, Verantwortung nachvollziehbar und gemeinsames Handeln möglich wird.",
         primary: "Unsere Arbeit",
         secondary: "Über Res Publica",
-        forumAlt: "Dreidimensionale zivile Begegnungslandschaft in der Form des Res-Publica-Signets mit aufrechten roten und blauen U-Bahnen, menschlichen Begegnungen, einem schmalen zentralen Rednerpult und einem bewegten komplexen Bernsteinkristall aus vielen Facetten.",
+        forumAlt: "Fotorealistische dreidimensionale Forschungs- und Dialoglandschaft in der Form des Res-Publica-Signets: Aufrechte rote und blaue U-Bahnen bilden ein transparentes Glaslabor, in dem vielfältige Menschen zuhören, Dokumente prüfen und gemeinsam arbeiten; auf der Mittelachse stehen ein schmales Rednerpult und ein bewegter komplexer Bernsteinkristall.",
         forumCaption: "Ein öffentlicher Raum für Zuhören, Evidenz und demokratische Verantwortung.",
       },
       ecosystem: {
@@ -300,7 +300,7 @@ export const publicSiteCopy = {
         lede: "Res Publica connects research, public hearings, knowledge and civic communities — making experience visible, responsibility answerable and shared action possible.",
         primary: "Explore our work",
         secondary: "About Res Publica",
-        forumAlt: "A three-dimensional civic meeting landscape shaped like the Res Publica mark, with upright red and blue U channels, human encounters, a narrow central lectern and a moving complex amber crystal with many facets.",
+        forumAlt: "A photorealistic three-dimensional research and dialogue environment shaped like the Res Publica mark: upright red and blue U channels form a transparent glass laboratory where diverse people listen, review documents and work together; a narrow lectern and a moving complex amber crystal occupy the central axis.",
         forumCaption: "A public space for listening, evidence and democratic responsibility.",
       },
       ecosystem: {
@@ -570,7 +570,7 @@ export const publicSiteCopy = {
         lede: "رس پوبلیکا پژوهش، جلسات استماع عمومی، دانش و اجتماع‌های مدنی را به هم پیوند می‌دهد تا تجربه دیده شود، مسئولیت پاسخ‌گو بماند و کنش مشترک ممکن گردد.",
         primary: "کاوش فعالیت‌ها",
         secondary: "دربارهٔ رس پوبلیکا",
-        forumAlt: "فضای سه‌بعدی دیدار مدنی به شکل نشان رس پوبلیکا، با مسیرهای ایستادهٔ U شکل قرمز و آبی، تعامل‌های انسانی، تریبون باریک مرکزی و بلور کهربایی پیچیده و متحرک با وجه‌های متعدد.",
+        forumAlt: "محیط سه‌بعدی و واقع‌گرای پژوهش و گفت‌وگو به شکل نشان رس پوبلیکا؛ مسیرهای ایستادهٔ U شکل قرمز و آبی یک آزمایشگاه شیشه‌ای شفاف می‌سازند که در آن افراد گوناگون به یکدیگر گوش می‌دهند، اسناد را بررسی می‌کنند و با هم کار می‌کنند؛ تریبون باریک و بلور کهربایی پیچیده و متحرک روی محور مرکزی قرار دارند.",
         forumCaption: "فضایی عمومی برای شنیدن، شواهد و مسئولیت دموکراتیک.",
       },
       ecosystem: {

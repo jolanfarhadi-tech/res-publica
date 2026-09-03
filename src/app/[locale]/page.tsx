@@ -33,21 +33,72 @@ function EcosystemNetwork() {
   return (
     <svg className="ecosystem-map__network" viewBox="0 0 800 480" aria-hidden="true" focusable="false" preserveAspectRatio="none">
       <defs>
-        <linearGradient id="ecosystem-route-blue" x1="150" y1="90" x2="400" y2="240" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#007f9f" stopOpacity="0.2" />
-          <stop offset="1" stopColor="#005e83" stopOpacity="0.76" />
+        <linearGradient id="ecosystem-route-blue" x1="120" y1="72" x2="680" y2="408" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#67c6d9" stopOpacity="0.2" />
+          <stop offset="0.48" stopColor="#007f9f" stopOpacity="0.82" />
+          <stop offset="1" stopColor="#0d3b66" stopOpacity="0.42" />
         </linearGradient>
-        <linearGradient id="ecosystem-route-red" x1="650" y1="390" x2="400" y2="240" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#c61d2d" stopOpacity="0.2" />
-          <stop offset="1" stopColor="#9f1723" stopOpacity="0.72" />
+        <linearGradient id="ecosystem-route-red" x1="680" y1="72" x2="120" y2="408" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#e78389" stopOpacity="0.2" />
+          <stop offset="0.52" stopColor="#c61d2d" stopOpacity="0.78" />
+          <stop offset="1" stopColor="#7e1721" stopOpacity="0.4" />
         </linearGradient>
+        <radialGradient id="ecosystem-core-field">
+          <stop offset="0" stopColor="#c88a3d" stopOpacity="0.48" />
+          <stop offset="0.42" stopColor="#007f9f" stopOpacity="0.18" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+        </radialGradient>
+        <marker id="ecosystem-arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
+          <path d="M0 0 8 4 0 8 2.2 4Z" fill="#007f9f" />
+        </marker>
+        <marker id="ecosystem-arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
+          <path d="M0 0 8 4 0 8 2.2 4Z" fill="#c61d2d" />
+        </marker>
+        <filter id="ecosystem-signal-glow" x="-250%" y="-250%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
       </defs>
-      <ellipse className="ecosystem-map__orbit ecosystem-map__orbit--outer" cx="400" cy="240" rx="286" ry="174" />
-      <ellipse className="ecosystem-map__orbit ecosystem-map__orbit--inner" cx="400" cy="240" rx="205" ry="112" />
-      <path className="ecosystem-map__route" d="M400 240C322 205 271 125 150 92" stroke="url(#ecosystem-route-blue)" />
-      <path className="ecosystem-map__route ecosystem-map__route--reverse" d="M400 240C478 205 529 125 650 92" stroke="url(#ecosystem-route-red)" />
-      <path className="ecosystem-map__route ecosystem-map__route--reverse" d="M400 240C322 275 271 355 150 388" stroke="url(#ecosystem-route-red)" />
-      <path className="ecosystem-map__route" d="M400 240C478 275 529 355 650 388" stroke="url(#ecosystem-route-blue)" />
+
+      <ellipse className="ecosystem-map__field" cx="400" cy="240" rx="190" ry="126" fill="url(#ecosystem-core-field)" />
+      <g className="ecosystem-map__feedback">
+        <path className="ecosystem-map__feedback-loop ecosystem-map__feedback-loop--outer" d="M400 48C554 48 688 104 688 240S554 432 400 432 112 376 112 240 246 48 400 48Z" markerEnd="url(#ecosystem-arrow-blue)" />
+        <path className="ecosystem-map__feedback-loop ecosystem-map__feedback-loop--inner" d="M400 112C294 112 202 150 202 240s92 128 198 128 198-38 198-128-92-128-198-128Z" markerEnd="url(#ecosystem-arrow-red)" />
+      </g>
+
+      <g className="ecosystem-map__channels">
+        <path id="ecosystem-channel-1" className="ecosystem-map__route" d="M150 92C252 114 302 194 400 240" stroke="url(#ecosystem-route-blue)" markerEnd="url(#ecosystem-arrow-blue)" />
+        <path id="ecosystem-channel-2" className="ecosystem-map__route ecosystem-map__route--reverse" d="M400 240C498 194 548 114 650 92" stroke="url(#ecosystem-route-red)" markerEnd="url(#ecosystem-arrow-red)" />
+        <path id="ecosystem-channel-3" className="ecosystem-map__route ecosystem-map__route--reverse" d="M150 388C252 366 302 286 400 240" stroke="url(#ecosystem-route-red)" markerEnd="url(#ecosystem-arrow-red)" />
+        <path id="ecosystem-channel-4" className="ecosystem-map__route" d="M400 240C498 286 548 366 650 388" stroke="url(#ecosystem-route-blue)" markerEnd="url(#ecosystem-arrow-blue)" />
+      </g>
+
+      <g className="ecosystem-map__sensors">
+        <circle cx="400" cy="48" r="5" />
+        <circle cx="688" cy="240" r="5" />
+        <circle cx="400" cy="432" r="5" />
+        <circle cx="112" cy="240" r="5" />
+        <circle cx="400" cy="112" r="4" />
+        <circle cx="598" cy="240" r="4" />
+        <circle cx="400" cy="368" r="4" />
+        <circle cx="202" cy="240" r="4" />
+      </g>
+
+      <g className="ecosystem-map__signals" filter="url(#ecosystem-signal-glow)">
+        <circle className="ecosystem-map__signal ecosystem-map__signal--blue" r="4">
+          <animateMotion dur="6.8s" repeatCount="indefinite" path="M150 92C252 114 302 194 400 240" />
+        </circle>
+        <circle className="ecosystem-map__signal ecosystem-map__signal--red" r="4">
+          <animateMotion dur="7.6s" begin="-3s" repeatCount="indefinite" path="M400 240C498 194 548 114 650 92" />
+        </circle>
+        <circle className="ecosystem-map__signal ecosystem-map__signal--red" r="3.5">
+          <animateMotion dur="8.2s" begin="-5s" repeatCount="indefinite" path="M150 388C252 366 302 286 400 240" />
+        </circle>
+        <circle className="ecosystem-map__signal ecosystem-map__signal--blue" r="3.5">
+          <animateMotion dur="7.2s" begin="-2s" repeatCount="indefinite" path="M400 240C498 286 548 366 650 388" />
+        </circle>
+      </g>
+
       <g className="ecosystem-map__junctions">
         <circle cx="150" cy="92" r="5" />
         <circle cx="650" cy="92" r="5" />
@@ -135,11 +186,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         address: { "@type": "PostalAddress", addressLocality: "Frankfurt am Main", addressCountry: "DE" },
       }} />
 
-      <main className="home-stage bg-paper text-night">
+      <div className="home-stage text-night">
         <section className="home-hero overflow-hidden" aria-labelledby="home-title">
           <Container className="home-hero__container max-w-[96rem] pb-6 pt-10 sm:pt-14 lg:pb-8">
             <div className="grid items-center gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-3">
-              <div className="relative z-10 py-4 lg:py-12">
+              <div className="home-hero__copy relative z-10 py-7 sm:p-8 lg:p-10">
                 <p className="civic-label text-brand-gold">{copy.hero.eyebrow}</p>
                 <h1 id="home-title" className="display-hero mt-5 text-deep-blue">{copy.hero.title}</h1>
                 <p className="mt-7 max-w-xl text-lg leading-relaxed text-night/72">{copy.hero.lede}</p>
@@ -160,7 +211,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     </li>
                   ))}
                 </ul>
-                <Image src="/brand/res-publica-civic-forum-logo-3d-v3.webp" alt={copy.hero.forumAlt} width={1536} height={1024} priority sizes="(min-width: 1024px) 64vw, 100vw" className="forum-hero__image h-auto w-full" />
+                <Image src="/brand/res-publica-civic-forum-glass-lab-v5.webp" alt={copy.hero.forumAlt} width={1536} height={1024} priority sizes="(min-width: 1024px) 64vw, 100vw" className="forum-hero__image h-auto w-full" />
                 <span className="forum-signal" aria-hidden="true">
                   <span className="forum-signal__orbit" />
                   <ForumCrystal />
@@ -230,16 +281,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <p className="mt-5 max-w-xl leading-relaxed text-muted">{copy.featured.ecosystemText}</p>
               <Link href={`/${locale}/about`} className="button-secondary mt-7 rounded-full">{copy.ecosystem.open} <Arrow /></Link>
             </div>
-            <div className="ecosystem-map relative min-h-[32rem] overflow-hidden border border-border bg-white" role="img" aria-label={copy.ecosystem.graphicCaption}>
+            <figure className="ecosystem-map relative min-h-[32rem] overflow-hidden border border-border bg-white">
               <div className="ecosystem-map__grid" aria-hidden="true" />
               <EcosystemNetwork />
               <div className="ecosystem-map__core" aria-hidden="true">
                 <span className="ecosystem-map__core-halo" />
+                <span className="ecosystem-map__core-ring ecosystem-map__core-ring--outer" />
+                <span className="ecosystem-map__core-ring ecosystem-map__core-ring--inner" />
                 <Image src="/brand/res-publica-logo.png" alt="" width={1200} height={216} className="ecosystem-map__logo" />
               </div>
               <ul className="absolute inset-0 list-none">
                 {copy.ecosystem.platforms.map((platform, index) => (
                   <li key={platform.name} className={`ecosystem-map__node ecosystem-map__node--${index + 1}`}>
+                    <span className="ecosystem-map__node-signal" aria-hidden="true" />
                     <span className="ecosystem-map__index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
                     <span className="ecosystem-map__node-copy">
                       <span className="block text-xs font-bold text-deep-blue">{platform.name}</span>
@@ -248,7 +302,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   </li>
                 ))}
               </ul>
-            </div>
+              <ul className="ecosystem-map__principles list-none" aria-label={copy.ecosystem.eyebrow}>
+                {copy.ecosystem.principles.map((principle) => <li key={principle}>{principle}</li>)}
+              </ul>
+              <figcaption className="sr-only">{copy.ecosystem.graphicCaption}</figcaption>
+            </figure>
           </Container>
         </section>
 
@@ -283,7 +341,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div className="flex flex-wrap gap-3"><Link href={`/${locale}/membership`} className="button-primary border-paper bg-paper text-night hover:bg-signal">{copy.close.primary} <Arrow /></Link><Link href={`/${locale}/about`} className="button-secondary border-paper/30 bg-transparent text-paper hover:border-paper">{copy.close.secondary}</Link></div>
           </Container>
         </section>
-      </main>
+      </div>
     </>
   );
 }

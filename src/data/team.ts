@@ -13,17 +13,24 @@ export type TeamMember = {
 /**
  * Public identities are limited to the current legal-site disclosure approved
  * by the owner. The signed Satzung defines collective Vorstand authority but
- * does not assign its three statutory offices to individual signatories.
+ * does not assign its three statutory offices to individual signatories. The
+ * individual titles and professional descriptions below were explicitly
+ * approved by the owner on 2026-09-03 and are not inferred from the Satzung.
  */
 export const team: TeamMember[] = [
   {
     id: "atie-kashef",
-    name: "Atie Kashef",
+    name: "Dr. Atie Kashef",
     image: "/team/atie-kashef-v3.webp",
     role: {
-      de: "Vorstand",
-      en: "Board",
-      fa: "هیئت‌مدیره",
+      de: "Vizepräsidentin · Vorstand",
+      en: "Vice President · Board",
+      fa: "نایب‌رئیس · هیئت‌مدیره",
+    },
+    bio: {
+      de: "High-Tech Community Designerin und Social Capacity Builderin.",
+      en: "High-Tech Community Designer and Social Capacity Builder.",
+      fa: "طراح جوامع فناوری پیشرفته و توسعه‌دهنده ظرفیت اجتماعی.",
     },
   },
   {
@@ -31,9 +38,14 @@ export const team: TeamMember[] = [
     name: "Donya Nasiri Zarghani",
     image: "/team/donya-nasiri-zarghani-v3.webp",
     role: {
-      de: "Vorstand",
-      en: "Board",
-      fa: "هیئت‌مدیره",
+      de: "Community-Hauptrepräsentantin · Vorstand",
+      en: "Principal Community Representative · Board",
+      fa: "نماینده اصلی جامعه · هیئت‌مدیره",
+    },
+    bio: {
+      de: "Real-Time Community Operatorin und Mathematikerin.",
+      en: "Real-Time Community Operator and Mathematician.",
+      fa: "راهبر بلادرنگ جامعه و ریاضی‌دان.",
     },
   },
   {
@@ -42,8 +54,13 @@ export const team: TeamMember[] = [
     image: "/team/jolan-farhadi-babadi-v3.webp",
     role: {
       de: "Vorstand · Geschäftsführer",
-      en: "Board · Geschäftsführer",
-      fa: "هیئت‌مدیره · Geschäftsführer",
+      en: "Board · Managing Director",
+      fa: "هیئت‌مدیره · مدیرعامل",
+    },
+    bio: {
+      de: "Governance- und Systemdesigner · M.A. in Praktischer Philosophie und Organisationsdesign.",
+      en: "Governance and Systems Designer · M.A. in Practical Philosophy and Organizational Design.",
+      fa: "طراح حکمرانی و سیستم‌ها · کارشناسی ارشد فلسفه عملی و طراحی سازمانی.",
     },
   },
 ];

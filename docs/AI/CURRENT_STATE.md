@@ -4,17 +4,25 @@
 
 The homepage now follows the owner-approved architectural reference without
 copying its fictional publication covers, titles, biographies or role labels.
-Its primary visual is an optimized 1536 × 1024 three-dimensional civic forum
+Its primary visual is an optimized 1536 × 1024 three-dimensional glass civic lab
 that follows the official mark as a red outer U and four upright nested blue U
 channels with long near-parallel sides, rounded lower returns and a continuous
 vertical centre axis. The former semicircular parliamentary geometry and wide
 horizontal committee-table hierarchy are absent; a narrow wooden civic
-lectern is restored on the centre axis. Small non-identifiable participants
-listen, read and speak in varied natural postures. A transparent, materially
+lectern is restored on the centre axis. Synthetic, non-identifiable adults at
+credible human scale listen, review documents and collaborate inside a calm
+transparent research environment; the visualization does not claim a real
+facility, event or participant. A transparent, materially
 rendered amber polyhedron with more than twenty unequal facets replaces the
 flatter SVG and remains a separate animated layer; its float, restrained turn
 and orbit pulse stop under the reduced-motion preference. Names, metrics and
 navigation remain semantic HTML rather than pixels.
+
+The same lab continues as a restrained fixed architectural field behind every
+localized public route. Translucent page surfaces and an accessible glass copy
+plane create the sense of looking into the institution without making the
+visualization carry meaning. High-contrast and reduced-transparency preferences
+suppress the decorative field.
 
 The forum is now staged with real CSS perspective, a recessed floor plane,
 foreground/background separation and controlled section overlap instead of a
@@ -32,11 +40,13 @@ lead to Lab, Projects, Programmes, Events, Knowledge and Communities. The
 human and institutional journeys remain visible in one compact paired section;
 the ecosystem map preserves separate Civic, HARM and Governance platforms plus
 internal Shared Platform Services. Its centre now uses the complete official
-horizontal lockup, with four bounded cards connected by layered route, orbit
-and junction graphics instead of the former raw mark-and-pill composition.
-Team presentation uses only Atie Kashef,
+horizontal lockup. Four bounded cards now participate in two directional
+cybernetic feedback loops with sensing junctions, inward/outward channels and
+restrained signal pulses; the six verified institutional principles remain
+visible without dissolving platform or authority boundaries.
+Team presentation uses only Dr. Atie Kashef,
 Donya Nasiri Zarghani and Jolan Farhadi Babadi with their previously verified
-roles. Latest-publication/news panels read only provenance-approved collection
+identities and owner-approved current roles. Latest-publication/news panels read only provenance-approved collection
 records and therefore show a truthful empty state when none are cleared.
 
 Focused public/i18n tests pass (33/33), as do lint, typecheck, structure and the
