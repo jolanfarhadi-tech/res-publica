@@ -41,6 +41,7 @@ export function TeamSection({ locale }: { locale: Locale }) {
                 name={member.name}
                 role={member.role[locale]}
                 bio={member.bio?.[locale]}
+                image={member.image}
               />
             </li>
           ))}

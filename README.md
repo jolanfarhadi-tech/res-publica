@@ -26,18 +26,33 @@ npm run dev        # http://localhost:3000 → redirects to /de|/en|/fa
 
 ## Environment variables
 
-| Variable                | Required | Purpose                                  |
-| ----------------------- | -------- | ---------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`  | yes (prod) | Canonical URLs, sitemap, JSON-LD, RSS, OG |
-| `NEWSLETTER_PROVIDER`   | optional | `buttondown` or `mailchimp`              |
-| `BUTTONDOWN_API_KEY`    | if buttondown | Buttondown API token                |
-| `MAILCHIMP_API_KEY`     | if mailchimp | Key ends in `-usXX` (datacenter)     |
-| `MAILCHIMP_AUDIENCE_ID` | if mailchimp | Audience/list ID                     |
+Copy `.env.example` to an untracked local `.env.local` for development. Never
+commit an environment file containing a real value. Production values belong
+only in the existing Vercel Production environment.
 
-Without a configured provider the newsletter endpoint returns 503
-and the form shows a localized "currently unavailable" message —
-no fake successes. Mailchimp subscriptions are created as
-`pending` (double opt-in); Buttondown handles confirmation itself.
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | yes in Production | Canonical URLs, sitemap, JSON-LD, RSS, and Open Graph |
+| `DATABASE_URL` | database-backed runtime | PostgreSQL connection string; server-side only |
+| `SESSION_SECRET` | authenticated runtime | Server-side session integrity secret |
+| `OIDC_ISSUER`, `OIDC_CLIENT_ID`, `OIDC_REDIRECT_URI` | OIDC login | Identity-provider configuration |
+| `OIDC_CLIENT_SECRET` | provider/client dependent | Confidential-client secret; server-side only |
+| `OIDC_SCOPE` | optional | Defaults to `openid profile email` |
+| `NEWSLETTER_ENABLED` | optional | Must be exactly `true` before newsletter delivery is considered enabled |
+| `NEWSLETTER_PROVIDER` | if newsletter enabled | `buttondown` or `mailchimp` |
+| `BUTTONDOWN_API_KEY` | if Buttondown enabled | Server-side Buttondown API token |
+| `MAILCHIMP_API_KEY`, `MAILCHIMP_AUDIENCE_ID` | if Mailchimp enabled | Server-side Mailchimp configuration |
+
+Without a configured and enabled provider the newsletter endpoint returns 503
+and the form shows a localized "currently unavailable" message — no fake
+successes. Mailchimp subscriptions are created as `pending` (double opt-in);
+Buttondown handles confirmation itself.
+
+`HARM_OPERATIONS_ENABLED`, `ACADEMY_ENROLLMENT_ENABLED`,
+`FELLOWSHIP_APPLICATIONS_ENABLED`, and every `RESEARCH_*` real-data gate remain
+closed unless their independent legal, security, privacy, and operational
+approval conditions are met. The template keeps them false; it is not an
+activation mechanism.
 
 ## Content model (`src/content/`)
 

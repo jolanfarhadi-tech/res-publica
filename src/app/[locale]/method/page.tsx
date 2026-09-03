@@ -28,6 +28,27 @@ export default async function MethodPage({ params }: Props) {
     <>
       <PageHeader title={copy.title} lede={copy.lede} />
       <Container className="py-14 sm:py-20">
+        <section aria-labelledby="harm-platform" className="border-y border-border py-10 sm:py-14">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-gold">{copy.platformEyebrow}</p>
+              <h2 id="harm-platform" className="mt-4 text-3xl sm:text-4xl">{copy.platformTitle}</h2>
+            </div>
+            <div>
+              <p className="text-lg leading-relaxed text-muted">{copy.platformIntro}</p>
+              <p className="mt-5 border-s-2 border-gold ps-5 leading-relaxed text-muted">{copy.platformStatus}</p>
+            </div>
+          </div>
+          <dl className="mt-10 grid gap-px border border-border bg-border lg:grid-cols-3">
+            {copy.platformDistinctions.map(([term, definition]) => (
+              <div key={term} className="bg-bg p-6 sm:p-7">
+                <dt className="text-xl">{term}</dt>
+                <dd className="mt-4 leading-relaxed text-muted">{definition}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
         <section aria-labelledby="harm-lens" className="grid gap-8 border-y border-border py-10 lg:grid-cols-[0.8fr_1.2fr]">
           <h2 id="harm-lens" className="text-3xl sm:text-4xl">{copy.lensTitle}</h2>
           <p className="text-lg leading-relaxed text-muted">{copy.lens}</p>

@@ -94,24 +94,84 @@ The information architecture represents the ecosystem without redefining it.
 
 ## 5. Multi-platform ecosystem representation
 
-The public website uses a relationship view rather than a flat platform
-inventory.
+The public website uses a relationship view rather than a flat technical
+inventory. The following names describe distinct architectural levels and must
+not be used interchangeably.
+
+### 5.1 Res Publica ecosystem
+
+Res Publica is the institutional umbrella. It connects civic participation,
+research, learning, public narrative, governance, responsibility and repair.
+No single platform below is presented as the whole of Res Publica.
+
+### 5.2 Civic Platform
+
+The Civic Platform is the Civic Domain's participation environment. It brings
+together membership, community, programmes, events and project participation.
+Its public expression belongs primarily to JOIN and to the relevant WHAT
+pages. Status never becomes rank, and participation never grants unbounded
+authority.
+
+### 5.3 HARM Platform
+
+The HARM Platform is a separate platform within the Res Publica ecosystem. It
+is the institutional and digital environment through which the Governance
+Domain can support protected listening, structured documentation, evidence
+review, responsibility work, learning and repair. Its public orientation lives
+primarily on Method; protected records, assignments and decision state remain
+internal.
+
+Three HARM concepts remain explicitly distinct:
+
+- the **HARM Operating System** is the canonical methodology, not software;
+- the **HARM Platform** is the bounded institutional and digital execution
+  environment for that methodology;
+- the **HARM Research Project** researches, develops and evaluates HARM and is
+  presented publicly as a project, not as a product.
+
+Calling HARM a platform does not establish a separate legal organisation,
+commercial product, microservice, database or deployment boundary. It remains
+inside the Governance Domain defined by ADR-026. Any future runtime separation
+requires a separately accepted architectural decision.
+
+### 5.4 Governance Platform
+
+The Governance Platform is the control and accountability environment for
+bounded authority, delegation, exact scope, review, separation of duties and
+audit. It governs who may act and under what conditions; it does not replace
+the HARM Platform's case, evidence and responsibility work. Its public
+expression is limited to trust architecture and safeguards.
+
+### 5.5 Shared Platform Services
+
+Identity, authorization mechanisms, persistence, canonical audit, rate
+limiting and runtime support are shared infrastructure. They may support the
+Civic, HARM and Governance platforms, but they own no civic or governance
+meaning and are never marketed as public offerings.
+
+### 5.6 Programmes and non-ADR experience layers
+
+RPCS / Civic School is a civic learning programme, not a platform or product.
+The Experience, Narrative and Symbolic layers shape the public journey without
+redefining constitutional or technical architecture. The AI Layer and
+Executive AI Office remain bounded internal support, not public products.
 
 | Best-supported layer | Public role | Website expression | Governance status |
 | --- | --- | --- | --- |
-| Civic platform capabilities | participation, community, membership, events | JOIN and selected WHAT pages | ADR/domain governed |
-| HARM platform capabilities | listening, documentation, responsibility, learning | Method | ADR/domain governed where implemented; methodology is canonical documentation |
-| Governance platform capabilities | bounded authority, review, answerability | trust narrative and safeguards | ADR/Constitution governed |
-| RPCS / Civic School | civic learning programme | Offering marked documented/in development | canonical programme documentation |
+| Civic Platform | participation, community, membership, events | JOIN and selected WHAT pages | Civic Domain / ADR governed |
+| HARM Platform | listening, documentation, evidence, responsibility, learning and repair | Method and relevant Projects context | Governance Domain / ADR governed where implemented |
+| Governance Platform | bounded authority, review, answerability and audit | trust narrative and safeguards | Constitution / ADR governed |
+| RPCS / Civic School | civic learning programme | Programmes | canonical programme documentation |
 | Experience Layer | coherent and accessible user journey | all public pages | non-ADR |
 | Narrative Layer | public meaning and editorial sequence | WHY / HOW / WHAT / JOIN | non-ADR |
 | Symbolic Layer | dignity and relational orientation | homepage constellation | non-ADR |
-| Shared Platform Services | identity, persistence, audit, runtime support | not marketed; visible only through safe behavior | ADR governed |
+| Shared Platform Services | identity, persistence, audit and runtime support | not marketed; visible only through safe behavior | ADR governed |
 | AI Layer | bounded assistance | described only as limited assistance | internal, ADR governed |
 | Executive AI Office | internal coordination and review support | not a public offering | internal, ADR governed |
 
 Products are not platforms. Methodologies are not operational products.
-Internal infrastructure is not marketed as an offering.
+Modules are implementation units, not synonyms for platforms. Internal
+infrastructure is not marketed as an offering.
 
 ## 6. Homepage sequence
 

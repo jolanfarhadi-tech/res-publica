@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -42,14 +43,15 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <div>
             <Link
               href={`/${locale}`}
-              className="inline-flex items-center gap-3 text-paper"
+              className="inline-flex rounded-2xl bg-paper px-4 py-3 text-night"
             >
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-paper font-serif text-sm text-night">
-                RP
-              </span>
-              <span className="font-serif text-xl font-semibold tracking-[0.12em]">
-                RES<span className="text-signal">·</span>PUBLICA
-              </span>
+              <Image
+                src="/brand/res-publica-logo.png"
+                alt="Res Publica — Democratic Responsibility Ecosystem"
+                width={1200}
+                height={198}
+                className="h-12 w-auto"
+              />
             </Link>
             <p className="mt-5 max-w-sm leading-relaxed text-paper/65">
               {dict.footer.tagline}

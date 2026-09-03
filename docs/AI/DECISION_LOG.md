@@ -257,6 +257,35 @@ that a prepared action changed Production.
 
 ---
 
+## D-24: HARM Platform is a distinct platform inside the Res Publica ecosystem
+
+**Decision:** Res Publica is the institutional ecosystem. Within it, the HARM
+Platform is named and described separately as the Governance Domain's bounded
+institutional and digital environment for protected listening, structured
+documentation, evidence review, responsibility work, learning and repair. The
+HARM Operating System remains the canonical methodology and is not software;
+the HARM Research Project remains research, development and evaluation work
+and is not a commercial product.
+**Rationale:** treating all three meanings as “HARM” obscured the difference
+between method, execution environment and research work, and made one platform
+appear to stand for the whole Res Publica ecosystem. The explicit distinction
+preserves both the owner-confirmed multi-platform identity and ADR-026's
+constitutional domain boundaries.
+**Evidence:** `docs/source/foundation/01_HARM_OPERATING_SYSTEM.md` states that
+the Operating System is not software; ADR-026 assigns Harm, Evidence, Hearings,
+Responsibility, Repair, Scientific Review and Civic Intelligence to the
+Governance Domain; `docs/source/foundation/06_ECOSYSTEM.md` and
+`docs/website/STORYTELLING_EXPERIENCE_ARCHITECTURE.md` record the resulting
+platform map.
+**Related commit:** pending atomic commit for this implementation slice.
+**Related ADR:** ADR-026 is preserved and remains controlling.
+**Rejected alternatives:** presenting HARM only as a method; presenting the
+HARM Research Project as the platform; treating HARM as all of Res Publica;
+or implying a separate legal entity, product, microservice, database or
+deployment without an accepted ADR.
+
+---
+
 ## Decisions with rejected alternatives not otherwise itemized above
 
 **Verified**, `docs/source/DECISION_LOG.md` (read in full), additional items not already covered by D-01–D-16:

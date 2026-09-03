@@ -82,6 +82,17 @@ describe("public website boundaries", () => {
       en: "Board · Geschäftsführer",
       fa: "هیئت‌مدیره · Geschäftsführer",
     });
+    expect(team.map((member) => member.image)).toEqual([
+      "/team/atie-kashef-v2.webp",
+      "/team/donya-nasiri-zarghani-v2.webp",
+      "/team/jolan-farhadi-babadi-v2.webp",
+    ]);
+    for (const member of team) {
+      expect(member.image).toBeTruthy();
+      expect(
+        fs.existsSync(path.join(process.cwd(), "public", member.image!.slice(1)))
+      ).toBe(true);
+    }
     expect(managingDirector?.bio).toBeUndefined();
     expect(partners).toEqual([]);
   });
@@ -154,6 +165,63 @@ describe("public website boundaries", () => {
     expect(Object.keys(publicSiteCopy.fa.home)).toEqual(referenceKeys);
   });
 
+  it("uses the official supplied identity and separates the ecosystem platforms", () => {
+    expect(
+      fs.existsSync(path.join(process.cwd(), "public", "brand", "res-publica-logo.png"))
+    ).toBe(true);
+    expect(
+      fs.existsSync(path.join(process.cwd(), "public", "brand", "res-publica-mark.png"))
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(process.cwd(), "public", "brand", "res-publica-civic-forum-logo-3d-v2.webp")
+      )
+    ).toBe(true);
+
+    const header = source("src", "components", "site", "Header.tsx");
+    const footer = source("src", "components", "site", "Footer.tsx");
+    const homepage = source("src", "app", "[locale]", "page.tsx");
+    expect(header).toContain('/brand/res-publica-logo.png');
+    expect(header).toContain('/brand/res-publica-mark.png');
+    expect(footer).toContain('/brand/res-publica-logo.png');
+    expect(homepage).toContain('/brand/res-publica-civic-forum-logo-3d-v2.webp');
+    expect(homepage).toContain("copy.snapshot.items");
+    expect(homepage).toContain("copy.ecosystem.platforms");
+    expect(homepage).toContain("forum-hero__image");
+    expect(homepage).toContain("forum-signal__star");
+    expect(homepage).toContain("portal-card__icon");
+    const globalCss = source("src", "app", "globals.css");
+    expect(globalCss).toContain("perspective: 1400px");
+    expect(globalCss).toContain("@keyframes forum-signal-float");
+    expect(globalCss).toContain("@keyframes forum-signal-turn");
+    expect(globalCss).toContain("prefers-reduced-motion: reduce");
+
+    for (const locale of locales) {
+      const ecosystem = publicSiteCopy[locale].home.ecosystem;
+      expect(ecosystem.platforms.map((platform) => platform.name)).toEqual([
+        "Civic Platform",
+        "HARM Platform",
+        "Governance Platform",
+        "Shared Platform Services",
+      ]);
+      expect(ecosystem.platforms.at(-1)?.href).toBeNull();
+      expect(ecosystem.principles).toHaveLength(6);
+    }
+
+    expect(homepage).not.toMatch(/Projects\s*24|Publications\s*56|Partners\s*45/);
+    expect(homepage).not.toMatch(/Arash Abedi|Amnesia|The Fear of Truth/);
+
+    expect(publicSiteCopy.de.home.snapshot.items.map(([value]) => value)).toEqual([
+      "10", "4", "3", "5", "4", "2", "2", "5", "5",
+    ]);
+    expect(publicSiteCopy.en.home.snapshot.items.map(([value]) => value)).toEqual([
+      "10", "4", "3", "5", "4", "2", "2", "5", "5",
+    ]);
+    expect(publicSiteCopy.fa.home.snapshot.items.map(([value]) => value)).toEqual([
+      "۱۰", "۴", "۳", "۵", "۴", "۲", "۲", "۵", "۵",
+    ]);
+  });
+
   it("keeps the primary navigation concise and localized", () => {
     for (const locale of locales) {
       const items = publicNavigation(locale);
@@ -192,8 +260,22 @@ describe("public website boundaries", () => {
     });
   });
 
-  it("presents HARM as a reviewed research project, not a product", () => {
+  it("keeps the HARM Platform, Operating System and Research Project distinct", () => {
+    const methodPage = source("src", "app", "[locale]", "method", "page.tsx");
+    expect(methodPage).toContain('aria-labelledby="harm-platform"');
+    expect(methodPage).toContain("copy.platformDistinctions");
+
     for (const locale of locales) {
+      const method = publicSiteCopy[locale].method;
+      expect(method.platformTitle).toContain("HARM");
+      expect(method.platformIntro).toBeTruthy();
+      expect(method.platformStatus).toBeTruthy();
+      expect(method.platformDistinctions.map(([term]) => term)).toEqual([
+        "HARM Operating System",
+        "HARM Platform",
+        "HARM Research Project",
+      ]);
+
       const entry = getEntries(locale, "projects").find(
         (project) => project.slug === "harm-research"
       );
@@ -279,15 +361,13 @@ describe("public website boundaries", () => {
     expect(button).toContain("<a href={href}");
   });
 
-  it("renders the approved two-path homepage instead of a flat collection inventory", () => {
+  it("renders the two human and institutional paths inside the visual homepage architecture", () => {
     const homepage = source("src", "app", "[locale]", "page.tsx");
-    expect(homepage).toContain("<ConstellationNarrative");
-    expect(homepage).toContain("copy.human");
-    expect(homepage).toContain("copy.institutional");
-    expect(homepage).toContain("copy.trust");
-    expect(homepage).toContain("copy.fellowship");
-    expect(homepage).toContain('category="programs"');
-    expect(homepage).not.toContain("CollectionPreview");
+    expect(homepage).toContain("copy.journey.human");
+    expect(homepage).toContain("copy.journey.institutional");
+    expect(homepage).toContain("copy.gateways.items");
+    expect(homepage).toContain("copy.featured.ecosystemTitle");
+    expect(homepage).toContain("<CollectionPreview");
     expect(homepage).not.toContain('getEntries(locale, "research")');
   });
 

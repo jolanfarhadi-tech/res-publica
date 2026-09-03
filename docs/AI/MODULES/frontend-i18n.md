@@ -1,5 +1,70 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental visual homepage and three-dimensional forum — 2026-09-03
+
+The localized homepage is now a visual institutional landing page rather than
+a long sequence of text panels. A generated, optimized 3D civic-environment
+asset expresses the official mark through upright nested U channels instead of
+generic semicircular parliamentary seating. The longitudinal centre remains
+uninterrupted; varied non-identifiable participants humanize the space without
+claiming a real event. A separate faceted gold-star layer provides restrained
+motion and becomes static for reduced-motion users. Localized copy, the
+owner-confirmed static metrics, team names and route labels remain semantic
+HTML. Six route cards expose Lab, Projects, Programmes, Events, Knowledge and
+Communities. The paired human and institutional journeys and the separate
+Civic/HARM/Governance platform map preserve the approved narrative and
+architecture in compact form.
+
+The team uses the supplied Donya/Atie/Jolan illustrations and the verified
+roles in `src/data/team.ts`; screenshot-only names and biographies were not
+imported. Homepage publication and news panels use `getEntries`, so records
+without `public`, `reviewed` and `source` remain invisible. DE/EN/FA copy is
+complete. Focused tests pass (33/33); lint, typecheck, structure and the
+173-route Production build pass. Built-app browser QA confirms Persian RTL,
+loaded imagery and no horizontal overflow at 573px.
+
+The visual refinement adds genuine perspective and depth planes to the forum,
+snapshot, gateway and ecosystem compositions while preserving semantic HTML
+and reduced-motion behavior. Versioned `*-v2.webp` team portraits replace the
+supplied screenshot crops after removing connector lines, coloured fragments,
+compression artefacts and inconsistent framing. Built-app QA confirms the
+clean portraits, Persian RTL, zero mobile overflow and an empty browser error
+and warning log.
+
+## Superseded baseline — official identity and ecosystem homepage, 2026-09-03
+
+The public header/footer now use optimized web derivatives of the owner-supplied
+official RGB logo. The Homepage retains the approved human/institutional story
+and adds a visual civic-forum hero plus a localized ecosystem map that names
+Civic Platform, HARM Platform, Governance Platform and internal Shared Platform
+Services separately. No mockup metrics, partner counts, fictional products or
+fictional people were copied. DE/EN/FA browser QA confirmed loaded logo assets,
+correct Persian RTL, no 375px horizontal overflow and no console errors.
+Focused public/i18n tests pass (37/37), along with lint, typecheck and the
+Production build. Team cards use the three owner-supplied illustrative
+portraits in the stated Donya/Atie/Jolan mapping; the images remain decorative
+and are not described as documentary photographs or identity evidence.
+
+## Incremental HARM Platform clarification — 2026-09-03
+
+The localized Method page now presents the HARM Platform explicitly and
+consistently in DE/EN/FA. It distinguishes the platform from both the HARM
+Operating System methodology and the HARM Research Project, while keeping HARM
+outside the product/service catalogue. The section uses semantic `section`,
+`dl`, `dt` and `dd` structure, logical inline border/padding properties for RTL,
+and no new interaction or protected API call. Focused public-boundary and i18n
+tests pass (36/36).
+
+## Incremental public-copy correction — 2026-09-03
+
+The unused `platformFoundation` dictionary branch was removed together from
+DE/EN/FA after a repository-wide consumer search confirmed no component reads
+it. The branch retained an obsolete internal platform-inventory presentation,
+including claims that are not part of the current source/provenance-controlled
+public narrative. `src/i18n/dictionaries.test.ts` prevents reintroduction in
+any locale. No route, rendered feature, locale direction, metadata, API, or
+authorization boundary changed.
+
 ## Incremental bounded access management — 2026-09-02
 
 The DE/EN/FA Operations Control Panel now renders access-management controls

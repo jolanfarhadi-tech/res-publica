@@ -1,5 +1,86 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — professional visual homepage architecture, 2026-09-03
+
+The homepage now follows the owner-approved architectural reference without
+copying its fictional publication covers, titles, biographies or role labels.
+Its primary visual is an optimized 1536 × 1024 three-dimensional civic forum
+that follows the official mark as a red outer U and four upright nested blue U
+channels with long near-parallel sides, rounded lower returns and a continuous
+vertical centre axis. The former semicircular parliamentary geometry, podium
+and horizontal committee-table hierarchy are absent. Small non-identifiable
+participants listen, read and speak in varied natural postures. The gold star
+is a separate animated CSS layer; its float, turn and orbit pulse stop under
+the reduced-motion preference. Names, metrics and navigation remain semantic
+HTML rather than pixels.
+
+The forum is now staged with real CSS perspective, a recessed floor plane,
+foreground/background separation and controlled section overlap instead of a
+flat image stack. The three supplied portrait references were regenerated as
+clean, consistent navy line illustrations: connector lines, coloured screenshot
+fragments, compression halos and off-centre crops were removed. The superseded
+dirty derivatives are no longer part of `public/team`; runtime circular crops
+use the versioned `*-v2.webp` assets.
+
+The owner-confirmed institutional snapshot displays 10 researchers, 4
+partners, 3 communities, 5 publications, 4 planned hearings, 2 projects
+(HARM/STS), 2 programmes, 5 events and 5 awareness activities. The UI states
+that these are confirmed static figures, not live counters. Six visual gateways
+lead to Lab, Projects, Programmes, Events, Knowledge and Communities. The
+human and institutional journeys remain visible in one compact paired section;
+the ecosystem map preserves separate Civic, HARM and Governance platforms plus
+internal Shared Platform Services. Team presentation uses only Atie Kashef,
+Donya Nasiri Zarghani and Jolan Farhadi Babadi with their previously verified
+roles. Latest-publication/news panels read only provenance-approved collection
+records and therefore show a truthful empty state when none are cleared.
+
+Focused public/i18n tests pass (33/33), as do lint, typecheck, structure and the
+Production build (173 generated routes). Browser QA against the built app
+confirmed the generated hero and cleaned portraits load, English and Persian
+render, Persian uses `lang=fa` and `dir=rtl`, the 573px viewport has no
+horizontal overflow, and the browser console has no warnings or errors.
+
+## Superseded baseline — official identity and ecosystem homepage, 2026-09-03
+
+The supplied official RGB Res Publica logo now replaces the provisional text
+mark in the public masthead and footer. The homepage adopts a light,
+institutional civic-forum composition derived from the owner-provided visual
+direction without importing unsupported figures at that time. The owner later
+confirmed the institutional snapshot recorded above. A new DE/EN/FA ecosystem map separately presents Civic Platform,
+HARM Platform and Governance Platform; Shared Platform Services is visibly
+classified as internal infrastructure with no public call to action. Browser
+QA confirmed the official assets load, DE/EN/FA render, Persian remains RTL,
+375px layouts have no horizontal overflow, and no browser errors were emitted.
+Focused public/i18n tests pass (37/37), as do lint, typecheck and the Production
+build (173 static/dynamic route entries). The three owner-supplied illustrative
+portraits are mapped in the supplied order to Donya Nasiri Zarghani, Atie
+Kashef and Jolan Farhadi Babadi and are presented as decorative portraits,
+without claiming that they are documentary photographs or identity evidence.
+
+## Incremental update — explicit HARM Platform boundary, 2026-09-03
+
+The ecosystem and public Method architecture now define the **HARM Platform**
+as a distinct platform inside Res Publica and inside ADR-026's Governance
+Domain. Public copy in DE/EN/FA distinguishes the HARM Operating System
+(methodology, not software), the HARM Platform (bounded institutional and
+digital execution environment), and the HARM Research Project (research,
+development and evaluation, not a product). This naming creates no new legal,
+runtime, database, deployment or service boundary; such a split would require
+a separately accepted ADR. Publishing Authority remains a separate Civic
+Domain accountability boundary. Focused public-boundary and i18n tests pass
+(36/36).
+
+## Incremental update — public dictionary drift correction, 2026-09-03
+
+The unused `platformFoundation` branch was removed consistently from the
+DE/EN/FA dictionaries. It had no component consumer and contained obsolete
+platform-inventory copy that contradicted the current public narrative's
+source/provenance safeguards. `src/i18n/dictionaries.test.ts` asserts the
+branch is absent in all supported locales; the focused dictionary/Open Graph
+suite (7 tests) and TypeScript check pass. This changes no route, authorization,
+workflow, persistence, or public claim. The legal privacy-notice and legacy
+collection-provenance blockers remain open and are not changed by this slice.
+
 ## Incremental update — foundational authority provisioning, 2026-09-02
 
 The repository now contains a non-HTTP operator command for recording an

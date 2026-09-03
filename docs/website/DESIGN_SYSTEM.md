@@ -25,12 +25,67 @@ dashboards.
 - **Mineral white / paper**: primary reading surfaces.
 - **Deep civic ink / night**: institutional hero and high-emphasis sections.
 - **Observatory blue**: links, focus, and primary action.
+- **Res Publica blue, red and gold**: the official identity palette recovered
+  from the supplied RGB logo assets. Blue carries institutional structure, red
+  is used sparingly for civic emphasis, and gold marks the central signal.
 - **Verdigris**: verified state and quiet institutional emphasis.
 - **Signal brass**: sparse editorial indexing only.
 
 Glass is functional, not ornamental. It marks layered controls, consent,
 status, and selected editorial surfaces. Reduced-transparency preferences
 replace it with solid surfaces.
+
+## Official mark
+
+The web identity uses the supplied official RGB artwork rather than a recreated
+text mark. The horizontal lockup appears in the masthead and footer; the mark
+alone is reserved for compact layouts and structured metadata. CMYK and print
+files remain source assets and are not served to browsers. The logo is not
+recoloured, redrawn, animated or placed over visually noisy imagery.
+
+## Civic forum hero
+
+The homepage translates the mark into a three-dimensional civic environment:
+a red outer U, four upright nested blue channels, a continuous vertical centre
+axis and a restrained gold signal. The long near-parallel sides and rounded
+lower returns follow the mark rather than generic semicircular parliamentary
+seating. The centre axis must remain longitudinal; a podium or wide horizontal
+committee table would introduce an institutional hierarchy and interrupt the
+mark's geometry. The render contains no words, logos, portraits or
+institutional claims.
+All names, metrics and navigation remain semantic HTML so they can be
+localized, audited, indexed and read by assistive technology.
+
+The current forum web asset is
+`public/brand/res-publica-civic-forum-logo-3d-v2.webp` (1536 × 1024, 131 KB),
+generated from the official mark as the strict geometry reference and the
+owner-provided landing-page direction as a composition/depth reference. It is
+not a documentary image of a real hearing. Small non-identifiable participants
+use varied postures—listening, reading and quiet dialogue—to make the spatial
+metaphor human without implying a real event. The three supplied team
+illustrations are layered separately and remain decorative; public names and
+roles come from `src/data/team.ts`.
+
+The first team crops inherited connector lines, compression halos and fragments
+from the owner reference. They have been superseded by the `*-v2.webp` set:
+three independently cleaned 800 × 800 navy line portraits with consistent
+framing and no page-layout fragments. The originals are not runtime assets.
+
+Depth is structural rather than an applied glass effect: the hero establishes
+a perspective field, the civic forum and portraits occupy separate depth
+planes, the institutional snapshot overlaps the forum plane, gateway cards
+respond within a bounded perspective, and the ecosystem field uses restrained
+spatial rotation. Reduced-motion mode removes transforms without changing
+information hierarchy.
+
+The gold signal is a separate CSS-rendered faceted star, not baked into the
+forum bitmap. Its slow vertical float, turn and orbit pulse create a living
+focal point; all three animations stop under `prefers-reduced-motion`.
+
+The homepage institutional snapshot uses owner-confirmed static figures. It is
+explicitly labelled as a confirmed snapshot rather than a live counter. New or
+changed figures require renewed owner confirmation; collection previews remain
+independently provenance-gated by `visibility`, `reviewed` and `source`.
 
 ## Spacing and shape
 
@@ -83,7 +138,9 @@ remove non-essential motion.
 - No engagement scores, ranks, points, streaks, or competitive badges.
 - No invented people, partners, projects, publications, impact figures,
   testimonials, or launched capabilities.
-- HARM is a research project and methodology in development, never a product.
+- The HARM Operating System is the methodology; the HARM Platform is the
+  separate Governance Domain execution environment; the HARM Research Project
+  researches and develops it. None is presented as a commercial product.
 - RPCS / Civic School and Civic Fellowship are programmes, never products.
 - Publishing Authority remains an internal human-accountability boundary.
 - Backend, authentication, persistence, and audit contracts are unchanged.
