@@ -19,7 +19,7 @@ export const team: TeamMember[] = [
   {
     id: "atie-kashef",
     name: "Atie Kashef",
-    image: "/team/atie-kashef-v2.webp",
+    image: "/team/atie-kashef-v3.webp",
     role: {
       de: "Vorstand",
       en: "Board",
@@ -29,7 +29,7 @@ export const team: TeamMember[] = [
   {
     id: "donya-nasiri-zarghani",
     name: "Donya Nasiri Zarghani",
-    image: "/team/donya-nasiri-zarghani-v2.webp",
+    image: "/team/donya-nasiri-zarghani-v3.webp",
     role: {
       de: "Vorstand",
       en: "Board",
@@ -39,7 +39,7 @@ export const team: TeamMember[] = [
   {
     id: "jolan-farhadi-babadi",
     name: "Jolan Farhadi Babadi",
-    image: "/team/jolan-farhadi-babadi-v2.webp",
+    image: "/team/jolan-farhadi-babadi-v3.webp",
     role: {
       de: "Vorstand · Geschäftsführer",
       en: "Board · Geschäftsführer",

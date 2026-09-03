@@ -66,15 +66,21 @@ metaphor human without implying a real event. The three supplied team
 illustrations are layered separately and remain decorative; public names and
 roles come from `src/data/team.ts`.
 
-The faceted amber crystal is an SVG-rendered layer rather than a star-shaped
-CSS polygon or a baked-in raster object. It floats, turns, glints and carries a
-restrained orbit above the lectern; all motion stops under the user's
-reduced-motion preference.
+The amber focal object is a transparent 640 × 640 WebP render with more than
+twenty unequal crystalline planes, internal refraction and deep bronze shadow
+facets. It replaces both the star-shaped CSS polygon and the flatter faceted
+SVG. The raster supplies believable material depth while CSS provides a slow
+float, restrained three-axis turn and orbit pulse above the lectern; all motion
+stops under the user's reduced-motion preference.
 
 The first team crops inherited connector lines, compression halos and fragments
-from the owner reference. They have been superseded by the `*-v2.webp` set:
-three independently cleaned 800 × 800 navy line portraits with consistent
-framing and no page-layout fragments. The originals are not runtime assets.
+from the owner reference. They were first superseded by cleaned navy line
+portraits and are now replaced by the `*-v3.webp` set: three 800 × 800 coloured
+editorial illustrations derived from the owner-supplied identity references.
+Natural facial colour, restrained navy/coral clothing and a shared warm-grey
+field preserve recognisability without presenting the assets as documentary
+photographs. The source screenshots and real photographs are not runtime
+assets.
 
 Depth is structural rather than an applied glass effect: the hero establishes
 a perspective field, the civic forum and portraits occupy separate depth
@@ -83,9 +89,11 @@ respond within a bounded perspective, and the ecosystem field uses restrained
 spatial rotation. Reduced-motion mode removes transforms without changing
 information hierarchy.
 
-The gold signal is a separate CSS-rendered faceted star, not baked into the
-forum bitmap. Its slow vertical float, turn and orbit pulse create a living
-focal point; all three animations stop under `prefers-reduced-motion`.
+The platform visualization uses the complete supplied horizontal identity,
+not a cropped or reconstructed mark. Four bounded platform cards sit on a
+layered connection field with distinct routes, junctions and orbit planes.
+Movement is decorative and reduced-motion safe; the localized platform names
+and scopes remain semantic HTML rather than being embedded in the graphic.
 
 The homepage institutional snapshot uses owner-confirmed static figures. It is
 explicitly labelled as a confirmed snapshot rather than a live counter. New or

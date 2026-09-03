@@ -83,9 +83,9 @@ describe("public website boundaries", () => {
       fa: "هیئت‌مدیره · Geschäftsführer",
     });
     expect(team.map((member) => member.image)).toEqual([
-      "/team/atie-kashef-v2.webp",
-      "/team/donya-nasiri-zarghani-v2.webp",
-      "/team/jolan-farhadi-babadi-v2.webp",
+      "/team/atie-kashef-v3.webp",
+      "/team/donya-nasiri-zarghani-v3.webp",
+      "/team/jolan-farhadi-babadi-v3.webp",
     ]);
     for (const member of team) {
       expect(member.image).toBeTruthy();
@@ -177,6 +177,11 @@ describe("public website boundaries", () => {
         path.join(process.cwd(), "public", "brand", "res-publica-civic-forum-logo-3d-v3.webp")
       )
     ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(process.cwd(), "public", "brand", "res-publica-amber-polyhedron-v1.webp")
+      )
+    ).toBe(true);
 
     const header = source("src", "components", "site", "Header.tsx");
     const footer = source("src", "components", "site", "Footer.tsx");
@@ -185,17 +190,23 @@ describe("public website boundaries", () => {
     expect(header).toContain('/brand/res-publica-mark.png');
     expect(footer).toContain('/brand/res-publica-logo.png');
     expect(homepage).toContain('/brand/res-publica-civic-forum-logo-3d-v3.webp');
+    expect(homepage).toContain('/brand/res-publica-amber-polyhedron-v1.webp');
+    expect(homepage).toContain('/brand/res-publica-logo.png');
     expect(homepage).toContain("copy.snapshot.items");
     expect(homepage).toContain("copy.ecosystem.platforms");
     expect(homepage).toContain("forum-hero__image");
     expect(homepage).toContain("forum-signal__crystal");
     expect(homepage).not.toContain("forum-signal__star");
+    expect(homepage).toContain("ecosystem-map__network");
+    expect(homepage).toContain("ecosystem-map__core");
+    expect(homepage).not.toContain("ecosystem-map__mark");
     expect(homepage).toContain("portal-card__icon");
     const globalCss = source("src", "app", "globals.css");
     expect(globalCss).toContain("perspective: 1400px");
     expect(globalCss).toContain("@keyframes forum-signal-float");
     expect(globalCss).toContain("@keyframes forum-signal-turn");
-    expect(globalCss).toContain("@keyframes forum-signal-glint");
+    expect(globalCss).toContain("@keyframes ecosystem-route-flow");
+    expect(globalCss).toContain("@keyframes ecosystem-map-sheen");
     expect(globalCss).toContain("prefers-reduced-motion: reduce");
 
     for (const locale of locales) {

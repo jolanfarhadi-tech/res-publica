@@ -18,37 +18,42 @@ function Arrow() {
 
 function ForumCrystal() {
   return (
-    <svg className="forum-signal__crystal" viewBox="0 0 120 120" focusable="false">
+    <Image
+      src="/brand/res-publica-amber-polyhedron-v1.webp"
+      alt=""
+      width={640}
+      height={640}
+      sizes="(min-width: 1024px) 128px, 96px"
+      className="forum-signal__crystal"
+    />
+  );
+}
+
+function EcosystemNetwork() {
+  return (
+    <svg className="ecosystem-map__network" viewBox="0 0 800 480" aria-hidden="true" focusable="false" preserveAspectRatio="none">
       <defs>
-        <linearGradient id="crystal-top" x1="24" y1="10" x2="86" y2="62" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#fff0aa" />
-          <stop offset="0.48" stopColor="#efaa2f" />
-          <stop offset="1" stopColor="#b86910" />
+        <linearGradient id="ecosystem-route-blue" x1="150" y1="90" x2="400" y2="240" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#007f9f" stopOpacity="0.2" />
+          <stop offset="1" stopColor="#005e83" stopOpacity="0.76" />
         </linearGradient>
-        <linearGradient id="crystal-right" x1="65" y1="30" x2="99" y2="91" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#efae31" />
-          <stop offset="1" stopColor="#8c4608" />
-        </linearGradient>
-        <linearGradient id="crystal-bottom" x1="75" y1="65" x2="43" y2="113" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#dd8514" />
-          <stop offset="1" stopColor="#ffcc55" />
-        </linearGradient>
-        <linearGradient id="crystal-left" x1="22" y1="33" x2="59" y2="86" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#ffd66b" />
-          <stop offset="1" stopColor="#9b4c08" />
+        <linearGradient id="ecosystem-route-red" x1="650" y1="390" x2="400" y2="240" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#c61d2d" stopOpacity="0.2" />
+          <stop offset="1" stopColor="#9f1723" stopOpacity="0.72" />
         </linearGradient>
       </defs>
-      <g className="forum-signal__facets">
-        <polygon points="60,4 89,25 61,55 29,27" fill="url(#crystal-top)" />
-        <polygon points="89,25 104,58 61,55" fill="url(#crystal-right)" />
-        <polygon points="104,58 88,89 61,55" fill="#bf6810" />
-        <polygon points="88,89 61,113 61,55" fill="url(#crystal-bottom)" />
-        <polygon points="61,113 33,95 61,55" fill="#e99a20" />
-        <polygon points="33,95 15,62 61,55" fill="url(#crystal-left)" />
-        <polygon points="15,62 29,27 61,55" fill="#c56d10" />
-        <polygon points="29,27 60,4 61,55" fill="#f5bb3d" opacity="0.86" />
-        <polygon className="forum-signal__glint" points="60,4 73,40 61,55 48,35" fill="#fff5bd" opacity="0.6" />
-        <polygon points="61,55 88,89 61,113 48,78" fill="#a75408" opacity="0.72" />
+      <ellipse className="ecosystem-map__orbit ecosystem-map__orbit--outer" cx="400" cy="240" rx="286" ry="174" />
+      <ellipse className="ecosystem-map__orbit ecosystem-map__orbit--inner" cx="400" cy="240" rx="205" ry="112" />
+      <path className="ecosystem-map__route" d="M400 240C322 205 271 125 150 92" stroke="url(#ecosystem-route-blue)" />
+      <path className="ecosystem-map__route ecosystem-map__route--reverse" d="M400 240C478 205 529 125 650 92" stroke="url(#ecosystem-route-red)" />
+      <path className="ecosystem-map__route ecosystem-map__route--reverse" d="M400 240C322 275 271 355 150 388" stroke="url(#ecosystem-route-red)" />
+      <path className="ecosystem-map__route" d="M400 240C478 275 529 355 650 388" stroke="url(#ecosystem-route-blue)" />
+      <g className="ecosystem-map__junctions">
+        <circle cx="150" cy="92" r="5" />
+        <circle cx="650" cy="92" r="5" />
+        <circle cx="150" cy="388" r="5" />
+        <circle cx="650" cy="388" r="5" />
+        <circle cx="400" cy="240" r="8" />
       </g>
     </svg>
   );
@@ -225,11 +230,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <p className="mt-5 max-w-xl leading-relaxed text-muted">{copy.featured.ecosystemText}</p>
               <Link href={`/${locale}/about`} className="button-secondary mt-7 rounded-full">{copy.ecosystem.open} <Arrow /></Link>
             </div>
-            <div className="ecosystem-map relative min-h-[28rem] overflow-hidden border border-border bg-white" role="img" aria-label={copy.ecosystem.graphicCaption}>
+            <div className="ecosystem-map relative min-h-[32rem] overflow-hidden border border-border bg-white" role="img" aria-label={copy.ecosystem.graphicCaption}>
               <div className="ecosystem-map__grid" aria-hidden="true" />
-              <Image src="/brand/res-publica-mark.png" alt="" width={362} height={320} className="ecosystem-map__mark" />
+              <EcosystemNetwork />
+              <div className="ecosystem-map__core" aria-hidden="true">
+                <span className="ecosystem-map__core-halo" />
+                <Image src="/brand/res-publica-logo.png" alt="" width={1200} height={216} className="ecosystem-map__logo" />
+              </div>
               <ul className="absolute inset-0 list-none">
-                {copy.ecosystem.platforms.map((platform, index) => <li key={platform.name} className={`ecosystem-map__node ecosystem-map__node--${index + 1}`}><span className="block text-xs font-bold text-deep-blue">{platform.name}</span><span className="mt-1 block text-[0.65rem] text-muted">{platform.scope}</span></li>)}
+                {copy.ecosystem.platforms.map((platform, index) => (
+                  <li key={platform.name} className={`ecosystem-map__node ecosystem-map__node--${index + 1}`}>
+                    <span className="ecosystem-map__index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="ecosystem-map__node-copy">
+                      <span className="block text-xs font-bold text-deep-blue">{platform.name}</span>
+                      <span className="mt-1 block text-[0.65rem] text-muted">{platform.scope}</span>
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           </Container>

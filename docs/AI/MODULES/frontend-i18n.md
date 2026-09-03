@@ -7,18 +7,19 @@ a long sequence of text panels. A generated, optimized 3D civic-environment
 asset expresses the official mark through upright nested U channels instead of
 generic semicircular parliamentary seating. A narrow wooden civic lectern sits
 on the longitudinal centre axis; varied non-identifiable participants humanize
-the space without claiming a real event. A separate faceted amber-crystal
-layer provides restrained
-motion and becomes static for reduced-motion users. Localized copy, the
+the space without claiming a real event. A separate transparent amber
+polyhedron with more than twenty unequal facets provides material depth and
+restrained motion, becoming static for reduced-motion users. Localized copy, the
 owner-confirmed static metrics, team names and route labels remain semantic
 HTML. Six route cards expose Lab, Projects, Programmes, Events, Knowledge and
 Communities. The paired human and institutional journeys and the separate
 Civic/HARM/Governance platform map preserve the approved narrative and
 architecture in compact form.
 
-The team uses the supplied Donya/Atie/Jolan illustrations and the verified
-roles in `src/data/team.ts`; screenshot-only names and biographies were not
-imported. Homepage publication and news panels use `getEntries`, so records
+The team uses coloured graphical portraits derived from the owner-supplied
+Donya/Atie/Jolan identity references and the verified roles in
+`src/data/team.ts`; the private source images, screenshot-only names and
+biographies were not imported. Homepage publication and news panels use `getEntries`, so records
 without `public`, `reviewed` and `source` remain invisible. DE/EN/FA copy is
 complete. Focused tests pass (33/33); lint, typecheck, structure and the
 173-route Production build pass. Built-app browser QA confirms Persian RTL,
@@ -26,11 +27,12 @@ loaded imagery and no horizontal overflow at 573px.
 
 The visual refinement adds genuine perspective and depth planes to the forum,
 snapshot, gateway and ecosystem compositions while preserving semantic HTML
-and reduced-motion behavior. Versioned `*-v2.webp` team portraits replace the
-supplied screenshot crops after removing connector lines, coloured fragments,
-compression artefacts and inconsistent framing. Built-app QA confirms the
-clean portraits, Persian RTL, zero mobile overflow and an empty browser error
-and warning log.
+and reduced-motion behavior. Versioned `*-v3.webp` team portraits provide
+recognisable colour editorial treatments on one shared warm-grey field. The
+ecosystem visualization uses the complete official lockup and four semantic
+platform cards over custom route, orbit and junction graphics. Built-app QA
+must confirm the new assets, Persian RTL, zero mobile overflow and an empty
+browser error and warning log before release.
 
 ## Superseded baseline — official identity and ecosystem homepage, 2026-09-03
 

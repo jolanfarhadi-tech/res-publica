@@ -10,19 +10,19 @@ channels with long near-parallel sides, rounded lower returns and a continuous
 vertical centre axis. The former semicircular parliamentary geometry and wide
 horizontal committee-table hierarchy are absent; a narrow wooden civic
 lectern is restored on the centre axis. Small non-identifiable participants
-listen, read and speak in varied natural postures. The faceted amber crystal
-is a separate animated SVG layer; its float, turn, glint and orbit pulse stop
-under
-the reduced-motion preference. Names, metrics and navigation remain semantic
-HTML rather than pixels.
+listen, read and speak in varied natural postures. A transparent, materially
+rendered amber polyhedron with more than twenty unequal facets replaces the
+flatter SVG and remains a separate animated layer; its float, restrained turn
+and orbit pulse stop under the reduced-motion preference. Names, metrics and
+navigation remain semantic HTML rather than pixels.
 
 The forum is now staged with real CSS perspective, a recessed floor plane,
 foreground/background separation and controlled section overlap instead of a
-flat image stack. The three supplied portrait references were regenerated as
-clean, consistent navy line illustrations: connector lines, coloured screenshot
-fragments, compression halos and off-centre crops were removed. The superseded
-dirty derivatives are no longer part of `public/team`; runtime circular crops
-use the versioned `*-v2.webp` assets.
+flat image stack. The owner-supplied real references for Atie Kashef, Donya
+Nasiri Zarghani and Jolan Farhadi Babadi are represented through consistent,
+colour editorial illustrations on a warm-grey field. Runtime circular crops
+use the versioned `*-v3.webp` assets; the identifying source photographs are
+not copied into the public asset tree.
 
 The owner-confirmed institutional snapshot displays 10 researchers, 4
 partners, 3 communities, 5 publications, 4 planned hearings, 2 projects
@@ -31,7 +31,10 @@ that these are confirmed static figures, not live counters. Six visual gateways
 lead to Lab, Projects, Programmes, Events, Knowledge and Communities. The
 human and institutional journeys remain visible in one compact paired section;
 the ecosystem map preserves separate Civic, HARM and Governance platforms plus
-internal Shared Platform Services. Team presentation uses only Atie Kashef,
+internal Shared Platform Services. Its centre now uses the complete official
+horizontal lockup, with four bounded cards connected by layered route, orbit
+and junction graphics instead of the former raw mark-and-pill composition.
+Team presentation uses only Atie Kashef,
 Donya Nasiri Zarghani and Jolan Farhadi Babadi with their previously verified
 roles. Latest-publication/news panels read only provenance-approved collection
 records and therefore show a truthful empty state when none are cleared.
