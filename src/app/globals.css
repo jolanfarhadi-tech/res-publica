@@ -122,15 +122,15 @@ body.site-depth-shell::after {
 body.site-depth-shell::before {
   z-index: -2;
   background-image:
-    linear-gradient(180deg, rgb(247 250 251 / 0.3), rgb(244 247 248 / 0.64)),
-    url("/brand/res-publica-civic-forum-glass-lab-v5.webp");
-  background-position: center, center clamp(4rem, 8vh, 7rem);
+    linear-gradient(180deg, rgb(247 250 251 / 0.38), rgb(244 247 248 / 0.72)),
+    url("/brand/res-publica-architectural-field-v1.webp");
+  background-position: center, center clamp(3.5rem, 7vh, 6rem);
   background-repeat: no-repeat;
-  background-size: cover, min(108rem, 148vw) auto;
+  background-size: cover, max(100vw, 88rem) auto;
   background-attachment: fixed;
-  filter: saturate(0.84) contrast(0.94);
-  opacity: 0.34;
-  transform: translateZ(0) scale(1.025);
+  filter: saturate(0.72) contrast(0.96);
+  opacity: 0.3;
+  transform: translateZ(0) scale(1.018);
   transform-origin: center 18%;
 }
 
@@ -433,8 +433,42 @@ input:disabled {
 }
 
 .forum-hero {
-  padding-block-start: clamp(3.8rem, 7vw, 6.5rem);
+  padding-block-start: clamp(5.75rem, 9vw, 8rem);
   transform-style: preserve-3d;
+}
+
+.forum-people {
+  isolation: isolate;
+  padding-inline: clamp(0.25rem, 2vw, 1.5rem);
+}
+
+.forum-people::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: 50%;
+  inset-inline: 6%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(4 43 68 / 0.24) 15% 85%, transparent);
+  box-shadow: 0 0.45rem 1.5rem rgb(0 109 138 / 0.12);
+}
+
+.forum-people > li {
+  position: relative;
+  display: grid;
+  min-width: clamp(4rem, 7vw, 6rem);
+  place-items: center;
+}
+
+.forum-people > li::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block-start: calc(100% - 0.1rem);
+  inset-inline-start: 50%;
+  width: 1px;
+  height: clamp(1.25rem, 2.2vw, 2.25rem);
+  background: linear-gradient(rgb(4 43 68 / 0.24), transparent);
 }
 
 .forum-hero::before {
@@ -461,19 +495,19 @@ input:disabled {
 
 .forum-signal {
   position: absolute;
-  z-index: 5;
-  inset-block-start: clamp(26%, 29vw, 34%);
+  z-index: 3;
+  inset-block-start: clamp(8.5rem, 25.5%, 11.75rem);
   inset-inline-start: 50%;
-  width: clamp(4.5rem, 8.5vw, 7.75rem);
+  width: clamp(3.75rem, 6.4vw, 5.85rem);
   aspect-ratio: 1;
   pointer-events: none;
-  transform: translate(-50%, -50%) translateZ(6rem);
+  transform: translate(-50%, -50%) translateZ(2rem);
   transform-style: preserve-3d;
   animation: forum-signal-float 5.4s cubic-bezier(0.42, 0, 0.28, 1) infinite;
 }
 
 [dir="rtl"] .forum-signal {
-  transform: translate(50%, -50%) translateZ(6rem);
+  transform: translate(50%, -50%) translateZ(2rem);
 }
 
 .forum-signal__orbit {
@@ -535,8 +569,11 @@ input:disabled {
 }
 
 .forum-person {
-  border: 1px solid rgb(4 43 68 / 0.24);
-  box-shadow: 0 20px 42px -24px rgb(4 43 68 / 0.62), 0 0 0 0.5rem rgb(255 255 255 / 0.64);
+  border: 1px solid rgb(4 43 68 / 0.3);
+  box-shadow:
+    0 24px 48px -25px rgb(4 43 68 / 0.68),
+    0 0 0 0.45rem rgb(255 255 255 / 0.76),
+    0 0 0 0.62rem rgb(0 109 138 / 0.08);
   transform: translateZ(4rem);
 }
 
@@ -565,7 +602,12 @@ input:disabled {
 }
 
 .portal-grid {
+  align-items: stretch;
   perspective: 1200px;
+}
+
+.portal-grid > li {
+  height: 100%;
 }
 
 .portal-card {
@@ -689,6 +731,19 @@ input:disabled {
     radial-gradient(circle, rgb(4 43 68 / 0.18) 1px, transparent 1.5px);
   background-size: 3.5rem 3.5rem, 3.5rem 3.5rem, 1rem 1rem;
   mask-image: radial-gradient(ellipse, black 9%, transparent 78%);
+}
+
+.ecosystem-map__architecture {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(246 251 252 / 0.42), rgb(245 248 249 / 0.72)),
+    url("/brand/res-publica-architectural-field-v1.webp") center 42% / cover no-repeat;
+  opacity: 0.24;
+  filter: saturate(0.58) contrast(0.94);
+  mask-image: radial-gradient(ellipse at center, black 8%, rgb(0 0 0 / 0.8) 52%, transparent 94%);
+  transform: scale(1.035);
 }
 
 .ecosystem-map::before,
@@ -1027,15 +1082,21 @@ input:disabled {
     margin-block-start: -2.5rem;
   }
 
-  .portal-grid > li:nth-child(2),
-  .portal-grid > li:nth-child(5) {
-    transform: translateY(1.1rem);
-  }
 }
 
 @media (max-width: 39.99rem) {
   .forum-people {
     inset-inline: 2%;
+    padding-inline: 0;
+  }
+
+  .forum-hero {
+    padding-block-start: 5.25rem;
+  }
+
+  .forum-signal {
+    inset-block-start: 26%;
+    width: 3.5rem;
   }
 
   .home-hero::after,

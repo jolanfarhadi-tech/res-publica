@@ -23,6 +23,7 @@ function ForumCrystal() {
       alt=""
       width={640}
       height={640}
+      priority
       sizes="(min-width: 1024px) 128px, 96px"
       className="forum-signal__crystal"
     />
@@ -283,6 +284,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             </div>
             <figure className="ecosystem-map relative min-h-[32rem] overflow-hidden border border-border bg-white">
               <div className="ecosystem-map__grid" aria-hidden="true" />
+              <div className="ecosystem-map__architecture" aria-hidden="true" />
               <EcosystemNetwork />
               <div className="ecosystem-map__core" aria-hidden="true">
                 <span className="ecosystem-map__core-halo" />

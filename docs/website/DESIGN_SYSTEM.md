@@ -73,20 +73,24 @@ hearing, participant or project. The three supplied team illustrations are
 layered separately and remain decorative; public names and roles come from
 `src/data/team.ts`.
 
-The same visualization also forms a fixed, restrained architectural field
-behind the public site. It is intentionally softened and partially veiled by
-the page surface, while headings and interactive content sit on accessible
-glass layers. This creates the sense of looking into the institution rather
-than placing an unrelated illustration beside the copy. Dark, high-contrast
-and reduced-transparency modes preserve legibility and do not depend on the
-image for meaning.
+The separate `res-publica-architectural-field-v1.webp` asset forms a fixed,
+restrained architectural field behind the public site. It retains the civic
+red and navy spatial language while removing logos, copy and prominent focal
+objects, so it reads as a distant working environment instead of a repeated
+hero. It is intentionally softened and partially veiled by the page surface,
+while headings and interactive content sit on accessible glass layers. This
+creates the sense of looking into the institution rather than placing an
+unrelated illustration beside the copy. Dark, high-contrast and
+reduced-transparency modes preserve legibility and do not depend on the image
+for meaning.
 
 The amber focal object is a transparent 640 × 640 WebP render with more than
 twenty unequal crystalline planes, internal refraction and deep bronze shadow
 facets. It replaces both the star-shaped CSS polygon and the flatter faceted
 SVG. The raster supplies believable material depth while CSS provides a slow
-float, restrained three-axis turn and orbit pulse above the lectern; all motion
-stops under the user's reduced-motion preference.
+float, restrained three-axis turn and orbit pulse. Its smaller scale and higher,
+farther-back position keep the lectern and human forum as the primary plane;
+all motion stops under the user's reduced-motion preference.
 
 The first team crops inherited connector lines, compression halos and fragments
 from the owner reference. They were first superseded by cleaned navy line
@@ -95,7 +99,9 @@ editorial illustrations derived from the owner-supplied identity references.
 Natural facial colour, restrained navy/coral clothing and a shared warm-grey
 field preserve recognisability without presenting the assets as documentary
 photographs. The source screenshots and real photographs are not runtime
-assets.
+assets. The three portraits occupy a taller shared frame and are joined by a
+fine rail and individual stems, so they read as participants connected to the
+civic space rather than three unrelated floating badges.
 
 Depth is structural rather than an applied glass effect: the hero establishes
 a perspective field, the civic forum and portraits occupy separate depth
@@ -103,6 +109,10 @@ planes, the institutional snapshot overlaps the forum plane, gateway cards
 respond within a bounded perspective, and the ecosystem field uses restrained
 spatial rotation. Reduced-motion mode removes transforms without changing
 information hierarchy.
+
+The six gateway cards share one baseline, one height and one responsive grid.
+No decorative vertical staggering is applied: hierarchy comes from typography,
+iconography and interaction rather than misalignment.
 
 The ecosystem field uses a cybernetic visual grammar rather than a flat
 platform inventory. Two counter-moving closed feedback loops surround the
@@ -115,7 +125,9 @@ and removes moving signal particles while preserving every label and boundary.
 
 The platform visualization uses the complete supplied horizontal identity,
 not a cropped or reconstructed mark. Four bounded platform cards sit on a
-layered connection field with distinct routes, junctions and orbit planes.
+layered connection field with distinct routes, junctions and orbit planes. A
+low-opacity crop of the architectural field sits below those loops to give the
+system a believable institutional setting without competing with its labels.
 Movement is decorative and reduced-motion safe; the localized platform names
 and scopes remain semantic HTML rather than being embedded in the graphic.
 

@@ -1,5 +1,28 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — aligned gateways and architectural depth, 2026-09-03
+
+The homepage refinement removes the intentional desktop stagger from gateway
+cards: all six work-field entries now share one top edge, height and baseline.
+The three verified team portraits occupy a taller, connected frame above the
+forum visualization instead of floating as unrelated badges. The amber
+polyhedron remains a separate reduced-motion-safe image layer but is smaller,
+farther back in the perspective field and aligned with the lectern axis.
+
+`public/brand/res-publica-architectural-field-v1.webp` is a new optimized
+1536 × 1024 architectural background (164 KB). It provides subdued,
+photorealistic glass-laboratory depth behind public routes and within the
+cybernetic ecosystem panel without replacing semantic content. The platform
+diagram retains its closed feedback loops, bounded platform cards and complete
+official logo. High-contrast and reduced-transparency behavior remains intact.
+
+Focused frontend tests pass 30/30. The complete serial suite passes 119 files /
+509 tests. Lint, typecheck, structure, `db:check`, `db:check:fresh` (26
+migrations / 105 tables), the 173-route Production build and `git diff --check`
+pass. Browser QA confirms equal desktop card geometry, Persian `lang=fa` and
+`dir=rtl`, no mobile horizontal overflow, the expected image preload, and no
+console warnings or errors in a clean Production-mode tab.
+
 ## Incremental update — professional visual homepage architecture, 2026-09-03
 
 The homepage now follows the owner-approved architectural reference without

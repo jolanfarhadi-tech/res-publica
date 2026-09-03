@@ -1,5 +1,24 @@
 # Module: Frontend & Localization (i18n)
 
+## Incremental visual alignment and depth — 2026-09-03
+
+The six homepage gateway cards no longer use alternating vertical offsets;
+desktop browser geometry confirms identical top, bottom and height values.
+The hero reserves a taller visual plane for the three verified team portraits
+and connects them to the forum frame with a restrained rail. The amber
+polyhedron is smaller and positioned farther into the lectern axis while
+remaining independent, animated and reduced-motion safe.
+
+A separate optimized architectural field asset now supplies mature,
+photorealistic glass depth to the shared site shell and the ecosystem panel.
+It is decorative only: localized labels, routes, platform boundaries and
+assistive descriptions remain semantic. The ecosystem keeps the existing
+cybernetic loops and separate Civic, HARM, Governance and internal Shared
+Platform Services cards. Production-mode QA confirms DE desktop geometry,
+Persian RTL, no 390px overflow, image preloading and an empty browser
+warning/error log. Focused tests pass 30/30; the complete suite passes 509/509;
+lint, typecheck, structure, migration checks and the 173-route build pass.
+
 ## Incremental visual homepage and three-dimensional forum — 2026-09-03
 
 The localized homepage is now a visual institutional landing page rather than

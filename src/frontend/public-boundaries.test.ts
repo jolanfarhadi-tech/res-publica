@@ -210,6 +210,11 @@ describe("public website boundaries", () => {
         path.join(process.cwd(), "public", "brand", "res-publica-amber-polyhedron-v1.webp")
       )
     ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(process.cwd(), "public", "brand", "res-publica-architectural-field-v1.webp")
+      )
+    ).toBe(true);
 
     const header = source("src", "components", "site", "Header.tsx");
     const footer = source("src", "components", "site", "Footer.tsx");
@@ -223,6 +228,7 @@ describe("public website boundaries", () => {
     expect(homepage).not.toContain('/brand/res-publica-civic-forum-glass-lab-v4.webp');
     expect(homepage).not.toContain('/brand/res-publica-civic-forum-logo-3d-v3.webp');
     expect(homepage).toContain('/brand/res-publica-amber-polyhedron-v1.webp');
+    expect(homepage).toMatch(/res-publica-amber-polyhedron-v1\.webp[\s\S]*?priority/);
     expect(homepage).toContain('/brand/res-publica-logo.png');
     expect(homepage).toContain("copy.snapshot.items");
     expect(homepage).toContain("copy.ecosystem.platforms");
@@ -230,6 +236,7 @@ describe("public website boundaries", () => {
     expect(homepage).toContain("forum-signal__crystal");
     expect(homepage).not.toContain("forum-signal__star");
     expect(homepage).toContain("ecosystem-map__network");
+    expect(homepage).toContain("ecosystem-map__architecture");
     expect(homepage).toContain("ecosystem-map__core");
     expect(homepage).toContain("ecosystem-map__feedback");
     expect(homepage).toContain("ecosystem-map__signal");
@@ -242,8 +249,12 @@ describe("public website boundaries", () => {
     expect(layout).toContain('className="site-content flex-1"');
     expect(pageHeader).toContain("site-page-header");
     expect(globalCss).toContain("body.site-depth-shell::before");
-    expect(globalCss).toContain("/brand/res-publica-civic-forum-glass-lab-v5.webp");
+    expect(globalCss).toContain("/brand/res-publica-architectural-field-v1.webp");
     expect(globalCss).toContain("background-attachment: fixed");
+    expect(globalCss).toContain(".forum-people::before");
+    expect(globalCss).toContain(".forum-people > li::after");
+    expect(globalCss).toContain(".portal-grid > li");
+    expect(globalCss).not.toContain(".portal-grid > li:nth-child(2)");
     expect(globalCss).toContain(".home-hero__copy");
     expect(globalCss).toContain("perspective: 1400px");
     expect(globalCss).toContain("@keyframes forum-signal-float");
