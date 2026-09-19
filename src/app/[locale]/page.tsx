@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { HeroDepthScene } from "@/components/site/HeroDepthScene";
+import { ForumLustre3D } from "@/components/site/ForumLustre3D";
 import { Container } from "@/components/ui/Container";
 import { PersonCard } from "@/components/ui/PersonCard";
 import { team } from "@/data/team";
@@ -14,20 +16,6 @@ import { absoluteUrl, pageAlternates } from "@/lib/seo";
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
-}
-
-function ForumCrystal() {
-  return (
-    <Image
-      src="/brand/res-publica-amber-polyhedron-v1.webp"
-      alt=""
-      width={640}
-      height={640}
-      priority
-      sizes="(min-width: 1024px) 128px, 96px"
-      className="forum-signal__crystal"
-    />
-  );
 }
 
 function EcosystemNetwork() {
@@ -201,7 +189,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </div>
               </div>
 
-              <figure className="forum-hero relative isolate min-w-0">
+              <HeroDepthScene>
                 <ul className="forum-people absolute inset-x-[8%] top-0 z-10 grid list-none grid-cols-3 items-start" aria-label={copy.featured.teamTitle}>
                   {team.map((member, index) => (
                     <li key={member.id} className={index === 1 ? "justify-self-center" : index === 2 ? "justify-self-end" : "justify-self-start"}>
@@ -212,13 +200,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     </li>
                   ))}
                 </ul>
-                <Image src="/brand/res-publica-civic-forum-glass-lab-v5.webp" alt={copy.hero.forumAlt} width={1536} height={1024} priority sizes="(min-width: 1024px) 64vw, 100vw" className="forum-hero__image h-auto w-full" />
-                <span className="forum-signal" aria-hidden="true">
-                  <span className="forum-signal__orbit" />
-                  <ForumCrystal />
-                </span>
+                <div className="forum-hero__visual">
+                  <Image src="/brand/res-publica-civic-forum-glass-lab-v6.webp" alt={copy.hero.forumAlt} width={1536} height={1024} priority sizes="(min-width: 1024px) 64vw, 100vw" className="forum-hero__image h-auto w-full" />
+                  <ForumLustre3D />
+                </div>
                 <figcaption className="mx-auto -mt-4 w-fit rounded-full border border-night/10 bg-white/88 px-4 py-2 text-center text-xs font-semibold text-deep-blue shadow-sm backdrop-blur sm:-mt-8">{copy.hero.forumCaption}</figcaption>
-              </figure>
+              </HeroDepthScene>
             </div>
 
             <aside className="institutional-snapshot relative z-20 mt-7 overflow-hidden border border-night/10 bg-white/94" aria-label={copy.snapshot.label}>
@@ -337,10 +324,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </Container>
         </section>
 
-        <section className="bg-night py-14 text-paper sm:py-18">
-          <Container className="grid max-w-[96rem] gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div><p className="civic-label inverse-label">{copy.close.eyebrow}</p><h2 className="mt-4 max-w-4xl text-4xl leading-tight sm:text-6xl">{copy.close.title}</h2><p className="mt-6 max-w-3xl text-lg leading-relaxed text-paper/70">{copy.close.text}</p></div>
-            <div className="flex flex-wrap gap-3"><Link href={`/${locale}/membership`} className="button-primary border-paper bg-paper text-night hover:bg-signal">{copy.close.primary} <Arrow /></Link><Link href={`/${locale}/about`} className="button-secondary border-paper/30 bg-transparent text-paper hover:border-paper">{copy.close.secondary}</Link></div>
+        <section className="home-close relative isolate overflow-hidden py-16 text-paper sm:py-24">
+          <Image src="/brand/page-header-institution-v1.webp" alt="" fill sizes="100vw" className="home-close__media object-cover" />
+          <div className="home-close__veil" aria-hidden="true" />
+          <Container className="relative z-10 max-w-[96rem]">
+            <div className="home-close__panel max-w-4xl rounded-[2rem] border border-paper/15 bg-night/58 p-7 shadow-2xl backdrop-blur-md sm:p-12">
+              <p className="civic-label inverse-label">{copy.close.eyebrow}</p>
+              <h2 className="mt-4 text-4xl leading-tight sm:text-6xl">{copy.close.title}</h2>
+              <p className="mt-6 max-w-3xl text-lg leading-relaxed text-paper/74">{copy.close.text}</p>
+              <div className="mt-8 flex flex-wrap gap-3"><Link href={`/${locale}/membership`} className="button-primary border-paper bg-paper text-night hover:bg-signal">{copy.close.primary} <Arrow /></Link><Link href={`/${locale}/about`} className="button-secondary border-paper/30 bg-night/20 text-paper hover:border-paper">{copy.close.secondary}</Link></div>
+            </div>
           </Container>
         </section>
       </div>

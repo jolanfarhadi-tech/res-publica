@@ -23,7 +23,7 @@ export default async function MembershipPage({ params }: Props) {
   const dict = await getDictionary(locale as Locale);
   return (
     <>
-      <PageHeader title={dict.platform.membership.title} lede={dict.platform.membership.lede} />
+      <PageHeader title={dict.platform.membership.title} lede={dict.platform.membership.lede} visual="membership" />
       <Container className="py-14 sm:py-20">
         <p className="glass-panel mb-10 max-w-3xl rounded-3xl p-6 text-lg leading-relaxed text-muted sm:p-8">
           {getPublicSiteCopy(locale as Locale).membershipIntro}

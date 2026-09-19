@@ -37,8 +37,16 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   ];
 
   return (
-    <footer className="border-t border-border bg-night text-paper">
-      <Container className="py-14 sm:py-18">
+    <footer className="site-footer relative isolate overflow-hidden border-t border-border bg-night text-paper">
+      <Image
+        src="/brand/page-header-institution-v1.webp"
+        alt=""
+        fill
+        sizes="100vw"
+        className="site-footer__media object-cover"
+      />
+      <div className="site-footer__veil" aria-hidden="true" />
+      <Container className="relative z-10 py-14 sm:py-18">
         <div className="grid gap-12 border-b border-paper/15 pb-12 lg:grid-cols-[1.2fr_2fr]">
           <div>
             <Link

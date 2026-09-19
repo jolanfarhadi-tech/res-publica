@@ -46,7 +46,7 @@ recoloured, redrawn, animated or placed over visually noisy imagery.
 ## Civic forum hero
 
 The homepage translates the mark into a three-dimensional civic environment:
-a red outer U, four upright nested blue channels, a continuous vertical centre
+a red outer U, upright nested blue channels, a continuous vertical centre
 axis and a restrained amber signal. The long near-parallel sides and rounded
 lower returns follow the mark rather than generic semicircular parliamentary
 seating. A narrow civic lectern sits on the longitudinal centre axis as the
@@ -57,13 +57,25 @@ All names, metrics and navigation remain semantic HTML so they can be
 localized, audited, indexed and read by assistive technology.
 
 The current forum web asset is
-`public/brand/res-publica-civic-forum-glass-lab-v5.webp` (1536 × 1024, 295 KB),
+`public/brand/res-publica-civic-forum-glass-lab-v6.webp` (1536 × 1024, 253 KB),
 generated from the prior mark-faithful forum as a strict geometry reference.
-It preserves the red outer U, four upright nested blue channels, centre axis
+This image remains a fallback, not the live scene. The progressive Three.js
+scene models the entire room: glazed envelope, upright U-shaped volumes,
+furnished workspaces, synthetic seated figures, archive, lectern and suspended
+amber jewel. A perspective camera provides bounded pointer parallax inside
+the space, instead of rotating a flat image. Physical materials, environment
+lighting and directional shadows establish volume. Static meshes are batched
+by material; canvas resolution is capped at 1.2 million pixels and animation
+at approximately 30 fps, pausing offscreen and on hidden tabs. Both system and
+site reduced-motion preferences use a stationary rendered view. The fallback
+remains for unavailable/lost WebGL and no JavaScript. The model is an
+architectural visualization, not a scanned real building or free-roaming tour.
+Semantic headings, links and counts stay outside the scene.
+It preserves the red outer U, upright nested blue channels, centre axis
 and narrow lectern while turning the empty surround into a transparent,
 materially believable civic research laboratory. Synthetic, non-identifiable
-adults now appear at credible scale in listening, document-review and
-collaborative-research situations rather than as miniature figurines. Every
+adults appear as stylized, human-scale figures in document-review and
+collaborative-research situations. Every
 person stands on the floor or uses a visible chair and worktable; nobody sits
 on the coloured structural bands or glass partitions. Glass
 partitions, restrained research surfaces, daylight and reflections provide a
@@ -71,7 +83,11 @@ humanitarian working environment without sci-fi interface effects. This is an
 architectural visualization, not a documentary image of a real facility,
 hearing, participant or project. The three supplied team illustrations are
 layered separately and remain decorative; public names and roles come from
-`src/data/team.ts`.
+`src/data/team.ts`. A suspended amber-glass chandelier is now rendered directly
+into the static fallback room on the lectern axis. Its ceiling mount, physical
+scale, warm reflections and perspective belong to the architecture. The
+progressive WebGL variant uses a suspended, framed faceted fixture integrated
+into the same model, rather than an independently positioned image or orbit graphic.
 
 The separate `res-publica-architectural-field-v1.webp` asset forms a fixed,
 restrained architectural field behind the public site. It retains the civic
@@ -83,14 +99,6 @@ creates the sense of looking into the institution rather than placing an
 unrelated illustration beside the copy. Dark, high-contrast and
 reduced-transparency modes preserve legibility and do not depend on the image
 for meaning.
-
-The amber focal object is a transparent 640 × 640 WebP render with more than
-twenty unequal crystalline planes, internal refraction and deep bronze shadow
-facets. It replaces both the star-shaped CSS polygon and the flatter faceted
-SVG. The raster supplies believable material depth while CSS provides a slow
-float, restrained three-axis turn and orbit pulse. Its smaller scale and higher,
-farther-back position keep the lectern and human forum as the primary plane;
-all motion stops under the user's reduced-motion preference.
 
 The first team crops inherited connector lines, compression halos and fragments
 from the owner reference. They were first superseded by cleaned navy line
@@ -113,6 +121,33 @@ information hierarchy.
 The six gateway cards share one baseline, one height and one responsive grid.
 No decorative vertical staggering is applied: hierarchy comes from typography,
 iconography and interaction rather than misalignment.
+
+## Architectural page openings
+
+Public inner pages now open inside one coherent Res Publica building rather
+than on an empty white title strip. Four 1536 x 1024 editorial architectural
+visuals provide bounded contexts without making factual claims about a real
+facility or participant:
+
+- `page-header-institution-v1.webp` for About, Mission and the institutional
+  building context;
+- `page-header-membership-v1.webp` for Membership, participation, services and
+  events;
+- `page-header-method-research-v1.webp` for Method, research, programmes,
+  projects and products;
+- `page-header-publications-v1.webp` for the publication and archive wing.
+
+The heading, description and update date remain localized semantic HTML on an
+accessible dark-glass reading panel. The image is decorative, cannot replace
+page meaning, and is mirrored for RTL so its quiet copy field follows Persian
+reading direction. High-contrast and reduced-transparency modes replace the
+translucent treatment with an opaque, high-legibility surface. The full
+institution image returns at low contrast behind the footer and the homepage
+closing invitation, linking the end of the page to the same spatial system.
+
+Team portraits are integrated into full-width 4:3 editorial frames within
+equal-height cards. This gives each person a shared architectural field while
+keeping the approved names, roles and biographies as selectable text.
 
 The ecosystem field uses a cybernetic visual grammar rather than a flat
 platform inventory. Two counter-moving closed feedback loops surround the

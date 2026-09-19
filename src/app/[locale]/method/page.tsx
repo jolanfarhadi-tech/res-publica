@@ -26,7 +26,7 @@ export default async function MethodPage({ params }: Props) {
 
   return (
     <>
-      <PageHeader title={copy.title} lede={copy.lede} />
+      <PageHeader title={copy.title} lede={copy.lede} visual="method" />
       <Container className="py-14 sm:py-20">
         <section aria-labelledby="harm-platform" className="border-y border-border py-10 sm:py-14">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">

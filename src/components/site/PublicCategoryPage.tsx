@@ -16,7 +16,11 @@ export function PublicCategoryPage({
 
   return (
     <>
-      <PageHeader title={copy.title} lede={copy.lede} />
+      <PageHeader
+        title={copy.title}
+        lede={copy.lede}
+        visual={category === "services" ? "membership" : "method"}
+      />
       <Container className="section-shell">
         <section aria-labelledby={`${category}-maturity`}>
           <h2 id={`${category}-maturity`} className="mb-10 text-4xl sm:text-5xl">

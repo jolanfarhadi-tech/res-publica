@@ -12,12 +12,16 @@ import { Prose } from "@/components/ui/Prose";
  */
 export function MdxPage({ locale, slug }: { locale: Locale; slug: string }) {
   const page = getPage(locale, slug);
+  const visual = slug === "about" || slug === "mission" || slug === "mission-vision"
+    ? "institution"
+    : "method";
 
   return (
     <>
       <PageHeader
         title={page.frontmatter.title}
         lede={page.frontmatter.description}
+        visual={visual}
       />
       <Container className="section-shell">
         <Prose>

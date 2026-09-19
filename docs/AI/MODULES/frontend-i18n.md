@@ -1,5 +1,37 @@
 # Module: Frontend & Localization (i18n)
 
+## Live-depth hero — 2026-09-19
+
+`HeroDepthScene` retains the semantic figure and restrained ambient light.
+`ForumLustre3D` now lazy-loads the complete architectural model from
+`forum-architecture.ts`: glazing, U-shaped volumes, furniture, synthetic people,
+archive shelves, lectern and suspended jewel. The perspective camera, not the
+image plane, responds to pointer movement. Static geometry is batched by
+material; GPU resources are disposed on unmount. Touch uses the same model;
+system/site reduced motion keeps a stationary view. The complete v6 image
+remains the accessible fallback until a successful frame, and on context loss.
+The canvas is decorative and adds no identity data or translation strings.
+
+## Architectural page openings — 2026-09-08
+
+`PageHeader` selects one of four decorative architectural images by public
+content context while keeping DE/EN/FA titles and descriptions in semantic
+HTML. RTL mirrors the image and veil so the Persian reading field remains on
+the correct side. Collection, category, MDX, membership and method routes use
+the shared mapping. The footer and closing homepage invitation reuse the
+institution field at reduced prominence, and the team cards use consistent
+full-width portrait frames. No route, API, authentication or data contract is
+changed.
+
+## Integrated chandelier asset — 2026-09-03
+
+The hero now uses `res-publica-civic-forum-glass-lab-v6.webp`, in which the
+amber-glass chandelier is physically part of the photographed architectural
+scene. The former separately animated crystal and orbit were removed so the
+focal object cannot drift away from the room's perspective. German, English
+and Persian alternative text was updated together; the change does not alter
+routes, content hierarchy, RTL behavior or application boundaries.
+
 ## Incremental visual alignment and depth — 2026-09-03
 
 The six homepage gateway cards no longer use alternating vertical offsets;

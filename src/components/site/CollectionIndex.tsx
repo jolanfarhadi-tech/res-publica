@@ -73,13 +73,18 @@ export function CollectionIndex({
   const labels = dict.collections.labels;
   const section = dict.collections[collection];
   const basePath = `/${locale}/${collection}`;
+  const visual = collection === "publications"
+    ? "publications"
+    : collection === "events"
+      ? "membership"
+      : "method";
 
   const all = getEntries(locale, collection);
   const filtered = tag ? all.filter((entry) => entry.tags.includes(tag)) : all;
 
   return (
     <>
-      <PageHeader title={section.title} lede={section.lede} />
+      <PageHeader title={section.title} lede={section.lede} visual={visual} />
       <Container className="section-shell">
         <TagFilter
           basePath={basePath}

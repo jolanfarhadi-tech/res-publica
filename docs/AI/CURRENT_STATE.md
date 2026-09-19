@@ -1,5 +1,56 @@
 # Current State — Live Repository Snapshot
 
+## Incremental update — live-depth visual release, 2026-09-19
+
+The next public visual release is in progress on `codex/platform-phase-3`.
+It retains the complete v6 room-and-chandelier image as the no-JavaScript or
+unavailable-WebGL fallback. The live scene now models the entire glass room,
+upright U-shaped volumes, 30 furnished workstations with synthetic seated
+figures, archive shelves, central lectern and suspended faceted chandelier.
+A perspective camera responds gently to the mouse; it is not a tilted photo.
+Static geometry is batched by material. Resolution and frame rate are capped,
+and rendering pauses offscreen/when hidden. System and site reduced-motion
+preferences render a stationary three-dimensional view. The architecture is
+illustrative, not a claim about a real facility or real participants.
+Inner-page visual headers, the footer context and team-card refinement are in
+the same release. No backend, migration, auth or Production configuration has
+been changed in this slice. The unrelated root PDF remains excluded.
+
+The production dependency graph was narrowly patched to Next.js 15.5.25,
+Sharp 0.35.4 and js-yaml 3.15.2 after the advisory audit found high/critical
+issues in the previous pinned versions. The post-update Production audit finds
+zero vulnerabilities. The prior focused frontend tests passed 46/46; a standalone
+rate-limiter test rerun passes 6/6 after grouped execution hit three local
+PGlite setup timeouts. The patched dependency build passed (173 pages).
+The final complete-room slice passed 48 focused tests (7 files), lint,
+typecheck, structure, secret/supply-chain scans and the Production build
+(173 pages; homepage first-load JS 161 kB, Three.js loaded separately).
+Local browser verification confirms the complete WebGL scene is active,
+no console errors, and Persian RTL without overflow at 390 px. Remote CI and
+Production deployment are pending; no deployment completion is asserted here.
+Previous broad local suite attempts were inconclusive because Windows test
+workers repeatedly restarted; they are not reported as successful full runs.
+
+## Incremental update — architectural inner-page system, 2026-09-08
+
+The public page-header system now uses four bounded architectural contexts for
+institution, membership, method/research and publications. Localized headings
+remain semantic HTML on accessible glass reading planes, Persian uses mirrored
+composition, and no generated scene is presented as documentary evidence. The
+institution image also provides the restrained footer and homepage closing
+background. Team portraits now occupy consistent 4:3 editorial card frames.
+The homepage hero chandelier is physically integrated into the v6 room image;
+the former independently positioned gem layer remains removed.
+
+## Incremental update — integrated architectural chandelier, 2026-09-03
+
+The homepage forum no longer composites a free-floating amber polyhedron over
+the architectural image. `res-publica-civic-forum-glass-lab-v6.webp` integrates
+a ceiling-mounted amber-glass chandelier directly into the room with coherent
+scale, perspective, reflections and light. The separate React image layer,
+orbit, animation and associated responsive CSS have been removed. The localized
+DE/EN/FA alternative text now describes the integrated chandelier accurately.
+
 ## Incremental update — aligned gateways and architectural depth, 2026-09-03
 
 The homepage refinement removes the intentional desktop stagger from gateway
