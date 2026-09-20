@@ -23,16 +23,22 @@ it does not claim the cinematic reference quality has been achieved.
 - [x] Repository-wide ESLint passed.
 - [x] `git diff --check` passed.
 - [ ] Complete repository test suite: local run interrupted after two backend
-  integration failures; investigate through the full CI run before promotion.
+  integration failures. Both failed cases passed in the isolated reproduction;
+  require the full CI run before promotion.
 - [x] Isolated production build: exit 0, 173 generated pages, including all
   three locales. Result: `C:/Users/alblo/AppData/Local/Temp/res-publica-build-1L5qJG/build-result.json`.
   No `.env` or credentials copied.
 - [ ] CI and preview deployment for the exact release commit.
-- [ ] HTTP, language/direction and main-page smoke checks in DE/EN/FA.
+- [x] Local HTTP, language/direction and main-page smoke checks in DE/EN/FA:
+  all 33 route checks passed using `scripts/check-architectural-release.mjs`.
 - [ ] Production deployment and verification on `respublica-ev.de`.
 
 Unchecked items are not completed claims. Build/test results and URLs must be
 recorded as they become available. The unrelated local PDF is excluded.
+
+The GitHub connector cannot create pull requests (403); the existing release
+branch therefore also runs the same CI on push. This adds coverage without
+disabling any check or changing the production branch. Production remains `main`.
 
 ## Performance and accessibility boundaries
 
