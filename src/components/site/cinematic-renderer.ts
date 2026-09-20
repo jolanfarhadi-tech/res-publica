@@ -21,6 +21,7 @@ import { ArchitectureMotion, architectureMotion } from "./architecture-motion";
 export type CinematicController = {
   setRoom: (room: ArchitecturalRoom | null) => void;
   setMotion: (reduced: boolean) => void;
+  setPaused: (paused: boolean) => void;
   setHomeProgress: (progress: number) => void;
   dispose: () => void;
 };
@@ -154,7 +155,7 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       // Warm material programs asynchronously where parallel shader compilation is supported.
       await renderer.compileAsync(scene, camera);
       if (disposed) return;
-      // Static shadows bake once. No idle animation loop when camera has settled.
+      // Architecture and people are static: bake shadows once, animate only the camera.
       renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true;
       ready = true; canvas.dataset.status = "ready"; resize(); options.onReady(); schedule();
     } catch (error) {
@@ -169,8 +170,12 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     if (!ready || disposed || failed || !room || document.hidden) return;
     const current = motion.pose;
     canvas.dataset.transition = motion.phase;
-    camera.position.set(...current.position); camera.lookAt(new THREE.Vector3(...current.target));
-    camera.fov = current.fov + (camera.aspect < 1 ? 12 : 0); camera.updateProjectionMatrix();
+    canvas.dataset.motion = reduced ? "reduced" : motion.moving ? "playing" : "paused";
+    const portrait = camera.aspect < 1;
+    camera.position.set(...current.position);
+    // Portrait framing looks into the room, not mostly at the mezzanine ceiling.
+    camera.lookAt(new THREE.Vector3(current.target[0], current.target[1] - (portrait ? 1.4 : 0), current.target[2]));
+    camera.fov = current.fov + (portrait ? 4 : 0); camera.updateProjectionMatrix();
     renderer.info.autoReset = false; renderer.info.reset();
     const renderStart = performance.now();
     composer.render(); frameCount++;
@@ -232,6 +237,7 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       schedule();
     },
     setMotion(value) { reduced = value; motion.setReduced(value); render(performance.now()); schedule(); },
+    setPaused(value) { motion.setPaused(value); lastFrame = 0; render(performance.now()); schedule(); },
     setHomeProgress(value) { motion.setProgress(value); schedule(); },
     dispose() {
       disposed = true; renderer.setAnimationLoop(null); observer.disconnect();

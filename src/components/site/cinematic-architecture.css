@@ -5,6 +5,10 @@
 .cinematic-building__canvas { display: block; width: 100%; height: 100%; opacity: 1; transition: opacity 180ms ease; }
 .cinematic-building__canvas[data-transition="out"] { opacity: 0; transition-duration: 140ms; }
 .architecture-surface-motion { min-width: 0; }
+.architecture-camera-control { position: fixed; inset-inline-end: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 30; display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: .65rem 1rem; border: 1px solid rgb(255 255 255 / .65); border-radius: 2rem; background: rgb(9 39 50 / .9); color: #fff; font-size: .75rem; box-shadow: 0 4px 20px rgb(0 0 0 / .16); cursor: pointer; }
+.architecture-camera-control:hover { background: #075b6a; }
+.architecture-camera-control:focus-visible { outline: 3px solid #e4b454; outline-offset: 3px; }
+.architecture-camera-control:disabled { cursor: default; }
 :root[data-architecture="cinema"] { --architecture-panel: rgb(247 251 251 / .86); --architecture-edge: rgb(255 255 255 / .8); --architecture-accent: #087487; }
 :root[data-architecture="cinema"] body { background: #d6dbd8; }
 :root[data-architecture="cinema"] body.site-depth-shell::before,
@@ -55,7 +59,7 @@
 :root[data-architecture="cinema"] .site-content > .container,
 :root[data-architecture="cinema"] .site-content > div:not(.home-stage):not(.cinematic-building):not(.architectural-backdrop) { background: var(--architecture-panel); border-radius: 1rem; margin-block: 1.5rem; }
 :root[data-architecture="cinema"] .site-content > section:not(.site-page-header),
-:root[data-architecture="cinema"] .site-content > article { background: var(--surface); }
+:root[data-architecture="cinema"] .site-content > article { background: var(--architecture-panel); margin-block: 2rem; border-radius: 1rem; }
 :root[data-architecture="cinema"] .site-header { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; padding: .6rem clamp(.6rem,2vw,2rem); }
 :root[data-architecture="cinema"] .site-header > div { min-height: 3.7rem; background: rgb(246 251 253 / .85); border: 1px solid var(--architecture-edge); border-block-start: 2px solid var(--architecture-accent); border-radius: 1rem; box-shadow: 0 8px 28px -20px #123343; }
 :root[data-architecture="cinema"] .site-header img,
@@ -70,11 +74,10 @@
 :root[data-architecture="cinema"][data-theme="dark"] :is(.home-hero__copy,.section-introduction,.home-section--team,.ecosystem-field,.site-footer) :is(h1,h2,h3,p,a:not(.button-primary)) { color: #e7f0f3; }
 :root[data-architecture="cinema"][data-contrast="high"] { --architecture-panel: var(--surface); --architecture-edge: var(--ink); }
 @media (max-width:767px) {
-  /* A deliberate architectural opening, followed by a stable reading canvas. */
-  .architectural-backdrop, .cinematic-building { inset-block-end: auto; height: clamp(22rem, 57svh, 32rem); }
-  :root[data-architecture="cinema"] { --architecture-panel: rgb(247 251 251 / .97); }
-  :root[data-architecture="cinema"] .home-hero { min-height: 0; padding-block-end: 1.5rem; background: linear-gradient(to bottom, transparent 15rem, var(--surface) 32rem); }
-  :root[data-architecture="cinema"] .home-hero__container { padding-block-start: clamp(12rem, 30svh, 18rem); padding-inline: 1rem; }
+  /* Keep the full-height architectural canvas throughout native mobile scrolling. */
+  :root[data-architecture="cinema"] { --architecture-panel: rgb(247 251 251 / .88); }
+  :root[data-architecture="cinema"] .home-hero { min-height: 100svh; padding-block-end: 2rem; background: transparent; }
+  :root[data-architecture="cinema"] .home-hero__container { padding-block-start: clamp(13rem, 34svh, 22rem); padding-inline: 1rem; }
   :root[data-architecture="cinema"] .home-hero__container > .grid { grid-template-columns: 1fr; min-height: 0; gap: 0; }
   :root[data-architecture="cinema"] .home-hero__opening { display: none; }
   :root[data-architecture="cinema"] .home-hero__copy { padding: 1.15rem; }
@@ -82,12 +85,18 @@
   :root[data-architecture="cinema"] .home-hero__copy > p:not(.civic-label) { font-size: .9rem; line-height: 1.85; }
   :root[data-architecture="cinema"] .home-hero__copy > div { display: grid; grid-template-columns: 1fr; }
   :root[data-architecture="cinema"] .home-hero__copy :is(.button-primary,.button-secondary) { justify-content: space-between; min-height: 2.9rem; font-size: .85rem; }
-  :root[data-architecture="cinema"] .home-section > div { max-width: 100%; }
-  :root[data-architecture="cinema"] :is(.home-section,.home-close,.site-footer) { background: var(--surface); }
-  :root[data-architecture="cinema"] .home-section { min-height: 0; padding-block: 1.75rem; }
-  :root[data-architecture="cinema"] .home-close { padding-block: 2rem; }
+  :root[data-architecture="cinema"] .home-section > div { max-width: 100%; padding-inline: 1rem; }
+  :root[data-architecture="cinema"] :is(.home-section,.home-close,.site-footer) { background: transparent; }
+  :root[data-architecture="cinema"] .home-section { min-height: 0; padding-block: clamp(3.5rem, 12svh, 7rem); }
+  :root[data-architecture="cinema"] .home-close { padding-block: 4rem; }
+  :root[data-architecture="cinema"] .site-footer { padding-block-end: 5rem; }
+  :root[data-architecture="cinema"] .home-section--team .person-editorial { display: grid; grid-template-columns: 5.5rem minmax(0,1fr); align-items: center; gap: .85rem; padding: .85rem; }
+  :root[data-architecture="cinema"] .home-section--team .person-editorial__portrait { aspect-ratio: 1; border-radius: 50%; }
+  :root[data-architecture="cinema"] .home-section--team .person-editorial > div:last-child { padding: 0; min-width: 0; }
+  :root[data-architecture="cinema"] .home-section--team .person-editorial h3 { font-size: 1rem; line-height: 1.5; }
+  :root[data-architecture="cinema"] .home-section--team .person-editorial p { font-size: .78rem; }
   :root[data-architecture="cinema"] .site-page-header { min-height: 0; }
-  :root[data-architecture="cinema"] .site-page-header__content { min-height: 0; padding-block: clamp(12rem, 30svh, 18rem) 1.5rem; }
+  :root[data-architecture="cinema"] .site-page-header__content { min-height: 80svh; padding-block: clamp(13rem, 34svh, 22rem) 3rem; }
   :root[data-architecture="cinema"] .site-page-header__copy { max-width: none; padding: 1.25rem; }
   :root[data-architecture="cinema"] .site-page-header__copy h1 { font-size: clamp(1.6rem, 6vw, 2rem); }
   :root[data-architecture="cinema"] .site-page-header__copy p { font-size: .9rem; }

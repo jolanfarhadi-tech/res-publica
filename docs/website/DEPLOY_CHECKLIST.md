@@ -77,7 +77,7 @@ Keep the previous production deployment available for rollback. If route,
 form, font or 3D loading checks fail, do not promote the preview. A rollback
 restores the prior known-good Vercel deployment; it must not delete content.
 
-## Camera/mobile correction — 2026-09-20 (not yet in production)
+## Camera/mobile correction — 2026-09-20 (published 2026-09-21)
 
 - Replaced scroll-triggered, repeatedly interrupted room tours with bounded
   atrium movement. Route changes use a short dissolve between authored views.
@@ -112,4 +112,83 @@ Not proven: real-device iOS/Safari performance, slow-network loading budgets,
 field Core Web Vitals or a pixel-baseline visual regression. Desktop viewport
 emulation is not a substitute for testing an actual phone.
 
-Pending: CI/remote preview evidence and production approval for this correction.
+Remote validation for correction commit `4115e5d0983e0d2fdd632337d7e742c0dd090eeb`:
+
+- CI passed: 567 tests in 131 files, repository-wide lint/type checks, security,
+  database migration checks and production build.
+  https://github.com/jolanfarhadi-tech/res-publica/actions/runs/35540228462
+- Primary Vercel preview succeeded:
+  https://res-publica-dewpyijwg-res-publica1.vercel.app
+  Deployment: `EorvUpejH4XuqTzmcjhqeR9qmGqf`.
+- Anonymous requests for all three locale preview URLs redirect to Vercel login.
+  Preview protection was preserved; those redirects are not page-level QA.
+
+Production approved by the owner on 2026-09-21 ("ok deploy kon"). The exact
+CI-verified correction commit was fast-forwarded to `main`, with no force push
+and no additional implementation changes. Previous production was
+`34aeb995e33e13ae3479e48d7e2451708fc06c19` and remains the rollback reference.
+
+Production Vercel build `Aj4itFkMufSrddZCRjkMDgCv9Tr6` succeeded on 2026-09-21.
+GitHub deployment `6558280679` reports `Production – res-publica`, success:
+`https://res-publica-q6aba51so-res-publica1.vercel.app`.
+
+Post-deployment checks on `https://respublica-ev.de`:
+
+- All 33 DE/EN/FA routes passed (HTTP 200, correct language/direction, shared
+  architecture and main content).
+- All three home pages contain the new wordmark class and no retired header or
+  forum image source. Browser inspection confirmed zero such image elements.
+- Site liveness, HDR environment and Lion-and-Sun texture returned HTTP 200.
+- Persian desktop (1280x720) and mobile (390x844) views reached WebGL ready;
+  no horizontal overflow or browser error logs were observed. At mobile scroll
+  position 740 the camera stayed `2.40,6.15,13.60`, frame count 2 (no idle loop).
+- Temporary viewport override was reset. No production form or account action
+  was submitted. Actual iOS/Safari and field-performance limitations above remain.
+
+The live custom domain now serves correction commit
+`4115e5d0983e0d2fdd632337d7e742c0dd090eeb`. Local preview remains at
+`http://127.0.0.1:3100/fa`.
+
+## 2026-09-21 — Restore the requested moving, continuous mobile architecture
+
+The preceding release's static mobile camera and opaque mobile reading canvas
+were verified technically but did **not** meet the owner's cinematic brief.
+The following correction supersedes those design decisions, not the preserved
+route/content/form behavior.
+
+- A bounded 36-second camera dolly now runs in all seven public architectural
+  rooms, including phones. Home scrolling adds a visible elevated atrium arc;
+  one viewport of scrolling is no longer diluted across the whole long page.
+- DE/EN/FA each have a visible pause/resume button. Reduced motion wins over
+  autoplay; forms, open dialogs and hidden tabs suspend the rendering loop.
+- Mobile retains the fixed full-viewport scene across the entire page. Opaque
+  section backgrounds and the 57svh canvas limit were removed. Individual
+  reading panels remain legible, and mobile team portraits are compact rows.
+- Portrait framing aims further into the room instead of mainly at its ceiling.
+  Wide room shots and bounded motion avoid approaching the artificial people.
+  No human models were replaced; this is not a photorealism claim.
+
+Local acceptance evidence:
+
+- 93 focused tests in 13 files passed, including automatic movement in every
+  room on both device modes, safe atrium bounds, pause/resume, reduced motion,
+  frame-delta limits, mobile-shell and translated-control regressions.
+- 33 route checks passed across DE/EN/FA; TypeScript and scoped ESLint passed.
+- Browser at 390x844: canvas height 844, no horizontal overflow; camera changed
+  without scroll from `2.77,6.15,13.12` to `1.29,6.15,13.32`.
+- Pause held camera `1.28,6.15,13.34` and frame 589 across separate observations.
+  Resume advanced the frame count and followed the restored scroll position.
+- All six home section/close shells computed transparent; the 3D canvas stayed
+  fixed at 844px after scrolling to 4978px. No retired background was restored.
+- English desktop 1440x900 and German research tablet 768x1024 were inspected.
+  Research camera moved from `-11.39,3.40,16.41` to `-12.41,3.40,16.25` without
+  another scroll. German phone 375x812 retained a full-height moving scene and
+  no horizontal overflow after the portrait-framing correction.
+- The local reduced-motion preference was tested and restored. No production
+  preferences, forms or account data were changed. A nonfatal GPU shader
+  precision warning was observed; no application error was observed.
+
+Limits: no physical iPhone/Safari run, field CWV, measured GPU frame-rate claim,
+or approved pixel baseline. Shader warm-up still requires load time; build and
+browser contention during local QA is not a mobile performance benchmark.
+Production remains at `4115e5d` until the owner approves this corrected preview.
