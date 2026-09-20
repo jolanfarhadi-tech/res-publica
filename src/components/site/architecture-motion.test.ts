@@ -1,81 +1,69 @@
 import { describe, expect, it } from "vitest";
-import { architecturalShots, type ArchitecturalRoom } from "./architecture-camera";
-import { ArchitectureMotion, cinematicCameraPose, homeCameraPose, homeReadingProgress } from "./architecture-motion";
+import { architecturalShots } from "./architecture-camera";
+import { ArchitectureMotion, homeArchitecturalChapters } from "./architecture-motion";
 
-function advance(motion: ArchitectureMotion, frames = 150) { for (let i = 0; i < frames; i++) motion.step(1000 / 30); }
+function advance(motion: ArchitectureMotion, frames = 1000) { for (let i = 0; i < frames; i++) motion.step(32); }
 const distance = (a: number[], b: number[]) => Math.hypot(...a.map((v, i) => v - b[i]));
 
-describe("continuous architectural camera", () => {
-  it.each(Object.keys(architecturalShots) as ArchitecturalRoom[])("visibly moves in %s without scrolling, on desktop and phone", (room) => {
-    for (const compact of [false, true]) {
-      const motion = new ArchitectureMotion(room);
-      motion.setCompact(compact);
-      const start = motion.pose.position;
-      advance(motion);
-      expect(distance(motion.pose.position, start)).toBeGreaterThan(.12);
-      expect(motion.moving).toBe(true);
-    }
+describe("approved release room-to-room journey", () => {
+  it("provides seven distinct home scenes rather than an endlessly repeating atrium orbit", () => {
+    expect(homeArchitecturalChapters).toHaveLength(7);
+    expect(new Set(homeArchitecturalChapters.map(chapter => chapter.room)).size).toBe(7);
+    expect(homeArchitecturalChapters[0].room).toBe("forum");
   });
-  it("keeps the atrium dolly clear of floor, rails and occupied seating", () => {
-    for (let p = 0; p <= 1; p += .02) for (let t = 0; t <= 36000; t += 500) {
-      const { position, fov } = cinematicCameraPose("forum", p, t);
-      expect(Math.abs(position[0])).toBeLessThan(6);
-      expect(position[1]).toBeGreaterThanOrEqual(6.15);
-      expect(position[1]).toBeLessThanOrEqual(7.8);
-      expect(position[2]).toBeGreaterThan(11);
-      expect(position[2]).toBeLessThan(14);
-      expect(fov).toBe(55);
-    }
-  });
-  it("reframes by metres after one screenful on a long mobile page", () => {
+  it("opens with a bounded establishing move and settles without a perpetual idle loop", () => {
     const motion = new ArchitectureMotion("forum");
-    motion.setCompact(true);
-    motion.setProgress(homeReadingProgress(844, 0, 844 * 5, 844));
-    advance(motion, 60);
-    expect(distance(motion.pose.position, architecturalShots.forum.position)).toBeGreaterThan(2);
-  });
-  it("freezes exactly when paused, resumes gently, and respects reduced motion", () => {
-    const motion = new ArchitectureMotion("forum");
+    const start = motion.pose;
+    advance(motion, 50);
+    expect(distance(motion.pose.position, start.position)).toBeGreaterThan(.8);
     advance(motion);
-    motion.setPaused(true);
-    const paused = motion.pose;
-    motion.setProgress(1);
-    advance(motion);
-    expect(motion.pose).toEqual(paused);
+    expect(motion.pose).toEqual(architecturalShots.forum);
     expect(motion.moving).toBe(false);
+  });
+  it("travels through every chapter without dissolving or teleporting", () => {
+    const motion = new ArchitectureMotion("forum");
+    advance(motion);
+    for (const { room } of homeArchitecturalChapters.slice(1)) {
+      const before = motion.pose;
+      motion.setRoom(room);
+      expect(motion.pose).toEqual(before);
+      expect(motion.phase).toBe("travelling");
+      advance(motion);
+      expect(motion.pose).toEqual(architecturalShots[room]);
+      expect(motion.moving).toBe(false);
+    }
+  });
+  it("redirects a rapid scroll from the current position without jumping to an old waypoint", () => {
+    const motion = new ArchitectureMotion("forum");
+    motion.setRoom("studio");
+    advance(motion, 40);
+    const before = motion.pose;
+    motion.setRoom("editorial");
+    expect(motion.pose).toEqual(before);
+    advance(motion);
+    expect(motion.pose).toEqual(architecturalShots.editorial);
+  });
+  it("freezes and resumes the same journey, and lets reduced motion override it", () => {
+    const motion = new ArchitectureMotion("forum");
+    motion.setRoom("studio");
+    advance(motion, 40);
+    motion.setPaused(true);
+    const before = motion.pose;
+    advance(motion);
+    expect(motion.pose).toEqual(before);
     motion.setPaused(false);
     motion.step(32);
-    expect(distance(motion.pose.position, paused.position)).toBeLessThan(.5);
+    expect(distance(motion.pose.position, before.position)).toBeLessThan(.5);
     motion.setReduced(true);
-    const reduced = motion.pose;
-    advance(motion);
-    expect(motion.pose).toEqual(reduced);
-    expect(motion.moving).toBe(false);
     motion.setRoom("learning");
-    expect(motion.phase).toBe("idle");
     expect(motion.pose).toEqual(architecturalShots.learning);
+    expect(motion.moving).toBe(false);
   });
-  it("bounds stalled frames and resolves rapid navigation without crossing walls", () => {
+  it("caps a stalled frame instead of skipping an entire journey", () => {
     const motion = new ArchitectureMotion("forum");
+    const before = motion.pose;
     motion.step(60000);
-    expect(distance(motion.pose.position, architecturalShots.forum.position)).toBeLessThan(.1);
-    motion.setRoom("studio");
-    motion.setRoom("editorial");
-    expect(motion.phase).toBe("out");
-    advance(motion, 11);
-    expect(motion.phase).toBe("idle");
-    expect(motion.pose).toEqual(architecturalShots.editorial);
-    advance(motion);
-    expect(distance(motion.pose.position, architecturalShots.editorial.position)).toBeLessThan(.3);
-  });
-  it("has a seamless closed dolly and clamps invalid input", () => {
-    for (const room of Object.keys(architecturalShots) as ArchitecturalRoom[]) {
-      const start = cinematicCameraPose(room, 0, 0), end = cinematicCameraPose(room, 0, 36000);
-      expect(distance(start.position, end.position)).toBeLessThan(.00001);
-    }
-    expect(homeCameraPose(NaN)).toEqual(architecturalShots.forum);
-    expect(homeReadingProgress(-10, 0, 4000, 800)).toBe(0);
-    expect(homeReadingProgress(1600, 0, 4000, 800)).toBe(.5);
-    expect(homeReadingProgress(10000, 0, 4000, 800)).toBe(1);
+    expect(distance(motion.pose.position, before.position)).toBeLessThan(.01);
+    expect(motion.moving).toBe(true);
   });
 });

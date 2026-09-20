@@ -200,31 +200,24 @@ describe("public website boundaries", () => {
     expect(
       fs.existsSync(path.join(process.cwd(), "public", "brand", "res-publica-mark.png"))
     ).toBe(true);
-    expect(
-      fs.existsSync(
-        path.join(process.cwd(), "public", "brand", "res-publica-civic-forum-glass-lab-v6.webp")
-      )
-    ).toBe(true);
-    expect(
-      fs.existsSync(
-        path.join(process.cwd(), "public", "brand", "res-publica-architectural-field-v1.webp")
-      )
-    ).toBe(true);
     for (const asset of [
+      "res-publica-civic-forum-glass-lab-v6.webp",
+      "res-publica-civic-forum-glass-lab-v5.webp",
+      "res-publica-civic-forum-logo-3d-v3.webp",
+      "res-publica-civic-forum-logo-3d-v2.webp",
+      "res-publica-architectural-field-v1.webp",
+      "res-publica-amber-polyhedron-v1.webp",
       "page-header-institution-v1.webp",
       "page-header-membership-v1.webp",
       "page-header-method-research-v1.webp",
       "page-header-publications-v1.webp",
     ]) {
-      expect(fs.existsSync(path.join(process.cwd(), "public", "brand", asset))).toBe(true);
+      expect(fs.existsSync(path.join(process.cwd(), "public", "brand", asset))).toBe(false);
     }
 
     const header = source("src", "components", "site", "Header.tsx");
     const footer = source("src", "components", "site", "Footer.tsx");
     const homepage = source("src", "app", "[locale]", "page.tsx");
-    const heroDepth = source("src", "components", "site", "HeroDepthScene.tsx");
-    const forumLustre = source("src", "components", "site", "ForumLustre3D.tsx");
-    const lustreScene = source("src", "components", "site", "forum-lustre-three.ts");
     const layout = source("src", "app", "[locale]", "layout.tsx");
     const pageHeader = source("src", "components", "ui", "PageHeader.tsx");
     const collectionIndex = source("src", "components", "site", "CollectionIndex.tsx");
@@ -249,17 +242,10 @@ describe("public website boundaries", () => {
     expect(homepage).not.toContain("<ForumLustre3D />");
     expect(homepage).toContain("home-hero__opening");
     expect(layout).toContain('data-architecture="cinema"');
-    expect(heroDepth).toContain("useReducedMotion");
-    expect(heroDepth).toContain('event.pointerType !== "mouse"');
-    expect(heroDepth).toContain("getHeroPose");
-    expect(forumLustre).toContain("prefers-reduced-motion: reduce");
-    expect(forumLustre).toContain("data-active={active}");
-    expect(forumLustre).toContain('data-scene="complete-architecture"');
-    expect(forumLustre).not.toContain("res-publica-civic-forum-glass-lab-v5.webp");
-    expect(lustreScene).toContain("new THREE.WebGLRenderer");
-    expect(lustreScene).toContain("new THREE.PerspectiveCamera");
-    expect(lustreScene).toContain("buildForumArchitecture()");
-    expect(lustreScene).toContain("renderer.dispose()");
+    for (const retired of ["HeroDepthScene.tsx", "ForumLustre3D.tsx", "forum-lustre-three.ts", "forum-architecture.ts"]) {
+      expect(fs.existsSync(path.join(process.cwd(), "src", "components", "site", retired))).toBe(false);
+    }
+    expect(source("src", "components", "site", "CinematicArchitecture.tsx")).toContain('data-baseline="34aeb99"');
     expect(homepage).not.toContain("forum-signal");
     expect(homepage).toContain("<EcosystemAtlas locale={locale} />");
     expect(ecosystemAtlas).toContain("ecosystem-atlas__domains");
@@ -287,7 +273,7 @@ describe("public website boundaries", () => {
     expect(layout).toContain('className="site-content flex-1"');
     expect(pageHeader).toContain("site-page-header");
     expect(globalCss).toContain("body.site-depth-shell::before");
-    expect(globalCss).toContain("/brand/res-publica-architectural-field-v1.webp");
+    expect(globalCss).not.toContain("/brand/res-publica-architectural-field-v1.webp");
     expect(globalCss).toContain("background-attachment: fixed");
     expect(globalCss).toContain(".forum-people::before");
     expect(globalCss).toContain(".forum-people > li::after");

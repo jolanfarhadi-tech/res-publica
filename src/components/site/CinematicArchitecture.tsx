@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { usePathname } from "next/navigation";
 import { usePreferences } from "@/components/privacy/PreferenceProvider";
 import { architecturalRoomForPath } from "./architecture-camera";
-import { homeReadingProgress } from "./architecture-motion";
+import { architectureMotion, homeArchitecturalChapters } from "./architecture-motion";
 import type { CinematicController } from "./cinematic-renderer";
 
 const PreviewContext = createContext(true);
@@ -63,31 +63,31 @@ export function CinematicArchitecture({ children }: { children: ReactNode }) {
   }, [room]);
 
   useEffect(() => {
-    if (!ready || !room) return;
-    const home = document.querySelector<HTMLElement>(".home-stage") ?? document.querySelector<HTMLElement>("main");
+    if (!ready || room !== "forum") return;
+    const home = document.querySelector<HTMLElement>(".home-stage");
     if (!home) return;
-    let frame = 0;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
     function update() {
-      frame = 0;
-      if (!home) return;
-      const rect = home.getBoundingClientRect();
-      // First screenful must visibly reframe the scene even on long mobile pages.
-      const extent = Math.min(rect.height, window.innerHeight * 5);
-      controller.current?.setHomeProgress(homeReadingProgress(window.scrollY, rect.top + window.scrollY, extent, window.innerHeight));
+      let active = homeArchitecturalChapters[0].room;
+      for (const chapter of homeArchitecturalChapters) {
+        const section = home?.querySelector(chapter.selector);
+        if (section && section.getBoundingClientRect().top <= window.innerHeight * .45) active = chapter.room;
+      }
+      controller.current?.setRoom(active);
     }
-    function scroll() { if (!frame) frame = requestAnimationFrame(update); }
+    function scroll() { clearTimeout(timeout); timeout = setTimeout(update, architectureMotion.readingDebounce); }
     window.addEventListener("scroll", scroll, { passive: true });
     window.addEventListener("resize", scroll);
     const observer = new ResizeObserver(scroll); observer.observe(home);
     update();
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener("scroll", scroll); window.removeEventListener("resize", scroll); };
+    return () => { clearTimeout(timeout); observer.disconnect(); window.removeEventListener("scroll", scroll); window.removeEventListener("resize", scroll); };
   }, [ready, room, pathname]);
 
   return (
     <PreviewContext.Provider value={true}>
       <div className="architectural-backdrop" data-room={room ?? "quiet"} aria-hidden="true" />
       {requested && <div className="cinematic-building" data-ready={ready && !!room} aria-hidden="true">
-        <canvas ref={canvas} className="cinematic-building__canvas" data-scene="continuous-civic-building" />
+        <canvas ref={canvas} className="cinematic-building__canvas" data-scene="continuous-civic-building" data-baseline="34aeb99" />
       </div>}
       {ready && room && <button className="architecture-camera-control" type="button"
         aria-pressed={paused || preferences.reduceMotion || systemReduced}

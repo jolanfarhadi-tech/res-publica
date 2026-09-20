@@ -198,3 +198,55 @@ Limits: no physical iPhone/Safari run, field CWV, measured GPU frame-rate claim,
 or approved pixel baseline. Shader warm-up still requires load time; build and
 browser contention during local QA is not a mobile performance benchmark.
 Production remains at `4115e5d` until the owner approves this corrected preview.
+
+Final remote result for `e129933a8c3c5711227e5cc1796e6845c6a1b7ce`:
+
+- CI succeeded: https://github.com/jolanfarhadi-tech/res-publica/actions/runs/35542548112
+  (job `106162715424`, including full tests, lint, type checks and production build).
+- Primary Vercel preview succeeded, deployment `8p83RZ7HmXFGuBYTtzHEDZAsUHMm`:
+  https://res-publica-htdkp2dfq-res-publica1.vercel.app
+- Anonymous DE/EN/FA preview requests each redirect to Vercel SSO (302).
+  Protection was not bypassed or disabled; hosted page-level visual QA therefore
+  remains gated. The three-language local route and visual evidence above is
+  not represented as anonymous hosted-preview acceptance.
+- Working local preview: http://127.0.0.1:3100/fa . Browser viewport override was
+  reset and the preview tab retained for the owner. No production push occurred.
+
+## 2026-09-21 — Restore the owner's first evening deployment, not the later dolly
+
+The owner clarified that the target is the first replacement deployed roughly
+two hours earlier. GitHub and Vercel agree on production `34aeb99`, created
+2026-09-20 21:25:32 UTC (23:25 Berlin), deployment `C1perqdDo8kTf6iJZyiN9MGSBvZN`,
+https://res-publica-q4zv60ma2-res-publica1.vercel.app . This precedes the supplied
+phone screenshot (23:33). The later `4115e5d` production and `e129933` preview
+are not the approved motion baseline.
+
+- Restored physical, scroll-directed room-to-room travel rather than the later
+  repeating dolly or fading between static viewpoints. Building geometry,
+  furniture and people assets are unchanged from `34aeb99`.
+- Seven homepage chapters use seven distinct rooms. Travel uses rounded paths,
+  open circulation lanes, bounded active-frame time and pause/reduced-motion
+  controls; targets cannot point above the travelling camera.
+- Research/library viewpoints stay back from standing people at near eye level.
+  The corrected publication aisle view and full-viewport mobile scene remain.
+- Removed two unused legacy skin implementations and their tests, plus ten
+  retired generated background images. Removed their remaining CSS references.
+  Logos, portraits, content and the current 3D building remain. The deleted
+  tracked files are recoverable from Git; no content/post records were deleted.
+- Local TypeScript and scoped ESLint passed. 87 focused tests in 12 files passed,
+  including every pair of room transitions, three-language mobile invariants,
+  retired-asset absence, reduced motion, pause and rapid redirect continuity.
+- All 33 public route checks passed in DE/EN/FA (HTTP 200, language/direction and
+  shared architectural shell). Phone 390x844 had no horizontal overflow. Browser
+  inspection observed forum -> studio -> review with changing physical camera
+  coordinates, and the canvas explicitly identifies baseline `34aeb99`.
+- A full local parallel test run exhausted host memory; it is NOT a test pass.
+  The one-worker retry was interrupted after stalling. Desktop visual QA also
+  hit browser/GPU recovery trouble after that memory event. Final full-suite and
+  production-build acceptance must come from the exact commit's remote CI.
+
+Production is still `4115e5d`. No Vercel deployments have been deleted. The
+obsolete online deployments were identified separately from local asset cleanup;
+the requested `34aeb99` baseline and the active production must be preserved
+until a verified replacement is approved. Hosted preview validation and the
+WEB-09 owner approval gate remain required before production promotion.

@@ -4,7 +4,8 @@ import { researchParticipants, standingObservers } from "./parliament-layout";
 
 describe("continuous architectural camera", () => {
   it("reframes portrait rooms in proportion to distance rather than looking at a nearby floor", () => {
-    expect(portraitTargetOffset(architecturalShots.studio, .5)).toBe(1.4);
+    expect(portraitTargetOffset(architecturalShots.studio, .5)).toBeGreaterThan(.8);
+    expect(portraitTargetOffset(architecturalShots.studio, .5)).toBeLessThanOrEqual(1.4);
     expect(portraitTargetOffset(architecturalShots.editorial, .5)).toBeLessThan(.3);
     expect(portraitTargetOffset(architecturalShots.editorial, 1.5)).toBe(0);
     expect(architecturalShots.editorial.position[2]).toBeLessThan(-16.3);
@@ -32,10 +33,11 @@ describe("continuous architectural camera", () => {
   it("frames occupied workspaces from a distance rather than placing faces in the foreground", () => {
     for (const room of ["studio", "library"] as const) {
       const { position: [x, y, z], fov } = architecturalShots[room];
-      expect(y).toBeGreaterThanOrEqual(3.4);
-      expect(fov).toBeGreaterThanOrEqual(58);
+      expect(y).toBeGreaterThanOrEqual(2);
+      expect(y).toBeLessThan(2.5);
+      expect(fov).toBeGreaterThanOrEqual(54);
       for (const person of [...researchParticipants, ...standingObservers]) {
-        expect(Math.hypot(x - person.x, y - person.y - 1.6, z - person.z)).toBeGreaterThan(10);
+        expect(Math.hypot(x - person.x, y - person.y - 1.6, z - person.z)).toBeGreaterThan(8);
       }
     }
   });
@@ -103,6 +105,15 @@ describe("continuous architectural camera", () => {
         const b = points[i + 1].map((v, j) => v - points[i][j]);
         const dot = a.reduce((sum, v, j) => sum + v * b[j], 0) / (Math.hypot(...a) * Math.hypot(...b));
         expect(dot).toBeGreaterThan(.96);
+      }
+    }
+  });
+  it("never aims upward at ceilings during transitions between ground and upper floors", () => {
+    for (const from of Object.values(architecturalShots)) for (const to of Object.values(architecturalShots)) {
+      const travel = planCameraTravel(from, to);
+      for (let i = 0; i <= 100; i++) {
+        const pose = sampleCameraTravel(travel, i / 100);
+        expect(pose.target[1]).toBeLessThan(pose.position[1]);
       }
     }
   });

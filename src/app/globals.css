@@ -124,9 +124,7 @@ body.site-depth-shell::after {
 
 body.site-depth-shell::before {
   z-index: -2;
-  background-image:
-    linear-gradient(180deg, rgb(247 250 251 / 0.38), rgb(244 247 248 / 0.72)),
-    url("/brand/res-publica-architectural-field-v1.webp");
+  background-image: linear-gradient(180deg, rgb(247 250 251 / 0.38), rgb(244 247 248 / 0.72));
   background-position: center, center clamp(3.5rem, 7vh, 6rem);
   background-repeat: no-repeat;
   background-size: cover, max(100vw, 88rem) auto;
@@ -779,9 +777,7 @@ input:disabled {
   position: absolute;
   z-index: -2;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgb(246 251 252 / 0.42), rgb(245 248 249 / 0.72)),
-    url("/brand/res-publica-architectural-field-v1.webp") center 42% / cover no-repeat;
+  background: linear-gradient(180deg, rgb(246 251 252 / 0.42), rgb(245 248 249 / 0.72));
   opacity: 0.24;
   filter: saturate(0.58) contrast(0.94);
   mask-image: radial-gradient(ellipse at center, black 8%, rgb(0 0 0 / 0.8) 52%, transparent 94%);

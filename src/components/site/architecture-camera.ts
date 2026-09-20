@@ -4,9 +4,9 @@ export type CameraPose = { position: [number, number, number]; target: [number, 
 /** All poses belong to the same building, in metres. No unbounded orbit. */
 export const architecturalShots: Record<ArchitecturalRoom, CameraPose> = {
   forum: { position: [2.4, 6.15, 13.6], target: [-.3, 2.3, -4], fov: 55 },
-  // Elevated establishing shots: furniture and architecture, not foreground faces.
-  library: { position: [12, 3.4, 16.5], target: [15.8, 1.65, -9], fov: 60 },
-  studio: { position: [-12, 3.4, 16.5], target: [-15.6, 1.3, -7], fov: 60 },
+  // Near eye level, looking into the rooms: neither a close-up nor a ceiling shot.
+  library: { position: [12, 2.15, 12.8], target: [15.8, 1.15, -9], fov: 56 },
+  studio: { position: [-12, 2.15, 12.8], target: [-15.6, 1.15, -7], fov: 56 },
   gallery: { position: [-4.8, 7.8, 12.8], target: [0, 2.5, -4], fov: 52 },
   // Look along the publication display aisle; do not fill a phone with one plinth.
   editorial: { position: [11.15, 2.3, -17.4], target: [15, 1.7, -19.1], fov: 62 },
@@ -86,13 +86,25 @@ export function planCameraTravel(from: CameraPose, to: CameraPose): CameraTravel
   const upperA = a[1] > 4.5, upperB = b[1] > 4.5;
   const points: CameraPose["position"][] = [a];
   const samePose = a.every((v, i) => Math.abs(v - b[i]) < 0.001);
+  const rearA = !upperA && a[2] < -8 && Math.abs(a[0]) > 10.5;
+  const rearB = !upperB && b[2] < -8 && Math.abs(b[0]) > 10.5;
+  // Rear displays are behind shelves/desks. Reach them via the open atrium edge,
+  // not a diagonal through furniture; the 8.6m lane also clears the side plants.
+  if (!samePose && rearA) points.push([Math.sign(a[0]) * 8.6, a[1], -17], [Math.sign(a[0]) * 8.6, a[1], 12]);
   if (!samePose && upperA !== upperB) {
     const side = (upperA ? b[0] : a[0]) < 0 ? -1 : 1;
-    if (upperA) points.push([side * 7.5, a[1], 12], [side * 7.5, b[1], 12], [b[0], b[1], 12]);
-    else points.push([a[0], a[1], 12], [side * 7.5, a[1], 12], [side * 7.5, b[1], 12]);
+    if (upperA) points.push([side * 7.5, a[1], 12], [side * 7.5, b[1], 12]);
+    else {
+      if (!rearA) points.push([a[0], a[1], 12]);
+      points.push([side * 7.5, a[1], 12], [side * 7.5, b[1], 12]);
+    }
   } else if (!samePose && !upperA && Math.sign(a[0]) !== Math.sign(b[0])) {
-    points.push([a[0], a[1], 12], [b[0], b[1], 12]);
+    if (!rearA) points.push([a[0], a[1], 12]);
+    if (!rearB) points.push([b[0], b[1], 12]);
+  } else if (!samePose && !upperA && rearB && !rearA) {
+    points.push([a[0], a[1], 12]);
   }
+  if (!samePose && rearB) points.push([Math.sign(b[0]) * 8.6, b[1], 12], [Math.sign(b[0]) * 8.6, b[1], -17]);
   points.push(b);
   const route = roundedCameraPath(points);
   const lengths = route.slice(1).map((p, i) => Math.hypot(...p.map((v, j) => v - route[i][j])));
@@ -109,6 +121,8 @@ export function sampleCameraTravel(travel: CameraTravel, progress: number): Came
     if (distance <= length && length > 0) {
       const t = distance / length;
       pose.position = travel.points[i].map((v, j) => v + (travel.points[i + 1][j] - v) * t) as CameraPose["position"];
+      // A target on the upper floor must not point a ground-floor camera at a ceiling.
+      pose.target[1] = Math.min(pose.target[1], pose.position[1] - .2);
       return pose;
     }
     distance -= length;

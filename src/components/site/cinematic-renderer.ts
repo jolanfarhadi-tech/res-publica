@@ -22,7 +22,6 @@ export type CinematicController = {
   setRoom: (room: ArchitecturalRoom | null) => void;
   setMotion: (reduced: boolean) => void;
   setPaused: (paused: boolean) => void;
-  setHomeProgress: (progress: number) => void;
   dispose: () => void;
 };
 
@@ -170,7 +169,7 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     if (!ready || disposed || failed || !room || document.hidden) return;
     const current = motion.pose;
     canvas.dataset.transition = motion.phase;
-    canvas.dataset.motion = reduced ? "reduced" : motion.moving ? "playing" : "paused";
+    canvas.dataset.motion = reduced ? "reduced" : motion.isPaused ? "paused" : motion.moving ? "travelling" : "settled";
     const portrait = camera.aspect < 1;
     camera.position.set(...current.position);
     // Portrait framing looks into the room, not mostly at the mezzanine ceiling.
@@ -205,7 +204,6 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     if (!width || !height) return;
     // One bounded 768px reflection on desktop; lighter rendering on small devices.
     const compact = width < 768;
-    motion.setCompact(compact);
     reflection.visible = width >= 1200 && navigator.hardwareConcurrency > 4;
     occlusion.enabled = !compact;
     const ratio = Math.min(window.devicePixelRatio || 1, compact ? 1 : 1.5, Math.sqrt((compact ? 500_000 : 1_650_000) / (width * height)));
@@ -238,7 +236,6 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     },
     setMotion(value) { reduced = value; motion.setReduced(value); render(performance.now()); schedule(); },
     setPaused(value) { motion.setPaused(value); lastFrame = 0; render(performance.now()); schedule(); },
-    setHomeProgress(value) { motion.setProgress(value); schedule(); },
     dispose() {
       disposed = true; renderer.setAnimationLoop(null); observer.disconnect();
       document.removeEventListener("visibilitychange", visibility);

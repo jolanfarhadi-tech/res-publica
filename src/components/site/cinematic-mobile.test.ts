@@ -16,6 +16,7 @@ describe("continuous mobile architecture regression guards", () => {
     expect(shell).toContain("aria-pressed={paused || preferences.reduceMotion || systemReduced}");
     expect(shell).toContain("disabled={preferences.reduceMotion || systemReduced}");
     expect(shell).toContain("controller.current?.setPaused(paused)");
-    expect(shell).not.toContain('room !== "forum"');
+    expect(shell).toContain("homeArchitecturalChapters");
+    expect(shell).toContain('data-baseline="34aeb99"');
   });
 });
