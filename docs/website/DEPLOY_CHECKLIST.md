@@ -170,7 +170,7 @@ route/content/form behavior.
 
 Local acceptance evidence:
 
-- 93 focused tests in 13 files passed, including automatic movement in every
+- 94 focused tests in 13 files passed, including automatic movement in every
   room on both device modes, safe atrium bounds, pause/resume, reduced motion,
   frame-delta limits, mobile-shell and translated-control regressions.
 - 33 route checks passed across DE/EN/FA; TypeScript and scoped ESLint passed.
@@ -187,6 +187,12 @@ Local acceptance evidence:
 - The local reduced-motion preference was tested and restored. No production
   preferences, forms or account data were changed. A nonfatal GPU shader
   precision warning was observed; no application error was observed.
+- Final phone review also corrected the publications close-up: the camera now
+  looks along the display aisle, and portrait target offsets scale with viewing
+  distance. Verified at 375x812 with multiple displays visible and no overflow.
+- Local production build passed (173 pages) before this final two-file framing
+  adjustment: `C:/Users/alblo/AppData/Local/Temp/res-publica-build-tItXxi`.
+  Final commit acceptance requires its own green remote CI/build.
 
 Limits: no physical iPhone/Safari run, field CWV, measured GPU frame-rate claim,
 or approved pixel baseline. Shader warm-up still requires load time; build and

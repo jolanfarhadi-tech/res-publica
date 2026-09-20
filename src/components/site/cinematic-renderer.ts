@@ -15,7 +15,7 @@ import { bakeCinematicPeople } from "./static-posed-people";
 import { researchParticipants, standingObservers } from "./parliament-layout";
 import { buildCeremonialFlags, civicFlagTexture } from "./ceremonial-flags";
 import { applyArchitecturalUVs } from "./architectural-uv";
-import { type ArchitecturalRoom } from "./architecture-camera";
+import { portraitTargetOffset, type ArchitecturalRoom } from "./architecture-camera";
 import { ArchitectureMotion, architectureMotion } from "./architecture-motion";
 
 export type CinematicController = {
@@ -174,7 +174,7 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     const portrait = camera.aspect < 1;
     camera.position.set(...current.position);
     // Portrait framing looks into the room, not mostly at the mezzanine ceiling.
-    camera.lookAt(new THREE.Vector3(current.target[0], current.target[1] - (portrait ? 1.4 : 0), current.target[2]));
+    camera.lookAt(new THREE.Vector3(current.target[0], current.target[1] - portraitTargetOffset(current, camera.aspect), current.target[2]));
     camera.fov = current.fov + (portrait ? 4 : 0); camera.updateProjectionMatrix();
     renderer.info.autoReset = false; renderer.info.reset();
     const renderStart = performance.now();

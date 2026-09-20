@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { architecturalRoomForPath, architecturalShots, cinematicEase, interpolateCamera, planCameraTravel, sampleCameraTravel } from "./architecture-camera";
+import { architecturalRoomForPath, architecturalShots, cinematicEase, interpolateCamera, planCameraTravel, portraitTargetOffset, sampleCameraTravel } from "./architecture-camera";
 import { researchParticipants, standingObservers } from "./parliament-layout";
 
 describe("continuous architectural camera", () => {
+  it("reframes portrait rooms in proportion to distance rather than looking at a nearby floor", () => {
+    expect(portraitTargetOffset(architecturalShots.studio, .5)).toBe(1.4);
+    expect(portraitTargetOffset(architecturalShots.editorial, .5)).toBeLessThan(.3);
+    expect(portraitTargetOffset(architecturalShots.editorial, 1.5)).toBe(0);
+    expect(architecturalShots.editorial.position[2]).toBeLessThan(-16.3);
+    expect(architecturalShots.editorial.position[0]).toBeLessThan(12);
+  });
   it("uses the same room mapping for all three locales", () => {
     for (const locale of ["de", "en", "fa"]) {
       expect(architecturalRoomForPath(`/${locale}`)).toBe("forum");

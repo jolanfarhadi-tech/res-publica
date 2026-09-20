@@ -8,10 +8,17 @@ export const architecturalShots: Record<ArchitecturalRoom, CameraPose> = {
   library: { position: [12, 3.4, 16.5], target: [15.8, 1.65, -9], fov: 60 },
   studio: { position: [-12, 3.4, 16.5], target: [-15.6, 1.3, -7], fov: 60 },
   gallery: { position: [-4.8, 7.8, 12.8], target: [0, 2.5, -4], fov: 52 },
-  editorial: { position: [14.45, 2.2, -16.7], target: [14.8, 1.5, -19.1], fov: 72 },
+  // Look along the publication display aisle; do not fill a phone with one plinth.
+  editorial: { position: [11.15, 2.3, -17.4], target: [15, 1.7, -19.1], fov: 62 },
   review: { position: [-11.1, 1.85, -14.7], target: [-15, 1.7, -18], fov: 60 },
   learning: { position: [-12, 6.4, 3], target: [-15, 5.9, -9], fov: 56 },
 };
+
+export function portraitTargetOffset(pose: CameraPose, aspect: number) {
+  if (aspect >= 1) return 0;
+  const distance = Math.hypot(...pose.position.map((value, index) => value - pose.target[index]));
+  return Math.min(1.4, distance * .06);
+}
 
 /** Deliberately allowlisted: personal, legal and operational pages stay still. */
 export function architecturalRoomForPath(path: string): ArchitecturalRoom | null {
