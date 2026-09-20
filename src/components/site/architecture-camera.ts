@@ -4,8 +4,9 @@ export type CameraPose = { position: [number, number, number]; target: [number, 
 /** All poses belong to the same building, in metres. No unbounded orbit. */
 export const architecturalShots: Record<ArchitecturalRoom, CameraPose> = {
   forum: { position: [2.4, 6.15, 13.6], target: [-.3, 2.3, -4], fov: 55 },
-  library: { position: [13.2, 1.8, 7], target: [15.8, 1.65, -9], fov: 52 },
-  studio: { position: [-13.2, 1.8, 9], target: [-15, 1.65, -7], fov: 52 },
+  // Elevated establishing shots: furniture and architecture, not foreground faces.
+  library: { position: [12, 3.4, 16.5], target: [15.8, 1.65, -9], fov: 60 },
+  studio: { position: [-12, 3.4, 16.5], target: [-15.6, 1.3, -7], fov: 60 },
   gallery: { position: [-4.8, 7.8, 12.8], target: [0, 2.5, -4], fov: 52 },
   editorial: { position: [14.45, 2.2, -16.7], target: [14.8, 1.5, -19.1], fov: 72 },
   review: { position: [-11.1, 1.85, -14.7], target: [-15, 1.7, -18], fov: 60 },

@@ -1,16 +1,9 @@
-/* Public architectural shell: the same composition before and after WebGL loads. */
-.architectural-backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: #c9d3d6 url('/brand/res-publica-civic-forum-glass-lab-v6.webp') center / cover no-repeat; }
-.architectural-backdrop[data-room="studio"],
-.architectural-backdrop[data-room="review"] { background-image: url('/brand/page-header-method-research-v1.webp'); }
-.architectural-backdrop[data-room="library"],
-.architectural-backdrop[data-room="editorial"] { background-image: url('/brand/page-header-publications-v1.webp'); }
-.architectural-backdrop[data-room="learning"] { background-image: url('/brand/page-header-membership-v1.webp'); }
-.architectural-backdrop[data-room="gallery"],
-.architectural-backdrop[data-room="quiet"] { background-image: url('/brand/page-header-institution-v1.webp'); }
-.architectural-backdrop[data-room="quiet"]::after { content: ''; position: absolute; inset: 0; background: rgb(230 239 242 / .24); }
+/* A neutral loading surface must never flash artwork from a retired skin. */
+.architectural-backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(145deg, #d5e0e3, #eef1ed 55%, #c5cbd0); }
 .cinematic-building { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 450ms ease; }
 .cinematic-building[data-ready="true"] { opacity: 1; }
-.cinematic-building__canvas { display: block; width: 100%; height: 100%; }
+.cinematic-building__canvas { display: block; width: 100%; height: 100%; opacity: 1; transition: opacity 180ms ease; }
+.cinematic-building__canvas[data-transition="out"] { opacity: 0; transition-duration: 140ms; }
 .architecture-surface-motion { min-width: 0; }
 :root[data-architecture="cinema"] { --architecture-panel: rgb(247 251 251 / .86); --architecture-edge: rgb(255 255 255 / .8); --architecture-accent: #087487; }
 :root[data-architecture="cinema"] body { background: #d6dbd8; }
@@ -77,15 +70,36 @@
 :root[data-architecture="cinema"][data-theme="dark"] :is(.home-hero__copy,.section-introduction,.home-section--team,.ecosystem-field,.site-footer) :is(h1,h2,h3,p,a:not(.button-primary)) { color: #e7f0f3; }
 :root[data-architecture="cinema"][data-contrast="high"] { --architecture-panel: var(--surface); --architecture-edge: var(--ink); }
 @media (max-width:767px) {
-  :root[data-architecture="cinema"] .home-hero__container { padding-block-start: 36svh; }
-  :root[data-architecture="cinema"] .home-hero__container > .grid { grid-template-columns: 1fr; min-height: 0; }
-  :root[data-architecture="cinema"] .home-hero__copy { padding: 1.25rem; }
+  /* A deliberate architectural opening, followed by a stable reading canvas. */
+  .architectural-backdrop, .cinematic-building { inset-block-end: auto; height: clamp(22rem, 57svh, 32rem); }
+  :root[data-architecture="cinema"] { --architecture-panel: rgb(247 251 251 / .97); }
+  :root[data-architecture="cinema"] .home-hero { min-height: 0; padding-block-end: 1.5rem; background: linear-gradient(to bottom, transparent 15rem, var(--surface) 32rem); }
+  :root[data-architecture="cinema"] .home-hero__container { padding-block-start: clamp(12rem, 30svh, 18rem); padding-inline: 1rem; }
+  :root[data-architecture="cinema"] .home-hero__container > .grid { grid-template-columns: 1fr; min-height: 0; gap: 0; }
+  :root[data-architecture="cinema"] .home-hero__opening { display: none; }
+  :root[data-architecture="cinema"] .home-hero__copy { padding: 1.15rem; }
+  :root[data-architecture="cinema"] .home-hero__copy .display-hero { font-size: clamp(1.5rem, 6vw, 1.9rem); line-height: 1.45; }
+  :root[data-architecture="cinema"] .home-hero__copy > p:not(.civic-label) { font-size: .9rem; line-height: 1.85; }
+  :root[data-architecture="cinema"] .home-hero__copy > div { display: grid; grid-template-columns: 1fr; }
+  :root[data-architecture="cinema"] .home-hero__copy :is(.button-primary,.button-secondary) { justify-content: space-between; min-height: 2.9rem; font-size: .85rem; }
   :root[data-architecture="cinema"] .home-section > div { max-width: 100%; }
-  :root[data-architecture="cinema"] .home-section { min-height: 0; padding-block: 3rem; }
+  :root[data-architecture="cinema"] :is(.home-section,.home-close,.site-footer) { background: var(--surface); }
+  :root[data-architecture="cinema"] .home-section { min-height: 0; padding-block: 1.75rem; }
+  :root[data-architecture="cinema"] .home-close { padding-block: 2rem; }
+  :root[data-architecture="cinema"] .site-page-header { min-height: 0; }
+  :root[data-architecture="cinema"] .site-page-header__content { min-height: 0; padding-block: clamp(12rem, 30svh, 18rem) 1.5rem; }
+  :root[data-architecture="cinema"] .site-page-header__copy { max-width: none; padding: 1.25rem; }
+  :root[data-architecture="cinema"] .site-page-header__copy h1 { font-size: clamp(1.6rem, 6vw, 2rem); }
+  :root[data-architecture="cinema"] .site-page-header__copy p { font-size: .9rem; }
+  :root[data-architecture="cinema"] .site-header { padding: .45rem .6rem; }
+  :root[data-architecture="cinema"] .site-header > div { padding-inline: .7rem; gap: .5rem; min-height: 3.5rem; }
+  :root[data-architecture="cinema"] .site-brand__mark { display: none; }
+  :root[data-architecture="cinema"] .site-brand__wordmark { display: block; width: clamp(7.5rem, 35vw, 11rem); height: auto; }
+  :root[data-architecture="cinema"] .site-footer__utilities { margin-block: 1rem; }
   .architecture-surface-motion { transform: none !important; }
 }
-@media (prefers-reduced-motion:reduce) { .cinematic-building { transition: none; } .architecture-surface-motion { transform: none !important; } }
-[data-motion="reduced"] .cinematic-building { transition: none; }
+@media (prefers-reduced-motion:reduce) { .cinematic-building, .cinematic-building__canvas { transition: none; } .architecture-surface-motion { transform: none !important; } }
+[data-motion="reduced"] .cinematic-building, [data-motion="reduced"] .cinematic-building__canvas { transition: none; }
 [data-motion="reduced"] .architecture-surface-motion { transform: none !important; }
 @media (prefers-reduced-transparency: reduce) {
   :root[data-architecture="cinema"] { --architecture-panel: var(--surface); }

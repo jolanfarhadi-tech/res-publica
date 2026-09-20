@@ -34,7 +34,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             width={362}
             height={320}
             priority
-            className="h-11 w-auto rounded-lg bg-white p-1 transition-transform group-hover:-translate-y-0.5 min-[34rem]:hidden"
+            className="site-brand__mark h-11 w-auto rounded-lg bg-white p-1 transition-transform group-hover:-translate-y-0.5 min-[34rem]:hidden"
           />
           <Image
             src="/brand/res-publica-logo.png"
@@ -42,7 +42,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             width={1200}
             height={198}
             priority
-            className="hidden h-11 w-auto rounded-lg bg-white p-1 transition-transform group-hover:-translate-y-0.5 min-[34rem]:block"
+            className="site-brand__wordmark hidden h-11 w-auto rounded-lg bg-white p-1 transition-transform group-hover:-translate-y-0.5 min-[34rem]:block"
           />
         </Link>
 

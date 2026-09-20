@@ -15,11 +15,13 @@ import { bakeCinematicPeople } from "./static-posed-people";
 import { researchParticipants, standingObservers } from "./parliament-layout";
 import { buildCeremonialFlags, civicFlagTexture } from "./ceremonial-flags";
 import { applyArchitecturalUVs } from "./architectural-uv";
-import { architecturalShots, planCameraTravel, sampleCameraTravel, type ArchitecturalRoom, type CameraPose } from "./architecture-camera";
+import { type ArchitecturalRoom } from "./architecture-camera";
+import { ArchitectureMotion, architectureMotion } from "./architecture-motion";
 
 export type CinematicController = {
   setRoom: (room: ArchitecturalRoom | null) => void;
   setMotion: (reduced: boolean) => void;
+  setHomeProgress: (progress: number) => void;
   dispose: () => void;
 };
 
@@ -30,10 +32,8 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   let disposed = false, failed = false, ready = false, reduced = options.reducedMotion;
   let room: ArchitecturalRoom | null = options.room;
   canvas.dataset.room = options.room;
-  let current: CameraPose = architecturalShots[options.room], destination = current;
-  let travel = planCameraTravel(current, destination);
-  let travelStart = 0, lastFrame = 0, frameCount = 0;
-  let pausedAt: number | null = null;
+  const motion = new ArchitectureMotion(options.room, reduced);
+  let lastFrame = 0, frameCount = 0;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
   resources.add(renderer);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -167,7 +167,8 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   }
   function render(now: number) {
     if (!ready || disposed || failed || !room || document.hidden) return;
-    if (!reduced && !isInteracting()) current = sampleCameraTravel(travel, (now - travelStart) / travel.duration);
+    const current = motion.pose;
+    canvas.dataset.transition = motion.phase;
     camera.position.set(...current.position); camera.lookAt(new THREE.Vector3(...current.target));
     camera.fov = current.fov + (camera.aspect < 1 ? 12 : 0); camera.updateProjectionMatrix();
     renderer.info.autoReset = false; renderer.info.reset();
@@ -178,32 +179,38 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     canvas.dataset.camera = current.position.map((v) => v.toFixed(2)).join(",");
     canvas.dataset.drawCalls = String(renderer.info.render.calls);
     canvas.dataset.triangles = String(renderer.info.render.triangles);
+    canvas.dataset.lastRender = now.toFixed(0);
   }
   function loop(now: number) {
-    if (now - lastFrame < 32) return;
-    lastFrame = now; render(now);
-    if (reduced || now - travelStart >= travel.duration || isInteracting()) renderer.setAnimationLoop(null);
+    if (now - lastFrame < architectureMotion.frameInterval - 1) return;
+    const delta = lastFrame ? now - lastFrame : architectureMotion.frameInterval;
+    lastFrame = now;
+    if (!isInteracting() && !document.hidden) motion.step(delta);
+    render(now);
+    if (!motion.moving || isInteracting()) { renderer.setAnimationLoop(null); lastFrame = 0; }
   }
   function schedule() {
-    const travelling = performance.now() - travelStart < travel.duration && travel.distance > 0.001;
-    renderer.setAnimationLoop(ready && !disposed && !failed && !!room && !document.hidden && !reduced && !isInteracting() && travelling ? loop : null);
+    const animate = ready && !disposed && !failed && !!room && !document.hidden && !reduced && !isInteracting() && motion.moving;
+    renderer.setAnimationLoop(animate ? loop : null);
+    if (!animate) lastFrame = 0;
   }
   function resize() {
     if (disposed || failed) return;
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return;
     // One bounded 768px reflection on desktop; lighter rendering on small devices.
-    reflection.visible = width >= 768 && navigator.hardwareConcurrency > 4;
-    const ratio = Math.min(window.devicePixelRatio || 1, 1.5, Math.sqrt(1_650_000 / (width * height)));
+    const compact = width < 768;
+    motion.setCompact(compact);
+    reflection.visible = width >= 1200 && navigator.hardwareConcurrency > 4;
+    occlusion.enabled = !compact;
+    const ratio = Math.min(window.devicePixelRatio || 1, compact ? 1 : 1.5, Math.sqrt((compact ? 500_000 : 1_650_000) / (width * height)));
     renderer.setPixelRatio(ratio); renderer.setSize(width, height, false);
     composer.setPixelRatio(ratio); composer.setSize(width, height);
     canvas.dataset.renderedPixels = String(Math.round(width * height * ratio * ratio));
-    camera.aspect = width / height; camera.updateProjectionMatrix(); render(performance.now());
+    camera.aspect = width / height; camera.updateProjectionMatrix(); render(performance.now()); schedule();
   }
   function updatePause() {
-    const now = performance.now();
-    if (document.hidden || isInteracting()) { if (pausedAt === null) pausedAt = now; }
-    else if (pausedAt !== null) { travelStart += now - pausedAt; pausedAt = null; }
+    lastFrame = 0;
     schedule();
   }
   function visibility() { updatePause(); if (!document.hidden) render(performance.now()); }
@@ -219,14 +226,13 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       if (disposed || next === room) return;
       room = next;
       if (next) {
-        destination = architecturalShots[next]; travel = planCameraTravel(current, destination); travelStart = performance.now();
-        pausedAt = document.hidden || isInteracting() ? travelStart : null;
-        if (reduced) current = destination;
+        motion.setRoom(next);
         canvas.dataset.room = next; render(performance.now());
       }
       schedule();
     },
-    setMotion(value) { reduced = value; if (reduced) { current = destination; render(performance.now()); } schedule(); },
+    setMotion(value) { reduced = value; motion.setReduced(value); render(performance.now()); schedule(); },
+    setHomeProgress(value) { motion.setProgress(value); schedule(); },
     dispose() {
       disposed = true; renderer.setAnimationLoop(null); observer.disconnect();
       document.removeEventListener("visibilitychange", visibility);

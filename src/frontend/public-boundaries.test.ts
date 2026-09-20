@@ -234,7 +234,7 @@ describe("public website boundaries", () => {
     expect(header).toContain('/brand/res-publica-logo.png');
     expect(header).toContain('/brand/res-publica-mark.png');
     expect(footer).toContain('/brand/res-publica-logo.png');
-    expect(source("src", "components", "site", "cinematic-architecture.css")).toContain('/brand/res-publica-civic-forum-glass-lab-v6.webp');
+    expect(source("src", "components", "site", "cinematic-architecture.css")).not.toContain('/brand/res-publica-civic-forum-glass-lab-v6.webp');
     expect(homepage).not.toContain('/brand/res-publica-civic-forum-glass-lab-v5.webp');
     expect(homepage).not.toContain('/brand/res-publica-civic-forum-glass-lab-v4.webp');
     expect(homepage).not.toContain('/brand/res-publica-civic-forum-logo-3d-v3.webp');
@@ -270,16 +270,12 @@ describe("public website boundaries", () => {
     expect(homepage).not.toContain("ecosystem-map__signal");
     expect(homepage).toContain("portal-card__drawing");
     expect(homepage).toContain('<ArchitecturalGlyph kind={kind}');
-    expect(homepage).toContain('/brand/page-header-institution-v1.webp');
-    expect(homepage).toContain("home-close__media");
-    expect(footer).toContain('/brand/page-header-institution-v1.webp');
-    expect(footer).toContain("site-footer__media");
-    expect(pageHeader).toContain('/brand/page-header-membership-v1.webp');
-    expect(pageHeader).toContain('/brand/page-header-method-research-v1.webp');
-    expect(pageHeader).toContain('/brand/page-header-publications-v1.webp');
-    expect(pageHeader).toContain("site-page-header__media");
-    expect(pageHeader).toContain("site-page-header__veil");
-    expect(pageHeader).toMatch(/fill[\s\S]*?priority[\s\S]*?sizes="100vw"/);
+    // Retired backgrounds must not even preload behind the current shell.
+    for (const component of [homepage, footer, pageHeader]) expect(component).not.toContain('/brand/page-header-');
+    expect(homepage).not.toContain("home-close__media");
+    expect(footer).not.toContain("site-footer__media");
+    expect(pageHeader).not.toContain("site-page-header__media");
+    expect(pageHeader).not.toContain("site-page-header__veil");
     expect(collectionIndex).toContain('collection === "publications"');
     expect(collectionIndex).toContain('collection === "events"');
     expect(mdxPage).toContain('slug === "about"');

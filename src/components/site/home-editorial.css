@@ -75,7 +75,28 @@
   .editorial-collections { grid-template-columns: 1fr; }
   .editorial-collection { padding: 1.25rem; grid-template-columns: minmax(0,1fr) 7rem; } .editorial-collection > .architectural-glyph { width: 7rem; }
 }
-@media (max-width: 430px) { .home-editorial .portal-grid { grid-template-columns: 1fr; } .home-editorial .portal-card { grid-template-columns: 6rem minmax(0,1fr) auto; align-items: center; gap: .6rem; } .portal-card__drawing { grid-column: 1; height: auto; } .portal-card__drawing .editorial-number { display: none; } .portal-card__drawing svg { width: 6rem; } .portal-card > .action-arrow { margin: 0; } .journey-stations { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; } .journey-stations li:nth-child(2)::after { display: none; } }
+@media (max-width: 767px) {
+  .home-editorial .institutional-snapshot { margin-block-start: 1.5rem; }
+  .home-editorial .snapshot-grid { gap: .5rem; }
+  .home-editorial .snapshot-item { padding: .7rem .35rem; }
+  .home-editorial .snapshot-item strong { font-size: 1.5rem; }
+  .snapshot-icon { margin-block-end: .35rem; }
+  .snapshot-icon svg { width: 1.3rem; height: 1.3rem; }
+  .home-editorial .snapshot-note { margin-block-start: .75rem; }
+  .home-editorial .portal-grid { grid-template-columns: 1fr; gap: .75rem; }
+  .home-editorial .portal-card { grid-template-columns: 3.75rem minmax(0,1fr) auto; align-items: center; gap: .7rem; padding: 1rem; }
+  .portal-card__drawing { grid-column: 1; height: auto; }
+  .portal-card__drawing .editorial-number { display: none; }
+  .portal-card__drawing svg { width: 3.75rem; }
+  .portal-card > .action-arrow { margin: 0; width: 1.75rem; height: 1.75rem; }
+  .home-editorial .portal-card h3 { font-size: 1.05rem; }
+  .home-editorial .portal-card p { font-size: .85rem; line-height: 1.8; }
+  .home-editorial .section-introduction { padding: 1rem; gap: .5rem; }
+  .home-editorial .section-introduction h2 { font-size: 1.3rem; }
+  .home-editorial .journey-track { padding: 1.1rem; }
+  .journey-stations { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
+  .journey-stations li:nth-child(2)::after { display: none; }
+}
 @media (prefers-reduced-motion: reduce) { .home-editorial :is(.portal-card,.button-primary,.button-secondary) { transform: none; transition: none; } }
 [data-motion="reduced"] .home-editorial :is(.portal-card,.button-primary,.button-secondary) { transform: none; transition: none; }
 @media (prefers-reduced-transparency: reduce) { .home-editorial { --card-paper: var(--surface); } }

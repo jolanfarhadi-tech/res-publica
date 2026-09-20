@@ -107,4 +107,11 @@ describe("cinematic building preview", () => {
     expect(wrapper).toContain('window.removeEventListener("scroll", scroll)');
     expect(wrapper).not.toContain("new IntersectionObserver");
   });
+  it("never flashes retired artwork while the current architectural scene loads", () => {
+    const style = fs.readFileSync("src/components/site/cinematic-architecture.css", "utf8");
+    expect(style).not.toContain("url(");
+    expect(style).toContain('.cinematic-building__canvas[data-transition="out"]');
+    expect(style).toContain('.home-hero__opening { display: none; }');
+    expect(style).toContain('.site-brand__wordmark { display: block;');
+  });
 });

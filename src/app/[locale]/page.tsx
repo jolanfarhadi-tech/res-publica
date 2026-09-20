@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { ArchitecturalGlyph } from "@/components/site/ArchitecturalGlyph";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -209,8 +208,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </section>
 
         <section className="home-close relative isolate overflow-hidden py-16 text-paper sm:py-24">
-          <Image src="/brand/page-header-institution-v1.webp" alt="" fill sizes="100vw" className="home-close__media object-cover" />
-          <div className="home-close__veil" aria-hidden="true" />
           <Container className="relative z-10 max-w-[96rem]">
             <div className="home-close__panel">
               <div className="invitation-drawing"><ArchitecturalGlyph kind="join" /><ul>{invitation.paths.map(path => <li key={path}>{path}</li>)}</ul></div>

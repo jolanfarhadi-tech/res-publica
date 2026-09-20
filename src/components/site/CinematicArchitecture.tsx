@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { usePathname } from "next/navigation";
 import { usePreferences } from "@/components/privacy/PreferenceProvider";
 import { architecturalRoomForPath } from "./architecture-camera";
+import { homeReadingProgress } from "./architecture-motion";
 import type { CinematicController } from "./cinematic-renderer";
 
 const PreviewContext = createContext(true);
@@ -54,23 +55,21 @@ export function CinematicArchitecture({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!ready || room !== "forum") return;
-    // Observe the whole layout, not merely whichever entries changed this frame.
-    // Debounce scroll so one deliberate camera move follows a settled reading position.
-    let timeout: ReturnType<typeof setTimeout> | undefined;
-    const sections = [...document.querySelectorAll(".home-hero, .home-section--gateways, .home-section--team, .home-section--latest")];
-    function selectRoom() {
-      const marker = window.innerHeight * 0.55;
-      let active = sections[0];
-      for (const section of sections) if (section.getBoundingClientRect().top <= marker) active = section;
-      if (!active) return;
-      controller.current?.setRoom(active.classList.contains("home-section--latest") ? "library"
-        : active.classList.contains("home-section--gateways") ? "studio"
-          : active.classList.contains("home-hero") ? "forum" : "gallery");
+    const home = document.querySelector<HTMLElement>(".home-stage");
+    if (!home) return;
+    let frame = 0;
+    function update() {
+      frame = 0;
+      if (!home) return;
+      const rect = home.getBoundingClientRect();
+      controller.current?.setHomeProgress(homeReadingProgress(window.scrollY, rect.top + window.scrollY, rect.height, window.innerHeight));
     }
-    function scroll() { clearTimeout(timeout); timeout = setTimeout(selectRoom, 180); }
+    function scroll() { if (!frame) frame = requestAnimationFrame(update); }
     window.addEventListener("scroll", scroll, { passive: true });
-    selectRoom();
-    return () => { clearTimeout(timeout); window.removeEventListener("scroll", scroll); };
+    window.addEventListener("resize", scroll);
+    const observer = new ResizeObserver(scroll); observer.observe(home);
+    update();
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener("scroll", scroll); window.removeEventListener("resize", scroll); };
   }, [ready, room, pathname]);
 
   return (

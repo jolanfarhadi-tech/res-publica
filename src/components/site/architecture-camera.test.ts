@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { architecturalRoomForPath, architecturalShots, cinematicEase, interpolateCamera, planCameraTravel, sampleCameraTravel } from "./architecture-camera";
+import { researchParticipants, standingObservers } from "./parliament-layout";
 
 describe("continuous architectural camera", () => {
   it("uses the same room mapping for all three locales", () => {
@@ -20,6 +21,16 @@ describe("continuous architectural camera", () => {
     const rooms = ["publications", "research", "method", "programs"].map(path => architecturalRoomForPath(`/fa/${path}`)!);
     expect(new Set(rooms).size).toBe(4);
     expect(new Set(rooms.map(room => JSON.stringify(architecturalShots[room]))).size).toBe(4);
+  });
+  it("frames occupied workspaces from a distance rather than placing faces in the foreground", () => {
+    for (const room of ["studio", "library"] as const) {
+      const { position: [x, y, z], fov } = architecturalShots[room];
+      expect(y).toBeGreaterThanOrEqual(3.4);
+      expect(fov).toBeGreaterThanOrEqual(58);
+      for (const person of [...researchParticipants, ...standingObservers]) {
+        expect(Math.hypot(x - person.x, y - person.y - 1.6, z - person.z)).toBeGreaterThan(10);
+      }
+    }
   });
   it("never turns protected, consent, legal or form routes into moving scenes", () => {
     for (const locale of ["de", "en", "fa"]) for (const path of ["membership", "profile", "dashboard", "operations", "admin", "privacy", "datenschutz", "contact", "auth/error", "unknown"]) {
