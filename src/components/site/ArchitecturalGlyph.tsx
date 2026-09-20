@@ -1,0 +1,13 @@
+/** Small architectural drawings, not implied product interfaces or live data. */
+export function ArchitecturalGlyph({ kind, className = "" }: { kind: string; className?: string }) {
+  return <svg className={`architectural-glyph ${className}`} viewBox="0 0 180 120" fill="none" stroke="currentColor" strokeWidth="1.15" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d="m14 77 73 30 78-32-73-30Z" fill="currentColor" fillOpacity=".04" strokeOpacity=".22" />
+    <path d="m14 82 73 30 78-32M87 107v5" strokeOpacity=".18" />
+    {(kind === "lab" || kind === "research") && <><path d="m40 70 46 19 49-20-45-18Z" fill="currentColor" fillOpacity=".08"/><path d="M40 70V31l46 19v39M86 50l49-20v39M40 31l50-20 45 19"/><path d="M53 37v38M68 43v38M104 42v39M120 35v39" strokeOpacity=".25"/><path d="m73 68 14 6 19-8-14-6Z"/><path d="M83 63V46m11 17V48M79 46l10-4 9 4"/></>}
+    {(kind === "knowledge" || kind === "publications") && <><path d="m40 80 26 10V34L40 23Zm30 12 27-11V27L70 38Zm31-13 27-11V14l-27 11Z" fill="currentColor" fillOpacity=".08"/><path d="m44 29 18 7M44 45l18 7M44 61l18 7m13-22 17-7m-17 22 17-7m-17 22 17-7m14-36 16-7m-16 22 16-7m-16 22 16-7" strokeOpacity=".6"/><path d="m32 89 24 10 16-7m20-5 33-14" strokeOpacity=".25"/></>}
+    {kind === "projects" && <><path d="m33 72 29 12 30-12-30-12Zm47-25 29 12 30-12-30-12Z" fill="currentColor" fillOpacity=".1"/><path d="M33 72V49l29-12 30 12v23M33 49l29 12 30-12M62 61v23M80 47V24l29-12 30 12v23M80 24l29 12 30-12M109 36v23M92 70l30 12V65"/><path d="m62 94 48-20" strokeDasharray="3 4"/></>}
+    {kind === "programs" && <><path d="m35 76 52 22 54-23-52-22Zm0-18 52 22 54-23-52-22Zm0-18 52 22 54-23-52-22Z" fill="currentColor" fillOpacity=".05"/><path d="M35 40v36M87 62v36M141 39v36M60 30v55M113 28v59" strokeOpacity=".3"/></>}
+    {(kind === "communities" || kind === "join" || kind === "events") && <><ellipse cx="87" cy="70" rx="48" ry="20" fill="currentColor" fillOpacity=".06"/><ellipse cx="87" cy="65" rx="48" ry="20"/><path d="M39 65v5m96-5v5M70 81v13m35-13v13"/><path d="M53 50v-9m68 9v-9M87 39V27M62 90v-8m50 8v-8"/><circle cx="53" cy="35" r="6"/><circle cx="121" cy="35" r="6"/><circle cx="87" cy="21" r="6"/><circle cx="62" cy="76" r="6"/><circle cx="112" cy="76" r="6"/>{kind === "join" && <path d="M84 56v18m-9-9h18" strokeWidth="2"/>}</>}
+    {(kind === "news" || kind === "harm") && <><path d="m40 83 38 15V36L40 21Zm38 15 57-23V13L78 36Z" fill="currentColor" fillOpacity=".06"/><path d="m47 37 23 9m-23 5 23 9m-23 5 23 9m19-27 33-13m-33 24 33-13m-33 24 21-8"/><path d="M89 29 122 16v13L89 42Z" fill="currentColor" fillOpacity=".15"/></>}
+  </svg>;
+}

@@ -229,7 +229,18 @@ remove non-essential motion.
 - Publishing Authority remains an internal human-accountability boundary.
 - Backend, authentication, persistence, and audit contracts are unchanged.
 
-## Sources
+## Approved replacement direction
+
+The owner-approved continuous architectural experience is specified in
+`ARCHITECTURAL_EXPERIENCE.md`, with its saved reference image. It supersedes
+the miniature/procedural hero as the visual target. A local opt-in implementation
+now exists, but has not met or received acceptance against that quality target.
+The current staged acceptance criteria and honest progress record are in
+`CINEMATIC_ACCEPTANCE.fa.md`.
+Do not treat the existing hero or a moving raster image as completion of that
+site-wide 3D requirement.
+
+## Institutional sources
 
 The design and copy are grounded in the signed Satzung supplied for this
 release review, `brain/00_constitution/00_constitution.md`,

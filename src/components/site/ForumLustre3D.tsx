@@ -2,13 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePreferences } from "@/components/privacy/PreferenceProvider";
+import { useCinematicPreview } from "./CinematicArchitecture";
 
 export function ForumLustre3D() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [active, setActive] = useState(false);
   const { preferences } = usePreferences();
+  const cinematicPreview = useCinematicPreview();
 
   useEffect(() => {
+    if (cinematicPreview) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let cancelled = false;
     let running = false;
@@ -55,7 +58,7 @@ export function ForumLustre3D() {
       reducedMotion.removeEventListener("change", syncMotionPreference);
       dispose();
     };
-  }, [preferences.reduceMotion]);
+  }, [preferences.reduceMotion, cinematicPreview]);
 
   return (
     <div className="forum-hero__live" data-active={active} aria-hidden="true">

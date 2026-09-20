@@ -1,0 +1,40 @@
+{
+  "records": [
+    {
+      "file": "Vazirmatn-variable.woff2",
+      "source": "https://raw.githubusercontent.com/rastikerdar/vazirmatn/6e553e33489a8f9dfaccc76860a2e3f3c1e66de7/fonts/webfonts/Vazirmatn%5Bwght%5D.woff2",
+      "bytes": 111152,
+      "sha256": "4e3fa217d38fdafc1fea4414ceb58ca5e662cf0ab5fa735a8c8c20e8b42cad92"
+    },
+    {
+      "file": "Vazirmatn-OFL.txt",
+      "source": "https://raw.githubusercontent.com/rastikerdar/vazirmatn/6e553e33489a8f9dfaccc76860a2e3f3c1e66de7/OFL.txt",
+      "bytes": 4391,
+      "sha256": "17e355067c8284f47743a1ee3b1ef7ff684ff0601eda357f9353b10b3016ab31"
+    },
+    {
+      "file": "Figtree-latin.woff2",
+      "source": "https://fonts.gstatic.com/s/figtree/v9/_Xms-HUzqDCFdgfMm4S9DQ.woff2",
+      "bytes": 20156,
+      "sha256": "4ba7d3d096695818fe0686be4f1e82c6b05134e18a22260336130335027462dd"
+    },
+    {
+      "file": "Figtree-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/figtree/OFL.txt",
+      "bytes": 4388,
+      "sha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268"
+    },
+    {
+      "file": "SourceSerif4-latin.woff2",
+      "source": "https://fonts.gstatic.com/s/sourceserif4/v14/vEFF2_tTDB4M7-auWDN0ahZJW3IX2ih5nk3AucvUHf6kDXr4.woff2",
+      "bytes": 50824,
+      "sha256": "c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb"
+    },
+    {
+      "file": "SourceSerif4-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/sourceserif4/OFL.txt",
+      "bytes": 4400,
+      "sha256": "5f94c3fd3a23131a417ab5a0c8452de57e70c3cfb9f604d88241f7065ebf9fd9"
+    }
+  ]
+}

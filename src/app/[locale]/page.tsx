@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { ArchitecturalGlyph } from "@/components/site/ArchitecturalGlyph";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { HeroDepthScene } from "@/components/site/HeroDepthScene";
-import { ForumLustre3D } from "@/components/site/ForumLustre3D";
+import { EcosystemAtlas } from "@/components/site/EcosystemAtlas";
+import { CinematicReadingSurface } from "@/components/site/CinematicReadingSurface";
 import { Container } from "@/components/ui/Container";
 import { PersonCard } from "@/components/ui/PersonCard";
 import { team } from "@/data/team";
@@ -15,89 +16,9 @@ import { getEntries, type Entry } from "@/lib/collections";
 import { absoluteUrl, pageAlternates } from "@/lib/seo";
 
 function Arrow() {
-  return <span aria-hidden="true">↗</span>;
+  return <span className="action-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></span>;
 }
 
-function EcosystemNetwork() {
-  return (
-    <svg className="ecosystem-map__network" viewBox="0 0 800 480" aria-hidden="true" focusable="false" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="ecosystem-route-blue" x1="120" y1="72" x2="680" y2="408" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#67c6d9" stopOpacity="0.2" />
-          <stop offset="0.48" stopColor="#007f9f" stopOpacity="0.82" />
-          <stop offset="1" stopColor="#0d3b66" stopOpacity="0.42" />
-        </linearGradient>
-        <linearGradient id="ecosystem-route-red" x1="680" y1="72" x2="120" y2="408" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#e78389" stopOpacity="0.2" />
-          <stop offset="0.52" stopColor="#c61d2d" stopOpacity="0.78" />
-          <stop offset="1" stopColor="#7e1721" stopOpacity="0.4" />
-        </linearGradient>
-        <radialGradient id="ecosystem-core-field">
-          <stop offset="0" stopColor="#c88a3d" stopOpacity="0.48" />
-          <stop offset="0.42" stopColor="#007f9f" stopOpacity="0.18" />
-          <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
-        </radialGradient>
-        <marker id="ecosystem-arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
-          <path d="M0 0 8 4 0 8 2.2 4Z" fill="#007f9f" />
-        </marker>
-        <marker id="ecosystem-arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
-          <path d="M0 0 8 4 0 8 2.2 4Z" fill="#c61d2d" />
-        </marker>
-        <filter id="ecosystem-signal-glow" x="-250%" y="-250%" width="500%" height="500%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-
-      <ellipse className="ecosystem-map__field" cx="400" cy="240" rx="190" ry="126" fill="url(#ecosystem-core-field)" />
-      <g className="ecosystem-map__feedback">
-        <path className="ecosystem-map__feedback-loop ecosystem-map__feedback-loop--outer" d="M400 48C554 48 688 104 688 240S554 432 400 432 112 376 112 240 246 48 400 48Z" markerEnd="url(#ecosystem-arrow-blue)" />
-        <path className="ecosystem-map__feedback-loop ecosystem-map__feedback-loop--inner" d="M400 112C294 112 202 150 202 240s92 128 198 128 198-38 198-128-92-128-198-128Z" markerEnd="url(#ecosystem-arrow-red)" />
-      </g>
-
-      <g className="ecosystem-map__channels">
-        <path id="ecosystem-channel-1" className="ecosystem-map__route" d="M150 92C252 114 302 194 400 240" stroke="url(#ecosystem-route-blue)" markerEnd="url(#ecosystem-arrow-blue)" />
-        <path id="ecosystem-channel-2" className="ecosystem-map__route ecosystem-map__route--reverse" d="M400 240C498 194 548 114 650 92" stroke="url(#ecosystem-route-red)" markerEnd="url(#ecosystem-arrow-red)" />
-        <path id="ecosystem-channel-3" className="ecosystem-map__route ecosystem-map__route--reverse" d="M150 388C252 366 302 286 400 240" stroke="url(#ecosystem-route-red)" markerEnd="url(#ecosystem-arrow-red)" />
-        <path id="ecosystem-channel-4" className="ecosystem-map__route" d="M400 240C498 286 548 366 650 388" stroke="url(#ecosystem-route-blue)" markerEnd="url(#ecosystem-arrow-blue)" />
-      </g>
-
-      <g className="ecosystem-map__sensors">
-        <circle cx="400" cy="48" r="5" />
-        <circle cx="688" cy="240" r="5" />
-        <circle cx="400" cy="432" r="5" />
-        <circle cx="112" cy="240" r="5" />
-        <circle cx="400" cy="112" r="4" />
-        <circle cx="598" cy="240" r="4" />
-        <circle cx="400" cy="368" r="4" />
-        <circle cx="202" cy="240" r="4" />
-      </g>
-
-      <g className="ecosystem-map__signals" filter="url(#ecosystem-signal-glow)">
-        <circle className="ecosystem-map__signal ecosystem-map__signal--blue" r="4">
-          <animateMotion dur="6.8s" repeatCount="indefinite" path="M150 92C252 114 302 194 400 240" />
-        </circle>
-        <circle className="ecosystem-map__signal ecosystem-map__signal--red" r="4">
-          <animateMotion dur="7.6s" begin="-3s" repeatCount="indefinite" path="M400 240C498 194 548 114 650 92" />
-        </circle>
-        <circle className="ecosystem-map__signal ecosystem-map__signal--red" r="3.5">
-          <animateMotion dur="8.2s" begin="-5s" repeatCount="indefinite" path="M150 388C252 366 302 286 400 240" />
-        </circle>
-        <circle className="ecosystem-map__signal ecosystem-map__signal--blue" r="3.5">
-          <animateMotion dur="7.2s" begin="-2s" repeatCount="indefinite" path="M400 240C498 286 548 366 650 388" />
-        </circle>
-      </g>
-
-      <g className="ecosystem-map__junctions">
-        <circle cx="150" cy="92" r="5" />
-        <circle cx="650" cy="92" r="5" />
-        <circle cx="150" cy="388" r="5" />
-        <circle cx="650" cy="388" r="5" />
-        <circle cx="400" cy="240" r="8" />
-      </g>
-    </svg>
-  );
-}
 
 function PortalIcon({ kind }: { kind: string }) {
   const common = {
@@ -122,7 +43,7 @@ function PortalIcon({ kind }: { kind: string }) {
 
 function CollectionPreview({ entries, locale, empty }: { entries: Entry[]; locale: Locale; empty: string }) {
   if (entries.length === 0) {
-    return <p className="rounded-2xl border border-dashed border-border p-6 text-sm leading-relaxed text-muted">{empty}</p>;
+    return <p className="collection-empty">{empty}</p>;
   }
 
   const languageTag = locale === "fa" ? "fa-IR" : locale === "de" ? "de-DE" : "en-GB";
@@ -158,6 +79,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const copy = getPublicSiteCopy(locale).home;
   const publications = getEntries(locale, "publications");
   const news = getEntries(locale, "news");
+  const number = new Intl.NumberFormat(locale === "fa" ? "fa-IR" : locale);
+  const snapshotKinds = ["lab", "projects", "communities", "knowledge", "events", "projects", "programs", "events", "communities"];
+  const invitation = {
+    de: { title: "Gestalten wir den öffentlichen Raum. Gemeinsam.", text: "Bringen Sie Ihre Perspektive ein. Entdecken Sie unsere Programme, lernen Sie das Team kennen oder informieren Sie sich über eine Mitgliedschaft.", action: "Wege zur Beteiligung", paths: ["Zuhören", "Mitgestalten", "Verantwortung teilen"] },
+    en: { title: "Shape our shared public space. Together.", text: "Bring your perspective. Explore our programmes, meet the team or find out what membership involves.", action: "Explore participation", paths: ["Listen", "Contribute", "Share responsibility"] },
+    fa: { title: "این فضای مشترک، با حضور شما شکل می‌گیرد.", text: "دیدگاه شما بخشی از گفت‌وگوست. برنامه‌ها را بشناسید، با تیم آشنا شوید و مسیر عضویت و مشارکت را بررسی کنید.", action: "شناخت مسیر مشارکت", paths: ["شنیدن", "هم‌فکری", "مسئولیت مشترک"] },
+  }[locale];
   const journeyTracks = [
     { label: copy.journey.humanLabel, steps: copy.journey.human },
     { label: copy.journey.institutionalLabel, steps: copy.journey.institutional },
@@ -175,11 +103,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         address: { "@type": "PostalAddress", addressLocality: "Frankfurt am Main", addressCountry: "DE" },
       }} />
 
-      <div className="home-stage text-night">
+      <div className="home-stage home-editorial text-night">
         <section className="home-hero overflow-hidden" aria-labelledby="home-title">
           <Container className="home-hero__container max-w-[96rem] pb-6 pt-10 sm:pt-14 lg:pb-8">
             <div className="grid items-center gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-3">
-              <div className="home-hero__copy relative z-10 py-7 sm:p-8 lg:p-10">
+              <CinematicReadingSurface className="home-hero__copy relative z-10 py-7 sm:p-8 lg:p-10">
                 <p className="civic-label text-brand-gold">{copy.hero.eyebrow}</p>
                 <h1 id="home-title" className="display-hero mt-5 text-deep-blue">{copy.hero.title}</h1>
                 <p className="mt-7 max-w-xl text-lg leading-relaxed text-night/72">{copy.hero.lede}</p>
@@ -187,54 +115,37 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   <Link href={`/${locale}/projects`} className="button-primary rounded-full bg-brand-red px-6">{copy.hero.primary} <Arrow /></Link>
                   <Link href={`/${locale}/about`} className="button-secondary rounded-full px-6">{copy.hero.secondary}</Link>
                 </div>
-              </div>
+              </CinematicReadingSurface>
 
-              <HeroDepthScene>
-                <ul className="forum-people absolute inset-x-[8%] top-0 z-10 grid list-none grid-cols-3 items-start" aria-label={copy.featured.teamTitle}>
-                  {team.map((member, index) => (
-                    <li key={member.id} className={index === 1 ? "justify-self-center" : index === 2 ? "justify-self-end" : "justify-self-start"}>
-                      <div className="forum-person relative h-16 w-16 overflow-hidden rounded-full bg-white sm:h-20 sm:w-20 lg:h-24 lg:w-24">
-                        <Image src={member.image ?? ""} alt="" fill sizes="96px" className="object-cover scale-[1.035]" />
-                        <span className="sr-only">{member.name}, {member.role[locale]}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                <div className="forum-hero__visual">
-                  <Image src="/brand/res-publica-civic-forum-glass-lab-v6.webp" alt={copy.hero.forumAlt} width={1536} height={1024} priority sizes="(min-width: 1024px) 64vw, 100vw" className="forum-hero__image h-auto w-full" />
-                  <ForumLustre3D />
-                </div>
-                <figcaption className="mx-auto -mt-4 w-fit rounded-full border border-night/10 bg-white/88 px-4 py-2 text-center text-xs font-semibold text-deep-blue shadow-sm backdrop-blur sm:-mt-8">{copy.hero.forumCaption}</figcaption>
-              </HeroDepthScene>
+              <div className="home-hero__opening" aria-hidden="true" />
             </div>
 
-            <aside className="institutional-snapshot relative z-20 mt-7 overflow-hidden border border-night/10 bg-white/94" aria-label={copy.snapshot.label}>
-              <ul className="grid list-none grid-cols-2 sm:grid-cols-3 lg:grid-cols-9">
-                {copy.snapshot.items.map(([value, label, detail]) => (
-                  <li key={label} className="snapshot-item min-w-0 px-4 py-5 text-center">
+            <aside className="institutional-snapshot" aria-label={copy.snapshot.label}>
+              <ul className="snapshot-grid">
+                {copy.snapshot.items.map(([value, label, detail], index) => (
+                  <li key={label} className="snapshot-item" data-tone={index % 3}>
+                    <span className="snapshot-icon"><PortalIcon kind={snapshotKinds[index]} /></span>
                     <strong className="editorial-index block font-serif text-3xl font-medium text-deep-blue">{value}</strong>
                     <span className="mt-1 block text-xs font-semibold leading-tight text-night/72">{label}</span>
                     {detail && <span className="mt-1 block text-[0.68rem] text-muted">{detail}</span>}
                   </li>
                 ))}
               </ul>
-              <p className="border-t border-night/8 px-4 py-2 text-center text-[0.68rem] leading-relaxed text-muted">{copy.snapshot.note}</p>
+              <p className="snapshot-note">{copy.snapshot.note}</p>
             </aside>
           </Container>
         </section>
 
         <section className="home-section home-section--gateways py-10 sm:py-16" aria-labelledby="gateways-title">
           <Container className="max-w-[96rem]">
-            <p className="civic-label">{copy.gateways.eyebrow}</p>
-            <h2 id="gateways-title" className="mt-3 max-w-3xl text-3xl text-deep-blue sm:text-4xl">{copy.gateways.title}</h2>
-            <ul className="portal-grid mt-8 grid list-none gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-              {copy.gateways.items.map(([title, text, href, kind]) => (
-                <li key={href}>
-                  <Link href={`/${locale}${href}`} className="portal-card group flex h-full min-h-64 flex-col overflow-hidden border border-border bg-white p-5">
-                    <span className="portal-card__icon text-accent transition-transform duration-300 motion-safe:group-hover:-translate-y-1"><PortalIcon kind={kind} /></span>
-                    <h3 className="mt-7 text-2xl text-deep-blue">{title}</h3>
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{text}</p>
-                    <span className="mt-6 self-end text-accent"><Arrow /></span>
+            <h2 id="gateways-title" className="sr-only">{copy.gateways.title}</h2>
+            <ul className="portal-grid">
+              {copy.gateways.items.map(([title, text, href, kind], index) => (
+                <li key={href} data-tone={index % 3}>
+                  <Link href={`/${locale}${href}`} className="portal-card group">
+                    <div className="portal-card__drawing"><span className="editorial-number">{number.format(index + 1).padStart(2, locale === "fa" ? "۰" : "0")}</span><ArchitecturalGlyph kind={kind} /></div>
+                    <div className="portal-card__content"><h3>{title}</h3><p>{text}</p></div>
+                    <Arrow />
                   </Link>
                 </li>
               ))}
@@ -244,16 +155,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
         <section className="home-section home-section--journey relative border-y border-border py-14 sm:py-20" aria-labelledby="journey-title">
           <Container className="max-w-[96rem]">
-            <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
-              <div><p className="civic-label">{copy.journey.eyebrow}</p><h2 id="journey-title" className="mt-4 text-4xl leading-tight text-deep-blue sm:text-5xl">{copy.journey.title}</h2></div>
-              <p className="max-w-2xl text-lg leading-relaxed text-muted">{copy.journey.intro}</p>
+            <div className="section-introduction">
+              <h2 id="journey-title">{copy.journey.eyebrow}</h2>
+              <p>{copy.journey.title}</p>
             </div>
-            <div className="mt-10 grid gap-4 lg:grid-cols-2">
+            <div className="journey-grid">
               {journeyTracks.map((track, trackIndex) => (
                 <article key={track.label} className={`journey-track rounded-3xl p-6 sm:p-8 ${trackIndex === 1 ? "journey-track--institutional" : ""}`}>
-                  <p className="civic-label">{track.label}</p>
-                  <ol className="mt-7 grid list-none gap-3 sm:grid-cols-4">
-                    {track.steps.map((step, index) => <li key={step} className="rounded-xl border border-current/15 bg-white/55 px-4 py-4 text-sm font-semibold"><span className="editorial-index me-2 text-brand-red">{index + 1}</span>{step}</li>)}
+                  <header><PortalIcon kind={trackIndex ? "knowledge" : "communities"} /><h3>{track.label}</h3></header>
+                  <ol className="journey-stations">
+                    {track.steps.map((step, index) => <li key={step}><span className="journey-station-number">{number.format(index + 1)}</span><span>{step}</span></li>)}
                   </ol>
                 </article>
               ))}
@@ -269,33 +180,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <p className="mt-5 max-w-xl leading-relaxed text-muted">{copy.featured.ecosystemText}</p>
               <Link href={`/${locale}/about`} className="button-secondary mt-7 rounded-full">{copy.ecosystem.open} <Arrow /></Link>
             </div>
-            <figure className="ecosystem-map relative min-h-[32rem] overflow-hidden border border-border bg-white">
-              <div className="ecosystem-map__grid" aria-hidden="true" />
-              <div className="ecosystem-map__architecture" aria-hidden="true" />
-              <EcosystemNetwork />
-              <div className="ecosystem-map__core" aria-hidden="true">
-                <span className="ecosystem-map__core-halo" />
-                <span className="ecosystem-map__core-ring ecosystem-map__core-ring--outer" />
-                <span className="ecosystem-map__core-ring ecosystem-map__core-ring--inner" />
-                <Image src="/brand/res-publica-logo.png" alt="" width={1200} height={216} className="ecosystem-map__logo" />
-              </div>
-              <ul className="absolute inset-0 list-none">
-                {copy.ecosystem.platforms.map((platform, index) => (
-                  <li key={platform.name} className={`ecosystem-map__node ecosystem-map__node--${index + 1}`}>
-                    <span className="ecosystem-map__node-signal" aria-hidden="true" />
-                    <span className="ecosystem-map__index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="ecosystem-map__node-copy">
-                      <span className="block text-xs font-bold text-deep-blue">{platform.name}</span>
-                      <span className="mt-1 block text-[0.65rem] text-muted">{platform.scope}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <ul className="ecosystem-map__principles list-none" aria-label={copy.ecosystem.eyebrow}>
-                {copy.ecosystem.principles.map((principle) => <li key={principle}>{principle}</li>)}
-              </ul>
-              <figcaption className="sr-only">{copy.ecosystem.graphicCaption}</figcaption>
-            </figure>
+            <EcosystemAtlas locale={locale} />
           </Container>
         </section>
 
@@ -315,11 +200,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
         <section className="home-section home-section--latest py-14 sm:py-20" aria-labelledby="latest-title">
           <Container className="max-w-[96rem]">
-            <p className="civic-label">{copy.featured.latestEyebrow}</p>
-            <h2 id="latest-title" className="mt-4 text-4xl text-deep-blue sm:text-5xl">{copy.featured.latestTitle}</h2>
-            <div className="mt-9 grid gap-8 lg:grid-cols-2">
-              <div><div className="mb-4 flex items-center justify-between gap-4"><h3 className="text-2xl text-deep-blue">{copy.featured.publications}</h3><Link href={`/${locale}/publications`} className="text-sm font-semibold text-accent">{copy.featured.allPublications} <Arrow /></Link></div><CollectionPreview entries={publications} locale={locale} empty={copy.featured.empty} /></div>
-              <div><div className="mb-4 flex items-center justify-between gap-4"><h3 className="text-2xl text-deep-blue">{copy.featured.news}</h3><Link href={`/${locale}/news`} className="text-sm font-semibold text-accent">{copy.featured.allNews} <Arrow /></Link></div><CollectionPreview entries={news} locale={locale} empty={copy.featured.empty} /></div>
+            <h2 id="latest-title" className="sr-only">{copy.featured.latestTitle}</h2>
+            <div className="editorial-collections">
+              <article className="editorial-collection" data-tone="2"><ArchitecturalGlyph kind="publications" /><h3>{copy.featured.publications}</h3><CollectionPreview entries={publications} locale={locale} empty={copy.featured.empty} /><Link href={`/${locale}/publications`} className="button-secondary">{copy.featured.allPublications} <Arrow /></Link></article>
+              <article className="editorial-collection" data-tone="1"><ArchitecturalGlyph kind="news" /><h3>{copy.featured.news}</h3><CollectionPreview entries={news} locale={locale} empty={copy.featured.empty} /><Link href={`/${locale}/news`} className="button-secondary">{copy.featured.allNews} <Arrow /></Link></article>
             </div>
           </Container>
         </section>
@@ -328,11 +212,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <Image src="/brand/page-header-institution-v1.webp" alt="" fill sizes="100vw" className="home-close__media object-cover" />
           <div className="home-close__veil" aria-hidden="true" />
           <Container className="relative z-10 max-w-[96rem]">
-            <div className="home-close__panel max-w-4xl rounded-[2rem] border border-paper/15 bg-night/58 p-7 shadow-2xl backdrop-blur-md sm:p-12">
-              <p className="civic-label inverse-label">{copy.close.eyebrow}</p>
-              <h2 className="mt-4 text-4xl leading-tight sm:text-6xl">{copy.close.title}</h2>
-              <p className="mt-6 max-w-3xl text-lg leading-relaxed text-paper/74">{copy.close.text}</p>
-              <div className="mt-8 flex flex-wrap gap-3"><Link href={`/${locale}/membership`} className="button-primary border-paper bg-paper text-night hover:bg-signal">{copy.close.primary} <Arrow /></Link><Link href={`/${locale}/about`} className="button-secondary border-paper/30 bg-night/20 text-paper hover:border-paper">{copy.close.secondary}</Link></div>
+            <div className="home-close__panel">
+              <div className="invitation-drawing"><ArchitecturalGlyph kind="join" /><ul>{invitation.paths.map(path => <li key={path}>{path}</li>)}</ul></div>
+              <div className="invitation-copy"><p className="civic-label">{copy.close.eyebrow}</p><h2>{invitation.title}</h2><p>{invitation.text}</p>
+              <div className="invitation-actions"><Link href={`/${locale}/membership`} className="button-primary">{invitation.action} <Arrow /></Link><Link href={`/${locale}/team`} className="button-secondary">{copy.featured.teamAction} <Arrow /></Link></div></div>
             </div>
           </Container>
         </section>

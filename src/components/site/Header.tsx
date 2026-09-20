@@ -21,7 +21,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const privacy = getExperienceCopy(locale).privacy;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/80 bg-[var(--glass)] shadow-[0_12px_34px_-28px_rgb(5_26_43_/_0.42)] backdrop-blur-2xl">
+    <header className="site-header sticky top-0 z-50 border-b border-border/80 bg-[var(--glass)] shadow-[0_12px_34px_-28px_rgb(5_26_43_/_0.42)] backdrop-blur-2xl">
       <Container className="flex min-h-20 max-w-[96rem] items-center justify-between gap-4 py-2">
         <Link
           href={`/${locale}`}

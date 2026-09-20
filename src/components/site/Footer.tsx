@@ -9,7 +9,7 @@ import { PreferenceTrigger } from "@/components/privacy/PreferenceProvider";
 import { NewsletterSignup } from "./NewsletterSignup";
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
-  const year = new Date().getFullYear();
+  const year = new Intl.NumberFormat(locale === "fa" ? "fa-IR" : locale, { useGrouping: false }).format(new Date().getFullYear());
   const site = getPublicSiteCopy(locale);
   const experience = getExperienceCopy(locale);
 
@@ -48,10 +48,10 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       <div className="site-footer__veil" aria-hidden="true" />
       <Container className="relative z-10 py-14 sm:py-18">
         <div className="grid gap-12 border-b border-paper/15 pb-12 lg:grid-cols-[1.2fr_2fr]">
-          <div>
+          <div className="site-footer__institution">
             <Link
               href={`/${locale}`}
-              className="inline-flex rounded-2xl bg-paper px-4 py-3 text-night"
+              className="site-footer__brand inline-flex rounded-2xl bg-paper px-4 py-3 text-night"
             >
               <Image
                 src="/brand/res-publica-logo.png"
@@ -82,7 +82,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
         </div>
 
-        <div className="grid gap-10 py-10 lg:grid-cols-[1fr_auto] lg:items-start">
+        <div className="site-footer__utilities grid gap-10 py-10 lg:grid-cols-[1fr_auto] lg:items-start">
           {isNewsletterConfigured() ? (
             <NewsletterSignup locale={locale} dict={dict} />
           ) : (
@@ -118,7 +118,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-paper/15 pt-6 text-sm text-paper/48 sm:flex-row sm:items-center sm:justify-between">
+        <div className="site-footer__copyright flex flex-col gap-2 border-t border-paper/15 pt-6 text-sm text-paper/48 sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Res Publica e.V.</p>
           <p>{dict.footer.rights}</p>
         </div>

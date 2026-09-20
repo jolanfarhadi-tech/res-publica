@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Source_Serif_4, Vazirmatn } from "next/font/google";
+import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { getDirection, isLocale, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -7,25 +7,30 @@ import { getOpenGraphPresentation } from "@/i18n/open-graph";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { PreferenceProvider } from "@/components/privacy/PreferenceProvider";
+import { CinematicArchitecture } from "@/components/site/CinematicArchitecture";
 import "../globals.css";
 
 /* Brand fonts, self-hosted by next/font (no external requests). */
-const figtree = Figtree({
-  subsets: ["latin", "latin-ext"],
+const figtree = localFont({
+  src: "../fonts/Figtree-latin.woff2",
+  weight: "300 800",
   variable: "--font-figtree",
-  display: "optional",
+  display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
-  subsets: ["latin"],
+const sourceSerif = localFont({
+  src: "../fonts/SourceSerif4-latin.woff2",
+  weight: "300 800",
   variable: "--font-source-serif",
-  display: "optional",
+  display: "swap",
 });
 
-const vazirmatn = Vazirmatn({
-  subsets: ["arabic", "latin"],
+const vazirmatn = localFont({
+  src: "../fonts/Vazirmatn-variable.woff2",
+  weight: "100 900",
   variable: "--font-vazirmatn",
-  display: "optional",
+  display: "swap",
+  fallback: ["Tahoma", "Arial", "sans-serif"],
 });
 
 /* Pre-render one page tree per language at build time. */
@@ -112,6 +117,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={dir}
+      data-architecture="cinema"
       suppressHydrationWarning
       className={`${figtree.variable} ${sourceSerif.variable} ${vazirmatn.variable}`}
     >
@@ -125,11 +131,13 @@ export default async function LocaleLayout({
           {dict.a11y.skipToContent}
         </a>
         <PreferenceProvider locale={locale as Locale}>
+          <CinematicArchitecture>
           <Header locale={locale as Locale} dict={dict} />
           <main id="main" className="site-content flex-1">
             {children}
           </main>
           <Footer locale={locale as Locale} dict={dict} />
+          </CinematicArchitecture>
         </PreferenceProvider>
       </body>
     </html>

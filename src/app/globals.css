@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "../components/site/cinematic-architecture.css";
+@import "../components/site/ecosystem-atlas.css";
+@import "../components/site/home-editorial.css";
 
 :root {
   --ink: #0a1b2b;
@@ -230,12 +233,17 @@ body.site-depth-shell::after {
     radial-gradient(ellipse at 50% 18%, transparent 0 28rem, rgb(7 19 31 / 0.56) 68rem);
 }
 
+html[lang="fa"] {
+  --font-sans: var(--font-vazirmatn), Tahoma, Arial, sans-serif;
+  --font-serif: var(--font-vazirmatn), Tahoma, Arial, sans-serif;
+}
+
 :lang(fa) body,
 body:lang(fa),
 :lang(fa) h1,
 :lang(fa) h2,
 :lang(fa) h3 {
-  font-family: var(--font-vazirmatn), system-ui, sans-serif;
+  font-family: var(--font-vazirmatn), Tahoma, Arial, sans-serif;
   letter-spacing: 0;
 }
 
