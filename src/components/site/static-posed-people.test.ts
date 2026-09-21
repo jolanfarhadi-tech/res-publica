@@ -4,9 +4,21 @@ import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { describe, expect, it } from "vitest";
 import { poseCinematicPerson } from "./cinematic-people";
-import { bakeCinematicPeople, bakePosedMesh } from "./static-posed-people";
+import { bakeCinematicPeople, bakeCinematicPeopleIncrementally, bakePosedMesh } from "./static-posed-people";
 
 describe("static posed participant batching", () => {
+  it("yields per occupant without altering the final geometry", async () => {
+    const material = new THREE.MeshStandardMaterial(), geometry = new THREE.BoxGeometry();
+    const people = [0, 1, 2].map(x => { const mesh = new THREE.Mesh(geometry, material); mesh.position.x = x * 2; return mesh; });
+    const resources: THREE.BufferGeometry[] = []; let yields = 0;
+    const sync = bakeCinematicPeople(people, item => resources.push(item));
+    const async = await bakeCinematicPeopleIncrementally(people, item => resources.push(item), async () => { yields++; });
+    expect(yields).toBe(people.length);
+    expect(new THREE.Box3().setFromObject(async)).toEqual(new THREE.Box3().setFromObject(sync));
+    expect((async.children[0] as THREE.Mesh).geometry.getAttribute("position").array)
+      .toEqual((sync.children[0] as THREE.Mesh).geometry.getAttribute("position").array);
+    resources.forEach(item => item.dispose()); material.dispose(); geometry.dispose();
+  });
   it("retains actual deformed geometry, smooth skin normals and shared materials", () => {
     const manager = new THREE.LoadingManager();
     const loader = new THREE.TextureLoader(manager);

@@ -30,7 +30,7 @@ export function bakePosedMesh(source: THREE.Mesh) {
 }
 
 /** Shared material batches replace per-person skeletal draw calls for static occupants. */
-export function bakeCinematicPeople(people: THREE.Object3D[], track: (geometry: THREE.BufferGeometry) => void) {
+function* participantBatches(people: THREE.Object3D[], track: (geometry: THREE.BufferGeometry) => void) {
   const batches = new Map<THREE.Material, THREE.BufferGeometry[]>();
   function add(material: THREE.Material, geometry: THREE.BufferGeometry) {
     const geometries = batches.get(material) ?? [];
@@ -54,6 +54,7 @@ export function bakeCinematicPeople(people: THREE.Object3D[], track: (geometry: 
       }
       geometry.dispose();
     });
+    yield;
   }
   const root = new THREE.Group(); root.name = "static-posed-participants";
   for (const [material, parts] of batches) {
@@ -65,4 +66,20 @@ export function bakeCinematicPeople(people: THREE.Object3D[], track: (geometry: 
     root.add(mesh);
   }
   return root;
+}
+
+export function bakeCinematicPeople(people: THREE.Object3D[], track: (geometry: THREE.BufferGeometry) => void) {
+  const batches = participantBatches(people, track);
+  let step = batches.next();
+  while (!step.done) step = batches.next();
+  return step.value;
+}
+
+/** Identical geometry, but touch/scroll/rendering can run between each occupant. */
+export async function bakeCinematicPeopleIncrementally(people: THREE.Object3D[], track: (geometry: THREE.BufferGeometry) => void,
+  yieldToBrowser: () => Promise<void>) {
+  const batches = participantBatches(people, track);
+  let step = batches.next();
+  while (!step.done) { await yieldToBrowser(); step = batches.next(); }
+  return step.value;
 }

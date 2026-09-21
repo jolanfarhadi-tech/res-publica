@@ -1,29 +1,22 @@
 import * as THREE from "three";
-import { HDRLoader } from "three/addons/loaders/HDRLoader.js";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { SMAAPass } from "three/addons/postprocessing/SMAAPass.js";
 import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
-import { ArchitecturalOcclusionPass } from "./architectural-occlusion";
-import { createArchitecturalReflection } from "./architectural-reflection";
-import { loadArchitecturalDetails } from "./architectural-details";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { buildCinematicBuilding, type BuildingMaps } from "./cinematic-building";
 import { buildingTextureFiles, createInitialBuildingMaps, replaceBuildingTexture } from "./cinematic-materials";
-import { loadCinematicPeople } from "./cinematic-people";
-import { bakeCinematicPeople } from "./static-posed-people";
 import { researchParticipants, standingObservers } from "./parliament-layout";
 import { buildCeremonialFlags, civicFlagTexture } from "./ceremonial-flags";
 import { applyArchitecturalUVs } from "./architectural-uv";
 import { portraitTargetOffset, type ArchitecturalRoom } from "./architecture-camera";
 import { ArchitectureMotion, architectureMotion } from "./architecture-motion";
+import { architecturalPixelRatio, CinematicQuality } from "./cinematic-quality";
+import type { createArchitecturalPostprocessing } from "./cinematic-postprocessing";
 
 export type CinematicController = {
   setRoom: (room: ArchitecturalRoom | null) => void;
   setMotion: (reduced: boolean) => void;
   setPaused: (paused: boolean) => void;
   setScroll: (progress: number) => void;
+  setRoomScroll: (progress: number) => void;
   dispose: () => void;
 };
 
@@ -35,10 +28,14 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   let room: ArchitecturalRoom | null = options.room;
   canvas.dataset.room = options.room;
   const motion = new ArchitectureMotion(options.room, reduced);
-  let lastFrame = 0, frameCount = 0;
+  let lastFrame = 0, frameCount = 0, diagnosticAt = 0, nextFrame = 0;
+  const quality = new CinematicQuality();
+  let postprocessing: ReturnType<typeof createArchitecturalPostprocessing> | null = null;
+  // Yield expensive optional model/pose work after a paint, not in one long task.
+  const yieldToBrowser = () => new Promise<void>(resolve => requestAnimationFrame(() => setTimeout(resolve, 0)));
   // A paused/reduced-motion frame must survive compositing, including Safari's
   // layer promotion when the loading veil fades and the browser toolbar resizes.
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance", preserveDrawingBuffer: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
   resources.add(renderer);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -48,16 +45,6 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xc5cbd0);
   const camera = new THREE.PerspectiveCamera(51, 1.6, 0.1, 180);
-  const reflection = createArchitecturalReflection();
-  scene.add(reflection); resources.add(reflection); resources.add(reflection.geometry);
-  const composer = new EffectComposer(renderer); resources.add(composer);
-  const renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
-  const occlusion = new ArchitecturalOcclusionPass(scene, camera, 512, 512);
-  occlusion.blendIntensity = 0.65;
-  occlusion.updateGtaoMaterial({ radius: .6, thickness: .45, distanceExponent: 1.6, screenSpaceRadius: false });
-  composer.addPass(occlusion); resources.add(occlusion);
-  const output = new OutputPass(); composer.addPass(output); resources.add(output);
-  const antialias = new SMAAPass(); composer.addPass(antialias); resources.add(antialias);
   const sun = new THREE.DirectionalLight(0xfff7ee, 2.0);
   sun.position.set(-13, 22, -17); sun.target.position.set(0, 0, 0);
   sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
@@ -118,9 +105,10 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       // Show the actual approved building first. Optional furniture and people
       // must not hold the entire translated page behind a blank loading surface.
       renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true;
-      ready = true; canvas.dataset.status = "ready"; canvas.dataset.readyAt = performance.now().toFixed(0);
+      ready = true; canvas.dataset.status = "ready";
       resize(); options.onReady(); schedule();
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      canvas.dataset.readyAt = performance.now().toFixed(0);
+      await yieldToBrowser();
       if (disposed) return;
       render(performance.now());
       // No network request gates the first real frame. Each upgrade is isolated:
@@ -133,9 +121,10 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
         if (key === "stone" || key === "oak") texture.colorSpace = THREE.SRGBColorSpace;
         replaceBuildingTexture(root, maps[key as keyof BuildingMaps], texture);
         maps[key as keyof BuildingMaps] = texture;
-        render(performance.now());
+        if (reduced || isInteracting()) render(performance.now());
       })).then(results => { if (!disposed) canvas.dataset.materialStatus = results.every(result => result.status === "fulfilled") ? "ready" : "partial"; });
-      const environment = new HDRLoader().loadAsync("/architecture/details/urban-courtyard.hdr").then(hdr => {
+      const environment = import("three/addons/loaders/HDRLoader.js").then(({ HDRLoader }) =>
+        new HDRLoader().loadAsync("/architecture/details/urban-courtyard.hdr")).then(hdr => {
         track(hdr); if (disposed) return;
         const pmrem = new THREE.PMREMGenerator(renderer);
         try {
@@ -160,24 +149,35 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       }).catch(() => { if (!disposed) canvas.dataset.flagStatus = "unavailable"; });
       // These promises handle their own failures and remain independent of people.
       void Promise.all([finishes, environment, flags]);
+      const { loadArchitecturalDetails } = await import("./architectural-details");
       const details = await loadArchitecturalDetails(track);
       if (disposed) return;
       scene.add(details);
+      await yieldToBrowser();
+      const [{ loadCinematicPeople }, { bakeCinematicPeopleIncrementally }] = await Promise.all([
+        import("./cinematic-people"), import("./static-posed-people"),
+      ]);
       const person = await loadCinematicPeople(track);
       if (disposed) return;
       const occupants: THREE.Object3D[] = [];
       for (let i = 0; i < seats.length; i += 3) {
+        await yieldToBrowser(); if (disposed) return;
         const seat = seats[i], human = person(i / 3, true);
         human.position.set(seat.x, seat.y, seat.z); human.rotation.y = seat.yaw; occupants.push(human);
       }
       for (const { model, x, y, z, yaw } of standingObservers) {
+        await yieldToBrowser(); if (disposed) return;
         const human = person(model); human.position.set(x, y, z); human.rotation.y = yaw; occupants.push(human);
       }
       for (const { model, x, y, z, yaw } of researchParticipants) {
+        await yieldToBrowser(); if (disposed) return;
         const human = person(model, false, "research");
         human.position.set(x, y, z); human.rotation.y = yaw; occupants.push(human);
       }
-      const participantBatches = bakeCinematicPeople(occupants, track); scene.add(participantBatches);
+      const participantBatches = await bakeCinematicPeopleIncrementally(occupants, track, yieldToBrowser);
+      for (const occupant of occupants) occupant.traverse(object => { if (object instanceof THREE.SkinnedMesh) object.skeleton.dispose(); });
+      if (disposed) return;
+      scene.add(participantBatches);
       canvas.dataset.participants = String(occupants.length);
       canvas.dataset.participantBatches = String(participantBatches.children.length);
       // Warm material programs asynchronously where parallel shader compilation is supported.
@@ -186,6 +186,14 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       // Architecture and people are static: bake shadows once, animate only the camera.
       renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true;
       canvas.dataset.detailStatus = "ready"; render(performance.now()); schedule();
+      // Keep all secondary effects and their shader code out of the first-frame
+      // dependency chain. Environment-map reflections remain on every device.
+      if (canvas.clientWidth >= 768 && quality.level === 2) {
+        await environment; await yieldToBrowser();
+        const { createArchitecturalPostprocessing } = await import("./cinematic-postprocessing");
+        if (disposed || quality.level < 2) return;
+        postprocessing = createArchitecturalPostprocessing(renderer, scene, camera); track(postprocessing); resize();
+      }
     } catch (error) {
       console.warn("Architectural scene unavailable:", error instanceof Error ? error.message : "rendering failed");
       if (ready) { canvas.dataset.detailStatus = "unavailable"; render(performance.now()); }
@@ -198,8 +206,6 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   function render(now: number) {
     if (!ready || disposed || failed || !room || document.hidden) return;
     const current = motion.framePose;
-    canvas.dataset.transition = motion.phase;
-    canvas.dataset.motion = reduced ? "reduced" : motion.isPaused ? "paused" : motion.moving ? "travelling" : "ambient";
     const portrait = camera.aspect < 1;
     camera.position.set(...current.position);
     // Portrait framing looks into the room, not mostly at the mezzanine ceiling.
@@ -207,8 +213,19 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     camera.fov = current.fov + (portrait ? 4 : 0); camera.updateProjectionMatrix();
     renderer.info.autoReset = false; renderer.info.reset();
     const renderStart = performance.now();
-    composer.render(); frameCount++;
+    if (postprocessing && quality.level === 2 && canvas.clientWidth >= 768) postprocessing.render();
+    else renderer.render(scene, camera);
+    frameCount++;
+    // Diagnostics are DOM-visible but do not generate thousands of attribute
+    // writes per second on mobile during an otherwise GPU-only animation.
+    if (now - diagnosticAt < 250 && frameCount > 1 && !reduced) return;
+    diagnosticAt = now;
+    canvas.dataset.transition = motion.phase;
+    canvas.dataset.motion = reduced ? "reduced" : motion.isPaused ? "paused" : motion.moving ? "travelling" : "ambient";
     canvas.dataset.cpuFrameMs = (performance.now() - renderStart).toFixed(1);
+    canvas.dataset.frameTimeMs = quality.frameMs.toFixed(1);
+    canvas.dataset.quality = String(quality.level);
+    canvas.dataset.postprocessing = postprocessing && quality.level === 2 && canvas.clientWidth >= 768 ? "half-resolution-ao" : "direct-pbr";
     canvas.dataset.frame = String(frameCount);
     canvas.dataset.camera = current.position.map((v) => v.toFixed(2)).join(",");
     canvas.dataset.drawCalls = String(renderer.info.render.calls);
@@ -216,9 +233,13 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     canvas.dataset.lastRender = now.toFixed(0);
   }
   function loop(now: number) {
-    if (now - lastFrame < architectureMotion.frameInterval - 1) return;
+    if (now < nextFrame - 1) return;
     const delta = lastFrame ? now - lastFrame : architectureMotion.frameInterval;
     lastFrame = now;
+    // Keep a stable 60Hz deadline instead of dropping to 30/20fps whenever one
+    // callback arrives a millisecond early or late.
+    nextFrame = now + architectureMotion.frameInterval - Math.max(0, now - nextFrame) % architectureMotion.frameInterval;
+    if (!document.hidden && quality.record(delta)) resize();
     if (!isInteracting() && !document.hidden) motion.step(delta);
     render(now);
     if (!motion.animating || isInteracting()) { renderer.setAnimationLoop(null); lastFrame = 0; }
@@ -226,24 +247,20 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   function schedule() {
     const animate = ready && !disposed && !failed && !!room && !document.hidden && !reduced && !isInteracting() && motion.animating;
     renderer.setAnimationLoop(animate ? loop : null);
-    if (!animate) lastFrame = 0;
+    if (!animate) { lastFrame = 0; nextFrame = 0; quality.resetSamples(); }
   }
   function resize() {
     if (disposed || failed) return;
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return;
-    // One bounded 768px reflection on desktop; lighter rendering on small devices.
-    const compact = width < 768;
-    reflection.visible = width >= 1200 && navigator.hardwareConcurrency > 4;
-    occlusion.enabled = !compact;
-    const ratio = Math.min(window.devicePixelRatio || 1, compact ? 1 : 1.5, Math.sqrt((compact ? 500_000 : 1_650_000) / (width * height)));
+    const ratio = architecturalPixelRatio(width, height, window.devicePixelRatio, quality.level);
     renderer.setPixelRatio(ratio); renderer.setSize(width, height, false);
-    composer.setPixelRatio(ratio); composer.setSize(width, height);
+    postprocessing?.resize(width, height, ratio);
     canvas.dataset.renderedPixels = String(Math.round(width * height * ratio * ratio));
     camera.aspect = width / height; camera.updateProjectionMatrix(); render(performance.now()); schedule();
   }
   function updatePause() {
-    lastFrame = 0;
+    lastFrame = 0; nextFrame = 0; quality.resetSamples();
     schedule();
   }
   function visibility() { updatePause(); if (!document.hidden) render(performance.now()); }
@@ -268,6 +285,7 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     },
     setMotion(value) { reduced = value; motion.setReduced(value); render(performance.now()); schedule(); },
     setScroll(progress) { motion.setScroll(progress); if (reduced) render(performance.now()); schedule(); },
+    setRoomScroll(progress) { motion.setRoomScroll(progress); if (reduced) render(performance.now()); schedule(); },
     setPaused(value) { motion.setPaused(value); lastFrame = 0; render(performance.now()); schedule(); },
     dispose() {
       disposed = true; renderer.setAnimationLoop(null); observer.disconnect();

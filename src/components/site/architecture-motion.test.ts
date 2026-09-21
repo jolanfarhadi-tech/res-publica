@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { architecturalShots } from "./architecture-camera";
-import { ArchitectureMotion, architecturalScrollProgress, homeArchitecturalChapters } from "./architecture-motion";
+import { ArchitectureMotion, architecturalScrollProgress, homeArchitecturalChapters, roomScrollPose } from "./architecture-motion";
 
 function advance(motion: ArchitectureMotion, frames = 1000) { for (let i = 0; i < frames; i++) motion.step(32); }
 const distance = (a: number[], b: number[]) => Math.hypot(...a.map((v, i) => v - b[i]));
@@ -71,7 +71,7 @@ describe("approved release room-to-room journey", () => {
     const start = motion.framePose;
     advance(motion, 250);
     expect(distance(start.position, motion.framePose.position)).toBeGreaterThan(.05);
-    expect(distance(architecturalShots.studio.position, motion.framePose.position)).toBeLessThan(.23);
+    expect(distance(architecturalShots.studio.position, motion.framePose.position)).toBeLessThan(.45);
     expect(motion.framePose.fov).toBe(start.fov);
     motion.setPaused(true);
     const paused = motion.framePose;
@@ -119,5 +119,30 @@ describe("approved release room-to-room journey", () => {
     expect(architecturalScrollProgress([350, 1350, 2350], 500, 1000)).toBe(.5);
     expect(architecturalScrollProgress([350, 1350, 2350], 1000, 1000)).toBe(1);
     expect(architecturalScrollProgress([350, 1350, 2350], 50000, 1000)).toBe(2);
+  });
+  it.each(Object.keys(architecturalShots) as (keyof typeof architecturalShots)[])("moves %s with page scroll, staying inside its own room", room => {
+    const motion = new ArchitectureMotion(room);
+    motion.setRoomScroll(0); advance(motion);
+    const first = motion.pose;
+    motion.setRoomScroll(1); advance(motion);
+    expect(distance(first.position, motion.pose.position)).toBeGreaterThan(1);
+    expect(motion.pose.position[1]).toBe(first.position[1]);
+    expect(motion.pose.fov).toBe(first.fov);
+    expect(distance(motion.pose.position, roomScrollPose(room, 1).position)).toBeLessThan(.001);
+    motion.setRoomScroll(0); advance(motion);
+    expect(distance(motion.pose.position, first.position)).toBeLessThan(.001);
+    motion.setReduced(true); motion.setRoomScroll(1); advance(motion);
+    expect(motion.framePose).toEqual(architecturalShots[room]);
+  });
+  it("preserves touch momentum on reversal and gives equivalent 30/60/120Hz poses", () => {
+    const poses = [30, 60, 120].map(fps => {
+      const motion = new ArchitectureMotion("learning"); motion.setRoomScroll(.7);
+      for (let i = 0; i < fps * 2; i++) motion.step(1000 / fps);
+      const before = motion.pose.position;
+      motion.setRoomScroll(0); motion.step(1000 / fps);
+      expect(distance(before, motion.pose.position)).toBeLessThan(.1);
+      return before;
+    });
+    expect(distance(poses[0], poses[2])).toBeLessThan(.035);
   });
 });

@@ -35,13 +35,25 @@ describe("continuous mobile architecture regression guards", () => {
     expect(preferences).toContain("label={copy.reduceMotion}");
     expect(preferences).toContain('update("reduceMotion", value)');
     expect(shell).toContain("homeArchitecturalChapters");
+    expect(shell).toContain("controller.current?.setRoomScroll");
+    expect(shell).not.toContain('room !== "forum"');
     expect(shell).toContain('data-baseline="34aeb99"');
   });
   it("shows the actual building before any architectural asset download", () => {
     expect(renderer.indexOf("options.onReady(); schedule();")).toBeLessThan(renderer.indexOf("await textureLoader.loadAsync"));
-    expect(renderer.indexOf("options.onReady(); schedule();")).toBeLessThan(renderer.indexOf('new HDRLoader().loadAsync'));
+    expect(renderer.indexOf("options.onReady(); schedule();")).toBeLessThan(renderer.indexOf('import("three/addons/loaders/HDRLoader.js")'));
     expect(renderer).toContain("Promise.allSettled(Object.entries(buildingTextureFiles)");
     expect(renderer).toContain('canvas.dataset.environmentStatus = "unavailable"');
     expect(renderer).toContain('document.activeElement?.closest("input, textarea, select, [contenteditable=');
+  });
+  it("defers model and postprocessing bundles and yields optional CPU work", () => {
+    for (const dependency of ["./cinematic-people", "./architectural-details", "./static-posed-people", "./cinematic-postprocessing"]) {
+      expect(renderer).toContain(`import("${dependency}")`);
+      const runtimeImports = renderer.split("\n").filter(line => line.startsWith("import ") && !line.startsWith("import type "));
+      expect(runtimeImports.some(line => line.includes(`from "${dependency}"`))).toBe(false);
+    }
+    expect(renderer).toContain("await bakeCinematicPeopleIncrementally");
+    expect(renderer).toContain("quality.record(delta)");
+    expect(renderer).toContain("else renderer.render(scene, camera)");
   });
 });

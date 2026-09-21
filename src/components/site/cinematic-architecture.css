@@ -1,6 +1,6 @@
 /* A neutral loading surface must never flash artwork from a retired skin. */
 .architectural-backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(145deg, #d5e0e3, #eef1ed 55%, #c5cbd0); }
-.cinematic-building { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 450ms ease; }
+.cinematic-building { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 150ms ease; }
 .cinematic-building[data-ready="true"] { opacity: 1; }
 .cinematic-building__canvas { display: block; width: 100%; height: 100%; }
 .architecture-surface-motion { min-width: 0; }

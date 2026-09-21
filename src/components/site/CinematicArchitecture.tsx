@@ -63,12 +63,16 @@ export function CinematicArchitecture({ children }: { children: ReactNode }) {
   }, [room]);
 
   useEffect(() => {
-    if (!ready || room !== "forum") return;
+    if (!ready || !room) return;
     const home = document.querySelector<HTMLElement>(".home-stage");
-    if (!home) return;
     let frame = 0;
     function update() {
       frame = 0;
+      if (!home) {
+        const distance = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        controller.current?.setRoomScroll(window.scrollY / distance);
+        return;
+      }
       const anchors = homeArchitecturalChapters.map(chapter => {
         const section = home?.querySelector(chapter.selector);
         return section ? section.getBoundingClientRect().top + window.scrollY : null;
@@ -82,7 +86,7 @@ export function CinematicArchitecture({ children }: { children: ReactNode }) {
     function scroll() { if (!frame) frame = requestAnimationFrame(update); }
     window.addEventListener("scroll", scroll, { passive: true });
     window.addEventListener("resize", scroll);
-    const observer = new ResizeObserver(scroll); observer.observe(home);
+    const observer = new ResizeObserver(scroll); observer.observe(home ?? document.body);
     update();
     return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener("scroll", scroll); window.removeEventListener("resize", scroll); };
   }, [ready, room, pathname]);

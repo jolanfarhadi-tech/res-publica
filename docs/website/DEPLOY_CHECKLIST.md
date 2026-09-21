@@ -362,3 +362,100 @@ going live after the fixes are verified.
   a successful navigation test or proof of production performance. Remaining
   laptop/locale checks and the exact commit's CI/hosted release must finish
   before reporting this follow-up published. Physical Safari remains untested.
+
+Final local follow-up, code commit `c3950bfb1fe58a09308ed57b80ef8b39333f95ee`:
+
+- The restarted preview server completed all 33 public DE/EN/FA HTTP checks.
+- Laptop 1366x768: Persian and German programmes screenshots inspected;
+  actual FA -> EN -> DE language links loaded the equivalent page with correct
+  language/direction, ready WebGL, original textures and no horizontal overflow.
+  Both header logo variants loaded after the server restart.
+- Preferences dialog: enabling reduced motion changed the renderer to
+  `reduced` while the scene stayed visible. Restored the original unchecked
+  preference without saving or changing consent settings.
+- Phone viewport 390x844: German membership rendered the gallery, full-height
+  canvas, readable header and no horizontal overflow. This is viewport testing,
+  not a physical Safari result. The temporary viewport override was reset.
+- Console inspection showed only the previously observed shader precision
+  warnings, not application errors. No field performance/CWV claim is made.
+- Git push was rejected by the safety reviewer pending explicit approval to
+  transmit source/history to `jolanfarhadi-tech/res-publica`. The owner has been
+  asked for that exact upload and publication approval. No alternative upload,
+  hosted preview, new remote CI run or production deployment was attempted.
+  Production remained at `c8cb474` at that point; see the approved continuation
+  below for the subsequent release status.
+
+## 2026-09-21 — Approved deployment continuation (`c3950bf`)
+
+- The owner explicitly confirmed continuation of the requested source upload
+  and publication. The exact code commit was pushed to the existing GitHub
+  branch `codex/platform-phase-3`.
+- GitHub CI run `35582991438`, job `106279849145`: PASS. All 575 tests in
+  131 files passed; lint, TypeScript, secret/history scan, supply-chain and
+  production dependency checks, fresh-database migrations and the 173-page
+  production build passed.
+- Creating a review PR through the installed GitHub integration returned HTTP
+  403 (resource inaccessible to the integration). No PR was created and no
+  permissions were broadened. The same complete workflow ran successfully on
+  the release branch push; this is not described as a PR-based CI run.
+- Hosted preview `Hwmvz9RmNLrtan5HDrpUcaBAhFYb` is ready at
+  https://res-publica-jmu68qzab-res-publica1.vercel.app.
+- Hosted browser checks: FA membership at 1440x900; actual FA -> EN -> DE
+  membership language clicks; German membership at 390x844; Persian programmes
+  at 1366x768. The gallery/learning scenes and original textures were ready,
+  language/direction matched, there was no horizontal overflow and no floating
+  camera control. No browser error-level messages were captured.
+- Preview membership reports the protected application service unavailable;
+  the decorative-background fix does not change or bypass that service.
+- After checking that production `c8cb474` is an ancestor, the tested commit was
+  fast-forwarded to `main` without force. Production deployment
+  `HpY3LiEaGgE7cfHbi9nDeHkCKfhG` reached Ready at 11:33:16 CEST. Vercel confirms
+  source `main` / `c3950bf`, Production environment and `respublica-ev.de` domain.
+- Post-release `scripts/check-architectural-release.mjs https://respublica-ev.de`:
+  all 33 public routes passed (HTTP 200, expected language/direction,
+  architectural mode, main/heading and no retired hero markup).
+- Production browser checks: Persian membership at 1366x768, actual FA -> EN ->
+  DE membership language changes at 1440x900, and a fresh German membership
+  load at 390x844 all showed the ready gallery and no floating camera control
+  or horizontal overflow. The production membership service presents its
+  normal sign-in/account options; no authentication or application was submitted.
+- Live Persian home: scrolling from 0 to 1800 changed the camera from
+  `2.42,6.15,13.60` to `-11.95,2.15,12.73`; renderer reported `travelling`
+  and the inspected screenshot retained an indoor architectural view.
+  At rest the renderer reported `ambient`. No error-level browser logs appeared.
+- Main-branch workflow runs `35583780708` and `35583780672` also completed with
+  success. The deployed code remains exactly `c3950bf`; this appended verification
+  record is local documentation and does not alter the released assets.
+- Physical iPhone/Safari and field Core Web Vitals are not verified. Viewport
+  checks are not represented as physical-device testing.
+
+## 2026-09-21 — Site-wide scroll and frame-pacing correction (publication pending)
+
+Owner reported the same camera/loading issue throughout the site, not just
+`/de/programs`, and explicitly requested another production release after fixes.
+
+- Reproduced: an internal page scrolled to 1381px but retained essentially the
+  same learning-room camera; only the 16cm ambient drift was active. The shell
+  registered scroll updates only when a `.home-stage` existed.
+- Every allowlisted architectural room now has its own bounded in-room dolly
+  controlled by document scroll, in all locales. Camera height/FOV and existing
+  home room-to-room routes remain unchanged. Private/legal routes remain quiet.
+- Critically damped scroll velocity replaces clipped first-order steps, with
+  equivalent 30/60/120Hz tests and stable direction reversals. Bounded ambient
+  drift is slightly more visible. OS/site reduced-motion preferences still win.
+- Removed the hard 30fps cadence. Frame deadlines now target 60Hz, and sustained
+  measured frame pressure reduces optional GPU passes/pixel count without
+  oscillation. Mobile uses direct antialiased PBR rendering, not the multipass
+  desktop pipeline. Desktop AO, when affordable, runs at half resolution.
+- Realtime planar floor reflection no longer redraws the whole scene during
+  motion; existing material/environment reflections, geometry and original
+  textures are preserved. FBX/GLTF/postprocessing code loads after the first
+  building frame. Avatar posing/baking yields between occupants; independent
+  avatar textures load concurrently. Readiness fade reduced from 450ms to 150ms.
+- Local: 81 tests/13 files, TypeScript and scoped ESLint passed. At 1440x900 on
+  `/de/programs`, scrolling changed camera z from 3.08 to 0.04. Steady measured
+  cadence was 16.6–16.7ms, CPU submission 4.6–5.1ms, about 487k triangles instead
+  of the former 1.43m. These are this browser's observations, not a device-wide
+  60fps guarantee or physical iPhone result. Development first-frame time is
+  not used as a production-loading measurement.
+- Hosted exact-commit CI/preview and post-release checks still pending.

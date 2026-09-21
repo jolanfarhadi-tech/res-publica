@@ -110,14 +110,15 @@ export async function loadCinematicPeople(track: (resource: THREE.Texture | THRE
     });
     const finishes = new Map<string, THREE.MeshPhysicalMaterial>();
     const loader = new THREE.TextureLoader();
-    for (const area of ["body", "head", "opacity"] as const) {
-      const map = await loader.loadAsync(`/architecture/${prefix}_${area}_color.webp`); track(map);
+    await Promise.all((["body", "head", "opacity"] as const).map(async area => {
+      const [map, normalMap] = await Promise.all([
+        loader.loadAsync(`/architecture/${prefix}_${area}_color.webp`).then(texture => { track(texture); return texture; }),
+        area === "opacity" ? Promise.resolve(null) : loader.loadAsync(`/architecture/${prefix}_${area}_normal.webp`).then(texture => { track(texture); return texture; }),
+      ]);
       map.colorSpace = THREE.SRGBColorSpace; map.anisotropy = 4;
-      const normalMap = area === "opacity" ? null : await loader.loadAsync(`/architecture/${prefix}_${area}_normal.webp`);
-      if (normalMap) track(normalMap);
       const finish = createParticipantFinish(area, map, normalMap);
       finishes.set(`${prefix}_${area}`, finish); track(finish);
-    }
+    }));
     model.traverse((object) => {
       if (!(object instanceof THREE.Mesh)) return;
       const replace = (material: THREE.Material) => finishes.get(material.name) ?? finishes.get(`${prefix}_body`)!;

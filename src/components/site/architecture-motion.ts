@@ -1,10 +1,36 @@
 import { architecturalShots, planCameraTravel, sampleCameraTravel, type ArchitecturalRoom, type CameraPose, type CameraTravel } from "./architecture-camera";
 
 export const architectureMotion = {
-  maximumFrameDelta: 80, frameInterval: 1000 / 30,
-  scrollResponse: 480, maximumChapterStep: .025,
-  ambientPeriod: 56000, ambientHorizontal: .16, ambientDepth: .08,
+  maximumFrameDelta: 80, frameInterval: 1000 / 60,
+  scrollResponse: 650, maximumChapterSpeed: .65, maximumRoomSpeed: .5,
+  ambientPeriod: 32000, ambientHorizontal: .36, ambientDepth: .12,
 };
+
+/** Short, surveyed rails within each room: no zoom, orbit or change of floor. */
+export const roomDollyOffsets: Record<ArchitecturalRoom, CameraPose["position"]> = {
+  forum: [-1.8, 0, 0], gallery: [2.8, 0, 0],
+  studio: [0, 0, -3.6], library: [0, 0, -3.6],
+  learning: [0, 0, -3.2], review: [1.6, 0, -.7], editorial: [-1.5, 0, .35],
+};
+
+export function roomScrollPose(room: ArchitecturalRoom, progress: number): CameraPose {
+  const shot = architecturalShots[room], t = Math.max(0, Math.min(1, progress));
+  const offset = roomDollyOffsets[room];
+  return { position: shot.position.map((v, i) => v + offset[i] * t) as CameraPose["position"],
+    target: shot.target.map((v, i) => v + offset[i] * t * .45) as CameraPose["target"], fov: shot.fov };
+}
+
+/** Critically damped response retains velocity across wheel/touch events. */
+export function dampCameraProgress(current: number, target: number, velocity: number, dt: number, maxSpeed: number) {
+  const response = architectureMotion.scrollResponse / 1000, omega = 2 / response;
+  const change = Math.max(-maxSpeed * response, Math.min(maxSpeed * response, current - target));
+  const localTarget = current - change, decay = Math.exp(-omega * dt);
+  const temporary = (velocity + omega * change) * dt;
+  const nextVelocity = (velocity - omega * temporary) * decay;
+  const position = localTarget + (change + temporary) * decay;
+  if ((target - current > 0) === (position > target)) return { position: target, velocity: 0 };
+  return { position, velocity: nextVelocity };
+}
 
 /** The approved release's room-to-room journey, with a distinct view for each chapter. */
 export const homeArchitecturalChapters: { selector: string; room: ArchitecturalRoom }[] = [
@@ -45,6 +71,8 @@ export class ArchitectureMotion {
   private ambientElapsed = 0;
   private scrollPosition: number | null = null;
   private scrollTarget = 0;
+  private scrollVelocity = 0;
+  private scrollMode: "home" | "room" = "home";
 
   constructor(private room: ArchitecturalRoom, private reduced = false) {
     const destination = architecturalShots[room];
@@ -61,7 +89,7 @@ export class ArchitectureMotion {
   get framePose(): CameraPose {
     if (this.reduced) return this.pose;
     const angle = this.ambientElapsed / architectureMotion.ambientPeriod * Math.PI * 2;
-    // Gentle architectural dolly, under 20cm: never an orbit or a portrait zoom.
+    // Visible but bounded architectural drift: never an orbit or a portrait zoom.
     return { ...this.pose, position: [
       this.pose.position[0] + Math.sin(angle) * architectureMotion.ambientHorizontal,
       this.pose.position[1],
@@ -74,6 +102,7 @@ export class ArchitectureMotion {
   setRoom(room: ArchitecturalRoom) {
     if (room === this.room && this.scrollPosition === null) return;
     this.scrollPosition = null;
+    this.scrollVelocity = 0;
     this.room = room;
     const destination = architecturalShots[room];
     if (this.reduced || this.paused) this.pose = destination;
@@ -82,6 +111,7 @@ export class ArchitectureMotion {
   }
 
   setScroll(progress: number) {
+    this.scrollMode = "home";
     this.scrollTarget = Math.max(0, Math.min(homeArchitecturalChapters.length - 1, Number.isFinite(progress) ? progress : 0));
     if (this.scrollPosition === null) this.scrollPosition = 0;
     if (this.reduced) {
@@ -90,13 +120,22 @@ export class ArchitectureMotion {
     }
   }
 
+  setRoomScroll(progress: number) {
+    this.scrollMode = "room";
+    this.scrollTarget = Math.max(0, Math.min(1, Number.isFinite(progress) ? progress : 0));
+    if (this.scrollPosition === null) this.scrollPosition = 0;
+    // Accessibility mode keeps the authored static room, not a scroll animation.
+    if (this.reduced) { this.scrollPosition = this.scrollTarget; this.pose = architecturalShots[this.room]; }
+  }
+
   setReduced(reduced: boolean) {
     this.reduced = reduced;
     if (reduced) {
-      this.pose = this.scrollPosition === null ? architecturalShots[this.room]
+      this.pose = this.scrollPosition === null || this.scrollMode === "room" ? architecturalShots[this.room]
         : architecturalShots[homeArchitecturalChapters[Math.round(this.scrollTarget)].room];
       this.elapsed = this.travel.duration;
       if (this.scrollPosition !== null) this.scrollPosition = this.scrollTarget;
+      this.scrollVelocity = 0;
     }
   }
 
@@ -107,11 +146,10 @@ export class ArchitectureMotion {
     const dt = Math.max(0, Math.min(architectureMotion.maximumFrameDelta, Number.isFinite(delta) ? delta : 0));
     this.ambientElapsed += dt;
     if (this.scrollPosition !== null) {
-      const difference = this.scrollTarget - this.scrollPosition;
-      const step = difference * (1 - Math.exp(-dt / architectureMotion.scrollResponse));
-      const limit = architectureMotion.maximumChapterStep * dt / architectureMotion.frameInterval;
-      this.scrollPosition += Math.max(-limit, Math.min(limit, step));
-      this.pose = chapterPose(this.scrollPosition);
+      const next = dampCameraProgress(this.scrollPosition, this.scrollTarget, this.scrollVelocity, dt / 1000,
+        this.scrollMode === "room" ? architectureMotion.maximumRoomSpeed : architectureMotion.maximumChapterSpeed);
+      this.scrollPosition = next.position; this.scrollVelocity = next.velocity;
+      this.pose = this.scrollMode === "room" ? roomScrollPose(this.room, this.scrollPosition) : chapterPose(this.scrollPosition);
       return;
     }
     if (!this.moving) return;
