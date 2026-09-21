@@ -40,8 +40,10 @@ export function CinematicArchitecture({ children }: { children: ReactNode }) {
     function motion() { controller.current?.setMotion(media.matches || motionRef.current); }
     motion();
     media.addEventListener("change", motion);
+    canvas.current.dataset.engineRequestedAt = performance.now().toFixed(0);
     void import("./cinematic-renderer").then(({ mountCinematicArchitecture }) => {
       if (cancelled || !canvas.current) return;
+      canvas.current.dataset.engineReadyAt = performance.now().toFixed(0);
       controller.current = mountCinematicArchitecture(canvas.current, {
         reducedMotion: media.matches || motionRef.current,
         room: roomRef.current ?? "forum",

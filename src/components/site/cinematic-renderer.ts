@@ -9,6 +9,7 @@ import { applyArchitecturalUVs } from "./architectural-uv";
 import { portraitTargetOffset, type ArchitecturalRoom } from "./architecture-camera";
 import { ArchitectureMotion, architectureMotion } from "./architecture-motion";
 import { architecturalPixelRatio, CinematicQuality } from "./cinematic-quality";
+import { prepareArchitecturalFinishes } from "./cinematic-startup";
 import type { createArchitecturalPostprocessing } from "./cinematic-postprocessing";
 
 export type CinematicController = {
@@ -24,6 +25,7 @@ export type CinematicController = {
 export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   options: { reducedMotion: boolean; room: ArchitecturalRoom; onReady: () => void; onFailure: () => void; onRecover?: () => void }): CinematicController {
   const resources = new Set<{ dispose: () => void }>();
+  const mountedAt = performance.now(); canvas.dataset.mountedAt = mountedAt.toFixed(0);
   let disposed = false, failed = false, ready = false, reduced = options.reducedMotion;
   let room: ArchitecturalRoom | null = options.room;
   canvas.dataset.room = options.room;
@@ -102,6 +104,8 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
         const batch = new THREE.Mesh(geometry, material); batch.castShadow = castShadow; batch.receiveShadow = receiveShadow; root.add(batch);
       }
       originals.forEach((mesh) => mesh.removeFromParent());
+      canvas.dataset.geometryMs = (performance.now() - mountedAt).toFixed(0);
+      const finishesWarmup = prepareArchitecturalFinishes(root); track(finishesWarmup);
       // Show the actual approved building first. Optional furniture and people
       // must not hold the entire translated page behind a blank loading surface.
       renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true;
@@ -110,6 +114,12 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       canvas.dataset.readyAt = performance.now().toFixed(0);
       await yieldToBrowser();
       if (disposed) return;
+      // Cold physical shaders used to block the very first frame. Keep the same
+      // lit geometry visible while KHR_parallel_shader_compile prepares them.
+      await renderer.compileAsync(finishesWarmup.warmup, camera, scene);
+      if (disposed) return;
+      finishesWarmup.restore(); finishesWarmup.dispose(); resources.delete(finishesWarmup);
+      canvas.dataset.physicalReadyAt = performance.now().toFixed(0);
       render(performance.now());
       // No network request gates the first real frame. Each upgrade is isolated:
       // a missing map or slow HDR cannot turn the already visible building blank.

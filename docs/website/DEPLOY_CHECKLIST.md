@@ -459,3 +459,15 @@ Owner reported the same camera/loading issue throughout the site, not just
   60fps guarantee or physical iPhone result. Development first-frame time is
   not used as a production-loading measurement.
 - Hosted exact-commit CI/preview and post-release checks still pending.
+- Candidate `f0ed307` passed CI `35586481143` and Vercel preview, but a cold
+  preview load took 17.178s before its first frame (warm reload 3.169s). This was
+  not accepted as a loading-performance pass and the candidate was not promoted.
+- Added same-geometry Lambert startup while the original physical-material GPU
+  shaders compile asynchronously. Exact original materials are then restored;
+  no poster/retired skin or geometry swap is introduced. DOM diagnostics now
+  distinguish engine request/import, geometry work, first frame and physical
+  finish readiness instead of attributing every delay to network downloads.
+- Local mobile check after this follow-up: engine requested at 2992ms, loaded
+  at 3818ms, geometry 671ms, actual first frame 4772ms, physical finishes 6059ms;
+  steady cadence 17.7ms. These include development-server costs, not production
+  performance claims. No browser error-level messages were captured.
