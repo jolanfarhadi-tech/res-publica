@@ -250,3 +250,115 @@ obsolete online deployments were identified separately from local asset cleanup;
 the requested `34aeb99` baseline and the active production must be preserved
 until a verified replacement is approved. Hosted preview validation and the
 WEB-09 owner approval gate remain required before production promotion.
+
+Exact restored-preview result, commit `c8cb4749780f9ac5623e6636b32c146b9f0e263b`:
+
+- CI https://github.com/jolanfarhadi-tech/res-publica/actions/runs/35545059619
+  succeeded (job `106169375915`): 566 tests in 130 files, lint, type checks,
+  migrations and production build with all 173 generated pages.
+- Primary Vercel deployment `HnrR14Kbb38M6FQoKEFXroyUBqHB` succeeded:
+  https://res-publica-61cr6iqjx-res-publica1.vercel.app .
+- The existing branch alias redirects anonymous DE/EN/FA requests to Vercel SSO
+  (302). Protection was kept intact. Authenticated hosted visual QA could not be
+  completed because the in-app browser failed to recover after host memory
+  exhaustion; do not represent the local phone inspection as hosted/iOS QA.
+- No production promotion or online deployment deletion was performed.
+
+## 2026-09-21 — Owner-approved restoration published
+
+Owner approved publication and cleanup ("enteshar bede lotfan wa ghadimiha ro
+hazf kon"). Verified the preview SHA and successful CI again, then fast-forwarded
+`main` from `4115e5d` to the exact tested `c8cb4749780f9ac5623e6636b32c146b9f0e263b`.
+No implementation change or force push was included.
+
+- GitHub production deployment `6559197021` for the primary `res-publica`
+  project reports success: https://res-publica-np3svxfjp-res-publica1.vercel.app .
+- https://respublica-ev.de/fa returns HTTP 200 and the restored baseline marker
+  `34aeb99`. All 33 public DE/EN/FA route smoke checks pass.
+- The retired forum-v6, architectural-field and membership-header image URLs
+  return HTTP 404 on the live custom domain, not just locally.
+- Live phone viewport 390x844: WebGL ready, full-height canvas, no horizontal
+  overflow and zero retired-image elements. Scrolling changed the camera from
+  forum `2.40,6.15,13.60` (frame 80) to studio `-12.00,2.15,12.80` (frame 291).
+  This verifies room travel on deployed code, not physical iPhone/Safari support.
+- Old Vercel deployment deletion has NOT occurred: the browser safety reviewer
+  blocked entering Delete without fresh action-time confirmation. A separate
+  confirmation asks to delete older `res-publica` deployments while retaining
+  the production/preview pair for `c8cb474`. Code history and site data are not
+  deletion targets. Pending confirmation must not be reported as completed.
+
+## 2026-09-21 — Cleanup and camera/mobile follow-up (not a new production release)
+
+- Owner gave fresh, risk-informed deletion approval ("hazf kon bere"), including
+  losing instant rollback and breaking old integration/PR deployment URLs.
+- Removed 42 older deployments from the primary `res-publica` Vercel project.
+  The `c8cb474` production `7Zsrzx49vWsenJjJzARA96pdGhEW` and preview
+  `HnrR14Kbb38M6FQoKEFXroyUBqHB` were explicitly protected throughout.
+- One older target remains: `4BneDNuwMLUhuBvZEdn2BjJVsr1E`, July 24, commit
+  `88354d8`, the latest preview on `integration/publishing-reconciliation`.
+  The safety reviewer blocked this specific deletion because its branch alias
+  remains active. A targeted owner confirmation is pending; do not report all
+  hosted deployments removed. No Git history, content, database, domains or
+  separate `res-publica-tq5l` project were deleted.
+
+The owner then reported a blank background, delayed locale navigation, and
+requested scroll-synchronised travel plus gentle autonomous camera movement.
+The following changes are local and NOT deployed:
+
+- Replaced debounced chapter switches with continuous document-anchor scroll
+  progress along the existing authored indoor paths. Added bounded smoothing,
+  reverse-scroll support and a sub-25cm ambient dolly without orbiting or zoom.
+- Preserved paused/reduced-motion canvas pixels across browser compositing.
+  Reduced motion still disables camera animation; it is never overridden.
+- Parallelised essential texture loading and reveal the approved building before
+  optional detail/people loading. Optional failures no longer hide the building.
+- Added translated loading/retry states and WebGL-context recovery with a fresh
+  canvas; released disposed GPU contexts.
+- Locale links use native document navigation at the root lang/dir boundary,
+  retaining the equivalent page path and explicit `hrefLang`.
+
+Verification:
+
+- 63 site tests in 11 files passed, including scroll continuity, reverse travel,
+  pause/reduced motion, bounded ambient movement and locale/rendering guards.
+- TypeScript and scoped ESLint passed; `git diff --check` passed.
+- In-app browser desktop: visible forum, changing camera coordinates with scroll,
+  then visible adjacent room. Idle camera reports `ambient`, pause works.
+- 390x844 viewport: FA -> EN -> DE -> FA navigation via the actual mobile menu
+  succeeded, with correct h1, lang/dir and no horizontal overflow. English and
+  German scene screenshots were inspected. German reduced-motion reload retained
+  the visible scene (frame 6, camera `2.40,6.15,13.60`, status `ready`).
+- Test accessibility preferences were restored to `system`/reduceMotion false.
+- The broader local 33-route smoke script was NOT completed: `/de` passed but
+  `/de/about` exceeded its 60-second deadline during development compilation.
+  The dev log subsequently returned HTTP 200 at 60588ms. This is not a pass,
+  production performance validation, or a reason to waive release checks.
+- Physical iPhone/Safari, release-build performance and a fresh hosted preview/CI
+  run remain unverified. The production domain still serves `c8cb474`; do not
+  describe these follow-up working-tree edits as deployed.
+
+## 2026-09-21 — Background availability and integrated motion preferences
+
+Owner requested retaining the current camera movement, fixing missing/delayed
+backgrounds and removing the floating pause button; subsequently authorised
+going live after the fixes are verified.
+
+- Root cause of the membership screenshot: the public `/membership` route was
+  excluded from the architectural room allowlist. It now uses the existing
+  gallery view in DE/EN/FA. Private/protocol routes remain excluded; focusing
+  form fields still suspends decorative rendering.
+- The first real building frame no longer waits on any asset download. Valid
+  initial material maps are replaced progressively with the existing original
+  textures. HDR lighting, flags and people cannot hide the building if delayed
+  or unavailable. No retired poster, geometry or camera route was introduced.
+- Removed the floating camera button. Reduced motion remains in the existing
+  site preferences and continues to respect the operating-system setting.
+  Loading/retry feedback is in the document, not a bottom-corner camera widget.
+- Disabled the development-only Next indicator for clean local previews.
+- 66 site tests across 12 files pass; TypeScript, scoped ESLint and diff checks
+  pass. Desktop 1440x900 membership: visible gallery, all texture/environment
+  upgrades ready, ambient camera, zero floating controls, no horizontal overflow.
+- Local server interruption was observed during laptop navigation; this is not
+  a successful navigation test or proof of production performance. Remaining
+  laptop/locale checks and the exact commit's CI/hosted release must finish
+  before reporting this follow-up published. Physical Safari remains untested.

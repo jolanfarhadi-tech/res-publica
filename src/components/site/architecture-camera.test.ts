@@ -23,6 +23,8 @@ describe("continuous architectural camera", () => {
       expect(architecturalRoomForPath(`/${locale}/partners`)).toBe("gallery");
       expect(architecturalRoomForPath(`/${locale}/products`)).toBe("learning");
       expect(architecturalRoomForPath(`/${locale}/services`)).toBe("learning");
+      expect(architecturalRoomForPath(`/${locale}/membership`)).toBe("gallery");
+      expect(architecturalRoomForPath(`/${locale}/membership/`)).toBe("gallery");
     }
   });
   it("gives publications, research, HARM and programmes distinct authored views", () => {
@@ -42,7 +44,7 @@ describe("continuous architectural camera", () => {
     }
   });
   it("never turns protected, consent, legal or form routes into moving scenes", () => {
-    for (const locale of ["de", "en", "fa"]) for (const path of ["membership", "profile", "dashboard", "operations", "admin", "privacy", "datenschutz", "contact", "auth/error", "unknown"]) {
+    for (const locale of ["de", "en", "fa"]) for (const path of ["membership/protocol", "profile", "dashboard", "operations", "admin", "privacy", "datenschutz", "contact", "auth/error", "unknown"]) {
       expect(architecturalRoomForPath(`/${locale}/${path}`)).toBeNull();
     }
     expect(architecturalRoomForPath("/api/auth/login")).toBeNull();

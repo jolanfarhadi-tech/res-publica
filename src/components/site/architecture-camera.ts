@@ -26,6 +26,9 @@ export function architecturalRoomForPath(path: string): ArchitecturalRoom | null
   if (!match) return null;
   const segment = (match[2] ?? "").split("/")[0];
   if (!segment) return "forum";
+  // The public membership landing page belongs to the building too. Its form
+  // pauses the renderer on focus; private/protocol routes remain quiet.
+  if (match[2] === "membership") return "gallery";
   if (segment === "publications") return "editorial";
   if (["knowledge", "news"].includes(segment)) return "library";
   if (segment === "method") return "review";

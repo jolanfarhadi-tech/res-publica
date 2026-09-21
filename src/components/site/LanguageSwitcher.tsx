@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { locales, localeNames, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -26,8 +25,11 @@ export function LanguageSwitcher({
           const active = locale === current;
           return (
             <li key={locale}>
-              <Link
+              {/* Locale is a root HTML boundary (lang/dir/fonts). Native navigation
+                  cannot get stranded behind an in-flight RSC/GPU transition. */}
+              <a
                 href={`/${locale}${rest ? `/${rest}` : ""}`}
+                hrefLang={locale}
                 lang={locale}
                 aria-current={active ? "true" : undefined}
                 className={`inline-flex min-h-9 items-center rounded-lg px-2.5 py-1 text-sm transition-colors ${
@@ -37,7 +39,7 @@ export function LanguageSwitcher({
                 }`}
               >
                 {localeNames[locale]}
-              </Link>
+              </a>
             </li>
           );
         })}

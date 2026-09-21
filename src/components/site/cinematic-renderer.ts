@@ -10,6 +10,7 @@ import { createArchitecturalReflection } from "./architectural-reflection";
 import { loadArchitecturalDetails } from "./architectural-details";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { buildCinematicBuilding, type BuildingMaps } from "./cinematic-building";
+import { buildingTextureFiles, createInitialBuildingMaps, replaceBuildingTexture } from "./cinematic-materials";
 import { loadCinematicPeople } from "./cinematic-people";
 import { bakeCinematicPeople } from "./static-posed-people";
 import { researchParticipants, standingObservers } from "./parliament-layout";
@@ -22,19 +23,22 @@ export type CinematicController = {
   setRoom: (room: ArchitecturalRoom | null) => void;
   setMotion: (reduced: boolean) => void;
   setPaused: (paused: boolean) => void;
+  setScroll: (progress: number) => void;
   dispose: () => void;
 };
 
 /** Persistent renderer: assets are local, HTML and authentication never enter the scene. */
 export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
-  options: { reducedMotion: boolean; room: ArchitecturalRoom; onReady: () => void; onFailure: () => void }): CinematicController {
+  options: { reducedMotion: boolean; room: ArchitecturalRoom; onReady: () => void; onFailure: () => void; onRecover?: () => void }): CinematicController {
   const resources = new Set<{ dispose: () => void }>();
   let disposed = false, failed = false, ready = false, reduced = options.reducedMotion;
   let room: ArchitecturalRoom | null = options.room;
   canvas.dataset.room = options.room;
   const motion = new ArchitectureMotion(options.room, reduced);
   let lastFrame = 0, frameCount = 0;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
+  // A paused/reduced-motion frame must survive compositing, including Safari's
+  // layer promotion when the loading veil fades and the browser toolbar resizes.
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance", preserveDrawingBuffer: true });
   resources.add(renderer);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -60,7 +64,8 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   Object.assign(sun.shadow.camera, { left: -27, right: 27, top: 25, bottom: -25, near: 1, far: 85 });
   sun.shadow.normalBias = 0.04; sun.shadow.bias = -0.0003;
   scene.add(sun, sun.target); resources.add(sun.shadow);
-  scene.add(new THREE.HemisphereLight(0xdbe7f3, 0x645342, 0.12));
+  // Daylight is available even before the optional HDR download finishes.
+  const skyLight = new THREE.HemisphereLight(0xdbe7f3, 0x645342, 0.8); scene.add(skyLight);
   const chandelierLight = new THREE.PointLight(0xffbc6e, 65, 14, 2);
   chandelierLight.position.set(0, 6.5, -4.5); scene.add(chandelierLight);
   for (const x of [-15, 15]) {
@@ -81,29 +86,8 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   async function prepare() {
     try {
       const textureLoader = new THREE.TextureLoader();
-      const specs = { stone: "details/marble_diff.jpg", stoneNormal: "details/marble_nor_gl.jpg", stoneRough: "details/marble_rough.jpg",
-        oak: "oak_veneer_01_diff.webp", oakNormal: "oak_veneer_01_nor_gl.webp", oakRough: "oak_veneer_01_rough.webp" };
-      const maps = {} as BuildingMaps;
-      for (const [key, file] of Object.entries(specs)) {
-        const texture = await textureLoader.loadAsync(`/architecture/${file}`); track(texture);
-        if (disposed) return;
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping; texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-        if (key === "stone" || key === "oak") texture.colorSpace = THREE.SRGBColorSpace;
-        maps[key as keyof BuildingMaps] = texture;
-      }
-      const hdr = await new HDRLoader().loadAsync("/architecture/details/urban-courtyard.hdr"); track(hdr);
-      if (disposed) return;
-      const pmrem = new THREE.PMREMGenerator(renderer);
-      const environment = pmrem.fromEquirectangular(hdr); pmrem.dispose(); track(environment);
-      scene.environment = environment.texture; scene.environmentIntensity = 0.72;
-      hdr.mapping = THREE.EquirectangularReflectionMapping;
-      scene.background = hdr; scene.backgroundBlurriness = 0.018; scene.backgroundIntensity = 0.8;
+      const maps: BuildingMaps = createInitialBuildingMaps(); Object.values(maps).forEach(track);
       const { root, seats } = buildCinematicBuilding(maps);
-      const lionSun = await textureLoader.loadAsync("/architecture/lion-sun-reference-v1.png"); track(lionSun);
-      if (disposed) return;
-      lionSun.colorSpace = THREE.SRGBColorSpace;
-      const flags = [civicFlagTexture("eu"), civicFlagTexture("germany"), lionSun]; flags.forEach(track);
-      root.add(buildCeremonialFlags(flags));
       scene.add(root);
       const originals: THREE.Mesh[] = [];
       const batches = new Map<THREE.Material, { geometries: THREE.BufferGeometry[]; castShadow: boolean; receiveShadow: boolean }>();
@@ -131,6 +115,51 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
         const batch = new THREE.Mesh(geometry, material); batch.castShadow = castShadow; batch.receiveShadow = receiveShadow; root.add(batch);
       }
       originals.forEach((mesh) => mesh.removeFromParent());
+      // Show the actual approved building first. Optional furniture and people
+      // must not hold the entire translated page behind a blank loading surface.
+      renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true;
+      ready = true; canvas.dataset.status = "ready"; canvas.dataset.readyAt = performance.now().toFixed(0);
+      resize(); options.onReady(); schedule();
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      if (disposed) return;
+      render(performance.now());
+      // No network request gates the first real frame. Each upgrade is isolated:
+      // a missing map or slow HDR cannot turn the already visible building blank.
+      const finishes = Promise.allSettled(Object.entries(buildingTextureFiles).map(async ([key, file]) => {
+        const texture = await textureLoader.loadAsync(`/architecture/${file}`); track(texture);
+        if (disposed) return;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+        if (key === "stone" || key === "oak") texture.colorSpace = THREE.SRGBColorSpace;
+        replaceBuildingTexture(root, maps[key as keyof BuildingMaps], texture);
+        maps[key as keyof BuildingMaps] = texture;
+        render(performance.now());
+      })).then(results => { if (!disposed) canvas.dataset.materialStatus = results.every(result => result.status === "fulfilled") ? "ready" : "partial"; });
+      const environment = new HDRLoader().loadAsync("/architecture/details/urban-courtyard.hdr").then(hdr => {
+        track(hdr); if (disposed) return;
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        try {
+          const lighting = pmrem.fromEquirectangular(hdr); track(lighting);
+          scene.environment = lighting.texture; scene.environmentIntensity = 0.72;
+        } finally { pmrem.dispose(); }
+        hdr.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background = hdr; scene.backgroundBlurriness = 0.018; scene.backgroundIntensity = 0.8;
+        skyLight.intensity = 0.12; canvas.dataset.environmentStatus = "ready"; render(performance.now());
+      }).catch(() => { if (!disposed) canvas.dataset.environmentStatus = "unavailable"; });
+      const flags = textureLoader.loadAsync("/architecture/lion-sun-reference-v1.png").then(lionSun => {
+        track(lionSun); if (disposed) return;
+        lionSun.colorSpace = THREE.SRGBColorSpace;
+        const textures = [civicFlagTexture("eu"), civicFlagTexture("germany"), lionSun]; textures.forEach(track);
+        const flags = buildCeremonialFlags(textures);
+        flags.traverse(object => {
+          if (!(object instanceof THREE.Mesh)) return;
+          track(object.geometry);
+          (Array.isArray(object.material) ? object.material : [object.material]).forEach(track);
+        });
+        root.add(flags); renderer.shadowMap.needsUpdate = true; render(performance.now());
+      }).catch(() => { if (!disposed) canvas.dataset.flagStatus = "unavailable"; });
+      // These promises handle their own failures and remain independent of people.
+      void Promise.all([finishes, environment, flags]);
       const details = await loadArchitecturalDetails(track);
       if (disposed) return;
       scene.add(details);
@@ -156,10 +185,11 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       if (disposed) return;
       // Architecture and people are static: bake shadows once, animate only the camera.
       renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true;
-      ready = true; canvas.dataset.status = "ready"; resize(); options.onReady(); schedule();
+      canvas.dataset.detailStatus = "ready"; render(performance.now()); schedule();
     } catch (error) {
       console.warn("Architectural scene unavailable:", error instanceof Error ? error.message : "rendering failed");
-      fail();
+      if (ready) { canvas.dataset.detailStatus = "unavailable"; render(performance.now()); }
+      else fail();
     }
   }
   function isInteracting() {
@@ -167,9 +197,9 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   }
   function render(now: number) {
     if (!ready || disposed || failed || !room || document.hidden) return;
-    const current = motion.pose;
+    const current = motion.framePose;
     canvas.dataset.transition = motion.phase;
-    canvas.dataset.motion = reduced ? "reduced" : motion.isPaused ? "paused" : motion.moving ? "travelling" : "settled";
+    canvas.dataset.motion = reduced ? "reduced" : motion.isPaused ? "paused" : motion.moving ? "travelling" : "ambient";
     const portrait = camera.aspect < 1;
     camera.position.set(...current.position);
     // Portrait framing looks into the room, not mostly at the mezzanine ceiling.
@@ -191,10 +221,10 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
     lastFrame = now;
     if (!isInteracting() && !document.hidden) motion.step(delta);
     render(now);
-    if (!motion.moving || isInteracting()) { renderer.setAnimationLoop(null); lastFrame = 0; }
+    if (!motion.animating || isInteracting()) { renderer.setAnimationLoop(null); lastFrame = 0; }
   }
   function schedule() {
-    const animate = ready && !disposed && !failed && !!room && !document.hidden && !reduced && !isInteracting() && motion.moving;
+    const animate = ready && !disposed && !failed && !!room && !document.hidden && !reduced && !isInteracting() && motion.animating;
     renderer.setAnimationLoop(animate ? loop : null);
     if (!animate) lastFrame = 0;
   }
@@ -219,10 +249,12 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
   function visibility() { updatePause(); if (!document.hidden) render(performance.now()); }
   function focus() { queueMicrotask(updatePause); }
   function lost(event: Event) { event.preventDefault(); fail(); }
+  function restored() { if (!disposed) options.onRecover?.(); }
   const observer = new ResizeObserver(resize); observer.observe(canvas);
   document.addEventListener("visibilitychange", visibility);
   document.addEventListener("focusin", focus); document.addEventListener("focusout", focus);
   canvas.addEventListener("webglcontextlost", lost);
+  canvas.addEventListener("webglcontextrestored", restored);
   void prepare();
   return {
     setRoom(next) {
@@ -235,14 +267,19 @@ export function mountCinematicArchitecture(canvas: HTMLCanvasElement,
       schedule();
     },
     setMotion(value) { reduced = value; motion.setReduced(value); render(performance.now()); schedule(); },
+    setScroll(progress) { motion.setScroll(progress); if (reduced) render(performance.now()); schedule(); },
     setPaused(value) { motion.setPaused(value); lastFrame = 0; render(performance.now()); schedule(); },
     dispose() {
       disposed = true; renderer.setAnimationLoop(null); observer.disconnect();
       document.removeEventListener("visibilitychange", visibility);
       document.removeEventListener("focusin", focus); document.removeEventListener("focusout", focus);
       canvas.removeEventListener("webglcontextlost", lost);
+      canvas.removeEventListener("webglcontextrestored", restored);
       scene.traverse((object) => { if (object instanceof THREE.SkinnedMesh) object.skeleton.dispose(); });
       for (const resource of resources) resource.dispose(); resources.clear(); scene.clear();
+      // Release the previous locale's GPU context immediately, especially on iOS
+      // where a few abandoned WebGL contexts can evict the newly opened scene.
+      renderer.forceContextLoss();
     },
   };
 }
